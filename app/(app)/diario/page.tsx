@@ -14,7 +14,7 @@ export default function DiarioPage() {
       const supabase = getSupabaseClient(); // 🔥 AGORA AQUI DENTRO
 
       const { data, error } = await supabase
-        .from("mensagens")
+        .from("diario_entries")
         .select("*")
         .order("created_at", { ascending: false });
 
