@@ -3,29 +3,31 @@
 import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase";
 
-export default function PerfilPage() {
-  const supabase = getSupabaseClient();
+export const dynamic = "force-dynamic";
 
-  const [nome, setNome] = useState("");
+export default function PerfilPage() {
+  const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
     async function carregarPerfil() {
+      const supabase = getSupabaseClient(); // 🔥 só cria aqui dentro
+
       const {
         data: { user },
       } = await supabase.auth.getUser();
 
       if (user) {
-        setNome(user.email ?? "");
+        setEmail(user.email ?? null);
       }
     }
 
     carregarPerfil();
-  }, [supabase]);
+  }, []);
 
   return (
     <div>
       <h1>Perfil</h1>
-      <p>Email: {nome}</p>
+      <p>Email: {email ?? "Carregando..."}</p>
     </div>
   );
 }
