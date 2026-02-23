@@ -1,18 +1,18 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase";
 
-export default function DiarioPage() {
-  const supabase = getSupabaseClient();
+export const dynamic = "force-dynamic";
 
+export default function DiarioPage() {
   const [mensagens, setMensagens] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function carregarMensagens() {
+      const supabase = getSupabaseClient(); // 🔥 AGORA AQUI DENTRO
+
       const { data, error } = await supabase
         .from("mensagens")
         .select("*")
