@@ -3,42 +3,45 @@
 import { useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 export default function LoginPage() {
-  const supabase = getSupabaseClient();
-
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-  async function handleLogin() {
-    setLoading(true);
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+
+    const supabase = getSupabaseClient(); // 🔥 só cria aqui dentro
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
     });
 
     if (error) {
-      alert("Erro ao enviar email: " + error.message);
+      setMessage("Erro ao enviar email.");
     } else {
-      alert("Verifique seu email para entrar");
+      setMessage("Verifique seu email para o link de acesso.");
     }
-
-    setLoading(false);
   }
 
   return (
     <div>
       <h1>Login</h1>
 
-      <input
-        type="email"
-        placeholder="Seu email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          placeholder="Seu email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-      <button onClick={handleLogin} disabled={loading}>
-        {loading ? "Enviando..." : "Entrar"}
-      </button>
+        <button type="submit">Entrar</button>
+      </form>
+
+      {message && <p>{message}</p>}
     </div>
   );
 }
