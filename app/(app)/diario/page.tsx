@@ -1,9 +1,10 @@
 "use client";
+
 export const dynamic = "force-dynamic";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
-import { Dancing_Script } from "next/font/google";
-import { Playfair_Display } from "next/font/google";
+
+import { useState } from "react";
+import { getSupabaseClient } from "@/lib/supabase";
+import { Dancing_Script, Playfair_Display } from "next/font/google";
 
 const cursive = Dancing_Script({
   subsets: ["latin"],
@@ -15,15 +16,9 @@ const serif = Playfair_Display({
   weight: ["400", "500"],
 });
 
-type Entry = {
-  id: string;
-  created_at: string;
-  versiculo: string | null;
-  destaque: string | null;
-  conteudo_texto: string | null;
-};
-
 export default function Diario() {
+  const supabase = getSupabaseClient();
+
   const [versiculo, setVersiculo] = useState("");
   const [destaque, setDestaque] = useState("");
   const [texto, setTexto] = useState("");
@@ -54,24 +49,21 @@ export default function Diario() {
 
   return (
     <div className="min-h-screen bg-[#f2eee9] flex justify-center py-10 px-6">
-      <div className="w-full max-w-5xl bg-[#f7f3ee] rounded-3xl shadow-md p-12 relative">
+      <div className="w-full max-w-5xl bg-[#f7f3ee] rounded-3xl p-12 relative">
         
-        {/* Data no canto direito */}
+        {/* Data */}
         <div className="absolute top-10 right-12 text-sm text-[#7a5c4b] opacity-70">
           {hoje}
         </div>
 
-        {/* Pergunta Título */}
-        <h1
-          className={`${serif.className} text-3xl text-[#4a3428] mb-12`}
-        >
+        {/* Pergunta */}
+        <h1 className={`${serif.className} text-3xl text-[#4a3428] mb-12`}>
           O que Deus falou com você hoje?
         </h1>
 
-        {/* Layout em duas colunas */}
         <div className="flex gap-10">
           
-          {/* Coluna Principal */}
+          {/* Escrita principal */}
           <div className="w-[70%]">
             <textarea
               value={texto}
@@ -88,7 +80,7 @@ export default function Diario() {
             />
           </div>
 
-          {/* Coluna Lateral */}
+          {/* Coluna lateral */}
           <div className="w-[30%] space-y-10">
 
             <div>
@@ -128,7 +120,7 @@ export default function Diario() {
           </div>
         </div>
 
-        {/* Botão salvar */}
+        {/* Botão */}
         <div className="flex justify-center mt-16">
           <button
             onClick={handleSave}
