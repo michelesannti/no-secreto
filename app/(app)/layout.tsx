@@ -26,11 +26,10 @@ export default function AppLayout({
           className={`
             w-12 h-12
             flex items-center justify-center
-            rounded-full
             transition-all duration-300
             ${
               active
-                ? "bg-[#e9d5bb] shadow-md shadow-[#70412d]/10"
+                ? "bg-[#e9d5bb] shadow-md shadow-[#70412d]/10 rounded-t-full rounded-b-md"
                 : ""
             }
           `}
@@ -51,7 +50,6 @@ export default function AppLayout({
 
   return (
     <div className="min-h-screen pb-24 bg-[#f9f5e9]">
-
       {children}
 
       <nav className="fixed bottom-0 left-0 right-0 bg-[#f9f5e9] border-t border-[#e9d5bb] py-3 flex justify-around">
