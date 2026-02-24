@@ -23,143 +23,133 @@ export default function DiarioPage() {
 
     const { error } = await supabase.from("diario_entries").insert([
       {
-        conteudo,
-        versiculo,
-        destaque,
-        data: new Date().toISOString(),
+        conteudo_texto: conteudo,
+        versiculo_texto: versiculo,
+        conteudo_desenho: destaque,
       },
     ]);
 
     if (error) {
       setMensagem("Erro ao salvar.");
     } else {
-      setMensagem("Salvo 🤎");
+      setMensagem("Salvo com carinho ✨");
+      setConteudo("");
+      setVersiculo("");
+      setDestaque("");
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#efe7dc] px-4 py-10">
+    <div className="min-h-screen bg-[#f4ede4] px-6 py-10">
 
-      {/* FOLHA CENTRAL */}
-      <div className="max-w-5xl mx-auto bg-[#f6efe6] shadow-[0_10px_30px_rgba(0,0,0,0.04)] px-6 md:px-16 py-16 relative">
+      {/* TOPO */}
+      <div className="flex justify-between items-center mb-16">
+        <h1 className="font-serif text-lg text-[#5a4636] tracking-wide">
+          Diário
+        </h1>
 
-        {/* DATA */}
-        <div className="absolute top-8 right-6 md:right-16 text-[11px] text-[#8a6f58] opacity-70 font-serif tracking-wide">
+        <span className="text-sm text-[#8c7563] opacity-70 font-serif">
           {dataHoje}
+        </span>
+      </div>
+
+      {/* PERGUNTA CENTRAL */}
+      <div className="text-center mb-20">
+        <h2 className="text-2xl md:text-3xl font-serif text-[#4e3b2f] leading-relaxed max-w-2xl mx-auto">
+          O que Deus falou com você hoje?
+        </h2>
+      </div>
+
+      {/* CONTEÚDO PRINCIPAL */}
+      <div className="flex flex-row gap-12">
+
+        {/* COLUNA ESQUERDA 75% */}
+        <div className="w-[75%]">
+
+          <textarea
+            value={conteudo}
+            onChange={(e) => setConteudo(e.target.value)}
+            placeholder="Escreva aqui..."
+            className="
+              w-full
+              h-[600px]
+              bg-transparent
+              border-none
+              outline-none
+              resize-none
+              text-[18px]
+              text-[#3e2f25]
+              leading-10
+            "
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(to bottom, transparent, transparent 38px, #e5d8cc 39px)",
+            }}
+          />
+
+          <button
+            onClick={handleSalvar}
+            className="mt-12 px-8 py-2 bg-[#7a5c45] text-white rounded-full text-xs tracking-widest hover:opacity-90 transition"
+          >
+            SALVAR
+          </button>
+
+          {mensagem && (
+            <p className="mt-4 text-xs text-[#8a6f58]">
+              {mensagem}
+            </p>
+          )}
         </div>
 
-        {/* PERGUNTA */}
-        <div className="text-center mt-6 mb-20">
-          <h1 className="text-xl md:text-2xl font-serif text-[#4e3b2f] leading-relaxed">
-            O que Deus falou com você hoje?
-          </h1>
-        </div>
+        {/* COLUNA DIREITA 25% */}
+        <div className="w-[25%] space-y-16">
 
-        {/* ESTRUTURA 70 / 30 FIXA */}
-        <div className="flex flex-row gap-6">
-
-          {/* COLUNA PRINCIPAL */}
-          <div className="w-[70%] pr-4">
+          {/* VERSÍCULO - estilo post-it */}
+          <div className="bg-[#efe3d6] p-6 rounded-md">
+            <h3 className="text-[11px] font-serif tracking-[3px] text-[#8a6f58] mb-4">
+              VERSÍCULO
+            </h3>
 
             <textarea
-              value={conteudo}
-              onChange={(e) => setConteudo(e.target.value)}
-              placeholder="Escreva aqui..."
+              value={versiculo}
+              onChange={(e) => setVersiculo(e.target.value)}
               className="
-                w-full 
-                h-[520px]
-                bg-transparent 
-                border-none 
-                outline-none 
-                resize-none 
-                text-[17px]
-                text-[#3e2f25]
-                leading-9
-                font-light
+                w-full
+                bg-transparent
+                border-none
+                outline-none
+                resize-none
+                italic
+                text-[#4e3b2f]
+                text-sm
+                leading-7
               "
-              style={{
-                backgroundImage:
-                  "repeating-linear-gradient(to bottom, transparent, transparent 34px, #e3d7cb 35px)",
-              }}
             />
-
-            <button
-              onClick={handleSalvar}
-              className="mt-10 px-6 py-2 bg-[#7a5c45] text-white rounded-full text-xs tracking-wide hover:opacity-90 transition"
-            >
-              SALVAR
-            </button>
-
-            {mensagem && (
-              <p className="mt-4 text-xs text-[#8a6f58]">
-                {mensagem}
-              </p>
-            )}
-
           </div>
 
-          {/* COLUNA LATERAL */}
-          <div className="w-[30%] pl-6 border-l border-[#e3d7cb]/40">
+          {/* DESTAQUE - estilo anotação */}
+          <div className="bg-[#e9dbcc] p-6 rounded-md">
+            <h3 className="text-[11px] font-serif tracking-[3px] text-[#8a6f58] mb-4">
+              DESTAQUE
+            </h3>
 
-            {/* VERSÍCULO */}
-            <div className="mb-16">
-              <h2 className="text-[10px] font-serif text-[#8a6f58] tracking-[2px] mb-6">
-                VERSÍCULO
-              </h2>
-
-              <textarea
-                value={versiculo}
-                onChange={(e) => setVersiculo(e.target.value)}
-                className="
-                  w-full 
-                  h-28 
-                  bg-transparent 
-                  border-none 
-                  outline-none 
-                  resize-none 
-                  italic 
-                  text-[#4e3b2f]
-                  text-sm
-                  leading-7
-                "
-                style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(to bottom, transparent, transparent 26px, #e3d7cb 27px)",
-                }}
-              />
-            </div>
-
-            {/* DESTAQUE */}
-            <div>
-              <h2 className="text-[10px] font-serif text-[#8a6f58] tracking-[2px] mb-6">
-                DESTAQUE
-              </h2>
-
-              <textarea
-                value={destaque}
-                onChange={(e) => setDestaque(e.target.value)}
-                className="
-                  w-full 
-                  h-24 
-                  bg-transparent 
-                  border-none 
-                  outline-none 
-                  resize-none 
-                  text-[#4e3b2f]
-                  text-sm
-                  leading-7
-                "
-                style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(to bottom, transparent, transparent 26px, #e3d7cb 27px)",
-                }}
-              />
-            </div>
-
+            <textarea
+              value={destaque}
+              onChange={(e) => setDestaque(e.target.value)}
+              className="
+                w-full
+                bg-transparent
+                border-none
+                outline-none
+                resize-none
+                text-[#4e3b2f]
+                text-sm
+                leading-7
+              "
+            />
           </div>
 
         </div>
-
       </div>
     </div>
   );
