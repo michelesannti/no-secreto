@@ -10,18 +10,63 @@ export default function DiarioPage() {
         <span>{today}</span>
       </div>
 
+      {/* Versículo + Destaque */}
+      <div className="flex gap-4 mb-12">
+
+        {/* Versículo */}
+        <div className="flex-1">
+          <p className="text-[10px] tracking-[0.25em] opacity-40 mb-3">
+            VERSÍCULO
+          </p>
+          <textarea
+            className="
+              w-full
+              min-h-[90px]
+              bg-[#e9d5bb]/35
+              rounded-[22px]
+              p-4
+              resize-none
+              outline-none
+              text-sm
+              leading-relaxed
+            "
+          />
+        </div>
+
+        {/* Destaque */}
+        <div className="flex-1">
+          <p className="text-[10px] tracking-[0.25em] opacity-40 mb-3">
+            DESTAQUE
+          </p>
+          <textarea
+            className="
+              w-full
+              min-h-[90px]
+              bg-[#e9d5bb]/25
+              rounded-[22px]
+              p-4
+              resize-none
+              outline-none
+              text-sm
+              leading-relaxed
+            "
+          />
+        </div>
+
+      </div>
+
       {/* Pergunta-direcionamento */}
       <p className="text-sm italic opacity-50 mb-8">
-        O que Deus falou com você hoje?
+        O que Deus falou com você através disso?
       </p>
 
-      {/* Área principal de escrita */}
-      <div className="mb-16">
+      {/* Área principal */}
+      <div>
         <textarea
           placeholder="Escreva com calma..."
           className="
             w-full
-            min-h-[280px]
+            min-h-[260px]
             bg-[#efe7d6]/40
             rounded-[28px]
             p-6
@@ -30,48 +75,6 @@ export default function DiarioPage() {
             text-base
             leading-7
             placeholder:text-[#70412d]/30
-          "
-        />
-      </div>
-
-      {/* Versículo */}
-      <div className="mb-12">
-        <p className="text-[11px] tracking-[0.25em] opacity-40 mb-4">
-          VERSÍCULO
-        </p>
-
-        <textarea
-          className="
-            w-full
-            min-h-[120px]
-            bg-[#e9d5bb]/35
-            rounded-[24px]
-            p-5
-            resize-none
-            outline-none
-            text-sm
-            leading-relaxed
-          "
-        />
-      </div>
-
-      {/* Destaque */}
-      <div>
-        <p className="text-[11px] tracking-[0.25em] opacity-40 mb-4">
-          DESTAQUE
-        </p>
-
-        <textarea
-          className="
-            w-full
-            min-h-[120px]
-            bg-[#e9d5bb]/25
-            rounded-[24px]
-            p-5
-            resize-none
-            outline-none
-            text-sm
-            leading-relaxed
           "
         />
       </div>
