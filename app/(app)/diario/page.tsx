@@ -14,8 +14,7 @@ export default function DiarioPage() {
 
   useEffect(() => {
     const hoje = new Date();
-    const formatada = hoje.toLocaleDateString("pt-BR");
-    setDataHoje(formatada);
+    setDataHoje(hoje.toLocaleDateString("pt-BR"));
   }, []);
 
   async function handleSalvar() {
@@ -32,7 +31,7 @@ export default function DiarioPage() {
     if (error) {
       setMensagem("Erro ao salvar.");
     } else {
-      setMensagem("Salvo com carinho ✨");
+      setMensagem("Salvo ✨");
       setConteudo("");
       setVersiculo("");
       setDestaque("");
@@ -40,11 +39,11 @@ export default function DiarioPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f4ede4] px-6 py-10">
+    <div className="min-h-screen bg-[#f4ede4]">
 
       {/* TOPO */}
-      <div className="flex justify-between items-center mb-16">
-        <h1 className="font-serif text-lg text-[#5a4636] tracking-wide">
+      <div className="flex justify-between items-center px-8 pt-10">
+        <h1 className="font-serif text-lg text-[#5a4636]">
           Diário
         </h1>
 
@@ -53,26 +52,25 @@ export default function DiarioPage() {
         </span>
       </div>
 
-      {/* PERGUNTA CENTRAL */}
-      <div className="text-center mb-20">
-        <h2 className="text-2xl md:text-3xl font-serif text-[#4e3b2f] leading-relaxed max-w-2xl mx-auto">
+      {/* PERGUNTA */}
+      <div className="text-center mt-20 mb-24 px-6">
+        <h2 className="text-3xl font-serif text-[#4e3b2f] leading-relaxed max-w-3xl mx-auto">
           O que Deus falou com você hoje?
         </h2>
       </div>
 
-      {/* CONTEÚDO PRINCIPAL */}
-      <div className="flex flex-row gap-12">
+      {/* CONTEÚDO */}
+      <div className="flex gap-16 px-10 pb-32">
 
-        {/* COLUNA ESQUERDA 75% */}
+        {/* TEXTO PRINCIPAL */}
         <div className="w-[75%]">
-
           <textarea
             value={conteudo}
             onChange={(e) => setConteudo(e.target.value)}
             placeholder="Escreva aqui..."
             className="
               w-full
-              h-[600px]
+              h-[650px]
               bg-transparent
               border-none
               outline-none
@@ -101,12 +99,11 @@ export default function DiarioPage() {
           )}
         </div>
 
-        {/* COLUNA DIREITA 25% */}
-        <div className="w-[25%] space-y-16">
+        {/* LATERAL */}
+        <div className="w-[25%] space-y-20">
 
-          {/* VERSÍCULO - estilo post-it */}
-          <div className="bg-[#efe3d6] p-6 rounded-md">
-            <h3 className="text-[11px] font-serif tracking-[3px] text-[#8a6f58] mb-4">
+          <div className="bg-[#efe3d6] p-8 rounded-xl">
+            <h3 className="text-[11px] font-serif tracking-[4px] text-[#8a6f58] mb-6">
               VERSÍCULO
             </h3>
 
@@ -127,9 +124,8 @@ export default function DiarioPage() {
             />
           </div>
 
-          {/* DESTAQUE - estilo anotação */}
-          <div className="bg-[#e9dbcc] p-6 rounded-md">
-            <h3 className="text-[11px] font-serif tracking-[3px] text-[#8a6f58] mb-4">
+          <div className="bg-[#e9dbcc] p-8 rounded-xl">
+            <h3 className="text-[11px] font-serif tracking-[4px] text-[#8a6f58] mb-6">
               DESTAQUE
             </h3>
 
@@ -150,6 +146,7 @@ export default function DiarioPage() {
           </div>
 
         </div>
+
       </div>
     </div>
   );
