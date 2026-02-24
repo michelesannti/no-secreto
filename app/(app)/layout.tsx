@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarDays, Lock, BookOpen, User } from "lucide-react";
+import { CalendarDays, BookOpen, Pencil, User } from "lucide-react";
 
 export default function AppLayout({
   children,
@@ -24,19 +24,19 @@ export default function AppLayout({
       <Link href={href} className="flex flex-col items-center">
         <div
           className={`
-            w-11 h-11
+            w-12 h-12
             flex items-center justify-center
-            rounded-full
-            transition
+            rounded-xl
+            transition-all duration-300
             ${
               active
-                ? "bg-[#e9d5bb]"
+                ? "bg-[#e9d5bb] shadow-md shadow-[#70412d]/10"
                 : ""
             }
           `}
         >
           <Icon
-            size={20}
+            size={22}
             strokeWidth={1.7}
             className={
               active
@@ -54,10 +54,10 @@ export default function AppLayout({
 
       {children}
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-[#f9f5e9] border-t border-[#e9d5bb] py-4 flex justify-around">
+      <nav className="fixed bottom-0 left-0 right-0 bg-[#f9f5e9] border-t border-[#e9d5bb] py-3 flex justify-around">
         <NavItem href="/hoje" Icon={CalendarDays} />
-        <NavItem href="/secreto" Icon={Lock} />
-        <NavItem href="/diario" Icon={BookOpen} />
+        <NavItem href="/secreto" Icon={BookOpen} />
+        <NavItem href="/diario" Icon={Pencil} />
         <NavItem href="/perfil" Icon={User} />
       </nav>
     </div>
