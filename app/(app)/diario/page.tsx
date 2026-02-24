@@ -38,24 +38,25 @@ export default function DiarioPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fdfaf6] px-6 md:px-20 py-16 relative">
+    <div className="min-h-screen bg-[#fdfaf6] px-4 md:px-20 py-16 relative">
 
       {/* DATA */}
-      <div className="absolute top-10 right-6 md:right-20 text-xs text-[#7a5c45] opacity-70 font-serif">
+      <div className="absolute top-10 right-4 md:right-20 text-xs text-[#7a5c45] opacity-70 font-serif">
         {dataHoje}
       </div>
 
       {/* PERGUNTA CENTRAL */}
       <div className="text-center mb-16 mt-10">
-        <h1 className="text-xl md:text-2xl font-serif text-[#4a3a2f]">
+        <h1 className="text-lg md:text-2xl font-serif text-[#4a3a2f]">
           O que Deus falou com você hoje?
         </h1>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-12">
+      {/* ESTRUTURA 70 / 30 FIXA ATÉ NO MOBILE */}
+      <div className="flex flex-row gap-4">
 
-        {/* COLUNA PRINCIPAL */}
-        <div className="md:w-[70%]">
+        {/* COLUNA PRINCIPAL 70% */}
+        <div className="w-[70%]">
 
           <textarea
             value={conteudo}
@@ -63,12 +64,12 @@ export default function DiarioPage() {
             placeholder="Escreva aqui..."
             className="
               w-full 
-              h-[400px] md:h-[500px] 
+              h-[500px]
               bg-transparent 
               border-none 
               outline-none 
               resize-none 
-              text-lg 
+              text-base md:text-lg
               text-[#3e2f25]
               leading-8
             "
@@ -80,7 +81,7 @@ export default function DiarioPage() {
 
           <button
             onClick={handleSalvar}
-            className="mt-8 px-6 py-2 bg-[#7a5c45] text-white rounded-full text-sm hover:opacity-90 transition"
+            className="mt-8 px-5 py-2 bg-[#7a5c45] text-white rounded-full text-sm hover:opacity-90 transition"
           >
             Salvar
           </button>
@@ -93,11 +94,11 @@ export default function DiarioPage() {
 
         </div>
 
-        {/* COLUNA LATERAL */}
-        <div className="md:w-[30%] md:border-l border-[#e8ded5] md:pl-8">
+        {/* COLUNA LATERAL 30% */}
+        <div className="w-[30%] border-l border-[#e8ded5] pl-4">
 
           <div className="mb-12">
-            <h2 className="text-xs font-serif text-[#7a5c45] mb-4 tracking-wide">
+            <h2 className="text-[10px] md:text-xs font-serif text-[#7a5c45] mb-4 tracking-wide">
               VERSÍCULO
             </h2>
 
@@ -113,17 +114,19 @@ export default function DiarioPage() {
                 resize-none 
                 italic 
                 text-[#4a3a2f]
+                text-sm
                 leading-6
               "
               style={{
                 backgroundImage:
                   "repeating-linear-gradient(to bottom, transparent, transparent 23px, #e8ded5 24px)",
+                backgroundSize: "100% 24px",
               }}
             />
           </div>
 
           <div>
-            <h2 className="text-xs font-serif text-[#7a5c45] mb-4 tracking-wide">
+            <h2 className="text-[10px] md:text-xs font-serif text-[#7a5c45] mb-4 tracking-wide">
               DESTAQUE
             </h2>
 
@@ -138,17 +141,21 @@ export default function DiarioPage() {
                 outline-none 
                 resize-none 
                 text-[#4a3a2f]
+                text-sm
                 leading-6
               "
               style={{
                 backgroundImage:
                   "repeating-linear-gradient(to bottom, transparent, transparent 23px, #e8ded5 24px)",
+                backgroundSize: "100% 24px",
               }}
             />
           </div>
 
         </div>
+
       </div>
+
     </div>
   );
 }
