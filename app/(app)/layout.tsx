@@ -24,19 +24,19 @@ export default function AppLayout({
       <Link href={href} className="flex flex-col items-center">
         <div
           className={`
-            w-11 h-11
+            w-10 h-10
             flex items-center justify-center
             transition-all duration-300
             ${
               active
-                ? "bg-[#e9d5bb] shadow-md shadow-[#70412d]/10 rounded-t-[22px] rounded-b-md"
+                ? "bg-[#e9d5bb] rounded-full shadow-md shadow-[#70412d]/10"
                 : ""
             }
           `}
         >
           <Icon
-            size={20}
-            strokeWidth={1.7}
+            size={19}
+            strokeWidth={1.8}
             className={
               active
                 ? "text-[#70412d]"
@@ -50,6 +50,7 @@ export default function AppLayout({
 
   return (
     <div className="min-h-screen pb-24 bg-[#f9f5e9]">
+      
       {children}
 
       <nav className="fixed bottom-0 left-0 right-0 bg-[#f9f5e9] border-t border-[#e9d5bb] py-3 flex justify-around">
@@ -58,6 +59,7 @@ export default function AppLayout({
         <NavItem href="/diario" Icon={Pencil} />
         <NavItem href="/perfil" Icon={User} />
       </nav>
+
     </div>
   );
 }
