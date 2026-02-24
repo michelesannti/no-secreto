@@ -23,15 +23,15 @@ export default function AppLayout({
     return (
       <Link
         href={href}
-        className="flex items-center justify-center transition-colors duration-200"
+        className="flex items-center justify-center transition-all duration-200"
       >
         <Icon
           size={24}
-          strokeWidth={active ? 2.2 : 1.6}
+          strokeWidth={active ? 2.1 : 1.5}
           className={
             active
-              ? "text-[#70412d]"
-              : "text-[#70412d]/30"
+              ? "text-[#70412d]/90"
+              : "text-[#70412d]/25"
           }
           fill={active ? "currentColor" : "none"}
         />
