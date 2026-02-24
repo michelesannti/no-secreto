@@ -7,8 +7,9 @@ import { Home, BookOpen, Pencil, User } from "lucide-react";
 export default function AppLayout({
   children,
 }: {
-  children: React.ReactNode;
-}) {
+    children: React.ReactNode;
+  }) {
+
   const pathname = usePathname();
 
   function NavItem({
@@ -18,32 +19,21 @@ export default function AppLayout({
     href: string;
     Icon: any;
   }) {
+
     const active = pathname === href;
 
     return (
-      <Link href={href} className="flex flex-col items-center">
-        <div
-          className={`
-            w-10 h-10
-            flex items-center justify-center
-            transition-all duration-300
-            ${
-              active
-                ? "bg-[#e9d5bb] rounded-full shadow-md shadow-[#70412d]/10"
-                : ""
-            }
-          `}
-        >
-          <Icon
-            size={19}
-            strokeWidth={1.8}
-            className={
-              active
-                ? "text-[#70412d]"
-                : "text-[#70412d]/40"
-            }
-          />
-        </div>
+      <Link href={href} className="flex items-center justify-center">
+        <Icon
+          size={24}
+          strokeWidth={active ? 2.2 : 1.8}
+          className={
+            active
+              ? "text-[#70412d]"
+              : "text-[#70412d]/40"
+          }
+          fill={active ? "currentColor" : "none"}
+        />
       </Link>
     );
   }
@@ -53,7 +43,7 @@ export default function AppLayout({
       
       {children}
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-[#f9f5e9] border-t border-[#e9d5bb] py-3 flex justify-around">
+      <nav className="fixed bottom-0 left-0 right-0 bg-[#f9f5e9] border-t border-[#e9d5bb] py-4 flex justify-around">
         <NavItem href="/hoje" Icon={Home} />
         <NavItem href="/secreto" Icon={BookOpen} />
         <NavItem href="/diario" Icon={Pencil} />
