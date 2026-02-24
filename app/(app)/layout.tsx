@@ -23,14 +23,28 @@ export default function AppLayout({
     return (
       <Link
         href={href}
-        className="flex items-center justify-center transition-all duration-300"
+        className="relative flex items-center justify-center transition-all duration-300"
       >
+        {active && (
+          <span
+            className="
+              absolute
+              w-10
+              h-10
+              rounded-full
+              bg-[#e9d5bb]
+              blur-sm
+              opacity-60
+            "
+          />
+        )}
+
         <Icon
           size={24}
           strokeWidth={active ? 2.4 : 1.6}
           className={
             active
-              ? "text-[#70412d]"
+              ? "text-[#70412d] relative z-10"
               : "text-[#70412d]/25"
           }
         />
@@ -52,7 +66,6 @@ export default function AppLayout({
             flex
             gap-12
             items-center
-            border border-[#e9d5bb]
             shadow-[0_6px_18px_rgba(112,65,45,0.08)]
           "
         >
