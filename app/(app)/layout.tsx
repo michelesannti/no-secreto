@@ -29,7 +29,7 @@ export default function AppLayout({
             transition-all duration-300
             ${
               active
-                ? "bg-[#e9d5bb] shadow-md shadow-[#70412d]/10 rounded-t-full rounded-b-md"
+                ? "bg-[#e9d5bb] shadow-md shadow-[#70412d]/10 rounded-t-full rounded-b-x1"
                 : ""
             }
           `}
