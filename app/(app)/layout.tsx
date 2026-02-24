@@ -24,18 +24,18 @@ export default function AppLayout({
       <Link href={href} className="flex flex-col items-center">
         <div
           className={`
-            w-12 h-12
+            w-11 h-11
             flex items-center justify-center
             transition-all duration-300
             ${
               active
-                ? "bg-[#e9d5bb] shadow-md shadow-[#70412d]/10 rounded-t-full rounded-b-x1"
+                ? "bg-[#e9d5bb] shadow-md shadow-[#70412d]/10 rounded-t-[22px] rounded-b-md"
                 : ""
             }
           `}
         >
           <Icon
-            size={22}
+            size={20}
             strokeWidth={1.7}
             className={
               active
