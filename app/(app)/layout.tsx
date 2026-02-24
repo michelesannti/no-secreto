@@ -23,11 +23,7 @@ export default function AppLayout({
     return (
       <Link
         href={href}
-        className={`
-          flex items-center justify-center
-          transition-all duration-300
-          ${active ? "scale-110" : "scale-100"}
-        `}
+        className="flex items-center justify-center transition-colors duration-200"
       >
         <Icon
           size={24}
