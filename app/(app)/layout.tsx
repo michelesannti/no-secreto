@@ -23,23 +23,17 @@ export default function AppLayout({
     return (
       <Link
         href={href}
-        className="relative flex items-center justify-center transition-all duration-300"
+        className="flex items-center justify-center transition-all duration-300"
       >
-        <div
-          className={`transition-all duration-300 ${
-            active ? "-translate-y-[2px]" : ""
-          }`}
-        >
-          <Icon
-            size={24}
-            strokeWidth={active ? 2.4 : 1.4}
-            className={
-              active
-                ? "text-[#70412d]"
-                : "text-[#70412d]/20"
-            }
-          />
-        </div>
+        <Icon
+          size={24}
+          strokeWidth={active ? 2.3 : 1.5}
+          className={
+            active
+              ? "text-[#70412d]"
+              : "text-[#70412d]/25"
+          }
+        />
       </Link>
     );
   }
@@ -48,21 +42,25 @@ export default function AppLayout({
     <div className="min-h-screen pb-32 bg-[#f9f5e9]">
       {children}
 
-      <div className="fixed bottom-8 left-0 right-0 flex justify-center">
+      <div className="fixed bottom-6 left-0 right-0 flex justify-center">
         <nav
           className="
-            bg-[#f9f5e9]/85
+            relative
+            bg-[#f9f5e9]/88
             backdrop-blur-lg
-            px-12
-            py-5
-            rounded-[28px]
+            px-10
+            py-4
+            rounded-3xl
             flex
-            gap-12
+            gap-10
             items-center
-            shadow-[0_8px_20px_rgba(112,65,45,0.10)]
-            border border-[#e9d5bb]/50
+            border border-[#e9d5bb]/60
+            shadow-[0_12px_30px_rgba(112,65,45,0.10)]
           "
         >
+          {/* Linha interna editorial */}
+          <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/40"></div>
+
           <NavItem href="/hoje" Icon={Home} />
           <NavItem href="/secreto" Icon={BookOpen} />
           <NavItem href="/diario" Icon={Pencil} />
