@@ -7,9 +7,8 @@ import { Home, BookOpen, Pencil, User } from "lucide-react";
 export default function AppLayout({
   children,
 }: {
-    children: React.ReactNode;
-  }) {
-
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
 
   function NavItem({
@@ -19,18 +18,24 @@ export default function AppLayout({
     href: string;
     Icon: any;
   }) {
-
     const active = pathname === href;
 
     return (
-      <Link href={href} className="flex items-center justify-center">
+      <Link
+        href={href}
+        className={`
+          flex items-center justify-center
+          transition-all duration-300
+          ${active ? "scale-110" : "scale-100"}
+        `}
+      >
         <Icon
           size={24}
-          strokeWidth={active ? 2.2 : 1.8}
+          strokeWidth={active ? 2.2 : 1.6}
           className={
             active
               ? "text-[#70412d]"
-              : "text-[#70412d]/40"
+              : "text-[#70412d]/30"
           }
           fill={active ? "currentColor" : "none"}
         />
@@ -40,16 +45,14 @@ export default function AppLayout({
 
   return (
     <div className="min-h-screen pb-24 bg-[#f9f5e9]">
-      
       {children}
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-[#f9f5e9] border-t border-[#e9d5bb] py-4 flex justify-around">
+      <nav className="fixed bottom-0 left-0 right-0 bg-[#f9f5e9] border-t border-[#e9d5bb] py-4 flex justify-around items-center">
         <NavItem href="/hoje" Icon={Home} />
         <NavItem href="/secreto" Icon={BookOpen} />
         <NavItem href="/diario" Icon={Pencil} />
         <NavItem href="/perfil" Icon={User} />
       </nav>
-
     </div>
   );
 }
