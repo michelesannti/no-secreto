@@ -23,28 +23,14 @@ export default function AppLayout({
     return (
       <Link
         href={href}
-        className="relative flex items-center justify-center transition-all duration-300"
+        className="flex items-center justify-center transition-all duration-300"
       >
-        {active && (
-          <span
-            className="
-              absolute
-              w-10
-              h-10
-              rounded-full
-              bg-[#e9d5bb]
-              blur-sm
-              opacity-60
-            "
-          />
-        )}
-
         <Icon
           size={24}
-          strokeWidth={active ? 2.4 : 1.6}
+          strokeWidth={active ? 2.3 : 1.5}
           className={
             active
-              ? "text-[#70412d] relative z-10"
+              ? "text-[#70412d]"
               : "text-[#70412d]/25"
           }
         />
@@ -56,19 +42,19 @@ export default function AppLayout({
     <div className="min-h-screen pb-32 bg-[#f9f5e9]">
       {children}
 
-      <div className="fixed bottom-8 left-0 right-0 flex justify-center">
-        <nav
-          className="
-            bg-[#f9f5e9]
-            px-12
-            py-5
-            rounded-[30px]
-            flex
-            gap-12
-            items-center
-            shadow-[0_6px_18px_rgba(112,65,45,0.08)]
-          "
-        >
+      <div className="fixed bottom-6 left-0 right-0 flex justify-center">
+        <nav className="
+          bg-[#f9f5e9]/90
+          backdrop-blur-md
+          px-10
+          py-4
+          rounded-3xl
+          flex
+          gap-10
+          items-center
+          shadow-[0_10px_30px_rgba(112,65,45,0.12)]
+          border border-[#e9d5bb]/60
+        ">
           <NavItem href="/hoje" Icon={Home} />
           <NavItem href="/secreto" Icon={BookOpen} />
           <NavItem href="/diario" Icon={Pencil} />
