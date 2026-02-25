@@ -23,34 +23,22 @@ export default function AppLayout({
     return (
       <Link
         href={href}
-        className="flex items-center justify-center"
+        className="relative flex items-center justify-center"
       >
-        <div
-          className={`
-            flex items-center justify-center
-            w-10 h-10
-            rounded-2xl
-            transition-all duration-300 ease-out
-            ${
-              active
-                ? `
-                  bg-[#eadcc7]
-                  shadow-[inset_0_2px_4px_rgba(112,65,45,0.12)]
-                `
-                : `bg-transparent`
-            }
-          `}
-        >
-          <Icon
-            size={20}
-            strokeWidth={active ? 2.4 : 1.6}
-            className={
-              active
-                ? "text-[#5a3424]"
-                : "text-[#70412d]/25"
-            }
-          />
-        </div>
+        {/* Fundo do ativo sem alterar largura */}
+        {active && (
+          <div className="absolute w-12 h-12 rounded-2xl bg-[#eadcc7] shadow-[inset_0_2px_4px_rgba(112,65,45,0.12)]"></div>
+        )}
+
+        <Icon
+          size={24}
+          strokeWidth={active ? 2.3 : 1.5}
+          className={
+            active
+              ? "relative text-[#5a3424]"
+              : "text-[#70412d]/25"
+          }
+        />
       </Link>
     );
   }
@@ -62,20 +50,22 @@ export default function AppLayout({
       <div className="fixed bottom-6 left-0 right-0 flex justify-center">
         <nav
           className="
-            bg-[#f9f5e9]/90
-            backdrop-blur-md
-            px-9
-            py-3
+            relative
+            bg-[#f9f5e9]/88
+            backdrop-blur-lg
+            px-10
+            py-4
             rounded-3xl
             flex
-            gap-8
+            gap-10
             items-center
-            shadow-[0_12px_30px_rgba(112,65,45,0.08)]
-            border border-[#e9d5bb]/50
-            w-fit
-            overflow-hidden
+            border border-[#e9d5bb]/60
+            shadow-[0_12px_30px_rgba(112,65,45,0.10)]
           "
         >
+          {/* Linha interna editorial */}
+          <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/40"></div>
+
           <NavItem href="/hoje" Icon={Home} />
           <NavItem href="/secreto" Icon={BookOpen} />
           <NavItem href="/diario" Icon={Pencil} />
