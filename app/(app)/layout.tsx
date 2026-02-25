@@ -36,7 +36,6 @@ export default function AppLayout({
                 ? `
                   bg-[#eadcc7]
                   shadow-[inset_0_2px_4px_rgba(112,65,45,0.12)]
-                  scale-105
                 `
                 : `bg-transparent`
             }
@@ -65,15 +64,16 @@ export default function AppLayout({
           className="
             bg-[#f9f5e9]/90
             backdrop-blur-md
-            px-8
+            px-9
             py-3
             rounded-3xl
             flex
-            gap-7
+            gap-8
             items-center
             shadow-[0_12px_30px_rgba(112,65,45,0.08)]
             border border-[#e9d5bb]/50
             w-fit
+            overflow-hidden
           "
         >
           <NavItem href="/hoje" Icon={Home} />
