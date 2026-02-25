@@ -28,14 +28,14 @@ export default function AppLayout({
         <div
           className={`
             flex items-center justify-center
-            w-11 h-11
+            w-10 h-10
             rounded-2xl
             transition-all duration-300 ease-out
             ${
               active
                 ? `
                   bg-[#eadcc7]
-                  shadow-[inset_0_2px_4px_rgba(112,65,45,0.15),0_2px_6px_rgba(112,65,45,0.12)]
+                  shadow-[inset_0_2px_4px_rgba(112,65,45,0.15),0_2px_6px_rgba(112,65,45,0.10)]
                   scale-105
                 `
                 : `bg-transparent`
@@ -43,7 +43,7 @@ export default function AppLayout({
           `}
         >
           <Icon
-            size={22}
+            size={20}
             strokeWidth={active ? 2.4 : 1.6}
             className={
               active
@@ -65,14 +65,15 @@ export default function AppLayout({
           className="
             bg-[#f9f5e9]/90
             backdrop-blur-md
-            px-10
-            py-4
+            px-7
+            py-3
             rounded-3xl
             flex
-            gap-10
+            gap-7
             items-center
-            shadow-[0_10px_30px_rgba(112,65,45,0.12)]
-            border border-[#e9d5bb]/60
+            shadow-[0_8px_25px_rgba(112,65,45,0.10)]
+            border border-[#e9d5bb]/50
+            w-fit
           "
         >
           <NavItem href="/hoje" Icon={Home} />
