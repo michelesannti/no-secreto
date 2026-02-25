@@ -23,7 +23,7 @@ export default function AppLayout({
     return (
       <Link
         href={href}
-        className="relative flex items-center justify-center transition-all duration-300"
+        className="flex items-center justify-center"
       >
         <div
           className={`
@@ -35,7 +35,7 @@ export default function AppLayout({
               active
                 ? `
                   bg-[#eadcc7]
-                  shadow-[inset_0_2px_4px_rgba(112,65,45,0.15),0_2px_6px_rgba(112,65,45,0.10)]
+                  shadow-[inset_0_2px_4px_rgba(112,65,45,0.12)]
                   scale-105
                 `
                 : `bg-transparent`
@@ -65,13 +65,13 @@ export default function AppLayout({
           className="
             bg-[#f9f5e9]/90
             backdrop-blur-md
-            px-7
+            px-8
             py-3
             rounded-3xl
             flex
             gap-7
             items-center
-            shadow-[0_8px_25px_rgba(112,65,45,0.10)]
+            shadow-[0_12px_30px_rgba(112,65,45,0.08)]
             border border-[#e9d5bb]/50
             w-fit
           "
