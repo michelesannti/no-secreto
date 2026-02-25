@@ -19,6 +19,7 @@ export default function DiarioPage() {
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] px-6 pt-10 pb-40">
+      
       {/* TOPO */}
       <div className="flex justify-between items-start mb-10">
         <h1 className="text-[#70412d] text-xl tracking-wide">
@@ -38,11 +39,12 @@ export default function DiarioPage() {
           placeholder="Versículo"
           className="
             w-1/2
-            bg-[#e9d5bb]/35
+            bg-[#e9d5bb]/30
             rounded-2xl
             p-4
-            text-sm
-            text-[#70412d]
+            text-[15px]
+            font-serif
+            text-[#5a3424]
             placeholder:text-[#70412d]/40
             resize-none
             outline-none
@@ -57,11 +59,13 @@ export default function DiarioPage() {
           placeholder="Destaque"
           className="
             w-1/2
-            bg-[#e9d5bb]/35
+            bg-[#e9d5bb]/30
             rounded-2xl
             p-4
-            text-sm
-            text-[#70412d]
+            text-[15px]
+            font-serif
+            font-semibold
+            text-[#5a3424]
             placeholder:text-[#70412d]/40
             resize-none
             outline-none
@@ -71,7 +75,7 @@ export default function DiarioPage() {
         />
       </div>
 
-      {/* TEXTO PRINCIPAL COM LINHAS */}
+      {/* TEXTO PRINCIPAL COM LINHAS + CURSIVA */}
       <textarea
         value={texto}
         onChange={(e) => setTexto(e.target.value)}
@@ -80,14 +84,15 @@ export default function DiarioPage() {
           w-full
           min-h-[420px]
           bg-transparent
-          text-[#70412d]
+          text-[#4a2b1d]
           placeholder:text-[#70412d]/30
-          text-base
+          text-[18px]
           leading-8
           outline-none
           resize-none
         "
         style={{
+          fontFamily: "cursive",
           backgroundImage:
             "repeating-linear-gradient(to bottom, transparent, transparent 31px, rgba(112,65,45,0.08) 32px)",
         }}
