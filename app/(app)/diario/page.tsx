@@ -38,7 +38,7 @@ export default function DiarioPage() {
           placeholder="Versículo"
           className="
             w-1/2
-            bg-[#e9d5bb]/40
+            bg-[#e9d5bb]/35
             rounded-2xl
             p-4
             text-sm
@@ -47,7 +47,6 @@ export default function DiarioPage() {
             resize-none
             outline-none
             leading-relaxed
-            shadow-sm
           "
           rows={3}
         />
@@ -58,7 +57,7 @@ export default function DiarioPage() {
           placeholder="Destaque"
           className="
             w-1/2
-            bg-[#e9d5bb]/40
+            bg-[#e9d5bb]/35
             rounded-2xl
             p-4
             text-sm
@@ -67,13 +66,12 @@ export default function DiarioPage() {
             resize-none
             outline-none
             leading-relaxed
-            shadow-sm
           "
           rows={3}
         />
       </div>
 
-      {/* TEXTO PRINCIPAL */}
+      {/* TEXTO PRINCIPAL COM LINHAS */}
       <textarea
         value={texto}
         onChange={(e) => setTexto(e.target.value)}
@@ -89,6 +87,10 @@ export default function DiarioPage() {
           outline-none
           resize-none
         "
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(to bottom, transparent, transparent 31px, rgba(112,65,45,0.08) 32px)",
+        }}
       />
 
       {/* BOTÃO DISCRETO */}
