@@ -1,13 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function DiarioPage() {
   const [versiculo, setVersiculo] = useState("");
   const [destaque, setDestaque] = useState("");
   const [texto, setTexto] = useState("");
 
+  const versiculoRef = useRef<HTMLTextAreaElement>(null);
+
   const hoje = new Date().toLocaleDateString("pt-BR");
+
+  // Auto resize do versículo
+  useEffect(() => {
+    if (versiculoRef.current) {
+      versiculoRef.current.style.height = "auto";
+      versiculoRef.current.style.height =
+        versiculoRef.current.scrollHeight + "px";
+    }
+  }, [versiculo]);
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] px-8 pt-14 pb-40 text-[#70412d]">
@@ -28,16 +39,16 @@ export default function DiarioPage() {
 
       {/* VERSÍCULO */}
       <textarea
+        ref={versiculoRef}
         value={versiculo}
         onChange={(e) => setVersiculo(e.target.value)}
         placeholder="Versículo"
-        className="w-full bg-transparent resize-none outline-none italic text-[#70412d]/60 leading-relaxed mb-14 placeholder:text-[#70412d]/40"
+        className="w-full bg-transparent resize-none outline-none italic text-[#70412d]/60 leading-relaxed mb-14 placeholder:text-[#70412d]/40 overflow-hidden"
       />
 
-      {/* DESTAQUE COM LINHAS VERTICAIS (menor e mais delicado) */}
+      {/* DESTAQUE */}
       <div className="flex items-center justify-center mb-12">
         <div className="flex items-center gap-4">
-
           <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
 
           <textarea
@@ -48,7 +59,6 @@ export default function DiarioPage() {
           />
 
           <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
-
         </div>
       </div>
 
@@ -65,10 +75,12 @@ export default function DiarioPage() {
           leading-8
           text-lg
           placeholder:text-[#70412d]/40
+          pt-1
         "
         style={{
           backgroundImage: `linear-gradient(to bottom, #e9d5bb 1px, transparent 1px)`,
           backgroundSize: "100% 32px",
+          backgroundPosition: "0 32px", // ← começa a linha só depois da primeira linha
           minHeight: "400px"
         }}
       />
