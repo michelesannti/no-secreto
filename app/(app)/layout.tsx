@@ -25,9 +25,8 @@ export default function AppLayout({
         href={href}
         className="relative flex items-center justify-center"
       >
-        {/* Fundo do ativo sem alterar largura */}
         {active && (
-          <div className="absolute w-12 h-12 rounded-2xl bg-[#eadcc7] shadow-[inset_0_2px_4px_rgba(112,65,45,0.12)]"></div>
+          <div className="absolute w-12 h-12 rounded-2xl bg-[#e9d5bb] shadow-[inset_0_2px_4px_rgba(112,65,45,0.12)]"></div>
         )}
 
         <Icon
@@ -35,7 +34,7 @@ export default function AppLayout({
           strokeWidth={active ? 2.3 : 1.5}
           className={
             active
-              ? "relative text-[#5a3424]"
+              ? "relative text-[#70412d]"
               : "text-[#70412d]/25"
           }
         />
@@ -51,7 +50,7 @@ export default function AppLayout({
         <nav
           className="
             relative
-            bg-[#f9f5e9]/88
+            bg-[#f9f5e9]/90
             backdrop-blur-lg
             px-10
             py-4
@@ -63,7 +62,6 @@ export default function AppLayout({
             shadow-[0_12px_30px_rgba(112,65,45,0.10)]
           "
         >
-          {/* Linha interna editorial */}
           <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/40"></div>
 
           <NavItem href="/hoje" Icon={Home} />
