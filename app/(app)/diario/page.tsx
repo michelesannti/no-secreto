@@ -4,121 +4,74 @@ import { useState } from "react";
 
 export default function DiarioPage() {
   const [texto, setTexto] = useState("");
-  const [versiculo, setVersiculo] = useState("");
-  const [destaque, setDestaque] = useState("");
-
-  const hoje = new Date().toLocaleDateString("pt-BR");
-
-  function handleSalvar() {
-    console.log({
-      texto,
-      versiculo,
-      destaque,
-    });
-  }
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] px-6 pt-10 pb-40">
-      
-      {/* TOPO */}
+    <div className="min-h-screen bg-[#f6f1e8] px-6 pt-10 pb-40 text-[#5c3b2e]">
+      {/* Header */}
       <div className="flex justify-between items-start mb-10">
-        <h1 className="text-[#70412d] text-xl tracking-wide">
-          Diário
-        </h1>
-
-        <span className="text-[#70412d]/60 text-sm">
-          {hoje}
-        </span>
+        <h1 className="text-3xl font-serif">Diário</h1>
+        <span className="text-sm opacity-60">26/02/2026</span>
       </div>
 
-      {/* VERSÍCULO + DESTAQUE */}
-      <div className="flex gap-4 mb-10">
-        <textarea
-          value={versiculo}
-          onChange={(e) => setVersiculo(e.target.value)}
-          placeholder="Versículo"
-          className="
-            w-1/2
-            bg-[#e9d5bb]/30
-            rounded-2xl
-            p-4
-            text-[15px]
-            font-serif
-            text-[#5a3424]
-            placeholder:text-[#70412d]/40
-            resize-none
-            outline-none
-            leading-relaxed
-          "
-          rows={3}
-        />
-
-        <textarea
-          value={destaque}
-          onChange={(e) => setDestaque(e.target.value)}
-          placeholder="Destaque"
-          className="
-            w-1/2
-            bg-[#e9d5bb]/30
-            rounded-2xl
-            p-4
-            text-[15px]
-            font-serif
-            font-semibold
-            text-[#5a3424]
-            placeholder:text-[#70412d]/40
-            resize-none
-            outline-none
-            leading-relaxed
-          "
-          rows={3}
-        />
-      </div>
-
-      {/* TEXTO PRINCIPAL COM LINHAS + CURSIVA */}
-      <textarea
-        value={texto}
-        onChange={(e) => setTexto(e.target.value)}
-        placeholder="O que Deus falou com você hoje?"
-        className="
-          w-full
-          min-h-[420px]
-          bg-transparent
-          text-[#4a2b1d]
-          placeholder:text-[#70412d]/30
-          text-[18px]
-          leading-8
-          outline-none
-          resize-none
-        "
-        style={{
-          fontFamily: "cursive",
-          backgroundImage:
-            "repeating-linear-gradient(to bottom, transparent, transparent 31px, rgba(112,65,45,0.08) 32px)",
-        }}
-      />
-
-      {/* BOTÃO DISCRETO */}
-      {texto.length > 0 && (
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={handleSalvar}
-            className="
-              text-sm
-              px-5
-              py-2
-              rounded-full
-              bg-[#70412d]
-              text-white
-              shadow-md
-              hover:opacity-90
-              transition
-            "
-          >
-            Salvar
-          </button>
+      {/* Versículo + Destaque */}
+      <div className="grid grid-cols-2 gap-4 mb-10">
+        {/* Versículo */}
+        <div className="bg-[#e9dfcf] rounded-3xl p-6 min-h-[160px] flex flex-col justify-between">
+          <span className="text-xs opacity-50 mb-2">
+            Ester 4:14
+          </span>
+          <p className="font-serif text-base leading-relaxed">
+            “Quem sabe se não foi para um momento como este que você chegou à posição de rainha?”
+          </p>
         </div>
-      )}
+
+        {/* Destaque */}
+        <div className="bg-[#e9dfcf] rounded-3xl p-6 min-h-[120px] flex items-start">
+          <p className="font-serif font-semibold text-lg leading-snug">
+            Chegou a sua vez
+          </p>
+        </div>
+      </div>
+
+      {/* Campo principal */}
+      <div className="relative">
+        <textarea
+          value={texto}
+          onChange={(e) => setTexto(e.target.value)}
+          placeholder="- ser anônima na terra, não me faz anônima no céu"
+          className="
+            w-full
+            min-h-[420px]
+            bg-transparent
+            resize-none
+            outline-none
+            font-serif
+            text-[16px]
+            leading-8
+            tracking-wide
+            placeholder:text-[#5c3b2e]/40
+          "
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(to bottom, transparent, transparent 30px, rgba(92,59,46,0.08) 31px)",
+          }}
+        />
+
+        {/* Botão salvar discreto */}
+        <button
+          className="
+            absolute
+            bottom-4
+            right-2
+            text-xs
+            opacity-50
+            hover:opacity-80
+            transition
+          "
+        >
+          salvar
+        </button>
+      </div>
     </div>
   );
 }
