@@ -11,43 +11,46 @@ export default function DiarioPage() {
     <div className="min-h-screen bg-[#f6f1e8] px-6 pt-10 pb-40 text-[#5c3b2e]">
 
       {/* Header */}
-      <div className="flex justify-between items-start mb-8">
+      <div className="flex justify-between items-start mb-10">
         <h1 className="text-2xl font-serif">Diário</h1>
         <span className="text-sm opacity-50">
           {new Date().toLocaleDateString("pt-BR")}
         </span>
       </div>
 
-      {/* Versículo (tema principal, horizontal e dominante) */}
-      <div className="bg-[#e9dfcf] rounded-3xl p-7 min-h-[140px] mb-6">
+      {/* Versículo — leve, sem caixa forte */}
+      <div className="mb-6">
         <textarea
           value={versiculo}
           onChange={(e) => setVersiculo(e.target.value)}
           placeholder="Versículo"
           className="
             w-full
-            h-full
             bg-transparent
             resize-none
             outline-none
             font-serif
-            text-[18px]
-            leading-8
+            text-[14px]
+            leading-6
+            italic
+            opacity-70
             placeholder:text-[#5c3b2e]/40
           "
         />
       </div>
 
-      {/* Destaque (menor, abaixo, mais vertical) */}
-      <div className="w-[65%] bg-[#e9dfcf] rounded-3xl p-6 min-h-[100px] mb-10">
+      {/* Destaque — estilo diferente (sem mesma caixa) */}
+      <div className="mb-10">
         <textarea
           value={destaque}
           onChange={(e) => setDestaque(e.target.value)}
           placeholder="Destaque"
           className="
-            w-full
-            h-full
-            bg-transparent
+            w-[70%]
+            bg-[#e9dfcf]
+            rounded-2xl
+            px-5
+            py-4
             resize-none
             outline-none
             font-serif
@@ -59,7 +62,7 @@ export default function DiarioPage() {
         />
       </div>
 
-      {/* Campo principal com linhas fixas */}
+      {/* Texto principal — o protagonista */}
       <div className="relative">
         <textarea
           value={texto}
@@ -67,23 +70,23 @@ export default function DiarioPage() {
           placeholder="O que Deus falou com você?"
           className="
             w-full
-            min-h-[480px]
+            min-h-[500px]
             bg-transparent
             resize-none
             outline-none
             font-serif
-            text-[16px]
-            leading-8
+            text-[18px]
+            leading-9
             tracking-wide
             placeholder:text-[#5c3b2e]/40
           "
           style={{
             backgroundImage:
-              "repeating-linear-gradient(to bottom, transparent, transparent 30px, rgba(92,59,46,0.08) 31px)",
+              "repeating-linear-gradient(to bottom, transparent, transparent 34px, rgba(92,59,46,0.08) 35px)",
           }}
         />
 
-        {/* Botão salvar discreto */}
+        {/* Salvar discreto */}
         <button
           className="
             absolute
