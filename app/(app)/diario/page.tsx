@@ -3,45 +3,76 @@
 import { useState } from "react";
 
 export default function DiarioPage() {
+  const [versiculo, setVersiculo] = useState("");
+  const [destaque, setDestaque] = useState("");
   const [texto, setTexto] = useState("");
 
   return (
     <div className="min-h-screen bg-[#f6f1e8] px-6 pt-10 pb-40 text-[#5c3b2e]">
+      
       {/* Header */}
-      <div className="flex justify-between items-start mb-10">
-        <h1 className="text-3xl font-serif">Diário</h1>
-        <span className="text-sm opacity-60">26/02/2026</span>
+      <div className="flex justify-between items-start mb-8">
+        <h1 className="text-2xl font-serif">Diário</h1>
+        <span className="text-sm opacity-50">
+          {new Date().toLocaleDateString("pt-BR")}
+        </span>
       </div>
 
-      {/* Versículo + Destaque */}
-      <div className="grid grid-cols-2 gap-4 mb-10">
-        {/* Versículo */}
-        <div className="bg-[#e9dfcf] rounded-3xl p-6 min-h-[160px] flex flex-col justify-between">
-          <span className="text-xs opacity-50 mb-2">
-            Ester 4:14
-          </span>
-          <p className="font-serif text-base leading-relaxed">
-            “Quem sabe se não foi para um momento como este que você chegou à posição de rainha?”
-          </p>
+      {/* Versículo + Destaque assimétricos */}
+      <div className="flex gap-4 mb-10">
+
+        {/* Versículo horizontal (maior) */}
+        <div className="flex-1 bg-[#e9dfcf] rounded-3xl p-6 min-h-[160px]">
+          <textarea
+            value={versiculo}
+            onChange={(e) => setVersiculo(e.target.value)}
+            placeholder="Escreva aqui o versículo do dia..."
+            className="
+              w-full
+              h-full
+              bg-transparent
+              resize-none
+              outline-none
+              font-serif
+              text-[15px]
+              leading-7
+              placeholder:text-[#5c3b2e]/40
+            "
+          />
         </div>
 
-        {/* Destaque */}
-        <div className="bg-[#e9dfcf] rounded-3xl p-6 min-h-[120px] flex items-start">
-          <p className="font-serif font-semibold text-lg leading-snug">
-            Chegou a sua vez
-          </p>
+        {/* Destaque vertical (mais estreito) */}
+        <div className="w-[38%] bg-[#e9dfcf] rounded-3xl p-6 min-h-[160px] flex items-start">
+          <textarea
+            value={destaque}
+            onChange={(e) => setDestaque(e.target.value)}
+            placeholder="Destaque..."
+            className="
+              w-full
+              h-full
+              bg-transparent
+              resize-none
+              outline-none
+              font-serif
+              font-semibold
+              text-[17px]
+              leading-snug
+              placeholder:text-[#5c3b2e]/40
+            "
+          />
         </div>
+
       </div>
 
-      {/* Campo principal */}
+      {/* Campo principal com linhas fixas */}
       <div className="relative">
         <textarea
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
-          placeholder="- ser anônima na terra, não me faz anônima no céu"
+          placeholder="Escreva aqui o que Deus falou com você hoje..."
           className="
             w-full
-            min-h-[420px]
+            min-h-[460px]
             bg-transparent
             resize-none
             outline-none
@@ -72,6 +103,7 @@ export default function DiarioPage() {
           salvar
         </button>
       </div>
+
     </div>
   );
 }
