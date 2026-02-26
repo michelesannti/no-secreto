@@ -19,7 +19,7 @@ export default function DiarioPage() {
       </div>
 
       {/* Versículo — sutil */}
-      <div className="mb-6">
+      <div className="mb-8">
         <textarea
           value={versiculo}
           onChange={(e) => setVersiculo(e.target.value)}
@@ -39,26 +39,24 @@ export default function DiarioPage() {
         />
       </div>
 
-      {/* Destaque — estilo post-it elegante */}
-      <div className="mb-12 flex justify-start">
-        <div className="bg-[#efe4d3] px-6 py-5 rounded-xl shadow-[0_8px_20px_rgba(112,65,45,0.08)] rotate-[-1deg] max-w-[75%]">
-          <textarea
-            value={destaque}
-            onChange={(e) => setDestaque(e.target.value)}
-            placeholder="Destaque"
-            className="
-              w-full
-              bg-transparent
-              resize-none
-              outline-none
-              font-serif
-              font-semibold
-              text-[16px]
-              leading-snug
-              placeholder:text-[#5c3b2e]/40
-            "
-          />
-        </div>
+      {/* Destaque — sem bloco, só linha lateral */}
+      <div className="mb-12 pl-5 border-l-2 border-[#70412d]/30">
+        <textarea
+          value={destaque}
+          onChange={(e) => setDestaque(e.target.value)}
+          placeholder="Destaque"
+          className="
+            w-full
+            bg-transparent
+            resize-none
+            outline-none
+            font-serif
+            font-semibold
+            text-[18px]
+            leading-snug
+            placeholder:text-[#5c3b2e]/40
+          "
+        />
       </div>
 
       {/* Texto principal — protagonista */}
