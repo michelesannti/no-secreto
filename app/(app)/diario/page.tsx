@@ -8,18 +8,18 @@ export default function DiarioPage() {
   const [texto, setTexto] = useState("");
 
   return (
-    <div className="min-h-screen bg-[#f6f1e8] px-6 pt-10 pb-40 text-[#5c3b2e]">
+    <div className="min-h-screen bg-[#f6f1e8] px-7 pt-12 pb-40 text-[#5c3b2e]">
 
       {/* Header */}
-      <div className="flex justify-between items-start mb-10">
-        <h1 className="text-2xl font-serif">Diário</h1>
-        <span className="text-sm opacity-50">
+      <div className="flex justify-between items-start mb-14">
+        <h1 className="text-3xl font-serif">Diário</h1>
+        <span className="text-sm opacity-40">
           {new Date().toLocaleDateString("pt-BR")}
         </span>
       </div>
 
-      {/* Versículo */}
-      <div className="mb-10">
+      {/* Versículo — pequeno e sutil */}
+      <div className="mb-8">
         <textarea
           value={versiculo}
           onChange={(e) => setVersiculo(e.target.value)}
@@ -33,14 +33,17 @@ export default function DiarioPage() {
             text-[14px]
             leading-6
             italic
-            opacity-70
-            placeholder:text-[#5c3b2e]/40
+            opacity-60
+            placeholder:text-[#5c3b2e]/30
           "
         />
       </div>
 
-      {/* Destaque com tipografia diferente */}
-      <div className="mb-14">
+      {/* Linha delicada de separação */}
+      <div className="h-px bg-[#5c3b2e]/10 mb-12" />
+
+      {/* Destaque — frase contemplativa */}
+      <div className="mb-20">
         <textarea
           value={destaque}
           onChange={(e) => setDestaque(e.target.value)}
@@ -50,11 +53,10 @@ export default function DiarioPage() {
             bg-transparent
             resize-none
             outline-none
-            font-sans
-            font-medium
+            font-serif
             text-[22px]
             leading-snug
-            tracking-tight
+            tracking-wide
             placeholder:text-[#5c3b2e]/40
           "
         />
@@ -68,24 +70,32 @@ export default function DiarioPage() {
           placeholder="O que Deus falou com você?"
           className="
             w-full
-            min-h-[500px]
+            min-h-[520px]
             bg-transparent
             resize-none
             outline-none
             font-serif
-            text-[18px]
+            text-[19px]
             leading-9
             tracking-wide
             placeholder:text-[#5c3b2e]/40
           "
           style={{
             backgroundImage:
-              "repeating-linear-gradient(to bottom, transparent, transparent 34px, rgba(92,59,46,0.08) 35px)",
+              "repeating-linear-gradient(to bottom, transparent, transparent 36px, rgba(92,59,46,0.07) 37px)",
           }}
         />
 
         <button
-          className="absolute bottom-4 right-2 text-xs opacity-50 hover:opacity-80 transition"
+          className="
+            absolute
+            bottom-4
+            right-2
+            text-xs
+            opacity-40
+            hover:opacity-80
+            transition
+          "
         >
           salvar
         </button>
