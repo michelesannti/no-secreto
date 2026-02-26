@@ -12,12 +12,12 @@ export default function DiarioPage() {
     <div className="min-h-screen bg-[#f9f5e9] px-8 pt-14 pb-40 text-[#70412d]">
 
       {/* TOPO */}
-      <div className="flex justify-between items-start mb-12">
+      <div className="flex justify-between items-start mb-10">
         <div>
-          <h1 className="text-3xl font-serif tracking-wide">
+          <h1 className="text-2xl font-serif tracking-wide">
             Diário
           </h1>
-          <div className="w-16 h-[2px] bg-[#e9d5bb] mt-2"></div>
+          <div className="w-12 h-[2px] bg-[#e9d5bb] mt-2"></div>
         </div>
 
         <span className="text-sm tracking-wider text-[#70412d]/60">
@@ -26,22 +26,23 @@ export default function DiarioPage() {
       </div>
 
       {/* VERSÍCULO */}
-      <p className="italic text-[#70412d]/60 leading-relaxed mb-16 max-w-xl">
-        Ester 4:14 “Quem sabe se não foi para um momento como este que você chegou à posição de rainha?”
-      </p>
+      <textarea
+        placeholder="Versículo"
+        className="w-full bg-transparent resize-none outline-none italic text-[#70412d]/60 leading-relaxed mb-12 placeholder:text-[#70412d]/40"
+      />
 
-      {/* DESTAQUE */}
-      <div className="mb-12 text-center">
-        <div className="w-full h-px bg-[#e9d5bb] mb-4"></div>
+      {/* DESTAQUE COM LINHAS DOS LADOS */}
+      <div className="flex items-center justify-center gap-4 mb-10">
+        <div className="flex-1 h-px bg-[#e9d5bb]"></div>
 
         <textarea
           value={destaque}
           onChange={(e) => setDestaque(e.target.value)}
-          placeholder="Seu destaque do dia"
-          className="w-full bg-transparent resize-none outline-none font-serif text-2xl font-semibold text-center placeholder:text-[#70412d]/30"
+          placeholder="Destaque"
+          className="bg-transparent resize-none outline-none font-serif text-2xl font-semibold text-center placeholder:text-[#70412d]/30"
         />
 
-        <div className="w-full h-px bg-[#e9d5bb] mt-4"></div>
+        <div className="flex-1 h-px bg-[#e9d5bb]"></div>
       </div>
 
       {/* TEXTO PRINCIPAL */}
