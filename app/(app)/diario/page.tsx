@@ -3,63 +3,73 @@
 import { useState } from "react";
 
 export default function DiarioPage() {
-  const [versiculo, setVersiculo] = useState("");
   const [destaque, setDestaque] = useState("");
   const [texto, setTexto] = useState("");
 
+  const hoje = new Date().toLocaleDateString("pt-BR");
+
   return (
-    <div className="min-h-screen bg-[#f9f5e9] px-8 pt-10 pb-40 text-[#70412d]">
+    <div className="min-h-screen bg-[#f9f5e9] px-8 pt-14 pb-40 text-[#70412d]">
 
       {/* TOPO */}
-      <div className="flex justify-between items-start mb-8">
-
-        {/* DIÁRIO - mais discreto */}
+      <div className="flex justify-between items-start mb-12">
         <div>
-          <h1 className="text-xl font-serif tracking-wide text-[#70412d]">
+          <h1 className="text-3xl font-serif tracking-wide">
             Diário
           </h1>
-          <div className="w-8 h-px bg-[#e9d5bb] mt-2"></div>
+          <div className="w-16 h-[2px] bg-[#e9d5bb] mt-2"></div>
         </div>
 
-        {/* DATA mais refinada */}
-        <span className="text-xs tracking-[0.2em] text-[#70412d]/40 mt-1">
-          {new Date().toLocaleDateString("pt-BR")}
+        <span className="text-sm tracking-wider text-[#70412d]/60">
+          {hoje}
         </span>
       </div>
 
       {/* VERSÍCULO */}
-      <textarea
-        value={versiculo}
-        onChange={(e) => setVersiculo(e.target.value)}
-        placeholder="Versículo"
-        className="w-full bg-transparent resize-none outline-none font-serif text-sm italic opacity-60 mb-8 placeholder:text-[#70412d]/30"
-      />
+      <p className="italic text-[#70412d]/60 leading-relaxed mb-16 max-w-xl">
+        Ester 4:14 “Quem sabe se não foi para um momento como este que você chegou à posição de rainha?”
+      </p>
 
-      {/* DESTAQUE - linhas laterais elegantes */}
-      <div className="mb-6 flex items-center gap-4">
-        <div className="flex-1 h-px bg-[#e9d5bb]"></div>
+      {/* DESTAQUE */}
+      <div className="mb-12 text-center">
+        <div className="w-full h-px bg-[#e9d5bb] mb-4"></div>
 
         <textarea
           value={destaque}
           onChange={(e) => setDestaque(e.target.value)}
-          placeholder="Destaque"
-          className="w-auto min-w-[120px] max-w-[60%] bg-transparent resize-none outline-none font-serif text-2xl font-semibold text-center placeholder:text-[#70412d]/40"
+          placeholder="Seu destaque do dia"
+          className="w-full bg-transparent resize-none outline-none font-serif text-2xl font-semibold text-center placeholder:text-[#70412d]/30"
         />
 
-        <div className="flex-1 h-px bg-[#e9d5bb]"></div>
+        <div className="w-full h-px bg-[#e9d5bb] mt-4"></div>
       </div>
 
-      {/* TEXTO PRINCIPAL - mais próximo */}
-      <textarea
-        value={texto}
-        onChange={(e) => setTexto(e.target.value)}
-        placeholder="O que Deus falou com você?"
-        className="w-full min-h-[460px] bg-transparent resize-none outline-none font-serif text-lg leading-9 placeholder:text-[#70412d]/35"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(to bottom, transparent, transparent 36px, rgba(112,65,45,0.08) 37px)",
-        }}
-      />
+      {/* TEXTO PRINCIPAL */}
+      <div>
+        <p className="mb-4 text-[#70412d]/70">
+          O que Deus falou com você?
+        </p>
+
+        <textarea
+          value={texto}
+          onChange={(e) => setTexto(e.target.value)}
+          placeholder="Escreva aqui..."
+          className="
+            w-full
+            bg-transparent
+            resize-none
+            outline-none
+            leading-8
+            text-lg
+            placeholder:text-[#70412d]/30
+            border-none
+          "
+          style={{
+            backgroundImage: `linear-gradient(to bottom, #e9d5bb 1px, transparent 1px)`,
+            backgroundSize: "100% 32px",
+          }}
+        />
+      </div>
     </div>
   );
 }
