@@ -3,9 +3,9 @@
 import { useState } from "react";
 
 export default function DiarioPage() {
+  const [versiculo, setVersiculo] = useState("");
   const [destaque, setDestaque] = useState("");
   const [texto, setTexto] = useState("");
-  const [versiculo, setVersiculo] = useState("");
 
   const hoje = new Date().toLocaleDateString("pt-BR");
 
@@ -34,49 +34,44 @@ export default function DiarioPage() {
         className="w-full bg-transparent resize-none outline-none italic text-[#70412d]/60 leading-relaxed mb-14 placeholder:text-[#70412d]/40"
       />
 
-      {/* DESTAQUE COM LINHAS VERTICAIS */}
-      <div className="flex items-center justify-center mb-14">
-        <div className="flex items-center gap-6 w-full justify-center">
+      {/* DESTAQUE COM LINHAS VERTICAIS (menor e mais delicado) */}
+      <div className="flex items-center justify-center mb-12">
+        <div className="flex items-center gap-4">
 
-          <div className="w-[2px] h-12 bg-[#e9d5bb]"></div>
+          <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
 
           <textarea
             value={destaque}
             onChange={(e) => setDestaque(e.target.value)}
             placeholder="Destaque"
-            className="bg-transparent resize-none outline-none font-serif text-3xl font-semibold text-center placeholder:text-[#70412d]/30 leading-tight"
+            className="bg-transparent resize-none outline-none font-serif text-2xl font-semibold text-center placeholder:text-[#70412d]/30 leading-tight"
           />
 
-          <div className="w-[2px] h-12 bg-[#e9d5bb]"></div>
+          <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
 
         </div>
       </div>
 
       {/* TEXTO PRINCIPAL */}
-      <div>
-        <p className="mb-4 text-[#70412d]/70">
-          O que Deus falou com você?
-        </p>
-
-        <textarea
-          value={texto}
-          onChange={(e) => setTexto(e.target.value)}
-          placeholder=""
-          className="
-            w-full
-            bg-transparent
-            resize-none
-            outline-none
-            leading-8
-            text-lg
-            placeholder:text-[#70412d]/40
-          "
-          style={{
-            backgroundImage: `linear-gradient(to bottom, #e9d5bb 1px, transparent 1px)`,
-            backgroundSize: "100% 32px",
-          }}
-        />
-      </div>
+      <textarea
+        value={texto}
+        onChange={(e) => setTexto(e.target.value)}
+        placeholder="O que Deus falou com você?"
+        className="
+          w-full
+          bg-transparent
+          resize-none
+          outline-none
+          leading-8
+          text-lg
+          placeholder:text-[#70412d]/40
+        "
+        style={{
+          backgroundImage: `linear-gradient(to bottom, #e9d5bb 1px, transparent 1px)`,
+          backgroundSize: "100% 32px",
+          minHeight: "400px"
+        }}
+      />
     </div>
   );
 }
