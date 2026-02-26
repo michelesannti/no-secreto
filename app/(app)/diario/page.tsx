@@ -18,8 +18,8 @@ export default function DiarioPage() {
         </span>
       </div>
 
-      {/* Versículo — sutil */}
-      <div className="mb-8">
+      {/* Versículo */}
+      <div className="mb-10">
         <textarea
           value={versiculo}
           onChange={(e) => setVersiculo(e.target.value)}
@@ -39,8 +39,8 @@ export default function DiarioPage() {
         />
       </div>
 
-      {/* Destaque — sem bloco, só linha lateral */}
-      <div className="mb-12 pl-5 border-l-2 border-[#70412d]/30">
+      {/* Destaque centralizado */}
+      <div className="mb-14 text-center">
         <textarea
           value={destaque}
           onChange={(e) => setDestaque(e.target.value)}
@@ -52,14 +52,15 @@ export default function DiarioPage() {
             outline-none
             font-serif
             font-semibold
-            text-[18px]
+            text-[20px]
             leading-snug
+            tracking-wide
             placeholder:text-[#5c3b2e]/40
           "
         />
       </div>
 
-      {/* Texto principal — protagonista */}
+      {/* Texto principal */}
       <div className="relative">
         <textarea
           value={texto}
@@ -84,15 +85,7 @@ export default function DiarioPage() {
         />
 
         <button
-          className="
-            absolute
-            bottom-4
-            right-2
-            text-xs
-            opacity-50
-            hover:opacity-80
-            transition
-          "
+          className="absolute bottom-4 right-2 text-xs opacity-50 hover:opacity-80 transition"
         >
           salvar
         </button>
