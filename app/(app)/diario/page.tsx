@@ -8,17 +8,22 @@ export default function DiarioPage() {
   const [texto, setTexto] = useState("");
 
   return (
-    <div className="min-h-screen bg-[#f6f1e8] px-8 pt-14 pb-40 text-[#5c3b2e]">
-
+    <div
+      className="min-h-screen px-10 pt-16 pb-40 text-[#5c3b2e]"
+      style={{
+        background:
+          "linear-gradient(to bottom, #f8f3ea 0%, #f6f1e8 40%, #f3ede3 100%)",
+      }}
+    >
       {/* Topo */}
-      <div className="flex justify-between items-start mb-12">
-        <h1 className="text-2xl font-serif">Diário</h1>
+      <div className="flex justify-between items-start mb-16">
+        <h1 className="text-3xl font-serif tracking-tight">Diário</h1>
         <span className="text-xs opacity-40">
           {new Date().toLocaleDateString("pt-BR")}
         </span>
       </div>
 
-      {/* Versículo */}
+      {/* Versículo (mais suave) */}
       <textarea
         value={versiculo}
         onChange={(e) => setVersiculo(e.target.value)}
@@ -29,18 +34,18 @@ export default function DiarioPage() {
           resize-none
           outline-none
           font-serif
-          text-[14px]
+          text-[13px]
           leading-6
           italic
-          opacity-60
-          mb-14
-          placeholder:text-[#5c3b2e]/30
+          opacity-50
+          mb-20
+          placeholder:text-[#5c3b2e]/25
         "
       />
 
-      {/* Destaque com gesto visual */}
-      <div className="mb-16 flex flex-col items-center">
-        <div className="w-16 h-px bg-[#5c3b2e]/30 mb-4"></div>
+      {/* Destaque forte e printável */}
+      <div className="mb-24 flex flex-col items-center text-center">
+        <div className="w-20 h-px bg-[#5c3b2e]/20 mb-6"></div>
 
         <textarea
           value={destaque}
@@ -48,20 +53,19 @@ export default function DiarioPage() {
           placeholder="Destaque"
           className="
             w-full
-            text-center
             bg-transparent
             resize-none
             outline-none
             font-serif
-            text-[20px]
-            leading-snug
+            text-[26px]
+            leading-tight
             tracking-wide
-            font-medium
-            placeholder:text-[#5c3b2e]/35
+            font-semibold
+            placeholder:text-[#5c3b2e]/30
           "
         />
 
-        <div className="w-10 h-px bg-[#5c3b2e]/20 mt-4"></div>
+        <div className="w-12 h-px bg-[#5c3b2e]/15 mt-6"></div>
       </div>
 
       {/* Campo principal */}
@@ -83,25 +87,10 @@ export default function DiarioPage() {
           "
           style={{
             backgroundImage:
-              "repeating-linear-gradient(to bottom, transparent, transparent 36px, rgba(92,59,46,0.06) 37px)",
+              "repeating-linear-gradient(to bottom, transparent, transparent 36px, rgba(92,59,46,0.05) 37px)",
           }}
         />
-
-        <button
-          className="
-            absolute
-            bottom-4
-            right-0
-            text-xs
-            opacity-40
-            hover:opacity-80
-            transition
-          "
-        >
-          salvar
-        </button>
       </div>
-
     </div>
   );
 }
