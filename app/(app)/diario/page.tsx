@@ -39,8 +39,8 @@ export default function DiarioPage() {
         />
       </div>
 
-      {/* Destaque centralizado */}
-      <div className="mb-14 text-center">
+      {/* Destaque com tipografia diferente */}
+      <div className="mb-14">
         <textarea
           value={destaque}
           onChange={(e) => setDestaque(e.target.value)}
@@ -50,11 +50,11 @@ export default function DiarioPage() {
             bg-transparent
             resize-none
             outline-none
-            font-serif
-            font-semibold
-            text-[20px]
+            font-sans
+            font-medium
+            text-[22px]
             leading-snug
-            tracking-wide
+            tracking-tight
             placeholder:text-[#5c3b2e]/40
           "
         />
