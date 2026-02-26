@@ -8,13 +8,10 @@ export default function DiarioPage() {
   const [texto, setTexto] = useState("");
 
   return (
-    <div className="relative min-h-screen bg-[#f9f5e9] px-10 pt-14 pb-40 text-[#70412d]">
-
-      {/* Linha editorial */}
-      <div className="absolute left-6 top-0 bottom-0 w-px bg-[#e9d5bb]/60"></div>
+    <div className="min-h-screen bg-[#f9f5e9] px-8 pt-14 pb-40 text-[#70412d]">
 
       <div className="flex justify-between items-start mb-12">
-        <h1 className="text-2xl font-serif tracking-tight">Diário</h1>
+        <h1 className="text-2xl font-serif">Diário</h1>
         <span className="text-xs opacity-40">
           {new Date().toLocaleDateString("pt-BR")}
         </span>
@@ -27,12 +24,14 @@ export default function DiarioPage() {
         className="w-full bg-transparent resize-none outline-none font-serif text-sm italic opacity-60 mb-14 placeholder:text-[#70412d]/30"
       />
 
-      <div className="mb-16 text-center">
+      <div className="relative mb-16">
+        <div className="absolute inset-0 bg-[#e9d5bb]/30 blur-2xl rounded-full"></div>
+
         <textarea
           value={destaque}
           onChange={(e) => setDestaque(e.target.value)}
           placeholder="Destaque"
-          className="w-full bg-transparent resize-none outline-none font-serif text-2xl font-semibold text-center placeholder:text-[#70412d]/40"
+          className="relative w-full bg-transparent resize-none outline-none font-serif text-2xl font-semibold text-center placeholder:text-[#70412d]/40"
         />
       </div>
 
