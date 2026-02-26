@@ -8,24 +8,11 @@ export default function DiarioPage() {
   const [texto, setTexto] = useState("");
 
   return (
-    <div
-      className="min-h-screen px-8 pt-16 pb-40 text-[#5c3b2e]"
-      style={{
-        background: `
-          radial-gradient(circle at center, rgba(0,0,0,0) 60%, rgba(0,0,0,0.04) 100%),
-          repeating-linear-gradient(
-            0deg,
-            #f6f1e8,
-            #f6f1e8 2px,
-            #f5efe6 2px,
-            #f5efe6 4px
-          )
-        `,
-      }}
-    >
+    <div className="min-h-screen bg-[#f6f1e8] px-8 pt-14 pb-40 text-[#5c3b2e]">
+
       {/* Topo */}
-      <div className="flex justify-between items-start mb-14">
-        <h1 className="text-3xl font-serif">Diário</h1>
+      <div className="flex justify-between items-start mb-12">
+        <h1 className="text-2xl font-serif">Diário</h1>
         <span className="text-xs opacity-40">
           {new Date().toLocaleDateString("pt-BR")}
         </span>
@@ -45,15 +32,15 @@ export default function DiarioPage() {
           text-[14px]
           leading-6
           italic
-          opacity-55
-          mb-20
+          opacity-60
+          mb-14
           placeholder:text-[#5c3b2e]/30
         "
       />
 
-      {/* Destaque com linha longa elegante */}
-      <div className="mb-24 text-center">
-        <div className="w-24 h-px bg-[#5c3b2e]/20 mx-auto mb-6"></div>
+      {/* Destaque com mais profundidade */}
+      <div className="mb-16 text-center">
+        <div className="w-16 h-px bg-[#5c3b2e]/20 mx-auto mb-6"></div>
 
         <textarea
           value={destaque}
@@ -65,14 +52,17 @@ export default function DiarioPage() {
             resize-none
             outline-none
             font-serif
-            text-[24px]
-            leading-tight
+            text-[22px]
+            leading-snug
             tracking-wide
             font-semibold
             text-center
-            placeholder:text-[#5c3b2e]/35
+            text-[#4a2c21]
+            placeholder:text-[#4a2c21]/40
           "
         />
+
+        <div className="w-10 h-px bg-[#5c3b2e]/15 mx-auto mt-6"></div>
       </div>
 
       {/* Campo principal */}
@@ -94,10 +84,11 @@ export default function DiarioPage() {
           "
           style={{
             backgroundImage:
-              "repeating-linear-gradient(to bottom, transparent, transparent 36px, rgba(92,59,46,0.05) 37px)",
+              "repeating-linear-gradient(to bottom, transparent, transparent 36px, rgba(92,59,46,0.06) 37px)",
           }}
         />
       </div>
+
     </div>
   );
 }
