@@ -18,7 +18,7 @@ export default function DiarioPage() {
         </span>
       </div>
 
-      {/* Versículo (semente do dia) */}
+      {/* Versículo */}
       <textarea
         value={versiculo}
         onChange={(e) => setVersiculo(e.target.value)}
@@ -38,14 +38,17 @@ export default function DiarioPage() {
         "
       />
 
-      {/* Destaque (selo do dia) */}
-      <div className="mb-16 text-center">
+      {/* Destaque com gesto visual */}
+      <div className="mb-16 flex flex-col items-center">
+        <div className="w-16 h-px bg-[#5c3b2e]/30 mb-4"></div>
+
         <textarea
           value={destaque}
           onChange={(e) => setDestaque(e.target.value)}
           placeholder="Destaque"
           className="
             w-full
+            text-center
             bg-transparent
             resize-none
             outline-none
@@ -57,6 +60,8 @@ export default function DiarioPage() {
             placeholder:text-[#5c3b2e]/35
           "
         />
+
+        <div className="w-10 h-px bg-[#5c3b2e]/20 mt-4"></div>
       </div>
 
       {/* Campo principal */}
