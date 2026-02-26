@@ -8,11 +8,11 @@ export default function DiarioPage() {
   const [texto, setTexto] = useState("");
 
   return (
-    <div className="min-h-screen bg-[#f6f1e8] px-8 pt-14 pb-40 text-[#5c3b2e]">
+    <div className="min-h-screen bg-[#f9f5e9] px-8 pt-14 pb-40 text-[#70412d]">
 
       {/* Topo */}
       <div className="flex justify-between items-start mb-12">
-        <h1 className="text-2xl font-serif">Diário</h1>
+        <h1 className="text-2xl font-serif tracking-tight">Diário</h1>
         <span className="text-xs opacity-40">
           {new Date().toLocaleDateString("pt-BR")}
         </span>
@@ -34,13 +34,13 @@ export default function DiarioPage() {
           italic
           opacity-60
           mb-14
-          placeholder:text-[#5c3b2e]/30
+          placeholder:text-[#70412d]/30
         "
       />
 
-      {/* Destaque com mais profundidade */}
+      {/* Destaque com profundidade usando a paleta */}
       <div className="mb-16 text-center">
-        <div className="w-16 h-px bg-[#5c3b2e]/20 mx-auto mb-6"></div>
+        <div className="w-16 h-px bg-[#e9d5bb] mx-auto mb-6"></div>
 
         <textarea
           value={destaque}
@@ -57,12 +57,12 @@ export default function DiarioPage() {
             tracking-wide
             font-semibold
             text-center
-            text-[#4a2c21]
-            placeholder:text-[#4a2c21]/40
+            text-[#70412d]
+            placeholder:text-[#70412d]/40
           "
         />
 
-        <div className="w-10 h-px bg-[#5c3b2e]/15 mx-auto mt-6"></div>
+        <div className="w-10 h-px bg-[#e9d5bb] mx-auto mt-6"></div>
       </div>
 
       {/* Campo principal */}
@@ -80,11 +80,11 @@ export default function DiarioPage() {
             font-serif
             text-[18px]
             leading-9
-            placeholder:text-[#5c3b2e]/35
+            placeholder:text-[#70412d]/35
           "
           style={{
             backgroundImage:
-              "repeating-linear-gradient(to bottom, transparent, transparent 36px, rgba(92,59,46,0.06) 37px)",
+              "repeating-linear-gradient(to bottom, transparent, transparent 36px, rgba(112,65,45,0.08) 37px)",
           }}
         />
       </div>
