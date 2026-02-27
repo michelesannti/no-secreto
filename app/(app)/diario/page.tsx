@@ -48,10 +48,10 @@ export default function DiarioPage() {
             value={versiculo}
             onChange={(e) => setVersiculo(e.target.value)}
             placeholder="Versículo"
-            className="w-full bg-transparent resize-none outline-none italic text-[#70412d]/60 leading-relaxed mb-14 placeholder:text-[#70412d]/40 overflow-hidden"
+            className="w-full bg-transparent resize-none outline-none italic text-[#70412d]/85 leading-relaxed mb-14 placeholder:text-[#70412d]/40 overflow-hidden"
           />
         ) : (
-          <p className="italic text-[#70412d]/60 leading-relaxed mb-14">
+          <p className="italic text-[#70412d]/85 leading-relaxed mb-14">
             {versiculo}
           </p>
         )}
@@ -84,6 +84,7 @@ export default function DiarioPage() {
         {/* TEXTO PRINCIPAL */}
         <div className="relative min-h-[600px] mb-8">
 
+          {/* Linhas de fundo */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
@@ -97,7 +98,7 @@ export default function DiarioPage() {
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
               placeholder="O que Deus falou com você?"
-              className="relative w-full h-full bg-transparent resize-none outline-none text-lg placeholder:text-[#70412d]/40"
+              className="relative w-full bg-transparent resize-none outline-none text-lg placeholder:text-[#70412d]/40"
               style={{
                 lineHeight: "32px",
                 minHeight: "600px"
