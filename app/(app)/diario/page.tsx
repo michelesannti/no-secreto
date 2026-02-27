@@ -26,10 +26,10 @@ export default function DiarioPage() {
       {/* TOPO */}
       <div className="flex justify-between items-start mb-12">
         <div>
-          <h1 className="text-xl font-serif tracking-wide">
+          <h1 className="text-lg font-serif tracking-wide">
             Diário
           </h1>
-          <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
+          <div className="w-8 h-[2px] bg-[#e9d5bb] mt-2"></div>
         </div>
 
         <span className="text-sm tracking-widest text-[#70412d]/60">
@@ -49,16 +49,16 @@ export default function DiarioPage() {
       {/* DESTAQUE */}
       <div className="flex items-center justify-center mb-12">
         <div className="flex items-center gap-4">
-          <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+          <div className="w-[1.5px] h-6 bg-[#e9d5bb]"></div>
 
           <textarea
             value={destaque}
             onChange={(e) => setDestaque(e.target.value)}
             placeholder="Destaque"
-            className="bg-transparent resize-none outline-none font-serif text-2xl font-semibold text-center placeholder:text-[#70412d]/30 leading-tight"
+            className="bg-transparent resize-none outline-none font-serif text-xl font-semibold text-center placeholder:text-[#70412d]/30 leading-tight"
           />
 
-          <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+          <div className="w-[1.5px] h-6 bg-[#e9d5bb]"></div>
         </div>
       </div>
 
@@ -75,13 +75,12 @@ export default function DiarioPage() {
           leading-8
           text-lg
           placeholder:text-[#70412d]/40
-          pt-1
         "
         style={{
           backgroundImage: `linear-gradient(to bottom, #e9d5bb 1px, transparent 1px)`,
           backgroundSize: "100% 32px",
-          backgroundPosition: "0 32px", // ← começa a linha só depois da primeira linha
-          minHeight: "400px"
+          backgroundPosition: "0 0",
+          minHeight: "420px"
         }}
       />
     </div>
