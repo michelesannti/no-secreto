@@ -32,22 +32,22 @@ export default function DiarioPage() {
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
 
-      {/* LIMITADOR DE LARGURA (DESKTOP) */}
-      <div className="max-w-2xl mx-auto px-8">
-
-        {/* TOPO */}
-        <div className="flex justify-between items-start mb-12">
-          <div>
-            <h1 className="text-xl font-serif tracking-wide">
-              Diário
-            </h1>
-            <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
-          </div>
-
-          <span className="text-sm tracking-widest text-[#70412d]/60">
-            {hoje}
-          </span>
+      {/* TOPO FULL WIDTH */}
+      <div className="flex justify-between items-start px-8 mb-12">
+        <div>
+          <h1 className="text-xl font-serif tracking-wide">
+            Diário
+          </h1>
+          <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
         </div>
+
+        <span className="text-sm tracking-widest text-[#70412d]/60">
+          {hoje}
+        </span>
+      </div>
+
+      {/* CONTEÚDO CENTRALIZADO */}
+      <div className="max-w-2xl mx-auto px-8">
 
         {/* VERSÍCULO */}
         {editando ? (
