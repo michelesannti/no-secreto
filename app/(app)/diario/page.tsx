@@ -30,7 +30,7 @@ export default function DiarioPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] px-8 pt-14 pb-40 text-[#70412d]">
+    <div className="min-h-screen bg-[#f9f5e9] px-8 pt-6 pb-40 text-[#70412d]">
 
       {/* TOPO */}
       <div className="flex justify-between items-start mb-12">
@@ -89,7 +89,6 @@ export default function DiarioPage() {
       {/* TEXTO PRINCIPAL */}
       <div className="relative min-h-[600px] mb-8">
 
-        {/* Linhas começando APÓS a primeira linha */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
