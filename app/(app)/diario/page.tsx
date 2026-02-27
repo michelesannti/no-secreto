@@ -94,17 +94,23 @@ export default function DiarioPage() {
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
           placeholder="O que Deus falou com você?"
-          className="w-full bg-transparent resize-none outline-none leading-8 text-lg placeholder:text-[#70412d]/40"
+          className="w-full bg-transparent resize-none outline-none text-lg placeholder:text-[#70412d]/40"
           style={{
-            backgroundImage: `linear-gradient(to bottom, #e9d5bb 1px, transparent 1px)`,
+            lineHeight: "32px",
+            paddingTop: "0px",
+            paddingBottom: "0px",
+            backgroundImage:
+              "linear-gradient(to bottom, #e9d5bb 1px, transparent 1px)",
             backgroundSize: "100% 32px",
-            backgroundPosition: "0 32px", // 🔥 começa após a primeira linha
+            backgroundPosition: "0 32px",
+            backgroundOrigin: "content-box",
             minHeight: "600px"
           }}
         />
       ) : (
         <div
-          className="leading-8 text-lg min-h-[600px]"
+          className="text-lg min-h-[600px]"
+          style={{ lineHeight: "32px" }}
           dangerouslySetInnerHTML={{
             __html: formatarTexto(texto),
           }}
