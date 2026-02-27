@@ -86,16 +86,15 @@ export default function DiarioPage() {
         </div>
       </div>
 
-      {/* TEXTO PRINCIPAL COM FUNDO SEPARADO */}
+      {/* TEXTO PRINCIPAL */}
       <div className="relative min-h-[600px] mb-8">
 
-        {/* Linhas de fundo */}
+        {/* Linhas começando APÓS a primeira linha */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage:
-              "linear-gradient(to bottom, #e9d5bb 1px, transparent 1px)",
-            backgroundSize: "100% 32px",
+              "repeating-linear-gradient(to bottom, transparent, transparent 31px, #e9d5bb 31px, #e9d5bb 32px)",
           }}
         />
 
@@ -113,7 +112,10 @@ export default function DiarioPage() {
         ) : (
           <div
             className="relative text-lg"
-            style={{ lineHeight: "32px", minHeight: "600px" }}
+            style={{
+              lineHeight: "32px",
+              minHeight: "600px"
+            }}
             dangerouslySetInnerHTML={{
               __html: formatarTexto(texto),
             }}
