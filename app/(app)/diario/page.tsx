@@ -11,7 +11,6 @@ export default function DiarioPage() {
 
   const hoje = new Date().toLocaleDateString("pt-BR");
 
-  // Auto resize do versículo
   useEffect(() => {
     if (versiculoRef.current) {
       versiculoRef.current.style.height = "auto";
@@ -72,14 +71,15 @@ export default function DiarioPage() {
           bg-transparent
           resize-none
           outline-none
-          leading-8
           text-lg
           placeholder:text-[#70412d]/40
         "
         style={{
-          backgroundImage: `linear-gradient(to bottom, #e9d5bb 1px, transparent 1px)`,
-          backgroundSize: "100% 32px",
-          backgroundPosition: "0 0",
+          lineHeight: "32px",
+          paddingTop: "0px",
+          paddingBottom: "0px",
+          backgroundImage:
+            "repeating-linear-gradient(to bottom, transparent, transparent 31px, #e9d5bb 31px, #e9d5bb 32px)",
           minHeight: "420px"
         }}
       />
