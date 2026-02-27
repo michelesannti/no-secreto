@@ -12,7 +12,6 @@ export default function DiarioPage() {
 
   const hoje = new Date().toLocaleDateString("pt-BR");
 
-  // Auto resize do versículo
   useEffect(() => {
     if (versiculoRef.current) {
       versiculoRef.current.style.height = "auto";
@@ -21,7 +20,6 @@ export default function DiarioPage() {
     }
   }, [versiculo]);
 
-  // Formatação simples
   function formatarTexto(texto: string) {
     let formatado = texto
       .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
@@ -88,34 +86,41 @@ export default function DiarioPage() {
         </div>
       </div>
 
-      {/* TEXTO PRINCIPAL */}
-      {editando ? (
-        <textarea
-          value={texto}
-          onChange={(e) => setTexto(e.target.value)}
-          placeholder="O que Deus falou com você?"
-          className="w-full bg-transparent resize-none outline-none text-lg placeholder:text-[#70412d]/40"
+      {/* TEXTO PRINCIPAL COM FUNDO SEPARADO */}
+      <div className="relative min-h-[600px] mb-8">
+
+        {/* Linhas de fundo */}
+        <div
+          className="absolute inset-0 pointer-events-none"
           style={{
-            lineHeight: "32px",
-            paddingTop: "0px",
-            paddingBottom: "0px",
             backgroundImage:
               "linear-gradient(to bottom, #e9d5bb 1px, transparent 1px)",
             backgroundSize: "100% 32px",
-            backgroundPosition: "0 32px",
-            backgroundOrigin: "content-box",
-            minHeight: "600px"
           }}
         />
-      ) : (
-        <div
-          className="text-lg min-h-[600px]"
-          style={{ lineHeight: "32px" }}
-          dangerouslySetInnerHTML={{
-            __html: formatarTexto(texto),
-          }}
-        />
-      )}
+
+        {editando ? (
+          <textarea
+            value={texto}
+            onChange={(e) => setTexto(e.target.value)}
+            placeholder="O que Deus falou com você?"
+            className="relative w-full h-full bg-transparent resize-none outline-none text-lg placeholder:text-[#70412d]/40"
+            style={{
+              lineHeight: "32px",
+              minHeight: "600px"
+            }}
+          />
+        ) : (
+          <div
+            className="relative text-lg"
+            style={{ lineHeight: "32px", minHeight: "600px" }}
+            dangerouslySetInnerHTML={{
+              __html: formatarTexto(texto),
+            }}
+          />
+        )}
+
+      </div>
 
       {/* BOTÃO */}
       <div className="mt-12 flex justify-center">
