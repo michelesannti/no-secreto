@@ -10,8 +10,6 @@ export default function DiarioPage() {
 
   const versiculoRef = useRef<HTMLTextAreaElement>(null);
 
-  const hoje = new Date().toLocaleDateString("pt-BR");
-
   useEffect(() => {
     if (versiculoRef.current) {
       versiculoRef.current.style.height = "auto";
@@ -33,17 +31,11 @@ export default function DiarioPage() {
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
 
       {/* TOPO FULL WIDTH */}
-      <div className="flex justify-between items-start px-8 mb-12">
-        <div>
-          <h1 className="text-xl font-serif tracking-wide">
-            Diário
-          </h1>
-          <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
-        </div>
-
-        <span className="text-sm tracking-widest text-[#70412d]/60">
-          {hoje}
-        </span>
+      <div className="px-8 mb-12">
+        <h1 className="text-xl font-serif tracking-wide">
+          Diário
+        </h1>
+        <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
       {/* CONTEÚDO CENTRALIZADO */}
