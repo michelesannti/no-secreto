@@ -12,7 +12,6 @@ export default function DiarioPage() {
 
   const hoje = new Date().toLocaleDateString("pt-BR");
 
-  // Auto resize do versículo
   useEffect(() => {
     if (versiculoRef.current) {
       versiculoRef.current.style.height = "auto";
@@ -21,12 +20,11 @@ export default function DiarioPage() {
     }
   }, [versiculo]);
 
-  // Função de formatação simples
   function formatarTexto(texto: string) {
     let formatado = texto
-      .replace(/\*(.*?)\*/g, "<strong>$1</strong>") // *negrito*
-      .replace(/_(.*?)_/g, "<em>$1</em>") // _italico_
-      .replace(/~(.*?)~/g, "<s>$1</s>"); // ~riscado~
+      .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
+      .replace(/_(.*?)_/g, "<em>$1</em>")
+      .replace(/~(.*?)~/g, "<s>$1</s>");
 
     return formatado.replace(/\n/g, "<br/>");
   }
@@ -94,25 +92,18 @@ export default function DiarioPage() {
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
           placeholder="O que Deus falou com você?"
-          className="
-            w-full
-            bg-transparent
-            resize-none
-            outline-none
-            leading-8
-            text-lg
-            placeholder:text-[#70412d]/40
-          "
+          className="w-full bg-transparent resize-none outline-none leading-8 text-lg placeholder:text-[#70412d]/40"
           style={{
             backgroundImage: `linear-gradient(to bottom, #e9d5bb 1px, transparent 1px)`,
             backgroundSize: "100% 32px",
-            backgroundPosition: "0 32px",
-            minHeight: "400px",
+            backgroundPosition: "0 0",
+            paddingTop: "4px",
+            minHeight: "600px"
           }}
         />
       ) : (
         <div
-          className="leading-8 text-lg min-h-[400px]"
+          className="leading-8 text-lg min-h-[600px]"
           dangerouslySetInnerHTML={{
             __html: formatarTexto(texto),
           }}
@@ -126,7 +117,7 @@ export default function DiarioPage() {
             onClick={() => setEditando(false)}
             className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide"
           >
-            Salvar reflexão
+            Salvar
           </button>
         ) : (
           <button
