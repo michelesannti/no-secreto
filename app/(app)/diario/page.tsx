@@ -12,6 +12,7 @@ export default function DiarioPage() {
 
   const hoje = new Date().toLocaleDateString("pt-BR");
 
+  // Auto resize do versículo
   useEffect(() => {
     if (versiculoRef.current) {
       versiculoRef.current.style.height = "auto";
@@ -20,6 +21,7 @@ export default function DiarioPage() {
     }
   }, [versiculo]);
 
+  // Formatação simples
   function formatarTexto(texto: string) {
     let formatado = texto
       .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
@@ -96,8 +98,7 @@ export default function DiarioPage() {
           style={{
             backgroundImage: `linear-gradient(to bottom, #e9d5bb 1px, transparent 1px)`,
             backgroundSize: "100% 32px",
-            backgroundPosition: "0 0",
-            paddingTop: "4px",
+            backgroundPosition: "0 32px", // 🔥 começa após a primeira linha
             minHeight: "600px"
           }}
         />
@@ -128,6 +129,7 @@ export default function DiarioPage() {
           </button>
         )}
       </div>
+
     </div>
   );
 }
