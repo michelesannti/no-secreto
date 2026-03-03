@@ -36,39 +36,30 @@ export default function SecretoPage() {
             CONTEXTO
           </p>
 
-          <div className="space-y-14">
+          <div className="space-y-16">
 
-            {/* QUEM */}
+            {/* ENTENDENDO */}
             <div>
-              <h2 className="font-semibold text-[17px] text-[#70412d] mb-3">
-                Quem é essa pessoa?
+              <h2 className="font-semibold text-[17px] text-[#70412d] mb-4">
+                Entendendo o que está acontecendo
               </h2>
-              <p className="leading-8 text-[#70412d]/85">
-                Deus é apresentado aqui como Criador soberano. Antes de qualquer
-                coisa existir, Ele já era. Não há explicação sobre Sua origem,
-                porque Ele é eterno.
-              </p>
-            </div>
 
-            {/* O QUE ESTAVA ACONTECENDO */}
-            <div>
-              <h2 className="font-semibold text-[17px] text-[#70412d] mb-3">
-                O que estava acontecendo?
-              </h2>
               <p className="leading-8 text-[#70412d]/85">
-                Este versículo marca o começo da criação. A palavra “princípio”
-                indica o início do tempo, da matéria e do espaço.
+                A Bíblia começa apresentando Deus como Criador.  
+                Antes de qualquer coisa existir, Ele já estava lá.  
+                “Princípio” marca o início do tempo, da matéria e da história.
               </p>
             </div>
 
             {/* TRAZENDO PRA VIDA */}
             <div>
-              <h2 className="font-semibold text-[17px] text-[#70412d] mb-3">
+              <h2 className="font-semibold text-[17px] text-[#70412d] mb-4">
                 Trazendo pra sua vida hoje
               </h2>
+
               <p className="leading-8 text-[#70412d]/85">
-                O mesmo Deus que criou o universo do nada é capaz de organizar
-                os seus próprios recomeços.
+                O mesmo Deus que criou tudo do nada continua criando.  
+                Se Ele iniciou o universo, também pode iniciar algo novo em você.
               </p>
             </div>
 
@@ -91,8 +82,7 @@ export default function SecretoPage() {
         {/* BOTÃO */}
         <div className="mt-12 flex justify-center">
           <button
-            className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide"
-          >
+            className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide">
             Concluir estudo
           </button>
         </div>
