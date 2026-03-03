@@ -1,10 +1,20 @@
-"use client";
+import Link from "next/link";
+import { getSupabaseClient } from "@/lib/supabase";
 
-export default function SecretoPage() {
+export default async function SecretoPage() {
+  const supabase = getSupabaseClient();
+
+  const { data: estudos, error } = await supabase
+    .from("estudos")
+    .select("*")
+    .order("ordem", { ascending: true });
+
+  if (error) {
+    return <div className="p-6">Erro ao carregar estudos.</div>;
+  }
+
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
-
-      {/* TOPO FULL WIDTH */}
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">
           Secreto
@@ -12,80 +22,18 @@ export default function SecretoPage() {
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
-      {/* CONTEÚDO CENTRALIZADO */}
-      <div className="max-w-2xl mx-auto px-8">
-
-        {/* PALAVRA */}
-        <div className="mb-16">
-          <p className="text-sm tracking-widest text-[#70412d]/50 mb-4">
-            PALAVRA
-          </p>
-
-          <p className="italic text-lg leading-relaxed text-[#70412d]/85">
-            "No princípio Deus criou os céus e a terra."
-          </p>
-
-          <p className="mt-3 text-sm text-[#70412d]/60">
-            Gênesis 1:1 (NVI)
-          </p>
-        </div>
-
-        {/* CONTEXTO */}
-        <div className="mb-10">
-          <p className="text-sm tracking-widest text-[#70412d]/50 mb-8">
-            CONTEXTO
-          </p>
-
-          <div className="space-y-16">
-
-            {/* O QUE ESTAVA ACONTECENDO */}
-            <div>
-              <h2 className="font-semibold text-[17px] text-[#70412d] mb-4">
-                O que estava acontecendo
-              </h2>
-
-              <p className="leading-8 text-[#70412d]/85">
-                A Bíblia começa apresentando Deus como Criador.  
-                Antes de qualquer coisa existir, Ele já estava lá.  
-                “Princípio” marca o início do tempo, da matéria e da história.
-              </p>
-            </div>
-
-            {/* TRAZENDO PRA VIDA */}
-            <div>
-              <h2 className="font-semibold text-[17px] text-[#70412d] mb-4">
-                Trazendo pra vida
-              </h2>
-
-              <p className="leading-8 text-[#70412d]/85">
-                O mesmo Deus que criou tudo do nada continua criando.  
-                Se Ele iniciou o universo, também pode iniciar algo novo em você.
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-        {/* FRASE DESTACADA */}
-        <div className="flex items-center justify-center mt-16 mb-10">
-          <div className="flex items-center gap-4">
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
-
-            <p className="font-serif text-xl font-semibold text-center leading-snug">
-              Deus continua criando novos começos
-            </p>
-
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
-          </div>
-        </div>
-
-        {/* BOTÃO */}
-        <div className="mt-12 flex justify-center">
-          <button className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide">
-            Concluir estudo
-          </button>
-        </div>
-
+      <div className="max-w-2xl mx-auto px-8 space-y-6">
+        {estudos?.map((estudo) => (
+          <Link
+            key={estudo.id}
+            href={`/estudo/${estudo.id}`}
+            className="block p-6 rounded-xl border border-[#e9d5bb] hover:bg-[#f3ecdd] transition"
+          >
+            <h2 className="font-serif text-lg">
+              {estudo.livro} {estudo.capitulo}:{estudo.versiculo}
+            </h2>
+          </Link>
+        ))}
       </div>
     </div>
   );
