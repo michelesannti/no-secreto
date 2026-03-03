@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase";
 
-export const dynamic = "force-dynamic";
-
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
   async function handleLogin(e: React.FormEvent) {
@@ -14,14 +15,15 @@ export default function LoginPage() {
 
     const supabase = getSupabaseClient();
 
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
+      password,
     });
 
     if (error) {
-      setMessage("Erro ao enviar email.");
+      setMessage("Email ou senha inválidos.");
     } else {
-      setMessage("Verifique seu email para o link de acesso.");
+      router.push("/secreto");
     }
   }
 
@@ -41,6 +43,15 @@ export default function LoginPage() {
           className="border p-2 rounded"
         />
 
+        <input
+          type="password"
+          placeholder="Sua senha"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="border p-2 rounded"
+        />
+
         <button
           type="submit"
           className="bg-[#7a5c45] text-white py-2 rounded"
@@ -49,7 +60,7 @@ export default function LoginPage() {
         </button>
 
         {message && (
-          <p className="text-sm text-center">{message}</p>
+          <p className="text-sm text-center text-red-500">{message}</p>
         )}
       </form>
     </div>
