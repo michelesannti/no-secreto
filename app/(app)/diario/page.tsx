@@ -30,7 +30,7 @@ export default function DiarioPage() {
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
 
-      {/* TOPO FULL WIDTH */}
+      {/* TOPO */}
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">
           Diário
@@ -38,7 +38,6 @@ export default function DiarioPage() {
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
-      {/* CONTEÚDO CENTRALIZADO */}
       <div className="max-w-2xl mx-auto px-8">
 
         {/* VERSÍCULO */}
@@ -51,9 +50,12 @@ export default function DiarioPage() {
             className="w-full bg-transparent resize-none outline-none italic text-[#70412d]/85 leading-relaxed mb-14 placeholder:text-[#70412d]/40 overflow-hidden"
           />
         ) : (
-          <p className="italic text-[#70412d]/85 leading-relaxed mb-14">
-            {versiculo}
-          </p>
+          <p
+            className="italic text-[#70412d]/85 leading-relaxed mb-14"
+            dangerouslySetInnerHTML={{
+              __html: formatarTexto(versiculo),
+            }}
+          />
         )}
 
         {/* DESTAQUE */}
@@ -81,10 +83,9 @@ export default function DiarioPage() {
           </div>
         </div>
 
-        {/* TEXTO PRINCIPAL */}
+        {/* TEXTO */}
         <div className="relative min-h-[600px] mb-8">
 
-          {/* Linhas de fundo */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
@@ -119,7 +120,6 @@ export default function DiarioPage() {
 
         </div>
 
-        {/* BOTÃO */}
         <div className="mt-12 flex justify-center">
           {editando ? (
             <button
