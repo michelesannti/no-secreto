@@ -30,53 +30,63 @@ export default function SecretoPage() {
           </p>
         </div>
 
-        {/* PRA ENTENDER MELHOR */}
-        <div className="space-y-14">
+        {/* CONTEXTO */}
+        <div className="mb-10">
+          <p className="text-sm tracking-widest text-[#70412d]/50 mb-6">
+            CONTEXTO
+          </p>
 
-          <div>
-            <h2 className="font-serif text-lg mb-3">
-              Quem é essa pessoa?
-            </h2>
-            <p className="leading-8 text-[#70412d]/80">
-              Deus é apresentado aqui como Criador soberano. Antes de qualquer
-              coisa existir, Ele já era. Não há explicação sobre Sua origem,
-              porque Ele é eterno.
-            </p>
+          <div className="space-y-14">
+
+            <div>
+              <h2 className="font-serif text-lg mb-3">
+                Quem é essa pessoa?
+              </h2>
+              <p className="leading-8 text-[#70412d]/80">
+                Deus é apresentado aqui como Criador soberano. Antes de qualquer
+                coisa existir, Ele já era. Não há explicação sobre Sua origem,
+                porque Ele é eterno.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="font-serif text-lg mb-3">
+                O que estava acontecendo?
+              </h2>
+              <p className="leading-8 text-[#70412d]/80">
+                Este versículo marca o começo da criação. A palavra “princípio”
+                indica o início do tempo, da matéria e do espaço.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="font-serif text-lg mb-3">
+                Trazendo pra sua vida hoje
+              </h2>
+              <p className="leading-8 text-[#70412d]/80">
+                O mesmo Deus que criou o universo do nada é capaz de organizar
+                os seus próprios recomeços.
+              </p>
+            </div>
+
           </div>
+        </div>
 
-          <div>
-            <h2 className="font-serif text-lg mb-3">
-              O que estava acontecendo?
-            </h2>
-            <p className="leading-8 text-[#70412d]/80">
-              Este versículo marca o começo da criação. A palavra “princípio”
-              indica o início do tempo, da matéria e do espaço.
-            </p>
-          </div>
+        {/* FRASE DESTACADA */}
+        <div className="flex items-center justify-center mt-16 mb-10">
+          <div className="flex items-center gap-4">
+            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
 
-          <div>
-            <h2 className="font-serif text-lg mb-3">
-              Trazendo pra sua vida hoje
-            </h2>
-            <p className="leading-8 text-[#70412d]/80">
-              O mesmo Deus que criou o universo do nada é capaz de organizar
-              os seus próprios recomeços.
-            </p>
-          </div>
-
-          <div>
-            <h2 className="font-serif text-lg mb-3">
-              Uma frase pra guardar
-            </h2>
-            <p className="italic leading-8 text-[#70412d]">
+            <p className="font-serif text-xl font-semibold text-center leading-tight">
               Deus continua criando novos começos.
             </p>
-          </div>
 
+            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+          </div>
         </div>
 
         {/* BOTÃO */}
-        <div className="mt-16 flex justify-center">
+        <div className="mt-12 flex justify-center">
           <button
             className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide"
           >
