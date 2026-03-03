@@ -40,8 +40,8 @@ export default function SecretoPage() {
 
             {/* QUEM */}
             <div>
-              <h2 className="text-sm uppercase tracking-wide text-[#70412d]/70 mb-3">
-                Quem é essa pessoa
+              <h2 className="font-semibold text-[17px] text-[#70412d] mb-3">
+                Quem é essa pessoa?
               </h2>
               <p className="leading-8 text-[#70412d]/85">
                 Deus é apresentado aqui como Criador soberano. Antes de qualquer
@@ -52,8 +52,8 @@ export default function SecretoPage() {
 
             {/* O QUE ESTAVA ACONTECENDO */}
             <div>
-              <h2 className="text-sm uppercase tracking-wide text-[#70412d]/70 mb-3">
-                O que estava acontecendo
+              <h2 className="font-semibold text-[17px] text-[#70412d] mb-3">
+                O que estava acontecendo?
               </h2>
               <p className="leading-8 text-[#70412d]/85">
                 Este versículo marca o começo da criação. A palavra “princípio”
@@ -63,7 +63,7 @@ export default function SecretoPage() {
 
             {/* TRAZENDO PRA VIDA */}
             <div>
-              <h2 className="text-sm uppercase tracking-wide text-[#70412d]/70 mb-3">
+              <h2 className="font-semibold text-[17px] text-[#70412d] mb-3">
                 Trazendo pra sua vida hoje
               </h2>
               <p className="leading-8 text-[#70412d]/85">
