@@ -38,10 +38,10 @@ export default function SecretoPage() {
 
           <div className="space-y-16">
 
-            {/* ENTENDENDO */}
+            {/* O QUE ESTAVA ACONTECENDO */}
             <div>
               <h2 className="font-semibold text-[17px] text-[#70412d] mb-4">
-                Entendendo o que está acontecendo
+                O que estava acontecendo
               </h2>
 
               <p className="leading-8 text-[#70412d]/85">
@@ -54,7 +54,7 @@ export default function SecretoPage() {
             {/* TRAZENDO PRA VIDA */}
             <div>
               <h2 className="font-semibold text-[17px] text-[#70412d] mb-4">
-                Trazendo pra sua vida hoje
+                Trazendo pra vida
               </h2>
 
               <p className="leading-8 text-[#70412d]/85">
@@ -81,8 +81,7 @@ export default function SecretoPage() {
 
         {/* BOTÃO */}
         <div className="mt-12 flex justify-center">
-          <button
-            className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide">
+          <button className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide">
             Concluir estudo
           </button>
         </div>
