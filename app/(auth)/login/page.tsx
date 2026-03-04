@@ -31,14 +31,16 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#f9f5e9] flex items-center justify-center text-[#70412d] px-6">
       <div className="w-full max-w-sm">
 
-        <div className="mb-10 text-center">
+        {/* Título */}
+        <div className="mb-12 text-center">
           <h1 className="text-xl font-serif tracking-wide">
             No Secreto
           </h1>
           <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
         </div>
 
-        <form onSubmit={handleLogin} className="flex flex-col gap-6">
+        {/* Form */}
+        <form onSubmit={handleLogin} className="flex flex-col gap-8">
 
           <input
             type="email"
@@ -46,7 +48,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="bg-transparent border-b border-[#e9d5bb] p-2 focus:outline-none"
+            className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none"
           />
 
           <input
@@ -55,12 +57,12 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="bg-transparent border-b border-[#e9d5bb] p-2 focus:outline-none"
+            className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none"
           />
 
           <button
             type="submit"
-            className="mt-4 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide"
+            className="mt-2 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide transition hover:opacity-90"
           >
             Entrar
           </button>
@@ -70,6 +72,7 @@ export default function LoginPage() {
               {message}
             </p>
           )}
+
         </form>
 
       </div>
