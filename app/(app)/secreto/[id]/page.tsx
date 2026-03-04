@@ -1,4 +1,5 @@
 import { getSupabaseClient } from "@/lib/supabase";
+import ConcluirButton from "./ConcluirButton";
 
 interface PageProps {
   params: {
@@ -9,6 +10,12 @@ interface PageProps {
 export default async function EstudoPage({ params }: PageProps) {
   const supabase = getSupabaseClient();
 
+  // 🔐 pega usuário logado
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // 📖 busca estudo
   const { data: estudo, error } = await supabase
     .from("estudos")
     .select("*")
@@ -16,24 +23,21 @@ export default async function EstudoPage({ params }: PageProps) {
     .single();
 
   if (error || !estudo) {
-    return (
-      <div className="p-6">
-        Estudo não encontrado.
-      </div>
-    );
+    return <div className="p-6">estudo não encontrado</div>;
   }
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">
-          Secreto
+          No Secreto
         </h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
       <div className="max-w-2xl mx-auto px-8">
 
+        {/* PALAVRA */}
         <div className="mb-16">
           <p className="text-sm tracking-widest text-[#70412d]/50 mb-4">
             PALAVRA
@@ -48,6 +52,7 @@ export default async function EstudoPage({ params }: PageProps) {
           </p>
         </div>
 
+        {/* CONTEXTO */}
         <div className="mb-10">
           <p className="text-sm tracking-widest text-[#70412d]/50 mb-8">
             CONTEXTO
@@ -56,7 +61,7 @@ export default async function EstudoPage({ params }: PageProps) {
           <div className="space-y-16">
 
             <div>
-              <h2 className="font-semibold text-[17px] mb-4">
+              <h2 className="font-semibold text-[17px] text-[#70412d] mb-4">
                 O que estava acontecendo
               </h2>
 
@@ -66,7 +71,7 @@ export default async function EstudoPage({ params }: PageProps) {
             </div>
 
             <div>
-              <h2 className="font-semibold text-[17px] mb-4">
+              <h2 className="font-semibold text-[17px] text-[#70412d] mb-4">
                 Trazendo pra vida
               </h2>
 
@@ -78,6 +83,7 @@ export default async function EstudoPage({ params }: PageProps) {
           </div>
         </div>
 
+        {/* FRASE DESTACADA */}
         <div className="flex items-center justify-center mt-16 mb-10">
           <div className="flex items-center gap-4">
             <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
@@ -89,6 +95,14 @@ export default async function EstudoPage({ params }: PageProps) {
             <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
           </div>
         </div>
+
+        {/* BOTÃO CONCLUIR */}
+        {user && (
+          <ConcluirButton
+            estudoId={estudo.id}
+            userId={user.id}
+          />
+        )}
 
       </div>
     </div>
