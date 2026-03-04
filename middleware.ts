@@ -27,8 +27,13 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Se não estiver logada e tentar acessar /secreto
-  if (!user && request.nextUrl.pathname.startsWith("/secreto")) {
+  const publicRoutes = ["/login", "/cadastro", "/"];
+
+  const isPublicRoute = publicRoutes.some((route) =>
+    request.nextUrl.pathname === route
+  );
+
+  if (!user && !isPublicRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -36,5 +41,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/secreto/:path*"],
+  matcher: ["/((?!_next|favicon.ico).*)"],
 };
