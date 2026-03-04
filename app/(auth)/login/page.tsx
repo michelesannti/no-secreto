@@ -21,7 +21,7 @@ export default function LoginPage() {
     });
 
     if (error) {
-      setMessage("Email ou senha inválidos.");
+      setMessage("email ou senha inválidos");
     } else {
       router.push("/secreto");
     }
@@ -33,16 +33,16 @@ export default function LoginPage() {
 
         <div className="mb-10 text-center">
           <h1 className="text-xl font-serif tracking-wide">
-            Secreto
+            No Secreto
           </h1>
           <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
         </div>
 
-        <form onSubmit={handleLogin} className="flex flex-col gap-4">
+        <form onSubmit={handleLogin} className="flex flex-col gap-6">
 
           <input
             type="email"
-            placeholder="Seu email"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -51,7 +51,7 @@ export default function LoginPage() {
 
           <input
             type="password"
-            placeholder="Sua senha"
+            placeholder="Senha"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -60,13 +60,13 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="mt-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide"
+            className="mt-4 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide"
           >
             Entrar
           </button>
 
           {message && (
-            <p className="text-sm text-center text-red-500 mt-2">
+            <p className="text-sm text-center text-red-500">
               {message}
             </p>
           )}
