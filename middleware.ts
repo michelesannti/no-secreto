@@ -1,45 +1,31 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 
-export async function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next();
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return request.cookies.get(name)?.value;
-        },
-        set(name, value, options) {
-          response.cookies.set({ name, value, ...options });
-        },
-        remove(name, options) {
-          response.cookies.set({ name, value: "", ...options });
-        },
-      },
-    }
-  );
+  const supabase = createMiddlewareClient({ req, res });
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const publicRoutes = ["/login", "/cadastro", "/"];
+  const isAuthPage =
+    req.nextUrl.pathname.startsWith("/login") ||
+    req.nextUrl.pathname.startsWith("/cadastro");
 
-  const isPublicRoute = publicRoutes.some((route) =>
-    request.nextUrl.pathname === route
-  );
-
-  if (!user && !isPublicRoute) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (!user && !isAuthPage) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  return response;
+  if (user && isAuthPage) {
+    return NextResponse.redirect(new URL("/secreto", req.url));
+  }
+
+  return res;
 }
 
 export const config = {
-  matcher: ["/((?!_next|favicon.ico).*)"],
+  matcher: ["/((?!_next|api|favicon.ico).*)"],
 };
