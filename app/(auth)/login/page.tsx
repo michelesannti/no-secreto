@@ -9,29 +9,37 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
+    setMessage("");
 
     const supabase = getSupabaseClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) {
+    if (error || !data.session) {
       setMessage("email ou senha inválidos");
-    } else {
-      router.push("/secreto");
+      setLoading(false);
+      return;
     }
+
+    // espera sessão estabilizar
+    await supabase.auth.getSession();
+
+    router.refresh();
+    router.push("/secreto");
   }
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] flex items-center justify-center text-[#70412d] px-6">
       <div className="w-full max-w-sm">
 
-        {/* Título */}
         <div className="mb-12 text-center">
           <h1 className="text-xl font-serif tracking-wide">
             No Secreto
@@ -39,7 +47,6 @@ export default function LoginPage() {
           <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleLogin} className="flex flex-col gap-8">
 
           <input
@@ -62,9 +69,10 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="mt-2 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide transition hover:opacity-90"
+            disabled={loading}
+            className="mt-2 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide transition hover:opacity-90 disabled:opacity-50"
           >
-            Entrar
+            {loading ? "Entrando..." : "Entrar"}
           </button>
 
           {message && (
