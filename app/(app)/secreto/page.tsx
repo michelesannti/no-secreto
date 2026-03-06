@@ -1,82 +1,54 @@
+"use client";
+
 import Link from "next/link";
-import { getSupabaseClient } from "@/lib/supabase";
 
-export default async function SecretoPage() {
-  const supabase = getSupabaseClient();
+const estudos = [
+  {
+    id: "intimidade-com-deus",
+    titulo: "Intimidade com Deus",
+    descricao: "Aprenda a desenvolver uma vida profunda no secreto.",
+  },
+  {
+    id: "identidade-em-cristo",
+    titulo: "Identidade em Cristo",
+    descricao: "Descubra quem você é em Deus.",
+  },
+  {
+    id: "proposito",
+    titulo: "Propósito",
+    descricao: "Entenda o chamado que Deus tem para sua vida.",
+  },
+];
 
-  const { data: estudos, error } = await supabase
-    .from("estudos")
-    .select("*")
-    .order("ordem", { ascending: true });
-
-  if (error) {
-    return (
-      <div className="p-8 text-[#70412d]">
-        Erro ao carregar estudos.
-      </div>
-    );
-  }
-
+export default function SecretoPage() {
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-10 pb-40 text-[#70412d]">
+    <div className="min-h-screen px-6 py-10 bg-[#F9F5E9] text-[#70412D]">
+      <h1
+        className="text-4xl mb-8"
+        style={{ fontFamily: "var(--font-playfair)" }}
+      >
+        No Secreto
+      </h1>
 
-      {/* TOPO */}
-      <div className="px-8 mb-14">
-        <h1 className="text-2xl font-[var(--font-title)] tracking-wide">
-          Secreto
-        </h1>
-
-        <div className="w-10 h-[2px] bg-[#e9d5bb] mt-3"></div>
-      </div>
-
-      {/* LISTA */}
-      <div className="max-w-2xl mx-auto px-8 space-y-6">
-
-        {estudos?.map((estudo) => (
+      <div className="grid gap-6">
+        {estudos.map((estudo) => (
           <Link
             key={estudo.id}
-            href={/secreto/${estudo.id}}
+            href={`/secreto/${estudo.id}`}
             className="block group"
           >
-            <div className="
-              flex
-              items-center
-              gap-6
-              p-6
-              rounded-2xl
-              border
-              border-[#e9d5bb]
-              bg-white/40
-              backdrop-blur
-              transition
-              group-hover:bg-[#f3ecdd]
-              group-hover:shadow-sm
-            ">
+            <div className="p-6 rounded-2xl bg-[#E9D5BB] hover:scale-[1.02] transition">
+              <h2
+                className="text-2xl mb-2"
+                style={{ fontFamily: "var(--font-cormorant)" }}
+              >
+                {estudo.titulo}
+              </h2>
 
-              {/* NÚMERO */}
-              <div className="text-4xl font-[var(--font-title)] text-[#70412d]/40">
-                {String(estudo.ordem).padStart(2, "0")}
-              </div>
-
-              {/* TEXTO */}
-              <div>
-
-                <h2 className="font-[var(--font-title)] text-lg leading-snug">
-                  {estudo.livro} {estudo.capitulo}:{estudo.versiculo}
-                </h2>
-
-                {estudo.titulo && (
-                  <p className="text-sm text-[#70412d]/60 mt-1">
-                    {estudo.titulo}
-                  </p>
-                )}
-
-              </div>
-
+              <p className="opacity-80">{estudo.descricao}</p>
             </div>
           </Link>
         ))}
-
       </div>
     </div>
   );
