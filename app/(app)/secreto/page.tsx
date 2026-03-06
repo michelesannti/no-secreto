@@ -10,39 +10,58 @@ export default async function SecretoPage() {
     .order("ordem", { ascending: true });
 
   if (error) {
-    return <div className="p-6">Erro ao carregar estudos.</div>;
+    return (
+      <div className="p-8 text-[#70412d]">
+        Erro ao carregar estudos.
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
-      
+    <div className="min-h-screen bg-[#f9f5e9] pt-10 pb-40 text-[#70412d]">
+
       {/* TOPO */}
-      <div className="px-8 mb-12">
-        <h1 className="text-xl font-serif tracking-wide">
+      <div className="px-8 mb-14">
+        <h1 className="text-2xl font-[var(--font-title)] tracking-wide">
           Secreto
         </h1>
-        <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
+
+        <div className="w-10 h-[2px] bg-[#e9d5bb] mt-3"></div>
       </div>
 
-      {/* LISTA DE ESTUDOS */}
+      {/* LISTA */}
       <div className="max-w-2xl mx-auto px-8 space-y-6">
 
         {estudos?.map((estudo) => (
           <Link
             key={estudo.id}
-            href={`/secreto/${estudo.id}`}
-            className="block"
+            href={/secreto/${estudo.id}}
+            className="block group"
           >
-            <div className="flex items-center gap-6 p-6 rounded-2xl border border-[#e9d5bb] hover:bg-[#f3ecdd] transition">
+            <div className="
+              flex
+              items-center
+              gap-6
+              p-6
+              rounded-2xl
+              border
+              border-[#e9d5bb]
+              bg-white/40
+              backdrop-blur
+              transition
+              group-hover:bg-[#f3ecdd]
+              group-hover:shadow-sm
+            ">
 
-              {/* NÚMERO GRANDE */}
-              <div className="text-4xl font-serif text-[#70412d]/40">
+              {/* NÚMERO */}
+              <div className="text-4xl font-[var(--font-title)] text-[#70412d]/40">
                 {String(estudo.ordem).padStart(2, "0")}
               </div>
 
               {/* TEXTO */}
               <div>
-                <h2 className="font-serif text-lg leading-snug">
+
+                <h2 className="font-[var(--font-title)] text-lg leading-snug">
                   {estudo.livro} {estudo.capitulo}:{estudo.versiculo}
                 </h2>
 
@@ -51,6 +70,7 @@ export default async function SecretoPage() {
                     {estudo.titulo}
                   </p>
                 )}
+
               </div>
 
             </div>
