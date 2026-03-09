@@ -1,29 +1,25 @@
-import "./globals.css";
-
+import type { Metadata } from "next";
 import { Playfair_Display, Inter, Cormorant_Garamond } from "next/font/google";
+import "./globals.css";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
-  display: "swap",
 });
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  display: "swap",
 });
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   variable: "--font-cormorant",
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "No Secreto",
-  description: "Seu diário espiritual no secreto com Deus.",
+  description: "Seu tempo com Deus começa aqui.",
 };
 
 export default function RootLayout({
@@ -35,11 +31,6 @@ export default function RootLayout({
     <html lang="pt-br">
       <body
         className={`${playfair.variable} ${inter.variable} ${cormorant.variable} antialiased`}
-        style={{
-          backgroundColor: "#F9F5E9",
-          color: "#70412D",
-          fontFamily: "var(--font-inter)",
-        }}
       >
         {children}
       </body>

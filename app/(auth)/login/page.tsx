@@ -18,48 +18,34 @@ export default function LoginPage() {
     setLoading(true);
     setMessage("");
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    console.log("LOGIN RESULT:", data, error);
-
     if (error) {
-      setMessage("email ou senha inválidos");
+      setMessage("Email ou senha inválidos");
       setLoading(false);
       return;
     }
 
-    // Aguarda sessão estabilizar
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    console.log("SESSION:", session);
-
-    if (session) {
-      router.refresh();
-      router.push("/secreto");
-    } else {
-      setMessage("erro ao iniciar sessão");
-      setLoading(false);
-    }
+    // redireciona direto para HOJE
+    router.replace("/hoje");
+    router.refresh();
   }
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] flex items-center justify-center text-[#70412d] px-6">
       <div className="w-full max-w-sm">
 
-        {/* Título */}
         <div className="mb-12 text-center">
           <h1 className="text-xl font-serif tracking-wide">
             No Secreto
           </h1>
-          <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
+
+          <div className="w-12 h-px bg-[#C6A46A]/50 mt-3 mx-auto"></div>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleLogin} className="flex flex-col gap-8">
 
           <input

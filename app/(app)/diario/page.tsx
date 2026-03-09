@@ -20,23 +20,24 @@ export default function DiarioPage() {
 
   function formatarTexto(texto: string) {
     let formatado = texto
-      .replace(/\(.?)\*/g, "<strong>$1</strong>")
-      .replace(/(.*?)/g, "<em>$1</em>")
-      .replace(/(.*?)/g, "<s>$1</s>");
+      .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
+      .replace(/_(.*?)_/g, "<em>$1</em>")
+      .replace(/~(.*?)~/g, "<s>$1</s>");
 
     return formatado.replace(/\n/g, "<br/>");
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-10 pb-40 text-[#70412d]">
+    <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
 
       {/* TOPO */}
       <div className="px-8 mb-12">
-        <h1 className="text-2xl font-[var(--font-title)] tracking-wide">
+        <h1 className="text-xl font-serif tracking-wide">
           Diário
         </h1>
 
-        <div className="w-10 h-[2px] bg-[#e9d5bb] mt-3"></div>
+        {/* linha dourada */}
+        <div className="w-12 h-px bg-[#C6A46A]/50 mt-3"></div>
       </div>
 
       <div className="max-w-2xl mx-auto px-8">
@@ -61,31 +62,29 @@ export default function DiarioPage() {
 
         {/* DESTAQUE */}
         <div className="flex items-center justify-center mb-12">
-
           <div className="flex items-center gap-4">
 
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+            <div className="w-[1px] h-8 bg-[#C6A46A]/40"></div>
 
             {editando ? (
               <textarea
                 value={destaque}
                 onChange={(e) => setDestaque(e.target.value)}
                 placeholder="Destaque"
-                className="bg-transparent resize-none outline-none font-[var(--font-highlight)] text-xl font-semibold text-center placeholder:text-[#70412d]/30 leading-tight"
+                className="bg-transparent resize-none outline-none font-serif text-xl font-semibold text-center placeholder:text-[#70412d]/30 leading-tight"
               />
             ) : (
               <p
-                className="font-[var(--font-highlight)] text-xl font-semibold text-center leading-tight"
+                className="font-serif text-xl font-semibold text-center leading-tight"
                 dangerouslySetInnerHTML={{
                   __html: formatarTexto(destaque),
                 }}
               />
             )}
 
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+            <div className="w-[1px] h-8 bg-[#C6A46A]/40"></div>
 
           </div>
-
         </div>
 
         {/* TEXTO */}
@@ -107,7 +106,7 @@ export default function DiarioPage() {
               className="relative w-full bg-transparent resize-none outline-none text-lg placeholder:text-[#70412d]/40"
               style={{
                 lineHeight: "32px",
-                minHeight: "600px",
+                minHeight: "600px"
               }}
             />
           ) : (
@@ -115,7 +114,7 @@ export default function DiarioPage() {
               className="relative text-lg"
               style={{
                 lineHeight: "32px",
-                minHeight: "600px",
+                minHeight: "600px"
               }}
               dangerouslySetInnerHTML={{
                 __html: formatarTexto(texto),
@@ -125,25 +124,22 @@ export default function DiarioPage() {
 
         </div>
 
-        {/* BOTÃO */}
         <div className="mt-12 flex justify-center">
-
           {editando ? (
             <button
               onClick={() => setEditando(false)}
-              className="px-7 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide hover:opacity-90 transition"
+              className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide hover:opacity-90"
             >
               Salvar
             </button>
           ) : (
             <button
               onClick={() => setEditando(true)}
-              className="px-7 py-2 rounded-full border border-[#70412d] text-[#70412d] text-sm tracking-wide hover:bg-[#70412d] hover:text-[#f9f5e9] transition"
+              className="px-6 py-2 rounded-full border border-[#C6A46A]/50 text-[#70412d] text-sm tracking-wide"
             >
               Editar
             </button>
           )}
-
         </div>
 
       </div>

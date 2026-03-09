@@ -67,8 +67,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
+  // usuário logado tentando acessar login
   if (user && isAuthRoute) {
-    return NextResponse.redirect(new URL("/secreto", req.url));
+    return NextResponse.redirect(new URL("/hoje", req.url));
   }
 
   return response;

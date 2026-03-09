@@ -1,24 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --ns-brown: #70412D;
   --ns-beige: #E9D5BB;
   --ns-offwhite: #F9F5E9;
   --ns-gold: #C6A46A;
-
-  --font-title: var(--font-playfair);
-  --font-text: var(--font-inter);
-  --font-highlight: var(--font-cormorant);
 }
 
 body {
   background: var(--ns-offwhite);
   color: var(--ns-brown);
-  font-family: var(--font-text);
+  font-family: var(--font-inter);
 }
 
 h1, h2, h3 {
-  font-family: var(--font-title);
+  font-family: var(--font-playfair);
 }
 
 .highlight {
-  font-family: var(--font-highlight);
+  font-family: var(--font-cormorant);
 }
