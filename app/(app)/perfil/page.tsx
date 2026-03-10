@@ -3,31 +3,73 @@
 import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase";
 
-export const dynamic = "force-dynamic";
-
 export default function PerfilPage() {
-  const [email, setEmail] = useState<string | null>(null);
+
+  const [nome, setNome] = useState("");
+  const [apelido, setApelido] = useState("");
 
   useEffect(() => {
-    async function carregarPerfil() {
-      const supabase = getSupabaseClient(); // 🔥 só cria aqui dentro
+
+    async function carregar() {
+
+      const supabase = getSupabaseClient();
 
       const {
         data: { user },
       } = await supabase.auth.getUser();
 
-      if (user) {
-        setEmail(user.email ?? null);
+      if (!user) return;
+
+      const { data } = await supabase
+        .from("profiles")
+        .select("nome, apelido")
+        .eq("id", user.id)
+        .single();
+
+      if (data) {
+        setNome(data.nome || "");
+        setApelido(data.apelido || "");
       }
     }
 
-    carregarPerfil();
+    carregar();
+
   }, []);
 
   return (
-    <div>
-      <h1>Perfil</h1>
-      <p>Email: {email ?? "Carregando..."}</p>
+    <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
+
+      <div className="px-8 mb-12">
+        <h1 className="text-xl font-serif tracking-wide">
+          Perfil
+        </h1>
+
+        <div className="w-10 h-[2px] bg-[#C6A46A]/60 mt-2"></div>
+      </div>
+
+      <div className="max-w-xl mx-auto px-8 space-y-6">
+
+        <div>
+          <p className="text-sm text-[#70412d]/60 mb-1">
+            Nome
+          </p>
+
+          <p className="text-lg">
+            {nome}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-[#70412d]/60 mb-1">
+            Apelido
+          </p>
+
+          <p className="text-lg">
+            {apelido || "Nenhum apelido definido"}
+          </p>
+        </div>
+
+      </div>
     </div>
   );
 }
