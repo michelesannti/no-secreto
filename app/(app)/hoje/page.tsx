@@ -15,7 +15,14 @@ export default async function HojePage() {
 
   const nome = profile?.apelido || profile?.nome;
 
-  const hora = new Date().getHours();
+  // pegar hora no fuso do Brasil
+  const hora = Number(
+    new Intl.DateTimeFormat("pt-BR", {
+      timeZone: "America/Sao_Paulo",
+      hour: "numeric",
+      hour12: false,
+    }).format(new Date())
+  );
 
   let saudacao = "Bom dia";
 
@@ -23,14 +30,18 @@ export default async function HojePage() {
   if (hora >= 18) saudacao = "Boa noite";
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-12 pb-40 text-[#70412d]">
+    <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
 
-      <div className="max-w-2xl mx-auto px-8">
-
-        {/* SAUDAÇÃO */}
-        <h1 className="text-2xl font-serif mb-10">
+      {/* SAUDAÇÃO COM MESMO ESTILO DAS PÁGINAS */}
+      <div className="px-8 mb-12">
+        <h1 className="text-xl font-serif tracking-wide">
           {saudacao} {nome} 🤎
         </h1>
+
+        <div className="w-10 h-[2px] bg-[#C6A46A]/60 mt-2"></div>
+      </div>
+
+      <div className="max-w-2xl mx-auto px-8">
 
         {/* VERSÍCULO */}
         <div className="bg-[#f3ecdd] p-6 rounded-2xl mb-10">
