@@ -7,19 +7,13 @@ export default async function HojePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let nome = "Amiga";
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("nome, apelido")
+    .eq("id", user?.id)
+    .single();
 
-  if (user) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("nome, apelido")
-      .eq("id", user.id)
-      .single();
-
-    if (profile) {
-      nome = profile.apelido || profile.nome || "Amiga";
-    }
-  }
+  const nome = profile?.apelido || profile?.nome;
 
   const hora = new Date().getHours();
 
@@ -29,23 +23,14 @@ export default async function HojePage() {
   if (hora >= 18) saudacao = "Boa noite";
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
-
-      {/* TOPO */}
-      <div className="px-8 mb-12">
-        <h1 className="text-xl font-serif tracking-wide">
-          Hoje
-        </h1>
-
-        <div className="w-10 h-[2px] bg-[#C6A46A]/60 mt-2"></div>
-      </div>
+    <div className="min-h-screen bg-[#f9f5e9] pt-12 pb-40 text-[#70412d]">
 
       <div className="max-w-2xl mx-auto px-8">
 
         {/* SAUDAÇÃO */}
-        <h2 className="text-2xl font-serif mb-6">
+        <h1 className="text-2xl font-serif mb-10">
           {saudacao} {nome} 🤎
-        </h2>
+        </h1>
 
         {/* VERSÍCULO */}
         <div className="bg-[#f3ecdd] p-6 rounded-2xl mb-10">
