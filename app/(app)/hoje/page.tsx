@@ -30,7 +30,7 @@ export default async function HojePage() {
   if (hora >= 12 && hora < 18) saudacao = "Boa tarde";
   if (hora >= 18) saudacao = "Boa noite";
 
-  // estudos
+  // buscar estudos
   const { data: estudos } = await supabase
     .from("estudos")
     .select("*")
@@ -53,6 +53,7 @@ export default async function HojePage() {
 
   // barra de progresso
   const porcentagem = total ? concluidos / total : 0;
+
   const blocos = 8;
   const preenchidos = Math.round(porcentagem * blocos);
 
@@ -60,33 +61,44 @@ export default async function HojePage() {
     "█".repeat(preenchidos) + "░".repeat(blocos - preenchidos);
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
+    <div className="min-h-screen bg-[#f9f5e9] pt-8 pb-40 text-[#70412d]">
 
       {/* SAUDAÇÃO */}
-      <div className="px-8 mb-12">
+      <div className="px-8 mb-16">
         <h1 className="text-xl font-serif tracking-wide">
           {saudacao} {nome} 🤎
         </h1>
 
-        <div className="w-10 h-[2px] bg-[#C6A46A]/60 mt-2"></div>
+        <div className="w-10 h-[2px] bg-[#C6A46A]/70 mt-2"></div>
       </div>
 
       <div className="max-w-2xl mx-auto px-8">
 
-        {/* FRASE DO APP */}
-        <div className="bg-[#f3ecdd] p-8 rounded-2xl mb-10 text-center">
+        {/* DETALHE VISUAL */}
+        <div className="text-center mb-10 text-[#C6A46A] text-xl">
+          ✧
+        </div>
 
-          <p className="font-serif text-xl leading-relaxed">
-            Não é sobre fazer perfeito.<br/>
-            É sobre não desistir.
+        {/* FRASE DO APP */}
+        <div className="text-center mb-16">
+
+          <p className="font-serif text-2xl leading-relaxed">
+            “Não é sobre fazer perfeito.
+            <br />
+            É sobre não desistir.”
           </p>
 
         </div>
 
-        {/* PROGRESSO */}
-        <div className="text-center mb-10">
+        {/* DETALHE VISUAL */}
+        <div className="text-center mb-12 text-[#C6A46A] text-xl">
+          ✧
+        </div>
 
-          <p className="text-sm mb-2 text-[#70412d]/70">
+        {/* PROGRESSO */}
+        <div className="text-center mb-16">
+
+          <p className="text-sm text-[#70412d]/70 mb-2">
             {concluidos} de {total} estudos concluídos
           </p>
 
@@ -100,7 +112,7 @@ export default async function HojePage() {
         {proximoEstudo && (
           <a
             href={`/secreto/${proximoEstudo.id}`}
-            className="block text-center py-3 rounded-full bg-[#70412d] text-[#f9f5e9] tracking-wide"
+            className="block text-center py-4 rounded-full bg-[#70412d] text-[#f9f5e9] tracking-wide text-sm transition hover:opacity-90"
           >
             Iniciar meu tempo com Deus
           </a>
