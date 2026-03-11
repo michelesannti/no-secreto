@@ -7,7 +7,7 @@ export default async function HojePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // buscar perfil
+  // perfil
   const { data: profile } = await supabase
     .from("profiles")
     .select("nome, apelido")
@@ -16,7 +16,7 @@ export default async function HojePage() {
 
   const nome = profile?.apelido || profile?.nome;
 
-  // hora no Brasil
+  // hora Brasil
   const hora = Number(
     new Intl.DateTimeFormat("pt-BR", {
       timeZone: "America/Sao_Paulo",
@@ -30,23 +30,34 @@ export default async function HojePage() {
   if (hora >= 12 && hora < 18) saudacao = "Boa tarde";
   if (hora >= 18) saudacao = "Boa noite";
 
-  // buscar estudos
+  // estudos
   const { data: estudos } = await supabase
     .from("estudos")
     .select("*")
     .order("ordem", { ascending: true });
 
-  // progresso da usuária
+  // progresso
   const { data: progresso } = await supabase
     .from("progresso_usuario")
     .select("estudo_id")
     .eq("user_id", user?.id);
+
+  const concluidos = progresso?.length || 0;
+  const total = estudos?.length || 0;
 
   const estudosConcluidos = progresso?.map((p) => p.estudo_id) || [];
 
   const proximoEstudo = estudos?.find(
     (e) => !estudosConcluidos.includes(e.id)
   );
+
+  // barra de progresso
+  const porcentagem = total ? concluidos / total : 0;
+  const blocos = 8;
+  const preenchidos = Math.round(porcentagem * blocos);
+
+  const barra =
+    "█".repeat(preenchidos) + "░".repeat(blocos - preenchidos);
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
@@ -62,24 +73,28 @@ export default async function HojePage() {
 
       <div className="max-w-2xl mx-auto px-8">
 
-        {/* FRASE DO ESTUDO */}
-        {proximoEstudo && (
-          <div className="bg-[#f3ecdd] p-8 rounded-2xl mb-12 text-center">
+        {/* FRASE DO APP */}
+        <div className="bg-[#f3ecdd] p-8 rounded-2xl mb-10 text-center">
 
-            <p className="font-serif text-2xl leading-relaxed text-[#70412d]">
-              “{proximoEstudo.frase}”
-            </p>
+          <p className="font-serif text-xl leading-relaxed">
+            Não é sobre fazer perfeito.<br/>
+            É sobre não desistir.
+          </p>
 
-            <p className="text-sm text-[#C6A46A] mt-4">
-              {proximoEstudo.livro} {proximoEstudo.capitulo}:
-              {proximoEstudo.versiculo_inicio}
-              {proximoEstudo.versiculo_fim !==
-                proximoEstudo.versiculo_inicio &&
-                `-${proximoEstudo.versiculo_fim}`}
-            </p>
+        </div>
 
-          </div>
-        )}
+        {/* PROGRESSO */}
+        <div className="text-center mb-10">
+
+          <p className="text-sm mb-2 text-[#70412d]/70">
+            {concluidos} de {total} estudos concluídos
+          </p>
+
+          <p className="font-mono text-lg text-[#C6A46A]">
+            {barra}
+          </p>
+
+        </div>
 
         {/* BOTÃO */}
         {proximoEstudo && (
