@@ -10,11 +10,12 @@ export default async function HojePage() {
   // perfil
   const { data: profile } = await supabase
     .from("profiles")
-    .select("nome, apelido")
+    .select("nome, apelido, avatar_url")
     .eq("id", user?.id)
     .single();
 
   const nome = profile?.apelido || profile?.nome;
+  const avatar = profile?.avatar_url;
 
   // hora Brasil
   const hora = Number(
@@ -30,7 +31,7 @@ export default async function HojePage() {
   if (hora >= 12 && hora < 18) saudacao = "Boa tarde";
   if (hora >= 18) saudacao = "Boa noite";
 
-  // buscar estudos
+  // estudos
   const { data: estudos } = await supabase
     .from("estudos")
     .select("*")
@@ -51,7 +52,7 @@ export default async function HojePage() {
     (e) => !estudosConcluidos.includes(e.id)
   );
 
-  // barra de progresso
+  // barra
   const porcentagem = total ? concluidos / total : 0;
 
   const blocos = 8;
@@ -61,38 +62,54 @@ export default async function HojePage() {
     "█".repeat(preenchidos) + "░".repeat(blocos - preenchidos);
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-8 pb-40 text-[#70412d]">
+    <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
 
-      {/* SAUDAÇÃO */}
-      <div className="px-8 mb-16">
-        <h1 className="text-xl font-serif tracking-wide">
-          {saudacao} {nome} 🤎
-        </h1>
+      {/* HEADER */}
+      <div className="flex items-center justify-between px-8 mb-12">
 
-        <div className="w-10 h-[2px] bg-[#C6A46A]/70 mt-2"></div>
+        <div className="flex items-center gap-3">
+
+          {avatar ? (
+            <img
+              src={avatar}
+              className="w-9 h-9 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-9 h-9 rounded-full bg-[#e9d5bb]" />
+          )}
+
+          <span className="font-serif text-lg tracking-wide">
+            No Secreto
+          </span>
+
+        </div>
+
       </div>
 
       <div className="max-w-2xl mx-auto px-8">
 
-        {/* DETALHE VISUAL */}
-        <div className="text-center mb-10 text-[#C6A46A] text-xl">
-          ✧
+        {/* SAUDAÇÃO */}
+        <div className="mb-10">
+
+          <h1 className="text-xl font-serif">
+            {saudacao} {nome} 🤎
+          </h1>
+
+          <div className="w-10 h-[2px] bg-[#C6A46A]/70 mt-2"></div>
+
         </div>
 
-        {/* FRASE DO APP */}
+        {/* FRASE */}
         <div className="text-center mb-16">
 
           <p className="font-serif text-2xl leading-relaxed">
+
             “Não é sobre fazer perfeito.
             <br />
             É sobre não desistir.”
+
           </p>
 
-        </div>
-
-        {/* DETALHE VISUAL */}
-        <div className="text-center mb-12 text-[#C6A46A] text-xl">
-          ✧
         </div>
 
         {/* PROGRESSO */}
@@ -119,6 +136,7 @@ export default async function HojePage() {
         )}
 
       </div>
+
     </div>
   );
 }
