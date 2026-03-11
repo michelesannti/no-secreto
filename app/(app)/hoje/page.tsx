@@ -7,7 +7,6 @@ export default async function HojePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // perfil
   const { data: profile } = await supabase
     .from("profiles")
     .select("nome, apelido, avatar_url")
@@ -17,7 +16,6 @@ export default async function HojePage() {
   const nome = profile?.apelido || profile?.nome;
   const avatar = profile?.avatar_url;
 
-  // hora Brasil
   const hora = Number(
     new Intl.DateTimeFormat("pt-BR", {
       timeZone: "America/Sao_Paulo",
@@ -31,13 +29,11 @@ export default async function HojePage() {
   if (hora >= 12 && hora < 18) saudacao = "Boa tarde";
   if (hora >= 18) saudacao = "Boa noite";
 
-  // estudos
   const { data: estudos } = await supabase
     .from("estudos")
     .select("*")
     .order("ordem", { ascending: true });
 
-  // progresso
   const { data: progresso } = await supabase
     .from("progresso_usuario")
     .select("estudo_id")
@@ -52,7 +48,6 @@ export default async function HojePage() {
     (e) => !estudosConcluidos.includes(e.id)
   );
 
-  // barra
   const porcentagem = total ? concluidos / total : 0;
 
   const blocos = 8;
@@ -62,45 +57,47 @@ export default async function HojePage() {
     "█".repeat(preenchidos) + "░".repeat(blocos - preenchidos);
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
+    <div className="min-h-screen bg-[#f9f5e9] pt-10 pb-40 text-[#70412d]">
 
-      {/* HEADER */}
-      <div className="flex items-center justify-between px-8 mb-12">
+      <div className="max-w-2xl mx-auto px-8 text-center">
 
-        <div className="flex items-center gap-3">
+        {/* AVATAR */}
+        <div className="flex justify-center mb-6">
 
           {avatar ? (
             <img
               src={avatar}
-              className="w-9 h-9 rounded-full object-cover"
+              className="w-20 h-20 rounded-full object-cover"
             />
           ) : (
-            <div className="w-9 h-9 rounded-full bg-[#e9d5bb]" />
+            <div className="w-20 h-20 rounded-full bg-[#e9d5bb]" />
           )}
-
-          <span className="font-serif text-lg tracking-wide">
-            No Secreto
-          </span>
 
         </div>
 
-      </div>
+        {/* LOGO */}
+        <div className="flex justify-center mb-10">
 
-      <div className="max-w-2xl mx-auto px-8">
+          <img
+            src="/logo.png"
+            className="h-10"
+          />
+
+        </div>
 
         {/* SAUDAÇÃO */}
-        <div className="mb-10">
+        <div className="mb-12">
 
           <h1 className="text-xl font-serif">
             {saudacao} {nome} 🤎
           </h1>
 
-          <div className="w-10 h-[2px] bg-[#C6A46A]/70 mt-2"></div>
+          <div className="w-10 h-[2px] bg-[#C6A46A]/70 mt-2 mx-auto"></div>
 
         </div>
 
         {/* FRASE */}
-        <div className="text-center mb-16">
+        <div className="mb-16">
 
           <p className="font-serif text-2xl leading-relaxed">
 
@@ -113,7 +110,7 @@ export default async function HojePage() {
         </div>
 
         {/* PROGRESSO */}
-        <div className="text-center mb-16">
+        <div className="mb-16">
 
           <p className="text-sm text-[#70412d]/70 mb-2">
             {concluidos} de {total} estudos concluídos
