@@ -36,7 +36,7 @@ export default async function HojePage() {
     .select("*")
     .order("ordem", { ascending: true });
 
-  // buscar progresso da usuária
+  // progresso da usuária
   const { data: progresso } = await supabase
     .from("progresso_usuario")
     .select("estudo_id")
@@ -44,7 +44,6 @@ export default async function HojePage() {
 
   const estudosConcluidos = progresso?.map((p) => p.estudo_id) || [];
 
-  // descobrir próximo estudo
   const proximoEstudo = estudos?.find(
     (e) => !estudosConcluidos.includes(e.id)
   );
@@ -63,19 +62,15 @@ export default async function HojePage() {
 
       <div className="max-w-2xl mx-auto px-8">
 
-        {/* VERSÍCULO DO ESTUDO */}
+        {/* FRASE DO ESTUDO */}
         {proximoEstudo && (
-          <div className="bg-[#f3ecdd] p-6 rounded-2xl mb-10">
+          <div className="bg-[#f3ecdd] p-8 rounded-2xl mb-12 text-center">
 
-            <p className="text-sm text-[#70412d]/60 mb-2">
-              Versículo do estudo
+            <p className="font-serif text-2xl leading-relaxed text-[#70412d]">
+              “{proximoEstudo.frase}”
             </p>
 
-            <p className="text-lg italic text-[#70412d] leading-relaxed">
-              {proximoEstudo.texto}
-            </p>
-
-            <p className="text-sm text-[#C6A46A] mt-3">
+            <p className="text-sm text-[#C6A46A] mt-4">
               {proximoEstudo.livro} {proximoEstudo.capitulo}:
               {proximoEstudo.versiculo_inicio}
               {proximoEstudo.versiculo_fim !==
@@ -97,7 +92,6 @@ export default async function HojePage() {
         )}
 
       </div>
-
     </div>
   );
 }
