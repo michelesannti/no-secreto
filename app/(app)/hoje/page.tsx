@@ -7,6 +7,7 @@ export default async function HojePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // buscar perfil
   const { data: profile } = await supabase
     .from("profiles")
     .select("nome, apelido")
@@ -15,7 +16,7 @@ export default async function HojePage() {
 
   const nome = profile?.apelido || profile?.nome;
 
-  // pegar hora no fuso do Brasil
+  // hora no Brasil
   const hora = Number(
     new Intl.DateTimeFormat("pt-BR", {
       timeZone: "America/Sao_Paulo",
@@ -29,10 +30,29 @@ export default async function HojePage() {
   if (hora >= 12 && hora < 18) saudacao = "Boa tarde";
   if (hora >= 18) saudacao = "Boa noite";
 
+  // buscar estudos
+  const { data: estudos } = await supabase
+    .from("estudos")
+    .select("*")
+    .order("ordem", { ascending: true });
+
+  // buscar progresso da usuária
+  const { data: progresso } = await supabase
+    .from("progresso_usuario")
+    .select("estudo_id")
+    .eq("user_id", user?.id);
+
+  const estudosConcluidos = progresso?.map((p) => p.estudo_id) || [];
+
+  // descobrir próximo estudo
+  const proximoEstudo = estudos?.find(
+    (e) => !estudosConcluidos.includes(e.id)
+  );
+
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
 
-      {/* SAUDAÇÃO COM MESMO ESTILO DAS PÁGINAS */}
+      {/* SAUDAÇÃO */}
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">
           {saudacao} {nome} 🤎
@@ -43,30 +63,41 @@ export default async function HojePage() {
 
       <div className="max-w-2xl mx-auto px-8">
 
-        {/* VERSÍCULO */}
-        <div className="bg-[#f3ecdd] p-6 rounded-2xl mb-10">
-          <p className="text-sm text-[#70412d]/60 mb-2">
-            Versículo do dia
-          </p>
+        {/* VERSÍCULO DO ESTUDO */}
+        {proximoEstudo && (
+          <div className="bg-[#f3ecdd] p-6 rounded-2xl mb-10">
 
-          <p className="text-lg italic text-[#70412d]">
-            “Buscai primeiro o Reino de Deus e a sua justiça...”
-          </p>
+            <p className="text-sm text-[#70412d]/60 mb-2">
+              Versículo do estudo
+            </p>
 
-          <p className="text-sm text-[#C6A46A] mt-2">
-            Mateus 6:33
-          </p>
-        </div>
+            <p className="text-lg italic text-[#70412d] leading-relaxed">
+              {proximoEstudo.texto}
+            </p>
+
+            <p className="text-sm text-[#C6A46A] mt-3">
+              {proximoEstudo.livro} {proximoEstudo.capitulo}:
+              {proximoEstudo.versiculo_inicio}
+              {proximoEstudo.versiculo_fim !==
+                proximoEstudo.versiculo_inicio &&
+                `-${proximoEstudo.versiculo_fim}`}
+            </p>
+
+          </div>
+        )}
 
         {/* BOTÃO */}
-        <a
-          href="/secreto"
-          className="block text-center py-3 rounded-full bg-[#70412d] text-[#f9f5e9] tracking-wide"
-        >
-          Entrar no Secreto
-        </a>
+        {proximoEstudo && (
+          <a
+            href={`/secreto/${proximoEstudo.id}`}
+            className="block text-center py-3 rounded-full bg-[#70412d] text-[#f9f5e9] tracking-wide"
+          >
+            Iniciar meu tempo com Deus
+          </a>
+        )}
 
       </div>
+
     </div>
   );
 }
