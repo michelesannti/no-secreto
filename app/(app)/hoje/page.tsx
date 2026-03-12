@@ -29,12 +29,6 @@ export default async function HojePage() {
 
   const porcentagem = total ? concluidos / total : 0;
 
-  const blocos = 10;
-  const preenchidos = Math.round(porcentagem * blocos);
-
-  const barra =
-    "█".repeat(preenchidos) + "░".repeat(blocos - preenchidos);
-
   return (
     <PortalIntro>
 
@@ -66,14 +60,24 @@ export default async function HojePage() {
 
           </div>
 
-          {/* PROGRESSO GRANDE */}
+          {/* PROGRESSO PREMIUM */}
           <div className="mb-20">
 
-            <p className="font-mono text-3xl text-[#C6A46A] mb-4">
-              {barra}
-            </p>
+            <div className="relative w-full h-[4px] bg-[#e9d5bb] rounded-full">
 
-            <p className="text-sm text-[#70412d]/70">
+              <div
+                className="absolute top-0 left-0 h-[4px] bg-[#C6A46A] rounded-full transition-all duration-700"
+                style={{ width: `${porcentagem * 100}%` }}
+              />
+
+              <div
+                className="absolute -top-[6px] w-4 h-4 rounded-full bg-[#C6A46A] transition-all duration-700"
+                style={{ left: `calc(${porcentagem * 100}% - 8px)` }}
+              />
+
+            </div>
+
+            <p className="mt-4 text-sm text-[#70412d]/70">
               {concluidos} de {total} estudos concluídos
             </p>
 
