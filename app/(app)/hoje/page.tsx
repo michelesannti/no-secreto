@@ -7,27 +7,6 @@ export default async function HojePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("nome, apelido")
-    .eq("id", user?.id)
-    .single();
-
-  const nome = profile?.apelido || profile?.nome;
-
-  const hora = Number(
-    new Intl.DateTimeFormat("pt-BR", {
-      timeZone: "America/Sao_Paulo",
-      hour: "numeric",
-      hour12: false,
-    }).format(new Date())
-  );
-
-  let saudacao = "Bom dia";
-
-  if (hora >= 12 && hora < 18) saudacao = "Boa tarde";
-  if (hora >= 18) saudacao = "Boa noite";
-
   // buscar estudos
   const { data: estudos } = await supabase
     .from("estudos")
@@ -58,34 +37,23 @@ export default async function HojePage() {
     "█".repeat(preenchidos) + "░".repeat(blocos - preenchidos);
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-16 pb-40 text-[#70412d]">
+    <div className="min-h-screen bg-[#f9f5e9] pt-24 pb-40 text-[#70412d]">
 
       <div className="max-w-2xl mx-auto px-8 text-center">
 
-        {/* LOGO */}
-        <div className="mb-14 flex justify-center">
+        {/* LOGO GRANDE */}
+        <div className="mb-20 flex justify-center">
 
           <img
             src="/logo.png"
             alt="No Secreto"
-            className="h-24"
+            className="h-32"
           />
 
         </div>
 
-        {/* SAUDAÇÃO */}
-        <div className="mb-12">
-
-          <h1 className="text-xl font-serif tracking-wide">
-            {saudacao} {nome} 🤎
-          </h1>
-
-          <div className="w-10 h-[2px] bg-[#C6A46A]/70 mt-2 mx-auto"></div>
-
-        </div>
-
-        {/* FRASE DO APP */}
-        <div className="mb-16">
+        {/* FRASE CENTRAL */}
+        <div className="mb-20">
 
           <p className="font-serif text-2xl leading-relaxed">
 
@@ -98,9 +66,9 @@ export default async function HojePage() {
         </div>
 
         {/* PROGRESSO */}
-        <div className="mb-16">
+        <div className="mb-20">
 
-          <p className="text-sm text-[#70412d]/70 mb-2">
+          <p className="text-sm text-[#70412d]/70 mb-3">
             {concluidos} de {total} estudos concluídos
           </p>
 
