@@ -29,7 +29,7 @@ export default async function HojePage() {
 
   const porcentagem = total ? concluidos / total : 0;
 
-  const blocos = 8;
+  const blocos = 10;
   const preenchidos = Math.round(porcentagem * blocos);
 
   const barra =
@@ -48,30 +48,13 @@ export default async function HojePage() {
             <img
               src="/logo.png"
               alt="No Secreto"
-              className="h-32"
+              className="h-36"
             />
 
           </div>
 
-          {/* PROGRESSO EM DESTAQUE */}
-          <div className="mb-20">
-
-            <p className="text-sm text-[#70412d]/70 mb-4">
-              Seu caminho no secreto
-            </p>
-
-            <p className="font-mono text-2xl text-[#C6A46A] mb-4">
-              {barra}
-            </p>
-
-            <p className="text-sm text-[#70412d]/70">
-              {concluidos} de {total} estudos concluídos
-            </p>
-
-          </div>
-
           {/* FRASE */}
-          <div className="mb-20">
+          <div className="mb-16">
 
             <p className="font-serif text-xl leading-relaxed">
 
@@ -79,6 +62,19 @@ export default async function HojePage() {
               <br />
               É sobre não desistir.”
 
+            </p>
+
+          </div>
+
+          {/* PROGRESSO GRANDE */}
+          <div className="mb-20">
+
+            <p className="font-mono text-3xl text-[#C6A46A] mb-4">
+              {barra}
+            </p>
+
+            <p className="text-sm text-[#70412d]/70">
+              {concluidos} de {total} estudos concluídos
             </p>
 
           </div>
