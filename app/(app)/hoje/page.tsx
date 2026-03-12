@@ -1,4 +1,5 @@
 import { getSupabaseClient } from "@/lib/supabase";
+import PortalIntro from "./PortalIntro";
 
 export default async function HojePage() {
   const supabase = getSupabaseClient();
@@ -7,13 +8,11 @@ export default async function HojePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // buscar estudos
   const { data: estudos } = await supabase
     .from("estudos")
     .select("*")
     .order("ordem", { ascending: true });
 
-  // progresso da usuária
   const { data: progresso } = await supabase
     .from("progresso_usuario")
     .select("estudo_id")
@@ -37,59 +36,67 @@ export default async function HojePage() {
     "█".repeat(preenchidos) + "░".repeat(blocos - preenchidos);
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-24 pb-40 text-[#70412d]">
+    <PortalIntro>
 
-      <div className="max-w-2xl mx-auto px-8 text-center">
+      <div className="min-h-screen bg-[#f9f5e9] pt-28 pb-40 text-[#70412d]">
 
-        {/* LOGO GRANDE */}
-        <div className="mb-20 flex justify-center">
+        <div className="max-w-2xl mx-auto px-8 text-center">
 
-          <img
-            src="/logo.png"
-            alt="No Secreto"
-            className="h-32"
-          />
+          {/* LOGO */}
+          <div className="mb-20 flex justify-center">
+
+            <img
+              src="/logo.png"
+              alt="No Secreto"
+              className="h-32"
+            />
+
+          </div>
+
+          {/* PROGRESSO EM DESTAQUE */}
+          <div className="mb-20">
+
+            <p className="text-sm text-[#70412d]/70 mb-4">
+              Seu caminho no secreto
+            </p>
+
+            <p className="font-mono text-2xl text-[#C6A46A] mb-4">
+              {barra}
+            </p>
+
+            <p className="text-sm text-[#70412d]/70">
+              {concluidos} de {total} estudos concluídos
+            </p>
+
+          </div>
+
+          {/* FRASE */}
+          <div className="mb-20">
+
+            <p className="font-serif text-xl leading-relaxed">
+
+              “Não é sobre fazer perfeito.
+              <br />
+              É sobre não desistir.”
+
+            </p>
+
+          </div>
+
+          {/* BOTÃO */}
+          {proximoEstudo && (
+            <a
+              href={`/secreto/${proximoEstudo.id}`}
+              className="block text-center py-4 rounded-full bg-[#70412d] text-[#f9f5e9] tracking-wide text-sm transition hover:opacity-90"
+            >
+              Iniciar meu tempo com Deus
+            </a>
+          )}
 
         </div>
-
-        {/* FRASE CENTRAL */}
-        <div className="mb-20">
-
-          <p className="font-serif text-2xl leading-relaxed">
-
-            “Não é sobre fazer perfeito.
-            <br />
-            É sobre não desistir.”
-
-          </p>
-
-        </div>
-
-        {/* PROGRESSO */}
-        <div className="mb-20">
-
-          <p className="text-sm text-[#70412d]/70 mb-3">
-            {concluidos} de {total} estudos concluídos
-          </p>
-
-          <p className="font-mono text-lg text-[#C6A46A]">
-            {barra}
-          </p>
-
-        </div>
-
-        {/* BOTÃO */}
-        {proximoEstudo && (
-          <a
-            href={`/secreto/${proximoEstudo.id}`}
-            className="block text-center py-4 rounded-full bg-[#70412d] text-[#f9f5e9] tracking-wide text-sm transition hover:opacity-90"
-          >
-            Iniciar meu tempo com Deus
-          </a>
-        )}
 
       </div>
 
-    </div>
+    </PortalIntro>
   );
 }
