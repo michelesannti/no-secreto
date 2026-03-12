@@ -9,12 +9,11 @@ export default async function HojePage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("nome, apelido, avatar_url")
+    .select("nome, apelido")
     .eq("id", user?.id)
     .single();
 
   const nome = profile?.apelido || profile?.nome;
-  const avatar = profile?.avatar_url;
 
   const hora = Number(
     new Intl.DateTimeFormat("pt-BR", {
@@ -29,11 +28,13 @@ export default async function HojePage() {
   if (hora >= 12 && hora < 18) saudacao = "Boa tarde";
   if (hora >= 18) saudacao = "Boa noite";
 
+  // buscar estudos
   const { data: estudos } = await supabase
     .from("estudos")
     .select("*")
     .order("ordem", { ascending: true });
 
+  // progresso da usuária
   const { data: progresso } = await supabase
     .from("progresso_usuario")
     .select("estudo_id")
@@ -57,30 +58,17 @@ export default async function HojePage() {
     "█".repeat(preenchidos) + "░".repeat(blocos - preenchidos);
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-10 pb-40 text-[#70412d]">
+    <div className="min-h-screen bg-[#f9f5e9] pt-16 pb-40 text-[#70412d]">
 
       <div className="max-w-2xl mx-auto px-8 text-center">
 
-        {/* AVATAR */}
-        <div className="flex justify-center mb-6">
-
-          {avatar ? (
-            <img
-              src={avatar}
-              className="w-20 h-20 rounded-full object-cover"
-            />
-          ) : (
-            <div className="w-20 h-20 rounded-full bg-[#e9d5bb]" />
-          )}
-
-        </div>
-
         {/* LOGO */}
-        <div className="flex justify-center mb-10">
+        <div className="mb-14 flex justify-center">
 
           <img
             src="/logo.png"
-            className="h-10"
+            alt="No Secreto"
+            className="h-24"
           />
 
         </div>
@@ -88,7 +76,7 @@ export default async function HojePage() {
         {/* SAUDAÇÃO */}
         <div className="mb-12">
 
-          <h1 className="text-xl font-serif">
+          <h1 className="text-xl font-serif tracking-wide">
             {saudacao} {nome} 🤎
           </h1>
 
@@ -96,7 +84,7 @@ export default async function HojePage() {
 
         </div>
 
-        {/* FRASE */}
+        {/* FRASE DO APP */}
         <div className="mb-16">
 
           <p className="font-serif text-2xl leading-relaxed">
