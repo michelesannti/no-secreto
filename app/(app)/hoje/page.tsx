@@ -14,15 +14,15 @@ export default function HojePage() {
             <img
               src="/logo.png"
               alt="No Secreto"
-              className="h-40"
+              className="h-40 drop-shadow-[0_0_20px_rgba(198,164,106,0.35)]"
             />
 
           </div>
 
           {/* FRASE */}
-          <div className="mb-24">
+          <div className="mb-24 max-w-md mx-auto">
 
-            <p className="font-serif text-2xl leading-relaxed">
+            <p className="font-serif text-2xl leading-relaxed text-[#70412d]/90">
 
               “Não é sobre fazer perfeito.
               <br />
@@ -31,6 +31,9 @@ export default function HojePage() {
             </p>
 
           </div>
+
+          {/* LINHA DOURADA */}
+          <div className="w-16 h-[2px] bg-[#C6A46A]/60 mx-auto mb-10"></div>
 
           {/* BOTÃO */}
           <a
