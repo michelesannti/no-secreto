@@ -13,10 +13,10 @@ export default function HojePage() {
         <img
           src="/logo.png"
           alt="No Secreto"
-          className="w-[360px] mb-3"
+          className="w-[360px] -mb-1"
         />
 
-        <p className="font-serif text-lg text-[#70412d]/80 leading-relaxed max-w-md">
+        <p className="font-serif text-lg text-[#70412d]/80 leading-tight max-w-md -mt-1">
 
           “Não é sobre fazer perfeito.
           <br />
