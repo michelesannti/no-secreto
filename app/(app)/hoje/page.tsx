@@ -11,7 +11,7 @@ export default function HojePage() {
       <img
         src="/logo.png"
         alt="No Secreto"
-        className="w-[260px] mb-12 animate-[pulse_6s_ease-in-out_infinite]"
+        className="w-[260px] mb-12 animate-logoEntrance"
       />
 
       {/* FRASE */}
@@ -32,6 +32,24 @@ export default function HojePage() {
       >
         Iniciar meu tempo com Deus
       </Link>
+
+      <style jsx>{`
+        @keyframes logoEntrance {
+          0% {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-logoEntrance {
+          animation: logoEntrance 1.2s ease-out;
+        }
+      `}</style>
 
     </div>
   );
