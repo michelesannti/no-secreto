@@ -11,7 +11,7 @@ export default function HojePage() {
       <img
         src="/logo.png"
         alt="No Secreto"
-        className="w-[300px] mb-12 animate-logoEntrance"
+        className="w-[360px] mb-6 animate-logoEntrance"
       />
 
       {/* FRASE */}
@@ -73,7 +73,7 @@ export default function HojePage() {
 
         .animate-textEntrance {
           animation: textEntrance 1.2s ease-out;
-          animation-delay: 0.4s;
+          animation-delay: 0.35s;
           animation-fill-mode: both;
         }
 
