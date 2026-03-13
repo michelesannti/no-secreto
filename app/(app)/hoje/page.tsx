@@ -5,26 +5,28 @@ import Image from "next/image";
 
 export default function HojePage() {
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-[#f9f5e9]">
 
       {/* PORTAL / LOGO FULLSCREEN */}
 
       <div className="fixed inset-0 z-0">
-        <Image
-          src="/logo.png"
-          alt="Portal No Secreto"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+        <div className="relative w-full h-full">
+          <Image
+            src="/logo.png"
+            alt="Portal No Secreto"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
       </div>
 
       {/* CAMADA PARA DAR LEITURA NO TEXTO */}
 
       <div className="fixed inset-0 bg-[#f9f5e9]/65 z-10"></div>
 
-      {/* CONTEÚDO DA HOME */}
+      {/* CONTEÚDO */}
 
       <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-8 text-center text-[#70412d]">
 
