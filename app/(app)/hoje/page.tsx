@@ -1,30 +1,32 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function HojePage() {
   return (
     <div className="relative min-h-screen overflow-hidden">
 
-      {/* LOGO / PORTAL EM TELA CHEIA */}
+      {/* PORTAL / LOGO FULLSCREEN */}
 
-      <div className="fixed inset-0 -z-10">
-        <img
+      <div className="fixed inset-0 z-0">
+        <Image
           src="/logo.png"
           alt="Portal No Secreto"
-          className="w-full h-full object-cover"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
       </div>
 
-      {/* CAMADA DE LUZ SUAVE PARA MELHORAR LEITURA */}
+      {/* CAMADA PARA DAR LEITURA NO TEXTO */}
 
-      <div className="fixed inset-0 bg-[#f9f5e9]/70 -z-10" />
+      <div className="fixed inset-0 bg-[#f9f5e9]/65 z-10"></div>
 
       {/* CONTEÚDO DA HOME */}
 
-      <div className="max-w-2xl mx-auto px-8 pt-40 text-center text-[#70412d]">
-
-        {/* FRASE DO APP */}
+      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-8 text-center text-[#70412d]">
 
         <p className="font-serif text-2xl leading-relaxed mb-20">
 
@@ -34,11 +36,9 @@ export default function HojePage() {
 
         </p>
 
-        {/* BOTÃO */}
-
         <Link
           href="/secreto/1"
-          className="block text-center py-4 rounded-full bg-[#70412d] text-[#f9f5e9] tracking-wide text-sm transition hover:opacity-90"
+          className="px-8 py-4 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide transition hover:opacity-90"
         >
           Iniciar meu tempo com Deus
         </Link>
