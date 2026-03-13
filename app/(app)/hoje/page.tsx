@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function HojePage() {
   return (
-    <div className="min-h-screen bg-[#f9f5e9] flex flex-col items-center justify-center px-8 text-center">
+    <div className="min-h-screen bg-[#f9f5e9] flex flex-col items-center pt-24 px-8 text-center">
 
       {/* LOGO + FRASE */}
 
@@ -30,7 +30,7 @@ export default function HojePage() {
 
       <Link
         href="/secreto/1"
-        className="mt-16 px-8 py-4 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide shadow-md transition hover:scale-[1.02] animate-buttonEntrance"
+        className="mt-20 px-8 py-4 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide shadow-md transition hover:scale-[1.02] animate-buttonEntrance"
       >
         Iniciar meu tempo com Deus
       </Link>
