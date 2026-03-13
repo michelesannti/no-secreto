@@ -11,12 +11,12 @@ export default function HojePage() {
       <img
         src="/logo.png"
         alt="No Secreto"
-        className="w-[260px] mb-12 animate-logoEntrance"
+        className="w-[300px] mb-12 animate-logoEntrance"
       />
 
       {/* FRASE */}
 
-      <p className="font-serif text-lg text-[#70412d]/80 leading-relaxed mb-16 max-w-md">
+      <p className="font-serif text-lg text-[#70412d]/80 leading-relaxed mb-16 max-w-md animate-textEntrance">
 
         “Não é sobre fazer perfeito.
         <br />
@@ -28,7 +28,7 @@ export default function HojePage() {
 
       <Link
         href="/secreto/1"
-        className="px-8 py-4 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide shadow-md transition hover:scale-[1.02]"
+        className="px-8 py-4 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide shadow-md transition hover:scale-[1.02] animate-buttonEntrance"
       >
         Iniciar meu tempo com Deus
       </Link>
@@ -37,9 +37,30 @@ export default function HojePage() {
         @keyframes logoEntrance {
           0% {
             opacity: 0;
+            transform: translateY(30px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes textEntrance {
+          0% {
+            opacity: 0;
             transform: translateY(20px);
           }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
 
+        @keyframes buttonEntrance {
+          0% {
+            opacity: 0;
+            transform: translateY(20px);
+          }
           100% {
             opacity: 1;
             transform: translateY(0);
@@ -48,6 +69,18 @@ export default function HojePage() {
 
         .animate-logoEntrance {
           animation: logoEntrance 1.2s ease-out;
+        }
+
+        .animate-textEntrance {
+          animation: textEntrance 1.2s ease-out;
+          animation-delay: 0.4s;
+          animation-fill-mode: both;
+        }
+
+        .animate-buttonEntrance {
+          animation: buttonEntrance 1.2s ease-out;
+          animation-delay: 0.8s;
+          animation-fill-mode: both;
         }
       `}</style>
 
