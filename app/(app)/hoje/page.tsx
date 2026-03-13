@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 
 export default function HojePage() {
   return (
@@ -9,19 +8,15 @@ export default function HojePage() {
 
       {/* LOGO PORTAL */}
 
-      <div className="mb-16">
-        <Image
-          src="/logo.png"
-          alt="No Secreto"
-          width={220}
-          height={220}
-          priority
-        />
-      </div>
+      <img
+        src="/logo.png"
+        alt="No Secreto"
+        className="w-[260px] mb-12 animate-[pulse_6s_ease-in-out_infinite]"
+      />
 
       {/* FRASE */}
 
-      <p className="font-serif text-2xl text-[#70412d] leading-relaxed mb-20">
+      <p className="font-serif text-lg text-[#70412d]/80 leading-relaxed mb-16 max-w-md">
 
         “Não é sobre fazer perfeito.
         <br />
@@ -33,7 +28,7 @@ export default function HojePage() {
 
       <Link
         href="/secreto/1"
-        className="px-8 py-4 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide transition hover:opacity-90"
+        className="px-8 py-4 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide shadow-md transition hover:scale-[1.02]"
       >
         Iniciar meu tempo com Deus
       </Link>
