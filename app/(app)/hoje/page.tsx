@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function HojePage() {
   return (
-    <div className="min-h-screen bg-[#f9f5e9] flex flex-col items-center pt-16 px-8 text-center">
+    <div className="h-screen overflow-hidden bg-[#f9f5e9] flex flex-col items-center justify-between pt-16 pb-32 px-8 text-center">
 
       {/* LOGO + FRASE */}
 
@@ -26,18 +26,14 @@ export default function HojePage() {
 
       </div>
 
-      {/* BOTÃO FIXADO NA PARTE INFERIOR */}
+      {/* BOTÃO */}
 
-      <div className="fixed bottom-28 left-0 w-full flex justify-center px-8">
-
-        <Link
-          href="/secreto/1"
-          className="w-full max-w-sm px-8 py-4 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide shadow-md transition hover:scale-[1.02] animate-buttonEntrance text-center"
-        >
-          Iniciar meu tempo com Deus
-        </Link>
-
-      </div>
+      <Link
+        href="/secreto/1"
+        className="w-full max-w-sm px-8 py-4 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide shadow-md transition hover:scale-[1.02] animate-buttonEntrance text-center"
+      >
+        Iniciar meu tempo com Deus
+      </Link>
 
       <style jsx>{`
         @keyframes logoEntrance {
