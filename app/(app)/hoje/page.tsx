@@ -1,76 +1,42 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function HojePage() {
   return (
-    <div className="relative min-h-screen">
+    <div className="min-h-screen bg-[#f9f5e9] flex flex-col items-center justify-center px-8 text-center">
 
-      {/* LOGO FULLSCREEN */}
+      {/* LOGO PORTAL */}
 
-      <img
-        src="/logo.png"
-        alt="Portal No Secreto"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          objectFit: "cover",
-          zIndex: 0,
-        }}
-      />
-
-      {/* CAMADA DE LEITURA */}
-
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          background: "rgba(249,245,233,0.65)",
-          zIndex: 1,
-        }}
-      />
-
-      {/* CONTEÚDO */}
-
-      <div
-        style={{
-          position: "relative",
-          zIndex: 2,
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
-          padding: "0 32px",
-          color: "#70412d",
-        }}
-      >
-
-        <p style={{ fontSize: "22px", marginBottom: "80px", fontFamily: "serif" }}>
-          “Não é sobre fazer perfeito.
-          <br />
-          É sobre não desistir.”
-        </p>
-
-        <Link
-          href="/secreto/1"
-          style={{
-            padding: "16px 32px",
-            background: "#70412d",
-            color: "#f9f5e9",
-            borderRadius: "999px",
-            textDecoration: "none",
-            fontSize: "14px",
-          }}
-        >
-          Iniciar meu tempo com Deus
-        </Link>
-
+      <div className="mb-16">
+        <Image
+          src="/logo.png"
+          alt="No Secreto"
+          width={220}
+          height={220}
+          priority
+        />
       </div>
+
+      {/* FRASE */}
+
+      <p className="font-serif text-2xl text-[#70412d] leading-relaxed mb-20">
+
+        “Não é sobre fazer perfeito.
+        <br />
+        É sobre não desistir.”
+
+      </p>
+
+      {/* BOTÃO */}
+
+      <Link
+        href="/secreto/1"
+        className="px-8 py-4 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide transition hover:opacity-90"
+      >
+        Iniciar meu tempo com Deus
+      </Link>
 
     </div>
   );
