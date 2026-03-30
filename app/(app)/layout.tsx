@@ -11,6 +11,8 @@ export default function AppLayout({
 }) {
   const pathname = usePathname();
 
+  const hideNav = pathname === "/hoje";
+
   function NavItem({
     href,
     Icon,
@@ -46,30 +48,32 @@ export default function AppLayout({
     <div className="min-h-screen pb-32 bg-[#f9f5e9]">
       {children}
 
-      <div className="fixed bottom-6 left-0 right-0 flex justify-center">
-        <nav
-          className="
-            relative
-            bg-[#f9f5e9]/90
-            backdrop-blur-lg
-            px-10
-            py-4
-            rounded-3xl
-            flex
-            gap-10
-            items-center
-            border border-[#e9d5bb]/60
-            shadow-[0_12px_30px_rgba(112,65,45,0.10)]
-          "
-        >
-          <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/40"></div>
+      {!hideNav && (
+        <div className="fixed bottom-6 left-0 right-0 flex justify-center">
+          <nav
+            className="
+              relative
+              bg-[#f9f5e9]/90
+              backdrop-blur-lg
+              px-10
+              py-4
+              rounded-3xl
+              flex
+              gap-10
+              items-center
+              border border-[#e9d5bb]/60
+              shadow-[0_12px_30px_rgba(112,65,45,0.10)]
+            "
+          >
+            <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/40"></div>
 
-          <NavItem href="/hoje" Icon={Home} />
-          <NavItem href="/secreto" Icon={BookOpen} />
-          <NavItem href="/diario" Icon={Pencil} />
-          <NavItem href="/perfil" Icon={User} />
-        </nav>
-      </div>
+            <NavItem href="/hoje" Icon={Home} />
+            <NavItem href="/secreto" Icon={BookOpen} />
+            <NavItem href="/diario" Icon={Pencil} />
+            <NavItem href="/perfil" Icon={User} />
+          </nav>
+        </div>
+      )}
     </div>
   );
 }
