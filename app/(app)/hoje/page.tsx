@@ -6,8 +6,6 @@ export default function HojePage() {
   return (
     <div className="h-screen overflow-hidden bg-[#f9f5e9] flex flex-col items-center justify-center px-8 text-center">
 
-      {/* LOGO */}
-
       <div className="flex flex-col items-center animate-logoEntrance">
         <img
           src="/logo.png"
@@ -15,8 +13,6 @@ export default function HojePage() {
           className="w-[360px]"
         />
       </div>
-
-      {/* BOTÃO */}
 
       <Link
         href="/secreto/1"
