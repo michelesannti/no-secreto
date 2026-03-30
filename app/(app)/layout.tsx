@@ -11,7 +11,7 @@ export default function AppLayout({
 }) {
   const pathname = usePathname();
 
-  const hideNavbar = pathname === "/hoje";
+  const isHoje = pathname === "/hoje";
 
   function NavItem({
     href,
@@ -30,21 +30,21 @@ export default function AppLayout({
 
         <Icon
           size={24}
-          className={
-            active ? "relative text-[#70412d]" : "text-[#70412d]/25"
-          }
+          strokeWidth={active ? 2.3 : 1.5}
+          className={active ? "text-[#70412d]" : "text-[#70412d]/25"}
         />
       </Link>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9]">
+    <div className={isHoje ? "h-screen overflow-hidden bg-[#f9f5e9]" : "min-h-screen pb-32 bg-[#f9f5e9]"}>
+      
       {children}
 
-      {!hideNavbar && (
+      {!isHoje && (
         <div className="fixed bottom-6 left-0 right-0 flex justify-center">
-          <nav className="bg-[#f9f5e9] px-10 py-4 rounded-3xl flex gap-10 items-center border border-[#e9d5bb] shadow-md">
+          <nav className="bg-[#f9f5e9]/90 backdrop-blur-lg px-10 py-4 rounded-3xl flex gap-10 items-center border border-[#e9d5bb]/60 shadow-[0_12px_30px_rgba(112,65,45,0.10)]">
             <NavItem href="/hoje" Icon={Home} />
             <NavItem href="/secreto" Icon={BookOpen} />
             <NavItem href="/diario" Icon={Pencil} />
@@ -52,6 +52,7 @@ export default function AppLayout({
           </nav>
         </div>
       )}
+
     </div>
   );
 }
