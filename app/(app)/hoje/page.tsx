@@ -1,11 +1,27 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function HojePage() {
-  return (
-    <div className="h-screen overflow-hidden bg-[#f9f5e9] flex flex-col items-center justify-center px-8 text-center">
+  const [vh, setVh] = useState(0);
 
+  useEffect(() => {
+    const setHeight = () => {
+      setVh(window.innerHeight);
+    };
+
+    setHeight();
+    window.addEventListener("resize", setHeight);
+
+    return () => window.removeEventListener("resize", setHeight);
+  }, []);
+
+  return (
+    <div
+      style={{ height: vh }}
+      className="overflow-hidden bg-[#f9f5e9] flex flex-col items-center justify-center px-8 text-center"
+    >
       <div className="flex flex-col items-center animate-logoEntrance">
         <img
           src="/logo.png"
@@ -54,7 +70,6 @@ export default function HojePage() {
           animation-fill-mode: both;
         }
       `}</style>
-
     </div>
   );
 }
