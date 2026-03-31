@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function HojePage() {
   return (
-    <div className="h-[100dvh] overflow-hidden bg-[#f9f5e9] flex flex-col items-center justify-between pt-16 pb-32 px-8 text-center">
+    <div className="h-[100dvh] overflow-hidden bg-[#f9f5e9] flex flex-col items-center justify-center px-8 text-center gap-16">
 
       {/* LOGO */}
       <div className="flex flex-col items-center animate-logoEntrance">
@@ -27,7 +27,7 @@ export default function HojePage() {
         @keyframes logoEntrance {
           0% {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(-20px);
           }
           100% {
             opacity: 1;
@@ -47,12 +47,12 @@ export default function HojePage() {
         }
 
         .animate-logoEntrance {
-          animation: logoEntrance 1.2s ease-out;
+          animation: logoEntrance 1s ease-out;
         }
 
         .animate-buttonEntrance {
-          animation: buttonEntrance 1.2s ease-out;
-          animation-delay: 0.8s;
+          animation: buttonEntrance 1s ease-out;
+          animation-delay: 0.5s;
           animation-fill-mode: both;
         }
       `}</style>
