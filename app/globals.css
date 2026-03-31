@@ -9,12 +9,22 @@
   --ns-gold: #C6A46A;
 }
 
+/* RESET + FIX MOBILE SCROLL */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* BASE */
 body {
   background: var(--ns-offwhite);
   color: var(--ns-brown);
   font-family: var(--font-inter);
 }
 
+/* TIPOGRAFIA */
 h1, h2, h3 {
   font-family: var(--font-playfair);
 }
