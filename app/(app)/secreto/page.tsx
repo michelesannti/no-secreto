@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase";
 
 export default async function SecretoPage() {
@@ -7,91 +8,46 @@ export default async function SecretoPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: estudos } = await supabase
+  if (!user) {
+    return redirect("/login");
+  }
+
+  const jornadaAtual = "genesis-1";
+
+  // Busca todos os estudos da jornada atual, na ordem certa
+  const { data: estudos, error: estudosError } = await supabase
     .from("estudos")
-    .select("*")
+    .select("id, ordem, jornada")
+    .eq("jornada", jornadaAtual)
     .order("ordem", { ascending: true });
 
-  const { data: progresso } = await supabase
+  if (estudosError || !estudos || estudos.length === 0) {
+    return <div className="p-6 text-[#70412d]">nenhum estudo encontrado para essa jornada</div>;
+  }
+
+  // Busca os estudos concluídos da usuária
+  const { data: progresso, error: progressoError } = await supabase
     .from("progresso_usuario")
     .select("estudo_id")
-    .eq("user_id", user?.id);
+    .eq("user_id", user.id)
+    .eq("concluido", true);
 
-  const concluidos = progresso?.length || 0;
-  const total = estudos?.length || 0;
+  if (progressoError) {
+    return <div className="p-6 text-[#70412d]">erro ao carregar progresso</div>;
+  }
 
-  const porcentagem = total ? concluidos / total : 0;
+  const concluidosIds = progresso?.map((item) => item.estudo_id) || [];
 
-  return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
-
-      {/* TOPO */}
-      <div className="px-8 mb-12">
-
-        <h1 className="text-xl font-serif tracking-wide">
-          Secreto
-        </h1>
-
-        <div className="w-10 h-[2px] bg-[#C6A46A]/70 mt-2"></div>
-
-      </div>
-
-      <div className="max-w-2xl mx-auto px-8">
-
-        {/* PROGRESSO */}
-        <div className="mb-16">
-
-          <p className="text-sm text-[#70412d]/70 mb-4">
-            Sua jornada
-          </p>
-
-          <div className="relative w-full h-[4px] bg-[#e9d5bb] rounded-full">
-
-            <div
-              className="absolute top-0 left-0 h-[4px] bg-[#C6A46A] rounded-full transition-all duration-700"
-              style={{ width: `${porcentagem * 100}%` }}
-            />
-
-            <div
-              className="absolute -top-[6px] w-4 h-4 rounded-full bg-[#C6A46A]"
-              style={{ left: `calc(${porcentagem * 100}% - 8px)` }}
-            />
-
-          </div>
-
-          <p className="mt-4 text-sm text-[#70412d]/70">
-            {concluidos} de {total} estudos concluídos
-          </p>
-
-        </div>
-
-        {/* LISTA DE ESTUDOS */}
-        <div className="space-y-6">
-
-          {estudos?.map((estudo) => (
-            <a
-              key={estudo.id}
-              href={`/secreto/${estudo.id}`}
-              className="block p-5 rounded-xl bg-[#f3ecdd] transition hover:opacity-90"
-            >
-
-              <p className="font-semibold">
-                {estudo.titulo}
-              </p>
-
-              <p className="text-sm text-[#70412d]/60 mt-1">
-                {estudo.livro} {estudo.capitulo}:{estudo.versiculo_inicio}
-                {estudo.versiculo_fim !== estudo.versiculo_inicio &&
-                  `-${estudo.versiculo_fim}`}
-              </p>
-
-            </a>
-          ))}
-
-        </div>
-
-      </div>
-
-    </div>
+  // Pega o primeiro estudo da jornada que ainda não foi concluído
+  const proximoEstudo = estudos.find(
+    (estudo) => !concluidosIds.includes(estudo.id)
   );
+
+  // Se ainda existe estudo a fazer, manda pra ele
+  if (proximoEstudo) {
+    return redirect(`/secreto/${proximoEstudo.id}`);
+  }
+
+  // Se concluiu tudo dessa jornada, volta pro Hoje por enquanto
+  return redirect("/hoje");
 }

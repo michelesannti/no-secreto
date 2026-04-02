@@ -10,20 +10,26 @@ interface PageProps {
 export default async function EstudoPage({ params }: PageProps) {
   const supabase = getSupabaseClient();
 
-  // 🔐 pega usuário logado
+  const estudoId = Number(params.id);
+
+  if (Number.isNaN(estudoId)) {
+    return <div className="p-6 text-[#70412d]">estudo não encontrado</div>;
+  }
+
+  // Usuário logado
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // 📖 busca estudo
+  // Busca estudo específico
   const { data: estudo, error } = await supabase
     .from("estudos")
     .select("*")
-    .eq("id", params.id)
+    .eq("id", estudoId)
     .single();
 
   if (error || !estudo) {
-    return <div className="p-6">estudo não encontrado</div>;
+    return <div className="p-6 text-[#70412d]">estudo não encontrado</div>;
   }
 
   return (
@@ -59,7 +65,6 @@ export default async function EstudoPage({ params }: PageProps) {
           </p>
 
           <div className="space-y-16">
-
             <div>
               <h2 className="font-semibold text-[17px] text-[#70412d] mb-4">
                 O que estava acontecendo
@@ -79,7 +84,6 @@ export default async function EstudoPage({ params }: PageProps) {
                 {estudo.aplicacao}
               </p>
             </div>
-
           </div>
         </div>
 
