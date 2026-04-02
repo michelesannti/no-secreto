@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { getSupabaseClient } from "@/lib/supabase";
 
 export default function DiarioPage() {
   const [versiculo, setVersiculo] = useState("");
   const [destaque, setDestaque] = useState("");
   const [texto, setTexto] = useState("");
   const [editando, setEditando] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const versiculoRef = useRef<HTMLTextAreaElement>(null);
 
@@ -18,6 +20,69 @@ export default function DiarioPage() {
     }
   }, [versiculo]);
 
+  useEffect(() => {
+    async function carregarEstudoAtualNoDiario() {
+      const supabase = getSupabaseClient();
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      const jornadaAtual = "genesis-1";
+
+      // busca estudos da jornada atual
+      const { data: estudos, error: estudosError } = await supabase
+        .from("estudos")
+        .select("*")
+        .eq("jornada", jornadaAtual)
+        .order("ordem", { ascending: true });
+
+      if (estudosError || !estudos || estudos.length === 0) {
+        setLoading(false);
+        return;
+      }
+
+      // busca progresso real da usuária
+      const { data: progresso, error: progressoError } = await supabase
+        .from("progresso")
+        .select("estudo_id")
+        .eq("user_id", user.id)
+        .eq("concluido", true);
+
+      if (progressoError) {
+        setLoading(false);
+        return;
+      }
+
+      const concluidosIds = progresso?.map((item) => item.estudo_id) || [];
+
+      // pega o estudo atual em andamento = primeiro não concluído
+      const estudoAtual = estudos.find(
+        (estudo) => !concluidosIds.includes(estudo.id)
+      );
+
+      // se concluiu tudo da jornada, pega o último estudo só como referência
+      const estudoBase = estudoAtual || estudos[estudos.length - 1];
+
+      if (estudoBase) {
+        const referencia = `${estudoBase.livro} ${estudoBase.capitulo}:${estudoBase.versiculo}`;
+        const bloco = `${referencia}\n${estudoBase.texto}`;
+
+        setVersiculo(bloco);
+        setDestaque(estudoBase.frase || "");
+      }
+
+      setLoading(false);
+    }
+
+    carregarEstudoAtualNoDiario();
+  }, []);
+
   function formatarTexto(texto: string) {
     let formatado = texto
       .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
@@ -27,8 +92,12 @@ export default function DiarioPage() {
     return formatado.replace(/\n/g, "<br/>");
   }
 
+  if (loading) {
+    return <div className="h-[100dvh] overflow-hidden bg-[#f9f5e9]" />;
+  }
+
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
+    <div className="h-[100dvh] overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
 
       {/* TOPO */}
       <div className="px-8 mb-12">
@@ -36,7 +105,6 @@ export default function DiarioPage() {
           Diário
         </h1>
 
-        {/* LINHA DOURADA */}
         <div className="w-10 h-[2px] bg-[#C6A46A]/60 mt-2"></div>
       </div>
 
@@ -62,15 +130,15 @@ export default function DiarioPage() {
 
         {/* DESTAQUE */}
         <div className="flex items-center justify-center mb-12">
-          <div className="flex items-center gap-4">
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+          <div className="flex items-center gap-4 max-w-full">
+            <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
 
             {editando ? (
               <textarea
                 value={destaque}
                 onChange={(e) => setDestaque(e.target.value)}
                 placeholder="Destaque"
-                className="bg-transparent resize-none outline-none font-serif text-xl font-semibold text-center placeholder:text-[#70412d]/30 leading-tight"
+                className="bg-transparent resize-none outline-none font-serif text-xl font-semibold text-center placeholder:text-[#70412d]/30 leading-tight w-full"
               />
             ) : (
               <p
@@ -81,7 +149,7 @@ export default function DiarioPage() {
               />
             )}
 
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+            <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
           </div>
         </div>
 
@@ -104,7 +172,7 @@ export default function DiarioPage() {
               className="relative w-full bg-transparent resize-none outline-none text-lg placeholder:text-[#70412d]/40"
               style={{
                 lineHeight: "32px",
-                minHeight: "600px"
+                minHeight: "600px",
               }}
             />
           ) : (
@@ -112,14 +180,13 @@ export default function DiarioPage() {
               className="relative text-lg"
               style={{
                 lineHeight: "32px",
-                minHeight: "600px"
+                minHeight: "600px",
               }}
               dangerouslySetInnerHTML={{
                 __html: formatarTexto(texto),
               }}
             />
           )}
-
         </div>
 
         <div className="mt-12 flex justify-center">
