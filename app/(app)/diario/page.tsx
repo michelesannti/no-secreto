@@ -25,7 +25,6 @@ export default function DiarioPage() {
 
       const jornadaAtual = "genesis-1";
 
-      // busca estudos da jornada atual
       const { data: estudos, error: estudosError } = await supabase
         .from("estudos")
         .select("*")
@@ -37,7 +36,6 @@ export default function DiarioPage() {
         return;
       }
 
-      // busca progresso real da usuária
       const { data: progresso, error: progressoError } = await supabase
         .from("progresso")
         .select("estudo_id")
@@ -51,16 +49,22 @@ export default function DiarioPage() {
 
       const concluidosIds = progresso?.map((item) => item.estudo_id) || [];
 
-      // pega o estudo atual em andamento = primeiro não concluído
       const estudoAtual = estudos.find(
         (estudo) => !concluidosIds.includes(estudo.id)
       );
 
-      // se concluiu tudo da jornada, pega o último estudo só como referência
       const estudoBase = estudoAtual || estudos[estudos.length - 1];
 
       if (estudoBase) {
-        setReferencia(`${estudoBase.livro} ${estudoBase.capitulo}:${estudoBase.versiculo}`);
+        const inicio = estudoBase.versiculo_inicio;
+        const fim = estudoBase.versiculo_fim;
+
+        const referenciaMontada =
+          inicio && fim && inicio !== fim
+            ? `${estudoBase.livro} ${estudoBase.capitulo}:${inicio}-${fim}`
+            : `${estudoBase.livro} ${estudoBase.capitulo}:${inicio ?? ""}`;
+
+        setReferencia(referenciaMontada.trim());
         setDestaque(estudoBase.frase || "");
       }
 
@@ -85,7 +89,6 @@ export default function DiarioPage() {
 
   return (
     <div className="h-[100dvh] overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
-      {/* TOPO */}
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">
           Diário
@@ -96,14 +99,12 @@ export default function DiarioPage() {
 
       <div className="max-w-2xl mx-auto px-8">
 
-        {/* REFERÊNCIA */}
         {referencia && (
           <p className="text-sm text-[#70412d]/55 tracking-wide mb-10 text-center">
             {referencia}
           </p>
         )}
 
-        {/* DESTAQUE */}
         <div className="flex items-center justify-center mb-12">
           <div className="flex items-center gap-4 max-w-full">
             <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
@@ -128,7 +129,6 @@ export default function DiarioPage() {
           </div>
         </div>
 
-        {/* TEXTO */}
         <div className="relative min-h-[600px] mb-8">
           <div
             className="absolute inset-0 pointer-events-none"
