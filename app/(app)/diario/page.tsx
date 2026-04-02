@@ -1,24 +1,14 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getSupabaseClient } from "@/lib/supabase";
 
 export default function DiarioPage() {
-  const [versiculo, setVersiculo] = useState("");
+  const [referencia, setReferencia] = useState("");
   const [destaque, setDestaque] = useState("");
   const [texto, setTexto] = useState("");
   const [editando, setEditando] = useState(true);
   const [loading, setLoading] = useState(true);
-
-  const versiculoRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    if (versiculoRef.current) {
-      versiculoRef.current.style.height = "auto";
-      versiculoRef.current.style.height =
-        versiculoRef.current.scrollHeight + "px";
-    }
-  }, [versiculo]);
 
   useEffect(() => {
     async function carregarEstudoAtualNoDiario() {
@@ -70,10 +60,7 @@ export default function DiarioPage() {
       const estudoBase = estudoAtual || estudos[estudos.length - 1];
 
       if (estudoBase) {
-        const referencia = `${estudoBase.livro} ${estudoBase.capitulo}:${estudoBase.versiculo}`;
-        const bloco = `${referencia}\n${estudoBase.texto}`;
-
-        setVersiculo(bloco);
+        setReferencia(`${estudoBase.livro} ${estudoBase.capitulo}:${estudoBase.versiculo}`);
         setDestaque(estudoBase.frase || "");
       }
 
@@ -98,7 +85,6 @@ export default function DiarioPage() {
 
   return (
     <div className="h-[100dvh] overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
-
       {/* TOPO */}
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">
@@ -110,22 +96,11 @@ export default function DiarioPage() {
 
       <div className="max-w-2xl mx-auto px-8">
 
-        {/* VERSÍCULO */}
-        {editando ? (
-          <textarea
-            ref={versiculoRef}
-            value={versiculo}
-            onChange={(e) => setVersiculo(e.target.value)}
-            placeholder="Versículo"
-            className="w-full bg-transparent resize-none outline-none italic text-[#70412d]/85 leading-relaxed mb-14 placeholder:text-[#70412d]/40 overflow-hidden"
-          />
-        ) : (
-          <p
-            className="italic text-[#70412d]/85 leading-relaxed mb-14"
-            dangerouslySetInnerHTML={{
-              __html: formatarTexto(versiculo),
-            }}
-          />
+        {/* REFERÊNCIA */}
+        {referencia && (
+          <p className="text-sm text-[#70412d]/55 tracking-wide mb-10 text-center">
+            {referencia}
+          </p>
         )}
 
         {/* DESTAQUE */}
@@ -155,7 +130,6 @@ export default function DiarioPage() {
 
         {/* TEXTO */}
         <div className="relative min-h-[600px] mb-8">
-
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
