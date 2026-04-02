@@ -41,7 +41,6 @@ export default function EstudoPage({ params }: PageProps) {
         return;
       }
 
-      // busca estudo atual
       const { data: estudoAtual, error: estudoError } = await supabase
         .from("estudos")
         .select("*")
@@ -55,7 +54,6 @@ export default function EstudoPage({ params }: PageProps) {
 
       setEstudo(estudoAtual);
 
-      // busca todos os estudos da mesma jornada
       const { data: estudosDaJornada } = await supabase
         .from("estudos")
         .select("id")
@@ -63,7 +61,6 @@ export default function EstudoPage({ params }: PageProps) {
 
       const total = estudosDaJornada?.length || 0;
 
-      // usuário logado
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -183,17 +180,18 @@ export default function EstudoPage({ params }: PageProps) {
         {/* FRASE DESTACADA */}
         <div className="flex items-center justify-center mt-16 mb-10">
           <div className="flex items-center gap-4">
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+            <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
 
-            <p className="font-serif text-xl font-semibold text-center leading-snug">
+            <p
+              className="font-serif text-xl font-semibold text-center leading-snug max-w-[28ch] [text-wrap:balance]"
+            >
               {estudo.frase}
             </p>
 
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+            <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
           </div>
         </div>
 
-        {/* BOTÃO CONCLUIR */}
         <ConcluirButton
           estudoId={estudo.id}
           jornada={estudo.jornada}

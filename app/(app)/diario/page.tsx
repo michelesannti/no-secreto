@@ -50,7 +50,6 @@ export default function DiarioPage() {
 
       const jornadaAtual = "genesis-1";
 
-      // estudos da jornada atual
       const { data: estudos, error: estudosError } = await supabase
         .from("estudos")
         .select("*")
@@ -62,7 +61,6 @@ export default function DiarioPage() {
         return;
       }
 
-      // progresso real da usuária
       const { data: progresso, error: progressoError } = await supabase
         .from("progresso")
         .select("estudo_id")
@@ -76,7 +74,6 @@ export default function DiarioPage() {
 
       const concluidosIds = progresso?.map((item) => item.estudo_id) || [];
 
-      // estudo atual = primeiro não concluído
       const estudoEmAndamento =
         estudos.find((estudo) => !concluidosIds.includes(estudo.id)) ||
         estudos[estudos.length - 1];
@@ -98,7 +95,6 @@ export default function DiarioPage() {
 
       setReferencia(referenciaMontada.trim());
 
-      // 1. tenta carregar diário salvo no banco
       const { data: diarioSalvo, error: diarioError } = await supabase
         .from("diario")
         .select("id, versiculo, destaque, texto")
@@ -114,21 +110,19 @@ export default function DiarioPage() {
         return;
       }
 
-      // 2. se não tem salvo, tenta carregar rascunho local
       const draftKey = `diario-draft-${user.id}-${estudoEmAndamento.id}`;
       const draft = localStorage.getItem(draftKey);
 
       if (draft) {
         try {
           const parsed = JSON.parse(draft);
-          setDestaque(parsed.destaque || estudoEmAndamento.frase || "");
+          setDestaque(estudoEmAndamento.frase || "");
           setTexto(parsed.texto || "");
         } catch {
           setDestaque(estudoEmAndamento.frase || "");
           setTexto("");
         }
       } else {
-        // 3. se não tem nada, usa o estudo atual como base
         setDestaque(estudoEmAndamento.frase || "");
         setTexto("");
       }
@@ -139,7 +133,6 @@ export default function DiarioPage() {
     carregarDiario();
   }, []);
 
-  // salva rascunho automático local enquanto escreve
   useEffect(() => {
     if (!userId || !estudoAtual || loading) return;
 
@@ -148,11 +141,10 @@ export default function DiarioPage() {
     localStorage.setItem(
       draftKey,
       JSON.stringify({
-        destaque,
         texto,
       })
     );
-  }, [destaque, texto, userId, estudoAtual, loading]);
+  }, [texto, userId, estudoAtual, loading]);
 
   async function handleSalvar() {
     if (!userId || !estudoAtual) return;
@@ -164,7 +156,7 @@ export default function DiarioPage() {
     const payload = {
       user_id: userId,
       estudo_id: estudoAtual.id,
-      versiculo: referencia, // aqui estamos usando a coluna versiculo como referência
+      versiculo: referencia,
       destaque,
       texto,
     };
@@ -237,11 +229,11 @@ export default function DiarioPage() {
         )}
 
         <div className="flex items-center justify-center mb-12">
-          <div className="flex items-center gap-4 max-w-full">
+          <div className="flex items-center gap-4">
             <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
 
             <p
-              className="font-serif text-xl font-semibold text-center leading-tight"
+              className="font-serif text-xl font-semibold text-center leading-snug max-w-[28ch] [text-wrap:balance]"
               dangerouslySetInnerHTML={{
                 __html: formatarTexto(destaque),
               }}

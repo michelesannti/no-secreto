@@ -32,7 +32,6 @@ export default function ConcluirButton({
       return;
     }
 
-    // salva progresso
     const { error: progressoError } = await supabase
       .from("progresso")
       .upsert({
@@ -46,7 +45,6 @@ export default function ConcluirButton({
       return;
     }
 
-    // próximo estudo da mesma jornada
     const { data: next } = await supabase
       .from("estudos")
       .select("id, ordem")
@@ -70,9 +68,9 @@ export default function ConcluirButton({
       <button
         onClick={handleConcluir}
         disabled={loading}
-        className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide transition hover:opacity-90"
+        className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide transition hover:opacity-90 disabled:opacity-60"
       >
-        {loading ? "Salvando..." : "Concluir estudo"}
+        {loading ? "Salvando..." : "Concluir"}
       </button>
     </div>
   );
