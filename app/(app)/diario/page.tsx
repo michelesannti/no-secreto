@@ -3,15 +3,38 @@
 import { useState, useEffect } from "react";
 import { getSupabaseClient } from "@/lib/supabase";
 
+interface Estudo {
+  id: number;
+  livro: string;
+  capitulo: number;
+  versiculo_inicio: number;
+  versiculo_fim: number;
+  frase: string;
+  jornada: string;
+  ordem: number;
+}
+
+interface DiarioSalvo {
+  id: string;
+  versiculo: string;
+  destaque: string;
+  texto: string;
+}
+
 export default function DiarioPage() {
   const [referencia, setReferencia] = useState("");
   const [destaque, setDestaque] = useState("");
   const [texto, setTexto] = useState("");
   const [editando, setEditando] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  const [userId, setUserId] = useState<string | null>(null);
+  const [estudoAtual, setEstudoAtual] = useState<Estudo | null>(null);
+  const [diarioId, setDiarioId] = useState<string | null>(null);
 
   useEffect(() => {
-    async function carregarEstudoAtualNoDiario() {
+    async function carregarDiario() {
       const supabase = getSupabaseClient();
 
       const {
@@ -23,8 +46,11 @@ export default function DiarioPage() {
         return;
       }
 
+      setUserId(user.id);
+
       const jornadaAtual = "genesis-1";
 
+      // estudos da jornada atual
       const { data: estudos, error: estudosError } = await supabase
         .from("estudos")
         .select("*")
@@ -36,6 +62,7 @@ export default function DiarioPage() {
         return;
       }
 
+      // progresso real da usuária
       const { data: progresso, error: progressoError } = await supabase
         .from("progresso")
         .select("estudo_id")
@@ -49,30 +76,134 @@ export default function DiarioPage() {
 
       const concluidosIds = progresso?.map((item) => item.estudo_id) || [];
 
-      const estudoAtual = estudos.find(
-        (estudo) => !concluidosIds.includes(estudo.id)
-      );
+      // estudo atual = primeiro não concluído
+      const estudoEmAndamento =
+        estudos.find((estudo) => !concluidosIds.includes(estudo.id)) ||
+        estudos[estudos.length - 1];
 
-      const estudoBase = estudoAtual || estudos[estudos.length - 1];
+      if (!estudoEmAndamento) {
+        setLoading(false);
+        return;
+      }
 
-      if (estudoBase) {
-        const inicio = estudoBase.versiculo_inicio;
-        const fim = estudoBase.versiculo_fim;
+      setEstudoAtual(estudoEmAndamento);
 
-        const referenciaMontada =
-          inicio && fim && inicio !== fim
-            ? `${estudoBase.livro} ${estudoBase.capitulo}:${inicio}-${fim}`
-            : `${estudoBase.livro} ${estudoBase.capitulo}:${inicio ?? ""}`;
+      const inicio = estudoEmAndamento.versiculo_inicio;
+      const fim = estudoEmAndamento.versiculo_fim;
 
-        setReferencia(referenciaMontada.trim());
-        setDestaque(estudoBase.frase || "");
+      const referenciaMontada =
+        inicio && fim && inicio !== fim
+          ? `${estudoEmAndamento.livro} ${estudoEmAndamento.capitulo}:${inicio}-${fim}`
+          : `${estudoEmAndamento.livro} ${estudoEmAndamento.capitulo}:${inicio ?? ""}`;
+
+      setReferencia(referenciaMontada.trim());
+
+      // 1. tenta carregar diário salvo no banco
+      const { data: diarioSalvo, error: diarioError } = await supabase
+        .from("diario")
+        .select("id, versiculo, destaque, texto")
+        .eq("user_id", user.id)
+        .eq("estudo_id", estudoEmAndamento.id)
+        .maybeSingle<DiarioSalvo>();
+
+      if (!diarioError && diarioSalvo) {
+        setDiarioId(diarioSalvo.id);
+        setDestaque(diarioSalvo.destaque || estudoEmAndamento.frase || "");
+        setTexto(diarioSalvo.texto || "");
+        setLoading(false);
+        return;
+      }
+
+      // 2. se não tem salvo, tenta carregar rascunho local
+      const draftKey = `diario-draft-${user.id}-${estudoEmAndamento.id}`;
+      const draft = localStorage.getItem(draftKey);
+
+      if (draft) {
+        try {
+          const parsed = JSON.parse(draft);
+          setDestaque(parsed.destaque || estudoEmAndamento.frase || "");
+          setTexto(parsed.texto || "");
+        } catch {
+          setDestaque(estudoEmAndamento.frase || "");
+          setTexto("");
+        }
+      } else {
+        // 3. se não tem nada, usa o estudo atual como base
+        setDestaque(estudoEmAndamento.frase || "");
+        setTexto("");
       }
 
       setLoading(false);
     }
 
-    carregarEstudoAtualNoDiario();
+    carregarDiario();
   }, []);
+
+  // salva rascunho automático local enquanto escreve
+  useEffect(() => {
+    if (!userId || !estudoAtual || loading) return;
+
+    const draftKey = `diario-draft-${userId}-${estudoAtual.id}`;
+
+    localStorage.setItem(
+      draftKey,
+      JSON.stringify({
+        destaque,
+        texto,
+      })
+    );
+  }, [destaque, texto, userId, estudoAtual, loading]);
+
+  async function handleSalvar() {
+    if (!userId || !estudoAtual) return;
+
+    setSaving(true);
+
+    const supabase = getSupabaseClient();
+
+    const payload = {
+      user_id: userId,
+      estudo_id: estudoAtual.id,
+      versiculo: referencia, // aqui estamos usando a coluna versiculo como referência
+      destaque,
+      texto,
+    };
+
+    let error = null;
+    let data = null;
+
+    if (diarioId) {
+      const response = await supabase
+        .from("diario")
+        .update(payload)
+        .eq("id", diarioId)
+        .select("id")
+        .single();
+
+      error = response.error;
+      data = response.data;
+    } else {
+      const response = await supabase
+        .from("diario")
+        .insert(payload)
+        .select("id")
+        .single();
+
+      error = response.error;
+      data = response.data;
+    }
+
+    if (!error && data?.id) {
+      setDiarioId(data.id);
+
+      const draftKey = `diario-draft-${userId}-${estudoAtual.id}`;
+      localStorage.removeItem(draftKey);
+
+      setEditando(false);
+    }
+
+    setSaving(false);
+  }
 
   function formatarTexto(texto: string) {
     let formatado = texto
@@ -109,21 +240,12 @@ export default function DiarioPage() {
           <div className="flex items-center gap-4 max-w-full">
             <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
 
-            {editando ? (
-              <textarea
-                value={destaque}
-                onChange={(e) => setDestaque(e.target.value)}
-                placeholder="Destaque"
-                className="bg-transparent resize-none outline-none font-serif text-xl font-semibold text-center placeholder:text-[#70412d]/30 leading-tight w-full"
-              />
-            ) : (
-              <p
-                className="font-serif text-xl font-semibold text-center leading-tight"
-                dangerouslySetInnerHTML={{
-                  __html: formatarTexto(destaque),
-                }}
-              />
-            )}
+            <p
+              className="font-serif text-xl font-semibold text-center leading-tight"
+              dangerouslySetInnerHTML={{
+                __html: formatarTexto(destaque),
+              }}
+            />
 
             <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
           </div>
@@ -166,10 +288,11 @@ export default function DiarioPage() {
         <div className="mt-12 flex justify-center">
           {editando ? (
             <button
-              onClick={() => setEditando(false)}
-              className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide"
+              onClick={handleSalvar}
+              disabled={saving}
+              className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide disabled:opacity-60"
             >
-              Salvar
+              {saving ? "Salvando..." : "Salvar"}
             </button>
           ) : (
             <button
