@@ -31,8 +31,6 @@ export default function EstudoPage({ params }: PageProps) {
   const [loading, setLoading] = useState(true);
   const [estudo, setEstudo] = useState<Estudo | null>(null);
   const [porcentagem, setPorcentagem] = useState(0);
-  const [concluidosNaJornada, setConcluidosNaJornada] = useState(0);
-  const [totalNaJornada, setTotalNaJornada] = useState(0);
 
   useEffect(() => {
     async function carregarEstudo() {
@@ -64,7 +62,6 @@ export default function EstudoPage({ params }: PageProps) {
         .eq("jornada", estudoAtual.jornada);
 
       const total = estudosDaJornada?.length || 0;
-      setTotalNaJornada(total);
 
       // usuário logado
       const {
@@ -86,7 +83,6 @@ export default function EstudoPage({ params }: PageProps) {
           idsDaJornada.includes(id)
         ).length;
 
-        setConcluidosNaJornada(concluidos);
         setPorcentagem(total ? (concluidos / total) * 100 : 0);
       }
 
@@ -97,11 +93,7 @@ export default function EstudoPage({ params }: PageProps) {
   }, [estudoId]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#f9f5e9] flex items-center justify-center text-[#70412d]">
-        carregando estudo...
-      </div>
-    );
+    return <div className="h-[100dvh] overflow-hidden bg-[#f9f5e9]" />;
   }
 
   if (!estudo) {
@@ -109,7 +101,7 @@ export default function EstudoPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
+    <div className="h-[100dvh] overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">
           No Secreto
@@ -138,7 +130,7 @@ export default function EstudoPage({ params }: PageProps) {
           </div>
 
           <p className="mt-4 text-sm text-[#70412d]/70">
-            {concluidosNaJornada} de {totalNaJornada} estudos concluídos
+            {Math.round(porcentagem)}%
           </p>
         </div>
 

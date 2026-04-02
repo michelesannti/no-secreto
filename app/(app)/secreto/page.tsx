@@ -64,7 +64,5 @@ export default function SecretoPage() {
     carregarProximoEstudo();
   }, [router]);
 
-  return (
-    <div className="h-[100dvh] overflow-hidden bg-[#f9f5e9]" />
-  );
+  return <div className="h-[100dvh] overflow-hidden bg-[#f9f5e9]" />;
 }
