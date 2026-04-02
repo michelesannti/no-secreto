@@ -1,34 +1,110 @@
+"use client";
+
+import { use, useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase";
 import ConcluirButton from "./ConcluirButton";
 
-interface PageProps {
-  params: {
-    id: string;
-  };
+interface Estudo {
+  id: number;
+  titulo?: string;
+  texto: string;
+  livro: string;
+  capitulo: number;
+  versiculo: string;
+  contexto: string;
+  aplicacao: string;
+  frase: string;
+  jornada: string;
+  ordem: number;
 }
 
-export default async function EstudoPage({ params }: PageProps) {
-  const supabase = getSupabaseClient();
+interface PageProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
 
-  const estudoId = Number(params.id);
+export default function EstudoPage({ params }: PageProps) {
+  const resolvedParams = use(params);
+  const estudoId = Number(resolvedParams.id);
 
-  if (Number.isNaN(estudoId)) {
-    return <div className="p-6 text-[#70412d]">estudo não encontrado</div>;
+  const [loading, setLoading] = useState(true);
+  const [estudo, setEstudo] = useState<Estudo | null>(null);
+  const [porcentagem, setPorcentagem] = useState(0);
+  const [concluidosNaJornada, setConcluidosNaJornada] = useState(0);
+  const [totalNaJornada, setTotalNaJornada] = useState(0);
+
+  useEffect(() => {
+    async function carregarEstudo() {
+      const supabase = getSupabaseClient();
+
+      if (Number.isNaN(estudoId)) {
+        setLoading(false);
+        return;
+      }
+
+      // busca estudo atual
+      const { data: estudoAtual, error: estudoError } = await supabase
+        .from("estudos")
+        .select("*")
+        .eq("id", estudoId)
+        .single();
+
+      if (estudoError || !estudoAtual) {
+        setLoading(false);
+        return;
+      }
+
+      setEstudo(estudoAtual);
+
+      // busca todos os estudos da mesma jornada
+      const { data: estudosDaJornada } = await supabase
+        .from("estudos")
+        .select("id")
+        .eq("jornada", estudoAtual.jornada);
+
+      const total = estudosDaJornada?.length || 0;
+      setTotalNaJornada(total);
+
+      // usuário logado
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        const idsDaJornada = estudosDaJornada?.map((item) => item.id) || [];
+
+        const { data: progresso } = await supabase
+          .from("progresso")
+          .select("estudo_id")
+          .eq("user_id", user.id)
+          .eq("concluido", true);
+
+        const concluidosIds = progresso?.map((item) => item.estudo_id) || [];
+
+        const concluidos = concluidosIds.filter((id) =>
+          idsDaJornada.includes(id)
+        ).length;
+
+        setConcluidosNaJornada(concluidos);
+        setPorcentagem(total ? (concluidos / total) * 100 : 0);
+      }
+
+      setLoading(false);
+    }
+
+    carregarEstudo();
+  }, [estudoId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#f9f5e9] flex items-center justify-center text-[#70412d]">
+        carregando estudo...
+      </div>
+    );
   }
 
-  // Usuário logado
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // Busca estudo específico
-  const { data: estudo, error } = await supabase
-    .from("estudos")
-    .select("*")
-    .eq("id", estudoId)
-    .single();
-
-  if (error || !estudo) {
+  if (!estudo) {
     return <div className="p-6 text-[#70412d]">estudo não encontrado</div>;
   }
 
@@ -42,6 +118,29 @@ export default async function EstudoPage({ params }: PageProps) {
       </div>
 
       <div className="max-w-2xl mx-auto px-8">
+
+        {/* PROGRESSO DA JORNADA */}
+        <div className="mb-16">
+          <p className="text-sm text-[#70412d]/70 mb-4">
+            Sua jornada
+          </p>
+
+          <div className="relative w-full h-[4px] bg-[#e9d5bb] rounded-full">
+            <div
+              className="absolute top-0 left-0 h-[4px] bg-[#C6A46A] rounded-full transition-all duration-700"
+              style={{ width: `${porcentagem}%` }}
+            />
+
+            <div
+              className="absolute -top-[6px] w-4 h-4 rounded-full bg-[#C6A46A]"
+              style={{ left: `calc(${porcentagem}% - 8px)` }}
+            />
+          </div>
+
+          <p className="mt-4 text-sm text-[#70412d]/70">
+            {concluidosNaJornada} de {totalNaJornada} estudos concluídos
+          </p>
+        </div>
 
         {/* PALAVRA */}
         <div className="mb-16">
@@ -65,6 +164,7 @@ export default async function EstudoPage({ params }: PageProps) {
           </p>
 
           <div className="space-y-16">
+
             <div>
               <h2 className="font-semibold text-[17px] text-[#70412d] mb-4">
                 O que estava acontecendo
@@ -84,6 +184,7 @@ export default async function EstudoPage({ params }: PageProps) {
                 {estudo.aplicacao}
               </p>
             </div>
+
           </div>
         </div>
 
@@ -101,12 +202,11 @@ export default async function EstudoPage({ params }: PageProps) {
         </div>
 
         {/* BOTÃO CONCLUIR */}
-        {user && (
-          <ConcluirButton
-            estudoId={estudo.id}
-            userId={user.id}
-          />
-        )}
+        <ConcluirButton
+          estudoId={estudo.id}
+          jornada={estudo.jornada}
+          ordemAtual={estudo.ordem}
+        />
 
       </div>
     </div>

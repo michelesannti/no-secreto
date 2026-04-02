@@ -6,10 +6,15 @@ import { getSupabaseClient } from "@/lib/supabase";
 
 interface Props {
   estudoId: number;
-  userId: string;
+  jornada: string;
+  ordemAtual: number;
 }
 
-export default function ConcluirButton({ estudoId, userId }: Props) {
+export default function ConcluirButton({
+  estudoId,
+  jornada,
+  ordemAtual,
+}: Props) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -18,26 +23,43 @@ export default function ConcluirButton({ estudoId, userId }: Props) {
 
     const supabase = getSupabaseClient();
 
-    // salva progresso
-    await supabase.from("progresso_usuario").upsert({
-      user_id: userId,
-      estudo_id: estudoId,
-      concluido: true,
-    });
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    // pega próximo estudo
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    // salva progresso
+    const { error: progressoError } = await supabase
+      .from("progresso")
+      .upsert({
+        user_id: user.id,
+        estudo_id: estudoId,
+        concluido: true,
+      });
+
+    if (progressoError) {
+      setLoading(false);
+      return;
+    }
+
+    // próximo estudo da mesma jornada
     const { data: next } = await supabase
       .from("estudos")
-      .select("id")
-      .gt("id", estudoId)
-      .order("id", { ascending: true })
+      .select("id, ordem")
+      .eq("jornada", jornada)
+      .gt("ordem", ordemAtual)
+      .order("ordem", { ascending: true })
       .limit(1)
       .single();
 
     if (next?.id) {
       router.push(`/secreto/${next.id}`);
     } else {
-      router.push("/hoje"); // acabou tudo
+      router.push("/hoje");
     }
 
     setLoading(false);
