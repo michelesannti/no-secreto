@@ -108,7 +108,7 @@ export default function EstudoPage({ params }: PageProps) {
 
       <div className="max-w-2xl mx-auto px-8">
 
-        {/* PROGRESSO DA JORNADA */}
+        {/* PROGRESSO */}
         <div className="mb-16">
           <p className="text-sm text-[#70412d]/70 mb-4">
             Sua jornada
@@ -183,7 +183,7 @@ export default function EstudoPage({ params }: PageProps) {
             <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
 
             <p
-              className="font-serif text-xl font-semibold text-center leading-snug max-w-[28ch] [text-wrap:balance]"
+              className="font-serif text-xl font-semibold text-center leading-snug max-w-[34ch] sm:max-w-[42ch] [text-wrap:balance]"
             >
               {estudo.frase}
             </p>

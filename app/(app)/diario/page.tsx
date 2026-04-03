@@ -95,6 +95,7 @@ export default function DiarioPage() {
 
       setReferencia(referenciaMontada.trim());
 
+      // 🔥 tenta carregar diário salvo
       const { data: diarioSalvo, error: diarioError } = await supabase
         .from("diario")
         .select("id, versiculo, destaque, texto")
@@ -110,6 +111,7 @@ export default function DiarioPage() {
         return;
       }
 
+      // 🔥 rascunho local
       const draftKey = `diario-draft-${user.id}-${estudoEmAndamento.id}`;
       const draft = localStorage.getItem(draftKey);
 
@@ -133,6 +135,7 @@ export default function DiarioPage() {
     carregarDiario();
   }, []);
 
+  // 🔥 salva rascunho automático
   useEffect(() => {
     if (!userId || !estudoAtual || loading) return;
 
@@ -222,18 +225,20 @@ export default function DiarioPage() {
 
       <div className="max-w-2xl mx-auto px-8">
 
+        {/* REFERÊNCIA */}
         {referencia && (
           <p className="text-sm text-[#70412d]/55 tracking-wide mb-10 text-center">
             {referencia}
           </p>
         )}
 
+        {/* FRASE DESTACADA */}
         <div className="flex items-center justify-center mb-12">
           <div className="flex items-center gap-4">
             <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
 
             <p
-              className="font-serif text-xl font-semibold text-center leading-snug max-w-[28ch] [text-wrap:balance]"
+              className="font-serif text-xl font-semibold text-center leading-snug max-w-[34ch] sm:max-w-[42ch] [text-wrap:balance]"
               dangerouslySetInnerHTML={{
                 __html: formatarTexto(destaque),
               }}
@@ -243,6 +248,7 @@ export default function DiarioPage() {
           </div>
         </div>
 
+        {/* TEXTO */}
         <div className="relative min-h-[600px] mb-8">
           <div
             className="absolute inset-0 pointer-events-none"
@@ -277,6 +283,7 @@ export default function DiarioPage() {
           )}
         </div>
 
+        {/* BOTÃO */}
         <div className="mt-12 flex justify-center">
           {editando ? (
             <button
