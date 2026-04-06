@@ -133,8 +133,21 @@ export default function DiarioPage() {
               <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
               <p
-                className="font-serif text-xl font-semibold text-center leading-snug max-w-[32ch]"
-                style={{ textWrap: "balance" }}
+                className="
+                  font-serif
+                  text-xl
+                  font-semibold
+                  text-center
+                  text-[#70412d]
+                  leading-snug
+                  max-w-[36ch]
+                  sm:max-w-[42ch]
+                  mx-auto
+                "
+                style={{
+                  textWrap: "balance",
+                  wordBreak: "keep-all"
+                }}
               >
                 {destaque}
               </p>

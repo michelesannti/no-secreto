@@ -109,17 +109,14 @@ export default function EstudoPage({ params }: PageProps) {
           </p>
 
           <div className="relative w-full h-[4px] bg-[#e9d5bb] rounded-full">
-
             <div
               className="absolute top-0 left-0 h-[4px] bg-[#C6A46A] rounded-full transition-all duration-700"
               style={{ width: `${porcentagem}%` }}
             />
-
             <div
               className="absolute -top-[6px] w-4 h-4 rounded-full bg-[#C6A46A]"
               style={{ left: `calc(${porcentagem}% - 8px)` }}
             />
-
           </div>
 
           <p className="mt-4 text-sm text-[#70412d]/70">
@@ -167,15 +164,18 @@ export default function EstudoPage({ params }: PageProps) {
 
         </div>
 
-        {/* DESTAQUE */}
+        {/* DESTAQUE OTIMIZADO */}
         <div className="flex items-center justify-center mt-16 mb-10">
           <div className="flex items-center gap-4">
 
             <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
             <p
-              className="font-serif text-xl font-semibold text-center leading-snug max-w-[32ch]"
-              style={{ textWrap: "balance" }}
+              className="font-serif text-xl font-semibold text-center text-[#70412d] leading-snug max-w-[36ch] sm:max-w-[42ch] mx-auto"
+              style={{
+                textWrap: "balance",
+                wordBreak: "keep-all"
+              }}
             >
               {estudo.frase}
             </p>
