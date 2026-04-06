@@ -39,12 +39,13 @@ export default function PerfilPage() {
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
 
+      {/* TOPO */}
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">
           Perfil
         </h1>
 
-        <div className="w-10 h-[2px] bg-[#C6A46A]/60 mt-2"></div>
+        <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
       <div className="max-w-xl mx-auto px-8 space-y-6">

@@ -46,7 +46,6 @@ export default function EstudoPage({ params }: PageProps) {
 
       setEstudo(estudoAtual);
 
-      // 📊 progresso
       const { data: estudosDaJornada } = await supabase
         .from("estudos")
         .select("id")
@@ -168,20 +167,20 @@ export default function EstudoPage({ params }: PageProps) {
 
         </div>
 
-        {/* FRASE */}
-        <div className="flex justify-center mt-16 mb-10">
+        {/* DESTAQUE */}
+        <div className="flex items-center justify-center mt-16 mb-10">
           <div className="flex items-center gap-4">
 
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+            <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
             <p
-              className="font-serif text-xl text-center max-w-[32ch]"
+              className="font-serif text-xl font-semibold text-center leading-snug max-w-[32ch]"
               style={{ textWrap: "balance" }}
             >
               {estudo.frase}
             </p>
 
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+            <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
           </div>
         </div>

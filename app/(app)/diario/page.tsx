@@ -64,7 +64,6 @@ export default function DiarioPage() {
 
       if (draft) setTexto(draft);
 
-      // 👉 só libera render quando tudo estiver pronto
       setReady(true);
     }
 
@@ -102,7 +101,6 @@ export default function DiarioPage() {
     router.push("/conclusao");
   }
 
-  // 🔥 evita render quebrado
   if (!ready) {
     return <div className="min-h-screen bg-[#f9f5e9]" />;
   }
@@ -118,7 +116,7 @@ export default function DiarioPage() {
             Diário
           </h1>
 
-          <div className="w-10 h-[2px] bg-[#C6A46A]/60 mt-2"></div>
+          <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
         </div>
 
         <div className="max-w-2xl mx-auto px-8">
@@ -129,10 +127,10 @@ export default function DiarioPage() {
           </p>
 
           {/* DESTAQUE */}
-          <div className="flex items-center justify-center mb-12">
+          <div className="flex items-center justify-center mt-16 mb-10">
             <div className="flex items-center gap-4">
 
-              <div className="w-[2px] h-8 bg-[#C6A46A]/60"></div>
+              <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
               <p
                 className="font-serif text-xl font-semibold text-center leading-snug max-w-[32ch]"
@@ -141,7 +139,7 @@ export default function DiarioPage() {
                 {destaque}
               </p>
 
-              <div className="w-[2px] h-8 bg-[#C6A46A]/60"></div>
+              <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
             </div>
           </div>
