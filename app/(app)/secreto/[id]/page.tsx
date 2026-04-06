@@ -6,7 +6,6 @@ import ConcluirButton from "./ConcluirButton";
 
 interface Estudo {
   id: number;
-  titulo?: string;
   texto: string;
   livro: string;
   capitulo: number;
@@ -19,9 +18,7 @@ interface Estudo {
 }
 
 interface PageProps {
-  params: Promise<{
-    id: string;
-  }>;
+  params: Promise<{ id: string }>;
 }
 
 export default function EstudoPage({ params }: PageProps) {
@@ -33,27 +30,23 @@ export default function EstudoPage({ params }: PageProps) {
   const [porcentagem, setPorcentagem] = useState(0);
 
   useEffect(() => {
-    async function carregarEstudo() {
+    async function carregar() {
       const supabase = getSupabaseClient();
 
-      if (Number.isNaN(estudoId)) {
-        setLoading(false);
-        return;
-      }
-
-      const { data: estudoAtual, error: estudoError } = await supabase
+      const { data: estudoAtual } = await supabase
         .from("estudos")
         .select("*")
         .eq("id", estudoId)
         .single();
 
-      if (estudoError || !estudoAtual) {
+      if (!estudoAtual) {
         setLoading(false);
         return;
       }
 
       setEstudo(estudoAtual);
 
+      // 📊 progresso
       const { data: estudosDaJornada } = await supabase
         .from("estudos")
         .select("id")
@@ -66,7 +59,7 @@ export default function EstudoPage({ params }: PageProps) {
       } = await supabase.auth.getUser();
 
       if (user) {
-        const idsDaJornada = estudosDaJornada?.map((item) => item.id) || [];
+        const ids = estudosDaJornada?.map((e) => e.id) || [];
 
         const { data: progresso } = await supabase
           .from("progresso")
@@ -74,10 +67,10 @@ export default function EstudoPage({ params }: PageProps) {
           .eq("user_id", user.id)
           .eq("concluido", true);
 
-        const concluidosIds = progresso?.map((item) => item.estudo_id) || [];
+        const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
         const concluidos = concluidosIds.filter((id) =>
-          idsDaJornada.includes(id)
+          ids.includes(id)
         ).length;
 
         setPorcentagem(total ? (concluidos / total) * 100 : 0);
@@ -86,11 +79,11 @@ export default function EstudoPage({ params }: PageProps) {
       setLoading(false);
     }
 
-    carregarEstudo();
+    carregar();
   }, [estudoId]);
 
   if (loading) {
-    return <div className="h-[100dvh] overflow-hidden bg-[#f9f5e9]" />;
+    return <div className="min-h-screen bg-[#f9f5e9]" />;
   }
 
   if (!estudo) {
@@ -98,7 +91,9 @@ export default function EstudoPage({ params }: PageProps) {
   }
 
   return (
-    <div className="h-[100dvh] overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
+    <div className="min-h-screen overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
+
+      {/* TOPO */}
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">
           No Secreto
@@ -115,6 +110,7 @@ export default function EstudoPage({ params }: PageProps) {
           </p>
 
           <div className="relative w-full h-[4px] bg-[#e9d5bb] rounded-full">
+
             <div
               className="absolute top-0 left-0 h-[4px] bg-[#C6A46A] rounded-full transition-all duration-700"
               style={{ width: `${porcentagem}%` }}
@@ -124,6 +120,7 @@ export default function EstudoPage({ params }: PageProps) {
               className="absolute -top-[6px] w-4 h-4 rounded-full bg-[#C6A46A]"
               style={{ left: `calc(${porcentagem}% - 8px)` }}
             />
+
           </div>
 
           <p className="mt-4 text-sm text-[#70412d]/70">
@@ -147,56 +144,49 @@ export default function EstudoPage({ params }: PageProps) {
         </div>
 
         {/* CONTEXTO */}
-        <div className="mb-10">
-          <p className="text-sm tracking-widest text-[#70412d]/50 mb-8">
-            CONTEXTO
-          </p>
+        <div className="mb-10 space-y-16">
 
-          <div className="space-y-16">
+          <div>
+            <h2 className="font-semibold text-[17px] mb-4">
+              O que estava acontecendo
+            </h2>
 
-            <div>
-              <h2 className="font-semibold text-[17px] text-[#70412d] mb-4">
-                O que estava acontecendo
-              </h2>
-
-              <p className="leading-8 text-[#70412d]/85">
-                {estudo.contexto}
-              </p>
-            </div>
-
-            <div>
-              <h2 className="font-semibold text-[17px] text-[#70412d] mb-4">
-                Trazendo pra vida
-              </h2>
-
-              <p className="leading-8 text-[#70412d]/85">
-                {estudo.aplicacao}
-              </p>
-            </div>
-
+            <p className="leading-8 text-[#70412d]/85">
+              {estudo.contexto}
+            </p>
           </div>
+
+          <div>
+            <h2 className="font-semibold text-[17px] mb-4">
+              Trazendo pra vida
+            </h2>
+
+            <p className="leading-8 text-[#70412d]/85">
+              {estudo.aplicacao}
+            </p>
+          </div>
+
         </div>
 
-        {/* FRASE DESTACADA */}
-        <div className="flex items-center justify-center mt-16 mb-10">
+        {/* FRASE */}
+        <div className="flex justify-center mt-16 mb-10">
           <div className="flex items-center gap-4">
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
+
+            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
 
             <p
-              className="font-serif text-xl font-semibold text-center leading-snug max-w-[34ch] sm:max-w-[42ch] [text-wrap:balance]"
+              className="font-serif text-xl text-center max-w-[32ch]"
+              style={{ textWrap: "balance" }}
             >
               {estudo.frase}
             </p>
 
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
+            <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+
           </div>
         </div>
 
-        <ConcluirButton
-          estudoId={estudo.id}
-          jornada={estudo.jornada}
-          ordemAtual={estudo.ordem}
-        />
+        <ConcluirButton estudoId={estudo.id} />
 
       </div>
     </div>

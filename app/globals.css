@@ -9,12 +9,12 @@
   --ns-gold: #C6A46A;
 }
 
-/* RESET + FIX MOBILE SCROLL */
+/* RESET + SCROLL FUNCIONAL */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto; /* 🔥 CORREÇÃO */
 }
 
 /* BASE */

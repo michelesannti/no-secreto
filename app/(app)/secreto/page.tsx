@@ -8,7 +8,7 @@ export default function SecretoPage() {
   const router = useRouter();
 
   useEffect(() => {
-    async function carregarProximoEstudo() {
+    async function carregar() {
       const supabase = getSupabaseClient();
 
       const {
@@ -20,49 +20,36 @@ export default function SecretoPage() {
         return;
       }
 
-      const jornadaAtual = "genesis-1";
-
-      // estudos da jornada atual
-      const { data: estudos, error: estudosError } = await supabase
+      const { data: estudos } = await supabase
         .from("estudos")
-        .select("id, ordem, jornada")
-        .eq("jornada", jornadaAtual)
+        .select("id, ordem")
+        .eq("jornada", "genesis-1")
         .order("ordem", { ascending: true });
 
-      if (estudosError || !estudos || estudos.length === 0) {
+      if (!estudos || estudos.length === 0) {
         router.replace("/hoje");
         return;
       }
 
-      // progresso real da usuária
-      const { data: progresso, error: progressoError } = await supabase
+      const { data: progresso } = await supabase
         .from("progresso")
         .select("estudo_id")
         .eq("user_id", user.id)
         .eq("concluido", true);
 
-      if (progressoError) {
-        router.replace("/hoje");
-        return;
+      const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
+
+      const proximo =
+        estudos.find((e) => !concluidosIds.includes(e.id)) ||
+        estudos[0];
+
+      if (proximo?.id) {
+        router.replace(`/secreto/${proximo.id}`);
       }
-
-      const concluidosIds = progresso?.map((item) => item.estudo_id) || [];
-
-      const proximoEstudo = estudos.find(
-        (estudo) => !concluidosIds.includes(estudo.id)
-      );
-
-      if (proximoEstudo) {
-        router.replace(`/secreto/${proximoEstudo.id}`);
-        return;
-      }
-
-      // terminou todos da jornada atual
-      router.replace("/hoje");
     }
 
-    carregarProximoEstudo();
+    carregar();
   }, [router]);
 
-  return <div className="h-[100dvh] overflow-hidden bg-[#f9f5e9]" />;
+  return <div className="min-h-screen bg-[#f9f5e9]" />;
 }

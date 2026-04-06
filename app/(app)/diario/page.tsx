@@ -1,264 +1,162 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase";
 
-interface Estudo {
-  id: number;
-  livro: string;
-  capitulo: number;
-  versiculo_inicio: number;
-  versiculo_fim: number;
-  frase: string;
-  jornada: string;
-  ordem: number;
-}
-
-interface DiarioSalvo {
-  id: string;
-  versiculo: string;
-  destaque: string;
-  texto: string;
-}
-
 export default function DiarioPage() {
-  const [referencia, setReferencia] = useState("");
-  const [destaque, setDestaque] = useState("");
+  const router = useRouter();
+
   const [texto, setTexto] = useState("");
-  const [editando, setEditando] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [destaque, setDestaque] = useState("");
+  const [referencia, setReferencia] = useState("");
 
   const [userId, setUserId] = useState<string | null>(null);
-  const [estudoAtual, setEstudoAtual] = useState<Estudo | null>(null);
-  const [diarioId, setDiarioId] = useState<string | null>(null);
+  const [estudoId, setEstudoId] = useState<number | null>(null);
+
+  const [ready, setReady] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    async function carregarDiario() {
+    async function carregar() {
       const supabase = getSupabaseClient();
 
       const {
         data: { user },
       } = await supabase.auth.getUser();
 
-      if (!user) {
-        setLoading(false);
-        return;
-      }
+      if (!user) return;
 
       setUserId(user.id);
 
-      const jornadaAtual = "genesis-1";
-
-      const { data: estudos, error: estudosError } = await supabase
+      const { data: estudos } = await supabase
         .from("estudos")
         .select("*")
-        .eq("jornada", jornadaAtual)
+        .eq("jornada", "genesis-1")
         .order("ordem", { ascending: true });
 
-      if (estudosError || !estudos || estudos.length === 0) {
-        setLoading(false);
-        return;
-      }
-
-      const { data: progresso, error: progressoError } = await supabase
+      const { data: progresso } = await supabase
         .from("progresso")
         .select("estudo_id")
         .eq("user_id", user.id)
         .eq("concluido", true);
 
-      if (progressoError) {
-        setLoading(false);
-        return;
-      }
+      const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
-      const concluidosIds = progresso?.map((item) => item.estudo_id) || [];
+      const estudoAtual =
+        estudos?.find((e) => !concluidosIds.includes(e.id)) ||
+        estudos?.[estudos.length - 1];
 
-      const estudoEmAndamento =
-        estudos.find((estudo) => !concluidosIds.includes(estudo.id)) ||
-        estudos[estudos.length - 1];
+      if (!estudoAtual) return;
 
-      if (!estudoEmAndamento) {
-        setLoading(false);
-        return;
-      }
+      setEstudoId(estudoAtual.id);
+      setDestaque(estudoAtual.frase);
 
-      setEstudoAtual(estudoEmAndamento);
+      const ref =
+        estudoAtual.versiculo_inicio !== estudoAtual.versiculo_fim
+          ? `${estudoAtual.livro} ${estudoAtual.capitulo}:${estudoAtual.versiculo_inicio}-${estudoAtual.versiculo_fim}`
+          : `${estudoAtual.livro} ${estudoAtual.capitulo}:${estudoAtual.versiculo_inicio}`;
 
-      const inicio = estudoEmAndamento.versiculo_inicio;
-      const fim = estudoEmAndamento.versiculo_fim;
+      setReferencia(ref);
 
-      const referenciaMontada =
-        inicio && fim && inicio !== fim
-          ? `${estudoEmAndamento.livro} ${estudoEmAndamento.capitulo}:${inicio}-${fim}`
-          : `${estudoEmAndamento.livro} ${estudoEmAndamento.capitulo}:${inicio ?? ""}`;
-
-      setReferencia(referenciaMontada.trim());
-
-      // 🔥 tenta carregar diário salvo
-      const { data: diarioSalvo, error: diarioError } = await supabase
-        .from("diario")
-        .select("id, versiculo, destaque, texto")
-        .eq("user_id", user.id)
-        .eq("estudo_id", estudoEmAndamento.id)
-        .maybeSingle<DiarioSalvo>();
-
-      if (!diarioError && diarioSalvo) {
-        setDiarioId(diarioSalvo.id);
-        setDestaque(diarioSalvo.destaque || estudoEmAndamento.frase || "");
-        setTexto(diarioSalvo.texto || "");
-        setLoading(false);
-        return;
-      }
-
-      // 🔥 rascunho local
-      const draftKey = `diario-draft-${user.id}-${estudoEmAndamento.id}`;
+      const draftKey = `diario-${user.id}-${estudoAtual.id}`;
       const draft = localStorage.getItem(draftKey);
 
-      if (draft) {
-        try {
-          const parsed = JSON.parse(draft);
-          setDestaque(estudoEmAndamento.frase || "");
-          setTexto(parsed.texto || "");
-        } catch {
-          setDestaque(estudoEmAndamento.frase || "");
-          setTexto("");
-        }
-      } else {
-        setDestaque(estudoEmAndamento.frase || "");
-        setTexto("");
-      }
+      if (draft) setTexto(draft);
 
-      setLoading(false);
+      // 👉 só libera render quando tudo estiver pronto
+      setReady(true);
     }
 
-    carregarDiario();
+    carregar();
   }, []);
 
-  // 🔥 salva rascunho automático
   useEffect(() => {
-    if (!userId || !estudoAtual || loading) return;
+    if (!userId || !estudoId) return;
+    localStorage.setItem(`diario-${userId}-${estudoId}`, texto);
+  }, [texto, userId, estudoId]);
 
-    const draftKey = `diario-draft-${userId}-${estudoAtual.id}`;
-
-    localStorage.setItem(
-      draftKey,
-      JSON.stringify({
-        texto,
-      })
-    );
-  }, [texto, userId, estudoAtual, loading]);
-
-  async function handleSalvar() {
-    if (!userId || !estudoAtual) return;
+  async function handleFinalizar() {
+    if (!userId || !estudoId) return;
 
     setSaving(true);
 
     const supabase = getSupabaseClient();
 
-    const payload = {
+    await supabase.from("diario").upsert({
       user_id: userId,
-      estudo_id: estudoAtual.id,
-      versiculo: referencia,
+      estudo_id: estudoId,
       destaque,
       texto,
-    };
+      versiculo: referencia,
+    });
 
-    let error = null;
-    let data = null;
+    await supabase.from("progresso").upsert({
+      user_id: userId,
+      estudo_id: estudoId,
+      concluido: true,
+    });
 
-    if (diarioId) {
-      const response = await supabase
-        .from("diario")
-        .update(payload)
-        .eq("id", diarioId)
-        .select("id")
-        .single();
+    localStorage.removeItem(`diario-${userId}-${estudoId}`);
 
-      error = response.error;
-      data = response.data;
-    } else {
-      const response = await supabase
-        .from("diario")
-        .insert(payload)
-        .select("id")
-        .single();
-
-      error = response.error;
-      data = response.data;
-    }
-
-    if (!error && data?.id) {
-      setDiarioId(data.id);
-
-      const draftKey = `diario-draft-${userId}-${estudoAtual.id}`;
-      localStorage.removeItem(draftKey);
-
-      setEditando(false);
-    }
-
-    setSaving(false);
+    router.push("/conclusao");
   }
 
-  function formatarTexto(texto: string) {
-    let formatado = texto
-      .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
-      .replace(/_(.*?)_/g, "<em>$1</em>")
-      .replace(/~(.*?)~/g, "<s>$1</s>");
-
-    return formatado.replace(/\n/g, "<br/>");
-  }
-
-  if (loading) {
-    return <div className="h-[100dvh] overflow-hidden bg-[#f9f5e9]" />;
+  // 🔥 evita render quebrado
+  if (!ready) {
+    return <div className="min-h-screen bg-[#f9f5e9]" />;
   }
 
   return (
-    <div className="h-[100dvh] overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
-      <div className="px-8 mb-12">
-        <h1 className="text-xl font-serif tracking-wide">
-          Diário
-        </h1>
+    <div className="min-h-screen bg-[#f9f5e9] text-[#70412d] overflow-y-auto">
 
-        <div className="w-10 h-[2px] bg-[#C6A46A]/60 mt-2"></div>
-      </div>
+      <div className="pt-6 pb-40">
 
-      <div className="max-w-2xl mx-auto px-8">
+        {/* TOPO */}
+        <div className="px-8 mb-12">
+          <h1 className="text-xl font-serif tracking-wide">
+            Diário
+          </h1>
 
-        {/* REFERÊNCIA */}
-        {referencia && (
-          <p className="text-sm text-[#70412d]/55 tracking-wide mb-10 text-center">
+          <div className="w-10 h-[2px] bg-[#C6A46A]/60 mt-2"></div>
+        </div>
+
+        <div className="max-w-2xl mx-auto px-8">
+
+          {/* REFERÊNCIA */}
+          <p className="text-sm text-[#70412d]/60 text-center mb-10">
             {referencia}
           </p>
-        )}
 
-        {/* FRASE DESTACADA */}
-        <div className="flex items-center justify-center mb-12">
-          <div className="flex items-center gap-4">
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
+          {/* DESTAQUE */}
+          <div className="flex items-center justify-center mb-12">
+            <div className="flex items-center gap-4">
 
-            <p
-              className="font-serif text-xl font-semibold text-center leading-snug max-w-[34ch] sm:max-w-[42ch] [text-wrap:balance]"
-              dangerouslySetInnerHTML={{
-                __html: formatarTexto(destaque),
+              <div className="w-[2px] h-8 bg-[#C6A46A]/60"></div>
+
+              <p
+                className="font-serif text-xl font-semibold text-center leading-snug max-w-[32ch]"
+                style={{ textWrap: "balance" }}
+              >
+                {destaque}
+              </p>
+
+              <div className="w-[2px] h-8 bg-[#C6A46A]/60"></div>
+
+            </div>
+          </div>
+
+          {/* TEXTO */}
+          <div className="relative min-h-[600px] mb-8">
+
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage:
+                  "repeating-linear-gradient(to bottom, transparent, transparent 31px, #e9d5bb 31px, #e9d5bb 32px)",
               }}
             />
 
-            <div className="w-[1.5px] h-8 bg-[#e9d5bb] shrink-0"></div>
-          </div>
-        </div>
-
-        {/* TEXTO */}
-        <div className="relative min-h-[600px] mb-8">
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage:
-                "repeating-linear-gradient(to bottom, transparent, transparent 31px, #e9d5bb 31px, #e9d5bb 32px)",
-            }}
-          />
-
-          {editando ? (
             <textarea
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
@@ -266,43 +164,24 @@ export default function DiarioPage() {
               className="relative w-full bg-transparent resize-none outline-none text-lg placeholder:text-[#70412d]/40"
               style={{
                 lineHeight: "32px",
-                minHeight: "600px",
+                minHeight: "600px"
               }}
             />
-          ) : (
-            <div
-              className="relative text-lg"
-              style={{
-                lineHeight: "32px",
-                minHeight: "600px",
-              }}
-              dangerouslySetInnerHTML={{
-                __html: formatarTexto(texto),
-              }}
-            />
-          )}
-        </div>
 
-        {/* BOTÃO */}
-        <div className="mt-12 flex justify-center">
-          {editando ? (
+          </div>
+
+          {/* BOTÃO */}
+          <div className="mt-12 flex justify-center">
             <button
-              onClick={handleSalvar}
+              onClick={handleFinalizar}
               disabled={saving}
-              className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide disabled:opacity-60"
+              className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]"
             >
-              {saving ? "Salvando..." : "Salvar"}
+              {saving ? "Finalizando..." : "Finalizar"}
             </button>
-          ) : (
-            <button
-              onClick={() => setEditando(true)}
-              className="px-6 py-2 rounded-full border border-[#70412d] text-[#70412d] text-sm tracking-wide"
-            >
-              Editar
-            </button>
-          )}
-        </div>
+          </div>
 
+        </div>
       </div>
     </div>
   );

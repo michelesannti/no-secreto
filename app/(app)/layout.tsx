@@ -45,7 +45,7 @@ export default function AppLayout({
   }
 
   return (
-    <div className={isHoje ? "h-screen overflow-hidden bg-[#f9f5e9]" : "min-h-screen bg-[#f9f5e9]"}>
+    <div className="min-h-screen bg-[#f9f5e9]"> {/* 🔥 CORREÇÃO AQUI */}
       {children}
 
       {!isHoje && (
