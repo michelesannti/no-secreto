@@ -84,11 +84,11 @@ export default function EstudoPage({ params }: PageProps) {
           </p>
         </div>
 
-        {/* 🔥 VERSÍCULO COM LINHAS DINÂMICAS */}
-        <div className="flex items-stretch justify-center mb-16">
-          <div className="flex items-stretch gap-4">
+        {/* 🔥 VERSÍCULO COM LINHAS DELICADAS */}
+        <div className="flex items-center justify-center mb-16">
+          <div className="flex items-center gap-4">
 
-            <div className="w-[2px] bg-[#e9d5bb] self-stretch"></div>
+            <div className="w-[2px] h-12 bg-[#e9d5bb]"></div>
 
             <p
               className="
@@ -105,7 +105,7 @@ export default function EstudoPage({ params }: PageProps) {
               {estudo.texto}
             </p>
 
-            <div className="w-[2px] bg-[#e9d5bb] self-stretch"></div>
+            <div className="w-[2px] h-12 bg-[#e9d5bb]"></div>
 
           </div>
         </div>
