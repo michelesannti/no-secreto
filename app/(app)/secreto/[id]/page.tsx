@@ -70,7 +70,7 @@ export default function EstudoPage({ params }: PageProps) {
       {/* TOPO */}
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">
-          No Secreto
+          Secreto
         </h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
@@ -84,18 +84,23 @@ export default function EstudoPage({ params }: PageProps) {
           </p>
         </div>
 
-        {/* TEXTO */}
-        <div className="mb-4 text-center">
-          <p className="italic text-lg leading-relaxed text-[#70412d]/85 whitespace-pre-line">
-            {estudo.texto}
-          </p>
-        </div>
+        {/* 🔥 VERSÍCULO COM ELEMENTO VISUAL */}
+        <div className="mb-20">
+          <div className="
+            bg-[#ffffff]/40
+            border border-[#e9d5bb]
+            rounded-2xl
+            px-6 py-8
+            shadow-[0_8px_20px_rgba(112,65,45,0.05)]
+          ">
+            <p className="italic text-lg leading-relaxed text-[#70412d]/90 whitespace-pre-line text-center">
+              {estudo.texto}
+            </p>
 
-        {/* VERSÃO */}
-        <div className="mb-16 text-center">
-          <p className="text-xs text-[#70412d]/40 tracking-wide">
-            NVI
-          </p>
+            <p className="mt-6 text-xs text-[#70412d]/40 tracking-wide text-center">
+              NVI
+            </p>
+          </div>
         </div>
 
         {/* CONTEXTO */}
