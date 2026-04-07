@@ -12,7 +12,7 @@ interface Estudo {
   versiculo: string;
   contexto: string;
   aplicacao: string;
-  destaque: string; // ✅ atualizado
+  destaque: string;
   jornada: string;
   ordem: number;
 }
@@ -27,7 +27,6 @@ export default function EstudoPage({ params }: PageProps) {
 
   const [loading, setLoading] = useState(true);
   const [estudo, setEstudo] = useState<Estudo | null>(null);
-  const [porcentagem, setPorcentagem] = useState(0);
 
   useEffect(() => {
     async function carregar() {
@@ -45,36 +44,6 @@ export default function EstudoPage({ params }: PageProps) {
       }
 
       setEstudo(estudoAtual);
-
-      const { data: estudosDaJornada } = await supabase
-        .from("estudos")
-        .select("id")
-        .eq("jornada", estudoAtual.jornada);
-
-      const total = estudosDaJornada?.length || 0;
-
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (user) {
-        const ids = estudosDaJornada?.map((e) => e.id) || [];
-
-        const { data: progresso } = await supabase
-          .from("progresso")
-          .select("estudo_id")
-          .eq("user_id", user.id)
-          .eq("concluido", true);
-
-        const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
-
-        const concluidos = concluidosIds.filter((id) =>
-          ids.includes(id)
-        ).length;
-
-        setPorcentagem(total ? (concluidos / total) * 100 : 0);
-      }
-
       setLoading(false);
     }
 
@@ -101,31 +70,6 @@ export default function EstudoPage({ params }: PageProps) {
       </div>
 
       <div className="max-w-2xl mx-auto px-8">
-
-        {/* PROGRESSO */}
-        <div className="mb-16">
-          <p className="text-sm text-[#70412d]/70 mb-4">
-            Sua jornada
-          </p>
-
-          <div className="relative w-full h-[4px] bg-[#e9d5bb] rounded-full">
-
-            <div
-              className="absolute top-0 left-0 h-[4px] bg-[#C6A46A] rounded-full transition-all duration-700"
-              style={{ width: `${porcentagem}%` }}
-            />
-
-            <div
-              className="absolute -top-[6px] w-4 h-4 rounded-full bg-[#C6A46A]"
-              style={{ left: `calc(${porcentagem}% - 8px)` }}
-            />
-
-          </div>
-
-          <p className="mt-4 text-sm text-[#70412d]/70">
-            {Math.round(porcentagem)}%
-          </p>
-        </div>
 
         {/* PALAVRA */}
         <div className="mb-16">
