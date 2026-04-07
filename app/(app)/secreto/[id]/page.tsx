@@ -9,7 +9,8 @@ interface Estudo {
   texto: string;
   livro: string;
   capitulo: number;
-  versiculo: string;
+  versiculo_inicio: number;
+  versiculo_fim: number;
   contexto: string;
   aplicacao: string;
   destaque: string;
@@ -58,6 +59,12 @@ export default function EstudoPage({ params }: PageProps) {
     return <div className="p-6 text-[#70412d]">estudo não encontrado</div>;
   }
 
+  // 🔥 referência correta
+  const referencia =
+    estudo.versiculo_inicio !== estudo.versiculo_fim
+      ? `${estudo.livro} ${estudo.capitulo}:${estudo.versiculo_inicio}-${estudo.versiculo_fim}`
+      : `${estudo.livro} ${estudo.capitulo}:${estudo.versiculo_inicio}`;
+
   return (
     <div className="min-h-screen overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
 
@@ -71,44 +78,49 @@ export default function EstudoPage({ params }: PageProps) {
 
       <div className="max-w-2xl mx-auto px-8">
 
-        {/* PALAVRA */}
-        <div className="mb-16">
-          <p className="text-sm tracking-widest text-[#70412d]/50 mb-4">
-            PALAVRA
+        {/* REFERÊNCIA */}
+        <div className="mb-6 text-center">
+          <p className="text-sm tracking-widest text-[#70412d]/50">
+            {referencia}
           </p>
+        </div>
 
-          <p className="italic text-lg leading-relaxed text-[#70412d]/85">
+        {/* TEXTO (COM QUEBRA DE LINHA) */}
+        <div className="mb-4 text-center">
+          <p
+            className="italic text-lg leading-relaxed text-[#70412d]/85 whitespace-pre-line"
+          >
             {estudo.texto}
           </p>
+        </div>
 
-          <p className="mt-3 text-sm text-[#70412d]/60">
-            {estudo.livro} {estudo.capitulo}:{estudo.versiculo}
+        {/* VERSÃO */}
+        <div className="mb-16 text-center">
+          <p className="text-xs text-[#70412d]/40 tracking-wide">
+            NVI
           </p>
         </div>
 
         {/* CONTEXTO */}
-        <div className="mb-10 space-y-16">
+        <div className="mb-16">
+          <p className="text-sm tracking-widest text-[#70412d]/50 mb-4">
+            CONTEXTO
+          </p>
 
-          <div>
-            <h2 className="font-semibold text-[17px] mb-4">
-              O que estava acontecendo
-            </h2>
+          <p className="leading-8 text-[#70412d]/85 whitespace-pre-line">
+            {estudo.contexto}
+          </p>
+        </div>
 
-            <p className="leading-8 text-[#70412d]/85">
-              {estudo.contexto}
-            </p>
-          </div>
+        {/* APLICAÇÃO */}
+        <div className="mb-10">
+          <p className="text-sm tracking-widest text-[#70412d]/50 mb-4">
+            APLICAÇÃO
+          </p>
 
-          <div>
-            <h2 className="font-semibold text-[17px] mb-4">
-              Trazendo pra vida
-            </h2>
-
-            <p className="leading-8 text-[#70412d]/85">
-              {estudo.aplicacao}
-            </p>
-          </div>
-
+          <p className="leading-8 text-[#70412d]/85 whitespace-pre-line">
+            {estudo.aplicacao}
+          </p>
         </div>
 
         {/* DESTAQUE */}
