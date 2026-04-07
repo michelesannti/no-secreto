@@ -84,23 +84,37 @@ export default function EstudoPage({ params }: PageProps) {
           </p>
         </div>
 
-        {/* 🔥 VERSÍCULO COM ELEMENTO VISUAL */}
-        <div className="mb-20">
-          <div className="
-            bg-[#ffffff]/40
-            border border-[#e9d5bb]
-            rounded-2xl
-            px-6 py-8
-            shadow-[0_8px_20px_rgba(112,65,45,0.05)]
-          ">
-            <p className="italic text-lg leading-relaxed text-[#70412d]/90 whitespace-pre-line text-center">
+        {/* 🔥 VERSÍCULO COM LINHAS DINÂMICAS */}
+        <div className="flex items-stretch justify-center mb-16">
+          <div className="flex items-stretch gap-4">
+
+            <div className="w-[2px] bg-[#e9d5bb] self-stretch"></div>
+
+            <p
+              className="
+                italic
+                text-lg
+                leading-relaxed
+                text-[#70412d]/85
+                text-center
+                max-w-[36ch] sm:max-w-[42ch]
+                whitespace-pre-line
+              "
+              style={{ textWrap: "balance" }}
+            >
               {estudo.texto}
             </p>
 
-            <p className="mt-6 text-xs text-[#70412d]/40 tracking-wide text-center">
-              NVI
-            </p>
+            <div className="w-[2px] bg-[#e9d5bb] self-stretch"></div>
+
           </div>
+        </div>
+
+        {/* VERSÃO */}
+        <div className="mb-16 text-center">
+          <p className="text-xs text-[#70412d]/40 tracking-wide">
+            NVI
+          </p>
         </div>
 
         {/* CONTEXTO */}
