@@ -59,7 +59,6 @@ export default function EstudoPage({ params }: PageProps) {
     return <div className="p-6 text-[#70412d]">estudo não encontrado</div>;
   }
 
-  // 🔥 referência correta
   const referencia =
     estudo.versiculo_inicio !== estudo.versiculo_fim
       ? `${estudo.livro} ${estudo.capitulo}:${estudo.versiculo_inicio}-${estudo.versiculo_fim}`
@@ -85,11 +84,9 @@ export default function EstudoPage({ params }: PageProps) {
           </p>
         </div>
 
-        {/* TEXTO (COM QUEBRA DE LINHA) */}
+        {/* TEXTO */}
         <div className="mb-4 text-center">
-          <p
-            className="italic text-lg leading-relaxed text-[#70412d]/85 whitespace-pre-line"
-          >
+          <p className="italic text-lg leading-relaxed text-[#70412d]/85 whitespace-pre-line">
             {estudo.texto}
           </p>
         </div>
@@ -121,24 +118,6 @@ export default function EstudoPage({ params }: PageProps) {
           <p className="leading-8 text-[#70412d]/85 whitespace-pre-line">
             {estudo.aplicacao}
           </p>
-        </div>
-
-        {/* DESTAQUE */}
-        <div className="flex items-center justify-center mt-16 mb-10">
-          <div className="flex items-center gap-4">
-
-            <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
-
-            <p
-              className="font-serif text-xl font-semibold text-center text-[#70412d] leading-snug max-w-[36ch] sm:max-w-[42ch] mx-auto"
-              style={{ textWrap: "balance", wordBreak: "keep-all" }}
-            >
-              {estudo.destaque}
-            </p>
-
-            <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
-
-          </div>
         </div>
 
         <ConcluirButton estudoId={estudo.id} />
