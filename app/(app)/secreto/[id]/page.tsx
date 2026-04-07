@@ -84,8 +84,8 @@ export default function EstudoPage({ params }: PageProps) {
           </p>
         </div>
 
-        {/* 🔥 VERSÍCULO COM LINHAS DELICADAS */}
-        <div className="flex items-center justify-center mb-16">
+        {/* VERSÍCULO (VERTICAL) */}
+        <div className="flex items-center justify-center mb-10">
           <div className="flex items-center gap-4">
 
             <div className="w-[2px] h-12 bg-[#e9d5bb]"></div>
@@ -111,17 +111,19 @@ export default function EstudoPage({ params }: PageProps) {
         </div>
 
         {/* VERSÃO */}
-        <div className="mb-16 text-center">
+        <div className="mb-10 text-center">
           <p className="text-xs text-[#70412d]/40 tracking-wide">
             NVI
           </p>
         </div>
 
         {/* CONTEXTO */}
-        <div className="mb-16">
-          <p className="text-sm tracking-widest text-[#70412d]/50 mb-4">
+        <div className="mb-14">
+          <p className="text-sm tracking-widest text-[#70412d]/50 mb-3">
             CONTEXTO
           </p>
+
+          <div className="w-full h-[1px] bg-[#e9d5bb] mb-4"></div>
 
           <p className="leading-8 text-[#70412d]/85 whitespace-pre-line">
             {estudo.contexto}
@@ -130,9 +132,11 @@ export default function EstudoPage({ params }: PageProps) {
 
         {/* APLICAÇÃO */}
         <div className="mb-10">
-          <p className="text-sm tracking-widest text-[#70412d]/50 mb-4">
+          <p className="text-sm tracking-widest text-[#70412d]/50 mb-3">
             APLICAÇÃO
           </p>
+
+          <div className="w-full h-[1px] bg-[#e9d5bb] mb-4"></div>
 
           <p className="leading-8 text-[#70412d]/85 whitespace-pre-line">
             {estudo.aplicacao}
