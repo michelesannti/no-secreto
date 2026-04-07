@@ -50,7 +50,9 @@ export default function DiarioPage() {
       if (!estudoAtual) return;
 
       setEstudoId(estudoAtual.id);
-      setDestaque(estudoAtual.frase);
+
+      // ✅ AQUI FOI O AJUSTE IMPORTANTE
+      setDestaque(estudoAtual.destaque);
 
       const ref =
         estudoAtual.versiculo_inicio !== estudoAtual.versiculo_fim
@@ -133,17 +135,7 @@ export default function DiarioPage() {
               <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
               <p
-                className="
-                  font-serif
-                  text-xl
-                  font-semibold
-                  text-center
-                  text-[#70412d]
-                  leading-snug
-                  max-w-[36ch]
-                  sm:max-w-[42ch]
-                  mx-auto
-                "
+                className="font-serif text-xl font-semibold text-center text-[#70412d] leading-snug max-w-[36ch] sm:max-w-[42ch] mx-auto"
                 style={{
                   textWrap: "balance",
                   wordBreak: "keep-all"
