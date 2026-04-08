@@ -110,27 +110,24 @@ export default function DiarioPage() {
 
         <div className="max-w-2xl mx-auto px-8">
 
-          {/* DESTAQUE (CORRIGIDO) */}
+          {/* DESTAQUE PERFEITO */}
           <div className="flex justify-center mt-16 mb-10">
             <div className="flex items-center gap-4">
 
               <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
-              <div className="text-center">
-                <p
-                  className="
-                    font-serif
-                    text-lg
-                    font-semibold
-                    whitespace-pre-line
-                    text-left
-                    inline-block
-                    max-w-[36ch]
-                  "
-                >
-                  {destaque}
-                </p>
-              </div>
+              <p
+                className="
+                  font-serif
+                  text-lg
+                  font-semibold
+                  text-center
+                  whitespace-pre-wrap
+                  max-w-[36ch]
+                "
+              >
+                {destaque}
+              </p>
 
               <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
@@ -152,15 +149,7 @@ export default function DiarioPage() {
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
               placeholder="O que Deus falou com você?"
-              className="
-                relative
-                w-full
-                bg-transparent
-                resize-none
-                outline-none
-                text-base
-                placeholder:text-[#70412d]/40
-              "
+              className="relative w-full bg-transparent resize-none outline-none text-base placeholder:text-[#70412d]/40"
               style={{
                 lineHeight: "32px",
                 minHeight: "600px"
