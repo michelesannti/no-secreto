@@ -95,8 +95,6 @@ export default function DiarioPage() {
 
   if (!ready) return <div className="min-h-screen bg-[#f9f5e9]" />;
 
-  const linhas = destaque.split("\n");
-
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
 
@@ -112,17 +110,24 @@ export default function DiarioPage() {
 
         <div className="max-w-2xl mx-auto px-8">
 
-          {/* DESTAQUE CONTROLADO */}
+          {/* DESTAQUE (VERSÃO CORRETA E SIMPLES) */}
           <div className="flex justify-center mt-16 mb-10">
             <div className="flex items-center gap-4">
 
               <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
-              <div className="flex flex-col items-center text-center font-serif text-lg font-semibold leading-snug">
-                {linhas.map((linha, i) => (
-                  <span key={i}>{linha}</span>
-                ))}
-              </div>
+              <p
+                className="
+                  font-serif
+                  text-lg
+                  font-semibold
+                  text-center
+                  whitespace-pre-line
+                  max-w-[36ch]
+                "
+              >
+                {destaque}
+              </p>
 
               <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
