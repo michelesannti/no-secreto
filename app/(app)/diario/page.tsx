@@ -9,13 +9,13 @@ export default function DiarioPage() {
 
   const [texto, setTexto] = useState("");
   const [destaque, setDestaque] = useState("");
-  const [referencia, setReferencia] = useState("");
 
   const [userId, setUserId] = useState<string | null>(null);
   const [estudoId, setEstudoId] = useState<number | null>(null);
 
   const [ready, setReady] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [podeFinalizar, setPodeFinalizar] = useState(false);
 
   useEffect(() => {
     async function carregar() {
@@ -37,11 +37,11 @@ export default function DiarioPage() {
 
       const { data: progresso } = await supabase
         .from("progresso")
-        .select("estudo_id")
-        .eq("user_id", user.id)
-        .eq("concluido", true);
+        .select("estudo_id, concluido")
+        .eq("user_id", user.id);
 
-      const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
+      const concluidosIds =
+        progresso?.filter((p) => p.concluido).map((p) => p.estudo_id) || [];
 
       const estudoAtual =
         estudos?.find((e) => !concluidosIds.includes(e.id)) ||
@@ -50,16 +50,14 @@ export default function DiarioPage() {
       if (!estudoAtual) return;
 
       setEstudoId(estudoAtual.id);
-
-      // ✅ AQUI FOI O AJUSTE IMPORTANTE
       setDestaque(estudoAtual.destaque);
 
-      const ref =
-        estudoAtual.versiculo_inicio !== estudoAtual.versiculo_fim
-          ? `${estudoAtual.livro} ${estudoAtual.capitulo}:${estudoAtual.versiculo_inicio}-${estudoAtual.versiculo_fim}`
-          : `${estudoAtual.livro} ${estudoAtual.capitulo}:${estudoAtual.versiculo_inicio}`;
+      // 🔥 verifica se já concluiu o estudo
+      const concluido = progresso?.find(
+        (p) => p.estudo_id === estudoAtual.id && p.concluido
+      );
 
-      setReferencia(ref);
+      setPodeFinalizar(!!concluido);
 
       const draftKey = `diario-${user.id}-${estudoAtual.id}`;
       const draft = localStorage.getItem(draftKey);
@@ -89,13 +87,6 @@ export default function DiarioPage() {
       estudo_id: estudoId,
       destaque,
       texto,
-      versiculo: referencia,
-    });
-
-    await supabase.from("progresso").upsert({
-      user_id: userId,
-      estudo_id: estudoId,
-      concluido: true,
     });
 
     localStorage.removeItem(`diario-${userId}-${estudoId}`);
@@ -123,19 +114,14 @@ export default function DiarioPage() {
 
         <div className="max-w-2xl mx-auto px-8">
 
-          {/* REFERÊNCIA */}
-          <p className="text-sm text-[#70412d]/60 text-center mb-10">
-            {referencia}
-          </p>
-
           {/* DESTAQUE */}
           <div className="flex items-center justify-center mt-16 mb-10">
             <div className="flex items-center gap-4">
 
-              <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
+              <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
 
               <p
-                className="font-serif text-xl font-semibold text-center text-[#70412d] leading-snug max-w-[36ch] sm:max-w-[42ch] mx-auto"
+                className="font-serif text-lg font-semibold text-center text-[#70412d] leading-snug max-w-[36ch] sm:max-w-[42ch] mx-auto"
                 style={{
                   textWrap: "balance",
                   wordBreak: "keep-all"
@@ -144,7 +130,7 @@ export default function DiarioPage() {
                 {destaque}
               </p>
 
-              <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
+              <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
 
             </div>
           </div>
@@ -173,16 +159,18 @@ export default function DiarioPage() {
 
           </div>
 
-          {/* BOTÃO */}
-          <div className="mt-12 flex justify-center">
-            <button
-              onClick={handleFinalizar}
-              disabled={saving}
-              className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]"
-            >
-              {saving ? "Finalizando..." : "Finalizar"}
-            </button>
-          </div>
+          {/* BOTÃO (SÓ APARECE SE CONCLUIU) */}
+          {podeFinalizar && (
+            <div className="mt-12 flex justify-center">
+              <button
+                onClick={handleFinalizar}
+                disabled={saving}
+                className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]"
+              >
+                {saving ? "Finalizando..." : "Finalizar"}
+              </button>
+            </div>
+          )}
 
         </div>
       </div>
