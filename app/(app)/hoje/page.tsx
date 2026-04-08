@@ -1,38 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { getSupabaseClient } from "@/lib/supabase";
 
 export default function HojePage() {
-  const router = useRouter();
-  const supabase = getSupabaseClient();
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function checkUser() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        router.replace("/login");
-        return;
-      }
-
-      setLoading(false);
-    }
-
-    checkUser();
-  }, []);
-
-  // 🔥 evita mostrar tela antes de validar login
-  if (loading) {
-    return <div className="h-[100dvh] bg-[#f9f5e9]" />;
-  }
-
   return (
     <div className="h-[100dvh] overflow-hidden bg-[#f9f5e9] flex flex-col items-center justify-center px-8 text-center gap-16">
 
@@ -45,7 +15,7 @@ export default function HojePage() {
         />
       </div>
 
-      {/* BOTÃO PADRONIZADO */}
+      {/* BOTÃO */}
       <Link
         href="/secreto"
         className="
