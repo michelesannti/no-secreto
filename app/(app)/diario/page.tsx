@@ -18,6 +18,7 @@ export default function DiarioPage() {
 
   const [ready, setReady] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [podeFinalizar, setPodeFinalizar] = useState(false);
 
   useEffect(() => {
     async function carregar() {
@@ -54,6 +55,14 @@ export default function DiarioPage() {
       setEstudoId(estudoAtual.id);
       setDestaque(estudoAtual.destaque);
 
+      // 🔥 lógica de liberação persistente
+      if (veioDoConcluir) {
+        localStorage.setItem("liberado-finalizar", "true");
+      }
+
+      const liberado = localStorage.getItem("liberado-finalizar") === "true";
+      setPodeFinalizar(liberado);
+
       const draftKey = `diario-${user.id}-${estudoAtual.id}`;
       const draft = localStorage.getItem(draftKey);
 
@@ -84,12 +93,14 @@ export default function DiarioPage() {
       texto,
     });
 
-    // 🔥 AQUI SIM marca como concluído
     await supabase.from("progresso").upsert({
       user_id: userId,
       estudo_id: estudoId,
       concluido: true,
     });
+
+    // 🔥 limpa liberação
+    localStorage.removeItem("liberado-finalizar");
 
     localStorage.removeItem(`diario-${userId}-${estudoId}`);
 
@@ -100,10 +111,8 @@ export default function DiarioPage() {
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
-
       <div className="pt-6 pb-40">
 
-        {/* TOPO */}
         <div className="px-8 mb-12">
           <h1 className="text-xl font-serif tracking-wide">
             Diário
@@ -134,7 +143,6 @@ export default function DiarioPage() {
 
           {/* TEXTO */}
           <div className="relative min-h-[600px] mb-8">
-
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
@@ -148,16 +156,12 @@ export default function DiarioPage() {
               onChange={(e) => setTexto(e.target.value)}
               placeholder="O que Deus falou com você?"
               className="relative w-full bg-transparent resize-none outline-none text-base placeholder:text-[#70412d]/40"
-              style={{
-                lineHeight: "32px",
-                minHeight: "600px"
-              }}
+              style={{ lineHeight: "32px", minHeight: "600px" }}
             />
-
           </div>
 
-          {/* BOTÃO (REGRA CORRETA) */}
-          {veioDoConcluir && (
+          {/* BOTÃO */}
+          {podeFinalizar && (
             <div className="mt-12 flex justify-center">
               <button
                 onClick={handleFinalizar}
