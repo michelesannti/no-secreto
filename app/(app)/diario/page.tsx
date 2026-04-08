@@ -1,11 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase";
 
 export default function DiarioPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const veioDoConcluir = searchParams.get("from") === "concluir";
 
   const [texto, setTexto] = useState("");
   const [destaque, setDestaque] = useState("");
@@ -15,7 +18,6 @@ export default function DiarioPage() {
 
   const [ready, setReady] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [podeFinalizar, setPodeFinalizar] = useState(false);
 
   useEffect(() => {
     async function carregar() {
@@ -52,12 +54,6 @@ export default function DiarioPage() {
       setEstudoId(estudoAtual.id);
       setDestaque(estudoAtual.destaque);
 
-      const concluido = progresso?.find(
-        (p) => p.estudo_id === estudoAtual.id && p.concluido
-      );
-
-      setPodeFinalizar(!!concluido);
-
       const draftKey = `diario-${user.id}-${estudoAtual.id}`;
       const draft = localStorage.getItem(draftKey);
 
@@ -88,14 +84,19 @@ export default function DiarioPage() {
       texto,
     });
 
+    // 🔥 AQUI SIM marca como concluído
+    await supabase.from("progresso").upsert({
+      user_id: userId,
+      estudo_id: estudoId,
+      concluido: true,
+    });
+
     localStorage.removeItem(`diario-${userId}-${estudoId}`);
 
     router.push("/conclusao");
   }
 
   if (!ready) return <div className="min-h-screen bg-[#f9f5e9]" />;
-
-  const linhas = destaque.split("\n");
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
@@ -112,18 +113,15 @@ export default function DiarioPage() {
 
         <div className="max-w-2xl mx-auto px-8">
 
-          {/* DESTAQUE FINAL CORRETO */}
+          {/* DESTAQUE */}
           <div className="flex justify-center mt-16 mb-10">
             <div className="flex items-center gap-4">
 
               <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
               <div className="text-center font-serif text-lg font-semibold">
-                {linhas.map((linha, i) => (
-                  <div
-                    key={i}
-                    style={{ whiteSpace: "nowrap" }}
-                  >
+                {destaque.split("\n").map((linha, i) => (
+                  <div key={i} style={{ whiteSpace: "nowrap" }}>
                     {linha}
                   </div>
                 ))}
@@ -158,8 +156,8 @@ export default function DiarioPage() {
 
           </div>
 
-          {/* BOTÃO */}
-          {podeFinalizar && (
+          {/* BOTÃO (REGRA CORRETA) */}
+          {veioDoConcluir && (
             <div className="mt-12 flex justify-center">
               <button
                 onClick={handleFinalizar}
