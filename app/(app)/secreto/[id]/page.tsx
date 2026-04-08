@@ -51,13 +51,8 @@ export default function EstudoPage({ params }: PageProps) {
     carregar();
   }, [estudoId]);
 
-  if (loading) {
-    return <div className="min-h-screen bg-[#f9f5e9]" />;
-  }
-
-  if (!estudo) {
-    return <div className="p-6 text-[#70412d]">estudo não encontrado</div>;
-  }
+  if (loading) return <div className="min-h-screen bg-[#f9f5e9]" />;
+  if (!estudo) return <div className="p-6 text-[#70412d]">estudo não encontrado</div>;
 
   const referencia =
     estudo.versiculo_inicio !== estudo.versiculo_fim
@@ -65,7 +60,7 @@ export default function EstudoPage({ params }: PageProps) {
       : `${estudo.livro} ${estudo.capitulo}:${estudo.versiculo_inicio}`;
 
   return (
-    <div className="min-h-screen overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
+    <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
 
       {/* TOPO */}
       <div className="px-8 mb-12">
@@ -78,14 +73,12 @@ export default function EstudoPage({ params }: PageProps) {
       <div className="max-w-2xl mx-auto px-8">
 
         {/* REFERÊNCIA */}
-        <div className="mb-6 text-center">
-          <p className="text-sm tracking-widest text-[#70412d]/50">
-            {referencia}
-          </p>
-        </div>
+        <p className="text-sm tracking-widest text-[#70412d]/50 text-center mb-6">
+          {referencia}
+        </p>
 
         {/* VERSÍCULO */}
-        <div className="flex items-center justify-center mb-10">
+        <div className="flex justify-center mb-10">
           <div className="flex items-center gap-4">
 
             <div className="w-[2px] h-12 bg-[#e9d5bb]"></div>
@@ -97,7 +90,7 @@ export default function EstudoPage({ params }: PageProps) {
                 leading-relaxed
                 text-[#70412d]/85
                 text-center
-                max-w-[36ch] sm:max-w-[42ch]
+                max-w-[36ch]
                 whitespace-pre-line
               "
               style={{ textWrap: "balance" }}
@@ -111,11 +104,9 @@ export default function EstudoPage({ params }: PageProps) {
         </div>
 
         {/* VERSÃO */}
-        <div className="mb-10 text-center">
-          <p className="text-xs text-[#70412d]/40 tracking-wide">
-            NVI
-          </p>
-        </div>
+        <p className="text-xs text-[#70412d]/40 text-center mb-10">
+          NVI
+        </p>
 
         {/* CONTEXTO */}
         <div className="mb-14">
@@ -126,7 +117,7 @@ export default function EstudoPage({ params }: PageProps) {
             <div className="h-[2px] bg-[#e9d5bb] w-full mt-1"></div>
           </div>
 
-          <p className="leading-8 text-[#70412d]/85 whitespace-pre-line">
+          <p className="text-base leading-8 text-[#70412d]/85 whitespace-pre-line">
             {estudo.contexto}
           </p>
         </div>
@@ -140,7 +131,7 @@ export default function EstudoPage({ params }: PageProps) {
             <div className="h-[2px] bg-[#e9d5bb] w-full mt-1"></div>
           </div>
 
-          <p className="leading-8 text-[#70412d]/85 whitespace-pre-line">
+          <p className="text-base leading-8 text-[#70412d]/85 whitespace-pre-line">
             {estudo.aplicacao}
           </p>
         </div>

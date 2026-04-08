@@ -93,12 +93,10 @@ export default function DiarioPage() {
     router.push("/conclusao");
   }
 
-  if (!ready) {
-    return <div className="min-h-screen bg-[#f9f5e9]" />;
-  }
+  if (!ready) return <div className="min-h-screen bg-[#f9f5e9]" />;
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] text-[#70412d] overflow-y-auto">
+    <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
 
       <div className="pt-6 pb-40">
 
@@ -107,24 +105,26 @@ export default function DiarioPage() {
           <h1 className="text-xl font-serif tracking-wide">
             Diário
           </h1>
-
           <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
         </div>
 
         <div className="max-w-2xl mx-auto px-8">
 
           {/* DESTAQUE */}
-          <div className="flex items-center justify-center mt-16 mb-10">
+          <div className="flex justify-center mt-16 mb-10">
             <div className="flex items-center gap-4">
 
               <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
               <p
-                className="font-serif text-lg font-semibold text-center text-[#70412d] leading-snug max-w-[36ch] sm:max-w-[42ch] mx-auto"
-                style={{
-                  textWrap: "balance",
-                  wordBreak: "keep-all"
-                }}
+                className="
+                  font-serif
+                  text-lg
+                  font-semibold
+                  text-center
+                  whitespace-pre-line
+                  max-w-[36ch]
+                "
               >
                 {destaque}
               </p>
@@ -149,7 +149,7 @@ export default function DiarioPage() {
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
               placeholder="O que Deus falou com você?"
-              className="relative w-full bg-transparent resize-none outline-none text-lg placeholder:text-[#70412d]/40"
+              className="relative w-full bg-transparent resize-none outline-none text-base placeholder:text-[#70412d]/40"
               style={{
                 lineHeight: "32px",
                 minHeight: "600px"
