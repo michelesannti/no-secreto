@@ -52,7 +52,6 @@ export default function DiarioPage() {
       setEstudoId(estudoAtual.id);
       setDestaque(estudoAtual.destaque);
 
-      // 🔥 verifica se já concluiu o estudo
       const concluido = progresso?.find(
         (p) => p.estudo_id === estudoAtual.id && p.concluido
       );
@@ -118,7 +117,7 @@ export default function DiarioPage() {
           <div className="flex items-center justify-center mt-16 mb-10">
             <div className="flex items-center gap-4">
 
-              <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+              <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
               <p
                 className="font-serif text-lg font-semibold text-center text-[#70412d] leading-snug max-w-[36ch] sm:max-w-[42ch] mx-auto"
@@ -130,7 +129,7 @@ export default function DiarioPage() {
                 {destaque}
               </p>
 
-              <div className="w-[1.5px] h-8 bg-[#e9d5bb]"></div>
+              <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
             </div>
           </div>
@@ -159,7 +158,7 @@ export default function DiarioPage() {
 
           </div>
 
-          {/* BOTÃO (SÓ APARECE SE CONCLUIU) */}
+          {/* BOTÃO */}
           {podeFinalizar && (
             <div className="mt-12 flex justify-center">
               <button
