@@ -55,7 +55,7 @@ export default function LoginPage() {
         {/* TOPO PADRONIZADO */}
         <div className="mb-12 text-center">
           <h1 className="text-xl font-serif tracking-wide">
-            Secreto
+            No Secreto
           </h1>
 
           <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>

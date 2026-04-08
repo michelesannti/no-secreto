@@ -1,8 +1,38 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getSupabaseClient } from "@/lib/supabase";
 
 export default function HojePage() {
+  const router = useRouter();
+  const supabase = getSupabaseClient();
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function checkUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        router.replace("/login");
+        return;
+      }
+
+      setLoading(false);
+    }
+
+    checkUser();
+  }, []);
+
+  // 🔥 evita mostrar tela antes de validar login
+  if (loading) {
+    return <div className="h-[100dvh] bg-[#f9f5e9]" />;
+  }
+
   return (
     <div className="h-[100dvh] overflow-hidden bg-[#f9f5e9] flex flex-col items-center justify-center px-8 text-center gap-16">
 
@@ -15,10 +45,21 @@ export default function HojePage() {
         />
       </div>
 
-      {/* BOTÃO */}
+      {/* BOTÃO PADRONIZADO */}
       <Link
         href="/secreto"
-        className="w-full max-w-sm px-8 py-4 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide shadow-md transition hover:scale-[1.02] animate-buttonEntrance text-center"
+        className="
+          px-6
+          py-2
+          rounded-full
+          bg-[#70412d]
+          text-[#f9f5e9]
+          text-sm
+          tracking-wide
+          transition
+          hover:opacity-90
+          animate-buttonEntrance
+        "
       >
         Iniciar meu tempo com Deus
       </Link>
