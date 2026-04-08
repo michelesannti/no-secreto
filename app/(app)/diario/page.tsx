@@ -95,6 +95,8 @@ export default function DiarioPage() {
 
   if (!ready) return <div className="min-h-screen bg-[#f9f5e9]" />;
 
+  const linhas = destaque.split("\n");
+
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
 
@@ -116,18 +118,16 @@ export default function DiarioPage() {
 
               <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
-              <p
-                className="
-                  font-serif
-                  text-lg
-                  font-semibold
-                  text-center
-                  whitespace-pre-line
-                  max-w-[42ch]
-                "
-              >
-                {destaque}
-              </p>
+              <div className="text-center font-serif text-lg font-semibold">
+                {linhas.map((linha, i) => (
+                  <div
+                    key={i}
+                    style={{ whiteSpace: "nowrap" }}
+                  >
+                    {linha}
+                  </div>
+                ))}
+              </div>
 
               <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
@@ -149,15 +149,7 @@ export default function DiarioPage() {
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
               placeholder="O que Deus falou com você?"
-              className="
-                relative
-                w-full
-                bg-transparent
-                resize-none
-                outline-none
-                text-base
-                placeholder:text-[#70412d]/40
-              "
+              className="relative w-full bg-transparent resize-none outline-none text-base placeholder:text-[#70412d]/40"
               style={{
                 lineHeight: "32px",
                 minHeight: "600px"
