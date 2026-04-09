@@ -77,29 +77,21 @@ export default function EstudoPage({ params }: PageProps) {
           {referencia}
         </p>
 
-        {/* VERSÍCULO */}
+        {/* VERSÍCULO (LIMPO) */}
         <div className="flex justify-center mb-10">
-          <div className="flex items-center gap-4">
-
-            <div className="w-[2px] h-12 bg-[#e9d5bb]"></div>
-
-            <p
-              className="
-                italic
-                text-base
-                leading-8
-                text-[#70412d]/85
-                text-center
-                max-w-[42ch]
-                whitespace-pre-line
-              "
-            >
-              {estudo.texto}
-            </p>
-
-            <div className="w-[2px] h-12 bg-[#e9d5bb]"></div>
-
-          </div>
+          <p
+            className="
+              italic
+              text-base
+              leading-8
+              text-[#70412d]/85
+              text-center
+              max-w-[48ch]
+              whitespace-pre-line
+            "
+          >
+            {estudo.texto}
+          </p>
         </div>
 
         {/* CONTEXTO */}
