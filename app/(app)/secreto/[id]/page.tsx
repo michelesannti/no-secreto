@@ -73,12 +73,12 @@ export default function EstudoPage({ params }: PageProps) {
       <div className="max-w-2xl mx-auto px-8">
 
         {/* REFERÊNCIA */}
-        <p className="text-sm tracking-widest text-[#70412d]/50 text-center mb-6">
+        <p className="text-sm tracking-widest text-[#70412d]/50 text-center mb-4">
           {referencia}
         </p>
 
-        {/* VERSÍCULO (LIMPO) */}
-        <div className="flex justify-center mb-10">
+        {/* VERSÍCULO */}
+        <div className="flex justify-center mb-12">
           <p
             className="
               italic
