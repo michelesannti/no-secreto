@@ -55,7 +55,6 @@ function DiarioContent() {
       setEstudoId(estudoAtual.id);
       setDestaque(estudoAtual.destaque);
 
-      // 🔥 libera botão
       if (veioDoConcluir) {
         localStorage.setItem("liberado-finalizar", "true");
       }
@@ -154,13 +153,23 @@ function DiarioContent() {
             />
           </div>
 
-          {/* BOTÃO */}
+          {/* BOTÃO PADRONIZADO */}
           {podeFinalizar && (
-            <div className="mt-12 flex justify-center">
+            <div className="mt-16 flex justify-center">
               <button
                 onClick={handleFinalizar}
                 disabled={saving}
-                className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]"
+                className="
+                  px-6
+                  py-2
+                  rounded-full
+                  bg-[#70412d]
+                  text-[#f9f5e9]
+                  text-sm
+                  tracking-wide
+                  transition
+                  hover:opacity-90
+                "
               >
                 {saving ? "Finalizando..." : "Finalizar"}
               </button>
