@@ -93,7 +93,6 @@ export default function EstudoPage({ params }: PageProps) {
                 max-w-[42ch]
                 whitespace-pre-line
               "
-              style={{ textWrap: "balance" }}
             >
               {estudo.texto}
             </p>
