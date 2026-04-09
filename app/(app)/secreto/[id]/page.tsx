@@ -90,7 +90,7 @@ export default function EstudoPage({ params }: PageProps) {
                 leading-8
                 text-[#70412d]/85
                 text-center
-                max-w-[36ch]
+                max-w-[42ch]
                 whitespace-pre-line
               "
               style={{ textWrap: "balance" }}
