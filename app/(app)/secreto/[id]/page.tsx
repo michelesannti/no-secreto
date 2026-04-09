@@ -72,9 +72,9 @@ export default function EstudoPage({ params }: PageProps) {
 
       <div className="max-w-2xl mx-auto px-8">
 
-        {/* REFERÊNCIA + NVI (CORRETO) */}
+        {/* REFERÊNCIA */}
         <p className="text-sm tracking-widest text-[#70412d]/50 text-center mb-6">
-          {referencia} NVI
+          {referencia}
         </p>
 
         {/* VERSÍCULO */}
