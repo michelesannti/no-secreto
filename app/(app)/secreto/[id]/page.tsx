@@ -86,8 +86,8 @@ export default function EstudoPage({ params }: PageProps) {
             <p
               className="
                 italic
-                text-lg
-                leading-relaxed
+                text-base
+                leading-8
                 text-[#70412d]/85
                 text-center
                 max-w-[36ch]
