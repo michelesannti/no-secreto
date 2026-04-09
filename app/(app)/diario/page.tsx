@@ -101,7 +101,6 @@ function DiarioContent() {
     localStorage.removeItem("liberado-finalizar");
     localStorage.removeItem(`diario-${userId}-${estudoId}`);
 
-    // 🔥 AGORA VAI PRO PERFIL (RECOMPENSA)
     router.push("/perfil");
   }
 
@@ -111,6 +110,7 @@ function DiarioContent() {
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
       <div className="pt-6 pb-40">
 
+        {/* TOPO */}
         <div className="px-8 mb-12">
           <h1 className="text-xl font-serif tracking-wide">Diário</h1>
           <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
@@ -118,14 +118,22 @@ function DiarioContent() {
 
         <div className="max-w-2xl mx-auto px-8">
 
-          {/* DESTAQUE */}
+          {/* DESTAQUE COM LINHAS */}
           <div className="flex justify-center mt-16 mb-10">
-            <div className="text-center font-serif text-lg font-semibold">
-              {destaque.split("\n").map((linha, i) => (
-                <div key={i} style={{ whiteSpace: "nowrap" }}>
-                  {linha}
-                </div>
-              ))}
+            <div className="flex items-center gap-4">
+
+              <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
+
+              <div className="text-center font-serif text-lg font-semibold">
+                {destaque.split("\n").map((linha, i) => (
+                  <div key={i} style={{ whiteSpace: "nowrap" }}>
+                    {linha}
+                  </div>
+                ))}
+              </div>
+
+              <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
+
             </div>
           </div>
 
