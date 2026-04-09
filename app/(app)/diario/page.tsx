@@ -101,7 +101,8 @@ function DiarioContent() {
     localStorage.removeItem("liberado-finalizar");
     localStorage.removeItem(`diario-${userId}-${estudoId}`);
 
-    router.push("/conclusao");
+    // 🔥 AGORA VAI PRO PERFIL (RECOMPENSA)
+    router.push("/perfil");
   }
 
   if (!ready) return <div className="min-h-screen bg-[#f9f5e9]" />;
@@ -119,18 +120,12 @@ function DiarioContent() {
 
           {/* DESTAQUE */}
           <div className="flex justify-center mt-16 mb-10">
-            <div className="flex items-center gap-4">
-              <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
-
-              <div className="text-center font-serif text-lg font-semibold">
-                {destaque.split("\n").map((linha, i) => (
-                  <div key={i} style={{ whiteSpace: "nowrap" }}>
-                    {linha}
-                  </div>
-                ))}
-              </div>
-
-              <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
+            <div className="text-center font-serif text-lg font-semibold">
+              {destaque.split("\n").map((linha, i) => (
+                <div key={i} style={{ whiteSpace: "nowrap" }}>
+                  {linha}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -153,7 +148,7 @@ function DiarioContent() {
             />
           </div>
 
-          {/* BOTÃO PADRONIZADO */}
+          {/* BOTÃO */}
           {podeFinalizar && (
             <div className="mt-16 flex justify-center">
               <button

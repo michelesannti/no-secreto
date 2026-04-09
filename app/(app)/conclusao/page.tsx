@@ -5,28 +5,37 @@ import { useRouter } from "next/navigation";
 export default function ConclusaoPage() {
   const router = useRouter();
 
-  function handleContinuar() {
-    router.push("/secreto");
-  }
-
   return (
-    <div className="h-[100dvh] flex flex-col items-center justify-center bg-[#f9f5e9] text-[#70412d] px-8 text-center">
+    <div className="min-h-screen bg-[#f9f5e9] flex flex-col items-center justify-center text-center text-[#70412d] px-8">
 
-      <div className="mb-10">
-        <p className="text-lg font-serif mb-4">
-          você finalizou seu tempo 🤎
+      <div className="flex flex-col items-center gap-8">
+
+        {/* FRASE PRINCIPAL */}
+        <p className="text-xl font-serif leading-relaxed max-w-[28ch]">
+          Você separou um momento com Deus 🤎
         </p>
 
-        <p className="text-sm text-[#70412d]/70">
-          um passo mais perto de viver o que Deus preparou pra você
+        {/* LINHA */}
+        <div className="w-10 h-[2px] bg-[#e9d5bb]"></div>
+
+        {/* FRASE SUAVE */}
+        <p className="text-sm text-[#70412d]/60">
+          continue no seu tempo
         </p>
+
       </div>
 
+      {/* AÇÃO DISCRETA */}
       <button
-        onClick={handleContinuar}
-        className="px-8 py-3 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide"
+        onClick={() => router.push("/secreto")}
+        className="
+          absolute bottom-10
+          text-xs
+          text-[#70412d]/40
+          tracking-wide
+        "
       >
-        continuar
+        tocar para continuar
       </button>
 
     </div>

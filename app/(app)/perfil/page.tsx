@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase";
 
 export default function PerfilPage() {
-
   const [nome, setNome] = useState("");
   const [apelido, setApelido] = useState("");
   const [porcentagem, setPorcentagem] = useState(0);
@@ -30,7 +29,6 @@ export default function PerfilPage() {
         setApelido(data.apelido || "");
       }
 
-      // 🔥 PROGRESSO
       const { data: estudos } = await supabase
         .from("estudos")
         .select("id")
@@ -60,22 +58,30 @@ export default function PerfilPage() {
         <h1 className="text-xl font-serif tracking-wide">
           Perfil
         </h1>
-
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
-      <div className="max-w-xl mx-auto px-8 space-y-10">
+      <div className="max-w-xl mx-auto px-8 space-y-12">
+
+        {/* RECOMPENSA */}
+        <div className="text-center space-y-4">
+          <p className="text-lg font-serif">
+            você avançou hoje 🤎
+          </p>
+
+          <div className="w-10 h-[2px] bg-[#e9d5bb] mx-auto"></div>
+        </div>
 
         {/* PROGRESSO */}
         <div>
           <p className="text-sm text-[#70412d]/60 mb-4">
-            Sua jornada
+            sua jornada
           </p>
 
           <div className="relative w-full h-[4px] bg-[#e9d5bb] rounded-full">
 
             <div
-              className="absolute top-0 left-0 h-[4px] bg-[#C6A46A] rounded-full"
+              className="absolute top-0 left-0 h-[4px] bg-[#C6A46A] rounded-full transition-all duration-700"
               style={{ width: `${porcentagem}%` }}
             />
 
@@ -91,7 +97,6 @@ export default function PerfilPage() {
           <p className="text-sm text-[#70412d]/60 mb-1">
             Nome
           </p>
-
           <p className="text-lg">
             {nome}
           </p>
@@ -101,7 +106,6 @@ export default function PerfilPage() {
           <p className="text-sm text-[#70412d]/60 mb-1">
             Apelido
           </p>
-
           <p className="text-lg">
             {apelido || "Nenhum apelido definido"}
           </p>
