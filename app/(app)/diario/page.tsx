@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase";
 
-export default function DiarioPage() {
+function DiarioContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -55,7 +55,7 @@ export default function DiarioPage() {
       setEstudoId(estudoAtual.id);
       setDestaque(estudoAtual.destaque);
 
-      // 🔥 lógica de liberação persistente
+      // 🔥 libera botão
       if (veioDoConcluir) {
         localStorage.setItem("liberado-finalizar", "true");
       }
@@ -99,9 +99,7 @@ export default function DiarioPage() {
       concluido: true,
     });
 
-    // 🔥 limpa liberação
     localStorage.removeItem("liberado-finalizar");
-
     localStorage.removeItem(`diario-${userId}-${estudoId}`);
 
     router.push("/conclusao");
@@ -114,9 +112,7 @@ export default function DiarioPage() {
       <div className="pt-6 pb-40">
 
         <div className="px-8 mb-12">
-          <h1 className="text-xl font-serif tracking-wide">
-            Diário
-          </h1>
+          <h1 className="text-xl font-serif tracking-wide">Diário</h1>
           <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
         </div>
 
@@ -125,7 +121,6 @@ export default function DiarioPage() {
           {/* DESTAQUE */}
           <div className="flex justify-center mt-16 mb-10">
             <div className="flex items-center gap-4">
-
               <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
 
               <div className="text-center font-serif text-lg font-semibold">
@@ -137,7 +132,6 @@ export default function DiarioPage() {
               </div>
 
               <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
-
             </div>
           </div>
 
@@ -176,5 +170,13 @@ export default function DiarioPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function DiarioPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#f9f5e9]" />}>
+      <DiarioContent />
+    </Suspense>
   );
 }
