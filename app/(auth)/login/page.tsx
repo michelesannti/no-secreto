@@ -13,7 +13,6 @@ export default function LoginPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🔥 verifica se já está logado E se pode acessar
   useEffect(() => {
     async function checkUser() {
       const {
@@ -22,12 +21,13 @@ export default function LoginPage() {
 
       if (!user) return;
 
-      // 🔥 verifica ativo
       const { data: profile } = await supabase
         .from("profiles")
         .select("ativo")
         .eq("id", user.id)
         .single();
+
+      console.log("CHECK USER PROFILE:", profile);
 
       if (profile?.ativo) {
         router.replace("/hoje");
@@ -47,7 +47,10 @@ export default function LoginPage() {
       password,
     });
 
+    console.log("LOGIN RESPONSE:", data);
+
     if (error) {
+      console.log("LOGIN ERROR:", error);
       setMessage("Email ou senha inválidos");
       setLoading(false);
       return;
@@ -61,12 +64,14 @@ export default function LoginPage() {
       return;
     }
 
-    // 🔥 verifica acesso
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("ativo")
       .eq("id", user.id)
       .single();
+
+    console.log("PROFILE RESULT:", profile);
+    console.log("PROFILE ERROR:", profileError);
 
     if (!profile?.ativo) {
       setMessage("Seu acesso ainda não foi liberado");
@@ -74,7 +79,6 @@ export default function LoginPage() {
       return;
     }
 
-    // ✅ entra
     router.replace("/hoje");
   }
 
@@ -82,7 +86,6 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#f9f5e9] flex items-center justify-center text-[#70412d] px-6">
       <div className="w-full max-w-sm">
 
-        {/* TOPO */}
         <div className="mb-12 text-center">
           <h1 className="text-xl font-serif tracking-wide">
             No Secreto
@@ -114,18 +117,9 @@ export default function LoginPage() {
             type="submit"
             disabled={loading}
             className="
-              px-6
-              py-2
-              rounded-full
-              bg-[#70412d]
-              text-[#f9f5e9]
-              text-sm
-              tracking-wide
-              transition
-              hover:opacity-90
-              disabled:opacity-60
-              mt-2
-              self-center
+              px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]
+              text-sm tracking-wide transition hover:opacity-90
+              disabled:opacity-60 mt-2 self-center
             "
           >
             {loading ? "Entrando..." : "Entrar"}
