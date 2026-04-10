@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase";
 
 export default function PerfilPage() {
-  const [nome, setNome] = useState("");
-  const [apelido, setApelido] = useState("");
   const [porcentagem, setPorcentagem] = useState(0);
 
   useEffect(() => {
@@ -18,17 +16,7 @@ export default function PerfilPage() {
 
       if (!user) return;
 
-      const { data } = await supabase
-        .from("profiles")
-        .select("nome, apelido")
-        .eq("id", user.id)
-        .single();
-
-      if (data) {
-        setNome(data.nome || "");
-        setApelido(data.apelido || "");
-      }
-
+      // 🔥 PROGRESSO
       const { data: estudos } = await supabase
         .from("estudos")
         .select("id")
@@ -58,24 +46,16 @@ export default function PerfilPage() {
         <h1 className="text-xl font-serif tracking-wide">
           Perfil
         </h1>
+
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
-      <div className="max-w-xl mx-auto px-8 space-y-12">
-
-        {/* RECOMPENSA */}
-        <div className="text-center space-y-4">
-          <p className="text-lg font-serif">
-            você avançou hoje 🤎
-          </p>
-
-          <div className="w-10 h-[2px] bg-[#e9d5bb] mx-auto"></div>
-        </div>
+      <div className="max-w-xl mx-auto px-8 space-y-10">
 
         {/* PROGRESSO */}
         <div>
           <p className="text-sm text-[#70412d]/60 mb-4">
-            sua jornada
+            Sua jornada
           </p>
 
           <div className="relative w-full h-[4px] bg-[#e9d5bb] rounded-full">
@@ -89,25 +69,6 @@ export default function PerfilPage() {
 
           <p className="mt-4 text-sm text-[#70412d]/60">
             {Math.round(porcentagem)}% concluído
-          </p>
-        </div>
-
-        {/* DADOS */}
-        <div>
-          <p className="text-sm text-[#70412d]/60 mb-1">
-            Nome
-          </p>
-          <p className="text-lg">
-            {nome}
-          </p>
-        </div>
-
-        <div>
-          <p className="text-sm text-[#70412d]/60 mb-1">
-            Apelido
-          </p>
-          <p className="text-lg">
-            {apelido || "Nenhum apelido definido"}
           </p>
         </div>
 

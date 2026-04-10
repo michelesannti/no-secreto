@@ -13,14 +13,23 @@ export default function LoginPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🔥 NOVO: se já estiver logado, pula login
+  // 🔥 verifica se já está logado E se pode acessar
   useEffect(() => {
     async function checkUser() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
 
-      if (user) {
+      if (!user) return;
+
+      // 🔥 verifica ativo
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("ativo")
+        .eq("id", user.id)
+        .single();
+
+      if (profile?.ativo) {
         router.replace("/hoje");
       }
     }
@@ -33,7 +42,7 @@ export default function LoginPage() {
     setLoading(true);
     setMessage("");
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -44,20 +53,40 @@ export default function LoginPage() {
       return;
     }
 
+    const user = data.user;
+
+    if (!user) {
+      setMessage("Erro ao entrar");
+      setLoading(false);
+      return;
+    }
+
+    // 🔥 verifica acesso
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("ativo")
+      .eq("id", user.id)
+      .single();
+
+    if (!profile?.ativo) {
+      setMessage("Seu acesso ainda não foi liberado");
+      setLoading(false);
+      return;
+    }
+
+    // ✅ entra
     router.replace("/hoje");
-    router.refresh();
   }
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] flex items-center justify-center text-[#70412d] px-6">
       <div className="w-full max-w-sm">
 
-        {/* TOPO PADRONIZADO */}
+        {/* TOPO */}
         <div className="mb-12 text-center">
           <h1 className="text-xl font-serif tracking-wide">
             No Secreto
           </h1>
-
           <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
         </div>
 
@@ -81,7 +110,6 @@ export default function LoginPage() {
             className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none"
           />
 
-          {/* BOTÃO PADRONIZADO */}
           <button
             type="submit"
             disabled={loading}

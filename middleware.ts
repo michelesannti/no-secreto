@@ -1,32 +1,63 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 
-export function middleware(request: NextRequest) {
-  // 🔥 pega todos cookies
-  const cookies = request.cookies.getAll();
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next();
 
-  // 🔥 verifica se existe cookie do Supabase
-  const hasSupabaseAuth = cookies.some((cookie) =>
-    cookie.name.includes("sb-") && cookie.name.includes("auth-token")
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name) {
+          return req.cookies.get(name)?.value;
+        },
+        set(name, value, options) {
+          res.cookies.set({ name, value, ...options });
+        },
+        remove(name, options) {
+          res.cookies.set({ name, value: "", ...options });
+        },
+      },
+    }
   );
 
-  const isAuthPage = request.nextUrl.pathname.startsWith("/login");
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // 🚫 não logado → bloqueia
-  if (!hasSupabaseAuth && !isAuthPage) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  const pathname = req.nextUrl.pathname;
+
+  const isLogin = pathname.startsWith("/login");
+
+  // 🚫 não logado → bloqueia tudo menos login
+  if (!user && !isLogin) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // 🔁 já logado → não volta pro login
-  if (hasSupabaseAuth && isAuthPage) {
-    return NextResponse.redirect(new URL("/hoje", request.url));
+  // 🔥 NÃO valida ativo na hora do login
+  if (user && !isLogin) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("ativo")
+      .eq("id", user.id)
+      .single();
+
+    if (!profile?.ativo) {
+      // 👉 redireciona pra login SEM quebrar sessão
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
   }
 
-  return NextResponse.next();
+  return res;
 }
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    "/hoje",
+    "/secreto/:path*",
+    "/diario",
+    "/perfil",
   ],
 };
