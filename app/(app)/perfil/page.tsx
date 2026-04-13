@@ -81,6 +81,7 @@ export default function PerfilPage() {
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
 
+      {/* HEADER */}
       <div className="px-8 mb-10">
         <h1 className="text-xl font-serif tracking-wide">Perfil</h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
@@ -88,15 +89,29 @@ export default function PerfilPage() {
 
       <div className="max-w-md mx-auto px-6 space-y-10">
 
-        <div>
-          <div className="relative w-full h-[10px] bg-[#e9d5bb]/50 rounded-full overflow-hidden">
+        {/* PROGRESSO */}
+        <div className="space-y-4">
+
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-[#70412d]/60">
+              Seu progresso
+            </p>
+
+            <p className="text-sm font-semibold">
+              {Math.round(porcentagem)}%
+            </p>
+          </div>
+
+          <div className="relative w-full h-[18px] bg-[#e9d5bb]/40 rounded-full overflow-hidden">
             <div
               className="absolute top-0 left-0 h-full bg-[#C6A46A] rounded-full transition-all duration-700"
               style={{ width: `${porcentagem}%` }}
             />
           </div>
+
         </div>
 
+        {/* CALENDÁRIO */}
         <div className="bg-[#e9d5bb]/25 rounded-2xl p-6 space-y-3">
 
           <p className="text-center text-sm font-semibold capitalize">
@@ -135,8 +150,10 @@ export default function PerfilPage() {
 
         </div>
 
+        {/* HISTÓRICO */}
         {historicoFiltrado.length > 0 && (
           <div className="space-y-4 mt-6">
+
             {historicoFiltrado.map((item, index) => (
               <div
                 key={index}
@@ -149,10 +166,12 @@ export default function PerfilPage() {
                 <div className="w-2 h-2 bg-[#C6A46A] rounded-full" />
               </div>
             ))}
+
           </div>
         )}
 
       </div>
+
     </div>
   );
 }
