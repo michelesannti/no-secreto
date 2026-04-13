@@ -7,6 +7,25 @@ export default function PerfilPage() {
   const [porcentagem, setPorcentagem] = useState(0);
   const [diasAtivos, setDiasAtivos] = useState<number[]>([]);
   const [historico, setHistorico] = useState<any[]>([]);
+  const [diaSelecionado, setDiaSelecionado] = useState<number | null>(null);
+
+  const hoje = new Date();
+  const ano = hoje.getFullYear();
+  const mes = hoje.getMonth();
+
+  const primeiroDia = new Date(ano, mes, 1).getDay();
+  const totalDias = new Date(ano, mes + 1, 0).getDate();
+
+  const diasMes = [
+    ...Array(primeiroDia).fill(null),
+    ...Array.from({ length: totalDias }, (_, i) => i + 1),
+  ];
+
+  const diasSemana = ["D", "S", "T", "Q", "Q", "S", "S"];
+
+  const nomeMes = hoje.toLocaleDateString("pt-BR", {
+    month: "long",
+  });
 
   useEffect(() => {
     async function carregar() {
@@ -18,7 +37,6 @@ export default function PerfilPage() {
 
       if (!user) return;
 
-      // PROGRESSO
       const { data: estudos } = await supabase
         .from("estudos")
         .select("id");
@@ -35,23 +53,24 @@ export default function PerfilPage() {
 
       setPorcentagem(total ? (feitos / total) * 100 : 0);
 
-      // CALENDÁRIO (dias ativos)
       const dias = progresso?.map((p) => {
         const date = new Date(p.created_at);
         return date.getDate();
       }) || [];
 
       setDiasAtivos(dias);
-
-      // HISTÓRICO (últimos 4)
-      setHistorico(progresso?.slice(0, 4) || []);
+      setHistorico(progresso || []);
     }
 
     carregar();
   }, []);
 
-  // CALENDÁRIO MOCK (30 dias)
-  const diasMes = Array.from({ length: 30 }, (_, i) => i + 1);
+  const historicoFiltrado = diaSelecionado
+    ? historico.filter((item) => {
+        const d = new Date(item.created_at).getDate();
+        return d === diaSelecionado;
+      })
+    : [];
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
@@ -64,44 +83,58 @@ export default function PerfilPage() {
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
-      <div className="max-w-md mx-auto px-6 space-y-12">
+      <div className="max-w-md mx-auto px-6 space-y-10">
 
         {/* PROGRESSO */}
         <div>
           <div className="relative w-full h-[10px] bg-[#e9d5bb]/50 rounded-full overflow-hidden">
-
             <div
               className="absolute top-0 left-0 h-full bg-[#C6A46A] rounded-full transition-all duration-700"
               style={{ width: `${porcentagem}%` }}
             />
-
           </div>
-
-          <p className="mt-3 text-sm text-[#70412d]/50">
-            {Math.round(porcentagem)}% concluído
-          </p>
         </div>
 
-        {/* CALENDÁRIO */}
-        <div>
+        {/* CALENDÁRIO (BLOCO ÚNICO) */}
+        <div className="space-y-2">
 
-          <p className="text-sm text-[#70412d]/50 mb-4">
-            Sua constância
+          {/* MÊS */}
+          <p className="text-center text-sm font-semibold capitalize">
+            {nomeMes}
           </p>
 
+          {/* DIAS DA SEMANA */}
+          <div className="grid grid-cols-7 text-xs font-semibold">
+            {diasSemana.map((d, i) => (
+              <div key={i} className="text-center">
+                {d}
+              </div>
+            ))}
+          </div>
+
+          {/* DIAS */}
           <div className="grid grid-cols-7 gap-3">
 
-            {diasMes.map((dia) => {
+            {diasMes.map((dia, i) => {
+              if (!dia) return <div key={`empty-${i}`} />;
+
               const ativo = diasAtivos.includes(dia);
+              const selecionado = diaSelecionado === dia;
 
               return (
                 <div
-                  key={dia}
+                  key={`${dia}-${i}`}
+                  onClick={() => ativo && setDiaSelecionado(dia)}
                   className={`
-                    w-10 h-10 flex items-center justify-center rounded-full text-sm
+                    w-10 h-10 flex items-center justify-center rounded-full text-sm transition
+
                     ${ativo
-                      ? "bg-[#C6A46A] text-[#f9f5e9]"
-                      : "bg-[#e9d5bb]/40"}
+                      ? "bg-[#C6A46A] text-[#f9f5e9] cursor-pointer"
+                      : ""}
+
+                    ${selecionado
+                      ? "ring-2 ring-[#e9d5bb]"
+                      : ""}
                   `}
                 >
                   {dia}
@@ -114,32 +147,16 @@ export default function PerfilPage() {
         </div>
 
         {/* HISTÓRICO */}
-        <div>
+        {historicoFiltrado.length > 0 && (
+          <div className="space-y-4 mt-6">
 
-          <p className="text-sm text-[#70412d]/50 mb-4">
-            Seu caminho
-          </p>
-
-          <div className="space-y-4">
-
-            {historico.length === 0 && (
-              <div className="bg-[#e9d5bb]/30 rounded-xl p-5 text-sm text-[#70412d]/50">
-                Seus estudos vão aparecer aqui 🤎
-              </div>
-            )}
-
-            {historico.map((item, index) => (
+            {historicoFiltrado.map((item, index) => (
               <div
                 key={index}
                 className="bg-[#e9d5bb]/40 rounded-xl p-4 flex items-center justify-between"
               >
-                <div>
-                  <p className="text-sm">
-                    Estudo concluído
-                  </p>
-                  <p className="text-xs text-[#70412d]/50">
-                    {new Date(item.created_at).toLocaleDateString()}
-                  </p>
+                <div className="text-sm">
+                  Estudo concluído
                 </div>
 
                 <div className="w-2 h-2 bg-[#C6A46A] rounded-full" />
@@ -147,8 +164,7 @@ export default function PerfilPage() {
             ))}
 
           </div>
-
-        </div>
+        )}
 
       </div>
 
