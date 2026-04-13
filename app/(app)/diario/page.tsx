@@ -15,6 +15,7 @@ function DiarioContent() {
 
   const [userId, setUserId] = useState<string | null>(null);
   const [estudoId, setEstudoId] = useState<number | null>(null);
+  const [jornada, setJornada] = useState<string>("");
 
   const [ready, setReady] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -40,11 +41,12 @@ function DiarioContent() {
 
       const { data: progresso } = await supabase
         .from("progresso")
-        .select("estudo_id, concluido")
-        .eq("user_id", user.id);
+        .select("estudo_id")
+        .eq("user_id", user.id)
+        .eq("jornada", "genesis-1");
 
       const concluidosIds =
-        progresso?.filter((p) => p.concluido).map((p) => p.estudo_id) || [];
+        progresso?.map((p) => p.estudo_id) || [];
 
       const estudoAtual =
         estudos?.find((e) => !concluidosIds.includes(e.id)) ||
@@ -54,6 +56,7 @@ function DiarioContent() {
 
       setEstudoId(estudoAtual.id);
       setDestaque(estudoAtual.destaque);
+      setJornada(estudoAtual.jornada);
 
       if (veioDoConcluir) {
         localStorage.setItem("liberado-finalizar", "true");
@@ -95,7 +98,7 @@ function DiarioContent() {
     await supabase.from("progresso").upsert({
       user_id: userId,
       estudo_id: estudoId,
-      concluido: true,
+      jornada: jornada,
     });
 
     localStorage.removeItem("liberado-finalizar");

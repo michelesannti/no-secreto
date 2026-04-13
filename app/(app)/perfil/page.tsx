@@ -5,9 +5,11 @@ import { getSupabaseClient } from "@/lib/supabase";
 
 export default function PerfilPage() {
   const [porcentagem, setPorcentagem] = useState(0);
-  const [diasAtivos, setDiasAtivos] = useState<number[]>([]);
+  const [diasAtivos, setDiasAtivos] = useState<string[]>([]);
   const [historico, setHistorico] = useState<any[]>([]);
-  const [diaSelecionado, setDiaSelecionado] = useState<number | null>(null);
+  const [diaSelecionado, setDiaSelecionado] = useState<string | null>(null);
+
+  const jornada = "genesis-1";
 
   const hoje = new Date();
   const ano = hoje.getFullYear();
@@ -39,7 +41,8 @@ export default function PerfilPage() {
 
       const { data: estudos } = await supabase
         .from("estudos")
-        .select("id");
+        .select("id")
+        .eq("jornada", jornada);
 
       const total = estudos?.length || 0;
 
@@ -47,16 +50,15 @@ export default function PerfilPage() {
         .from("progresso")
         .select("estudo_id, created_at")
         .eq("user_id", user.id)
-        .eq("concluido", true);
+        .eq("jornada", jornada);
 
       const feitos = progresso?.length || 0;
 
       setPorcentagem(total ? (feitos / total) * 100 : 0);
 
-      const dias = progresso?.map((p) => {
-        const date = new Date(p.created_at);
-        return date.getDate();
-      }) || [];
+      const dias = progresso?.map((p) =>
+        new Date(p.created_at).toLocaleDateString("sv-SE")
+      ) || [];
 
       setDiasAtivos(dias);
       setHistorico(progresso || []);
@@ -65,27 +67,27 @@ export default function PerfilPage() {
     carregar();
   }, []);
 
+  function getDateKey(dia: number) {
+    return new Date(ano, mes, dia).toLocaleDateString("sv-SE");
+  }
+
   const historicoFiltrado = diaSelecionado
-    ? historico.filter((item) => {
-        const d = new Date(item.created_at).getDate();
-        return d === diaSelecionado;
-      })
+    ? historico.filter(
+        (item) =>
+          new Date(item.created_at).toLocaleDateString("sv-SE") === diaSelecionado
+      )
     : [];
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
 
-      {/* HEADER */}
       <div className="px-8 mb-10">
-        <h1 className="text-xl font-serif tracking-wide">
-          Perfil
-        </h1>
+        <h1 className="text-xl font-serif tracking-wide">Perfil</h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
       <div className="max-w-md mx-auto px-6 space-y-10">
 
-        {/* PROGRESSO */}
         <div>
           <div className="relative w-full h-[10px] bg-[#e9d5bb]/50 rounded-full overflow-hidden">
             <div
@@ -95,61 +97,46 @@ export default function PerfilPage() {
           </div>
         </div>
 
-        {/* CALENDÁRIO COM PESO */}
         <div className="bg-[#e9d5bb]/25 rounded-2xl p-6 space-y-3">
 
-          {/* MÊS */}
           <p className="text-center text-sm font-semibold capitalize">
             {nomeMes}
           </p>
 
-          {/* DIAS DA SEMANA */}
           <div className="grid grid-cols-7 text-xs font-semibold text-[#70412d]/70">
             {diasSemana.map((d, i) => (
-              <div key={i} className="text-center">
-                {d}
-              </div>
+              <div key={i} className="text-center">{d}</div>
             ))}
           </div>
 
-          {/* DIAS */}
           <div className="grid grid-cols-7 gap-3">
-
             {diasMes.map((dia, i) => {
               if (!dia) return <div key={`empty-${i}`} />;
 
-              const ativo = diasAtivos.includes(dia);
-              const selecionado = diaSelecionado === dia;
+              const key = getDateKey(dia);
+              const ativo = diasAtivos.includes(key);
+              const selecionado = diaSelecionado === key;
 
               return (
                 <div
                   key={`${dia}-${i}`}
-                  onClick={() => ativo && setDiaSelecionado(dia)}
+                  onClick={() => ativo && setDiaSelecionado(key)}
                   className={`
                     w-10 h-10 flex items-center justify-center rounded-full text-sm transition
-
-                    ${ativo
-                      ? "bg-[#C6A46A] text-[#f9f5e9] cursor-pointer"
-                      : "text-[#70412d]/50"}
-
-                    ${selecionado
-                      ? "ring-2 ring-[#70412d]"
-                      : ""}
+                    ${ativo ? "bg-[#C6A46A] text-white cursor-pointer" : "text-[#70412d]/50"}
+                    ${selecionado ? "ring-2 ring-[#70412d]" : ""}
                   `}
                 >
                   {dia}
                 </div>
               );
             })}
-
           </div>
 
         </div>
 
-        {/* HISTÓRICO */}
         {historicoFiltrado.length > 0 && (
           <div className="space-y-4 mt-6">
-
             {historicoFiltrado.map((item, index) => (
               <div
                 key={index}
@@ -162,12 +149,10 @@ export default function PerfilPage() {
                 <div className="w-2 h-2 bg-[#C6A46A] rounded-full" />
               </div>
             ))}
-
           </div>
         )}
 
       </div>
-
     </div>
   );
 }

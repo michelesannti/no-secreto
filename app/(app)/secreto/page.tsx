@@ -20,6 +20,7 @@ export default function SecretoPage() {
         return;
       }
 
+      // 🔥 ESTUDOS DA JORNADA
       const { data: estudos } = await supabase
         .from("estudos")
         .select("id, ordem")
@@ -31,17 +32,18 @@ export default function SecretoPage() {
         return;
       }
 
+      // 🔥 PROGRESSO DO USUÁRIO (SEM CONCLUIDO)
       const { data: progresso } = await supabase
         .from("progresso")
         .select("estudo_id")
-        .eq("user_id", user.id)
-        .eq("concluido", true);
+        .eq("user_id", user.id);
 
       const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
+      // 🔥 PRÓXIMO ESTUDO
       const proximo =
         estudos.find((e) => !concluidosIds.includes(e.id)) ||
-        estudos[0];
+        estudos[estudos.length - 1];
 
       if (proximo?.id) {
         router.replace(`/secreto/${proximo.id}`);
