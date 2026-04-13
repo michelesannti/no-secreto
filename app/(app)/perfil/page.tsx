@@ -91,7 +91,6 @@ export default function PerfilPage() {
 
         {/* PROGRESSO */}
         <div className="space-y-4">
-
           <div className="flex items-center justify-between">
             <p className="text-sm text-[#70412d]/60">
               Seu progresso
@@ -108,23 +107,23 @@ export default function PerfilPage() {
               style={{ width: `${porcentagem}%` }}
             />
           </div>
-
         </div>
 
         {/* CALENDÁRIO */}
-        <div className="bg-[#e9d5bb]/25 rounded-2xl p-6 space-y-3">
+        <div className="bg-[#e9d5bb]/40 rounded-2xl p-6 space-y-4">
 
           <p className="text-center text-sm font-semibold capitalize">
             {nomeMes}
           </p>
 
-          <div className="grid grid-cols-7 text-xs font-semibold text-[#70412d]/70">
+          <div className="grid grid-cols-7 text-xs font-semibold text-[#70412d]">
             {diasSemana.map((d, i) => (
               <div key={i} className="text-center">{d}</div>
             ))}
           </div>
 
           <div className="grid grid-cols-7 gap-3">
+
             {diasMes.map((dia, i) => {
               if (!dia) return <div key={`empty-${i}`} />;
 
@@ -137,15 +136,22 @@ export default function PerfilPage() {
                   key={`${dia}-${i}`}
                   onClick={() => ativo && setDiaSelecionado(key)}
                   className={`
-                    w-10 h-10 flex items-center justify-center rounded-full text-sm transition
-                    ${ativo ? "bg-[#C6A46A] text-white cursor-pointer" : "text-[#70412d]/50"}
-                    ${selecionado ? "ring-2 ring-[#70412d]" : ""}
+                    w-10 h-10 flex items-center justify-center rounded-full text-sm transition-all duration-200
+
+                    ${ativo
+                      ? "bg-[#C6A46A] text-white shadow-md scale-105 cursor-pointer"
+                      : "text-[#70412d]/30"}
+
+                    ${selecionado
+                      ? "ring-2 ring-[#70412d]"
+                      : ""}
                   `}
                 >
                   {dia}
                 </div>
               );
             })}
+
           </div>
 
         </div>
