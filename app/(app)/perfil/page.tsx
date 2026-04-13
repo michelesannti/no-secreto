@@ -95,8 +95,8 @@ export default function PerfilPage() {
           </div>
         </div>
 
-        {/* CALENDÁRIO (BLOCO ÚNICO) */}
-        <div className="space-y-2">
+        {/* CALENDÁRIO COM PESO */}
+        <div className="bg-[#e9d5bb]/25 rounded-2xl p-6 space-y-3">
 
           {/* MÊS */}
           <p className="text-center text-sm font-semibold capitalize">
@@ -104,7 +104,7 @@ export default function PerfilPage() {
           </p>
 
           {/* DIAS DA SEMANA */}
-          <div className="grid grid-cols-7 text-xs font-semibold">
+          <div className="grid grid-cols-7 text-xs font-semibold text-[#70412d]/70">
             {diasSemana.map((d, i) => (
               <div key={i} className="text-center">
                 {d}
@@ -130,10 +130,10 @@ export default function PerfilPage() {
 
                     ${ativo
                       ? "bg-[#C6A46A] text-[#f9f5e9] cursor-pointer"
-                      : ""}
+                      : "text-[#70412d]/50"}
 
                     ${selecionado
-                      ? "ring-2 ring-[#e9d5bb]"
+                      ? "ring-2 ring-[#70412d]"
                       : ""}
                   `}
                 >
