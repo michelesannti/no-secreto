@@ -89,12 +89,12 @@ export default function PerfilPage() {
 
       <div className="max-w-md mx-auto px-6 space-y-12">
 
-        {/* 💣 PROGRESSO (VERSÃO ORIGINAL CORRETA) */}
+        {/* 💣 PROGRESSO */}
         <div>
           <div className="flex items-center justify-between mb-2">
 
             <p className="text-sm text-[#70412d]/60">
-              Seu progresso
+              Meu Progresso
             </p>
 
             <p className="text-sm font-semibold text-[#70412d]">
@@ -103,7 +103,8 @@ export default function PerfilPage() {
 
           </div>
 
-          <div className="relative w-full h-[10px] bg-[#e9d5bb]/50 rounded-full overflow-hidden">
+          {/* 🔥 BARRA MAIS GROSSA */}
+          <div className="relative w-full h-[14px] bg-[#e9d5bb]/50 rounded-full overflow-hidden">
             <div
               className="absolute top-0 left-0 h-full bg-[#C6A46A] rounded-full transition-all duration-700"
               style={{ width: `${porcentagem}%` }}
