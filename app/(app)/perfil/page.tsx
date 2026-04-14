@@ -100,6 +100,22 @@ export default function PerfilPage() {
       .replace(/\n/g, "<br/>");
   }
 
+  function renderTextoComHierarquia(texto: string) {
+    if (!texto) return "";
+
+    const linhas = texto.split("\n");
+
+    if (linhas.length === 0) return formatarTexto(texto);
+
+    const primeira = formatarTexto(linhas[0]);
+    const resto = formatarTexto(linhas.slice(1).join("\n"));
+
+    return `
+      <div style="opacity:0.75;">${primeira}</div>
+      <div style="margin-top:8px;">${resto}</div>
+    `;
+  }
+
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
 
@@ -176,7 +192,7 @@ export default function PerfilPage() {
       {/* MODAL */}
       {modalAberto && (
         <div
-          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/40 flex items-end justify-center pb-10 z-50"
           onClick={fecharModal}
         >
 
@@ -185,12 +201,12 @@ export default function PerfilPage() {
             onClick={(e) => e.stopPropagation()}
           >
 
-            {/* FECHAR */}
+            {/* FECHAR MAIS SUAVE */}
             <button
               onClick={fecharModal}
-              className="absolute top-4 right-4 text-[#70412d]/60"
+              className="absolute top-4 right-4 text-[#70412d]/40 text-lg"
             >
-              ✕
+              ×
             </button>
 
             <div className="space-y-10 max-h-[60vh] overflow-y-auto">
@@ -203,11 +219,11 @@ export default function PerfilPage() {
                     <div className="w-10 h-[2px] bg-[#C6A46A]/70 rounded-full" />
                   </div>
 
-                  {/* TEXTO */}
+                  {/* TEXTO COM HIERARQUIA */}
                   <div
                     className="text-[16px] leading-8 text-[#70412d]/85"
                     dangerouslySetInnerHTML={{
-                      __html: formatarTexto(item.texto),
+                      __html: renderTextoComHierarquia(item.texto),
                     }}
                   />
 
