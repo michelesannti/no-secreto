@@ -80,6 +80,7 @@ export default function PerfilPage() {
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
+
       {/* HEADER */}
       <div className="px-8 mb-10">
         <h1 className="text-xl font-serif tracking-wide">Perfil</h1>
@@ -87,18 +88,19 @@ export default function PerfilPage() {
       </div>
 
       <div className="max-w-md mx-auto px-6 space-y-12">
-        {/* PROGRESSO */}
+
+        {/* 💣 PROGRESSO (VERSÃO ORIGINAL CORRETA) */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            {/* TEXTO DOURADO */}
-            <p className="text-sm text-[#B8955B]">
-              Meu Progresso
+
+            <p className="text-sm text-[#70412d]/60">
+              Seu progresso
             </p>
 
-            {/* PORCENTAGEM MARROM + NEGRITO */}
             <p className="text-sm font-semibold text-[#70412d]">
               {Math.round(porcentagem)}%
             </p>
+
           </div>
 
           <div className="relative w-full h-[10px] bg-[#e9d5bb]/50 rounded-full overflow-hidden">
@@ -111,6 +113,7 @@ export default function PerfilPage() {
 
         {/* CALENDÁRIO */}
         <div className="bg-[#e9d5bb]/40 rounded-2xl p-6 space-y-4">
+
           <p className="text-center text-sm font-semibold capitalize">
             {nomeMes}
           </p>
@@ -124,6 +127,7 @@ export default function PerfilPage() {
           </div>
 
           <div className="grid grid-cols-7 gap-3">
+
             {diasMes.map((dia, i) => {
               if (!dia) return <div key={`empty-${i}`} />;
 
@@ -146,12 +150,15 @@ export default function PerfilPage() {
                 </div>
               );
             })}
+
           </div>
+
         </div>
 
         {/* HISTÓRICO */}
         {diaSelecionado && registrosDoDia.length > 0 && (
           <div className="space-y-4">
+
             {registrosDoDia.map((_, index) => (
               <div
                 key={index}
@@ -164,9 +171,12 @@ export default function PerfilPage() {
                 <div className="w-2 h-2 bg-[#C6A46A] rounded-full" />
               </div>
             ))}
+
           </div>
         )}
+
       </div>
+
     </div>
   );
 }
