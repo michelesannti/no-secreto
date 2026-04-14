@@ -7,7 +7,8 @@ export default function PerfilPage() {
   const [porcentagem, setPorcentagem] = useState(0);
   const [diasAtivos, setDiasAtivos] = useState<number[]>([]);
   const [diarios, setDiarios] = useState<any[]>([]);
-  const [diaSelecionado, setDiaSelecionado] = useState<number | null>(null);
+  const [modalAberto, setModalAberto] = useState(false);
+  const [registrosModal, setRegistrosModal] = useState<any[]>([]);
 
   const jornada = "genesis-1";
 
@@ -64,7 +65,8 @@ export default function PerfilPage() {
       const { data: diario } = await supabase
         .from("diario")
         .select("*")
-        .eq("user_id", user.id);
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: true });
 
       setDiarios(diario || []);
     }
@@ -72,15 +74,37 @@ export default function PerfilPage() {
     carregar();
   }, []);
 
-  const registrosDoDia = diaSelecionado
-    ? diarios.filter(
-        (d) => new Date(d.created_at).getDate() === diaSelecionado
-      )
-    : [];
+  function abrirModal(dia: number) {
+    const registros = diarios.filter(
+      (d) => new Date(d.created_at).getDate() === dia
+    );
+
+    if (registros.length === 0) return;
+
+    setRegistrosModal(registros);
+    setModalAberto(true);
+  }
+
+  function fecharModal() {
+    setModalAberto(false);
+    setRegistrosModal([]);
+  }
+
+  // 🔥 FORMATAÇÃO
+  function formatarTexto(texto: string) {
+    if (!texto) return "";
+
+    return texto
+      .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
+      .replace(/_(.*?)_/g, "<em>$1</em>")
+      .replace(/~(.*?)~/g, "<s>$1</s>")
+      .replace(/\n/g, "<br/>");
+  }
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
 
+      {/* HEADER */}
       <div className="px-8 mb-10">
         <h1 className="text-xl font-serif tracking-wide">Perfil</h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
@@ -91,7 +115,6 @@ export default function PerfilPage() {
         {/* PROGRESSO */}
         <div>
           <div className="flex items-center justify-between mb-2">
-
             <p className="text-sm text-[#70412d]/60">
               Meu Progresso
             </p>
@@ -99,10 +122,8 @@ export default function PerfilPage() {
             <p className="text-sm font-semibold text-[#70412d]">
               {Math.round(porcentagem)}%
             </p>
-
           </div>
 
-          {/* 🔥 MAIS GROSSA */}
           <div className="relative w-full h-[18px] bg-[#e9d5bb]/50 rounded-full overflow-hidden">
             <div
               className="absolute top-0 left-0 h-full bg-[#C6A46A] rounded-full transition-all duration-700"
@@ -120,9 +141,7 @@ export default function PerfilPage() {
 
           <div className="grid grid-cols-7 text-xs font-semibold text-[#70412d]">
             {diasSemana.map((d, i) => (
-              <div key={i} className="text-center">
-                {d}
-              </div>
+              <div key={i} className="text-center">{d}</div>
             ))}
           </div>
 
@@ -132,18 +151,16 @@ export default function PerfilPage() {
               if (!dia) return <div key={`empty-${i}`} />;
 
               const ativo = diasAtivos.includes(dia);
-              const selecionado = diaSelecionado === dia;
 
               return (
                 <div
                   key={`${dia}-${i}`}
-                  onClick={() => ativo && setDiaSelecionado(dia)}
+                  onClick={() => ativo && abrirModal(dia)}
                   className={`
                     w-10 h-10 flex items-center justify-center rounded-full text-sm transition
                     ${ativo
                       ? "bg-[#C6A46A] text-white scale-110 shadow-sm cursor-pointer"
                       : "text-[#70412d]/30"}
-                    ${selecionado ? "ring-2 ring-[#70412d]" : ""}
                   `}
                 >
                   {dia}
@@ -155,27 +172,53 @@ export default function PerfilPage() {
 
         </div>
 
-        {/* HISTÓRICO */}
-        {diaSelecionado && registrosDoDia.length > 0 && (
-          <div className="space-y-4">
+      </div>
 
-            {registrosDoDia.map((_, index) => (
-              <div
-                key={index}
-                className="bg-[#e9d5bb]/50 rounded-2xl p-5 flex items-center justify-between"
-              >
-                <p className="text-sm">
-                  Meu momento com Deus
-                </p>
+      {/* 💣 MODAL */}
+      {modalAberto && (
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+          onClick={fecharModal}
+        >
 
-                <div className="w-2 h-2 bg-[#C6A46A] rounded-full" />
-              </div>
-            ))}
+          <div
+            className="bg-[#f9f5e9] w-[90%] max-w-md rounded-2xl p-6 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+
+            {/* FECHAR */}
+            <button
+              onClick={fecharModal}
+              className="absolute top-4 right-4 text-[#70412d]/60"
+            >
+              ✕
+            </button>
+
+            <div className="space-y-6 max-h-[60vh] overflow-y-auto">
+
+              {registrosModal.map((item, index) => (
+                <div key={index} className="space-y-4">
+
+                  <div
+                    className="text-sm leading-7 text-[#70412d]/80"
+                    dangerouslySetInnerHTML={{
+                      __html: formatarTexto(item.texto),
+                    }}
+                  />
+
+                  {index !== registrosModal.length - 1 && (
+                    <div className="h-[1px] bg-[#e9d5bb]" />
+                  )}
+
+                </div>
+              ))}
+
+            </div>
 
           </div>
-        )}
 
-      </div>
+        </div>
+      )}
 
     </div>
   );
