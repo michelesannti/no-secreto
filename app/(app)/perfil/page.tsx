@@ -90,7 +90,6 @@ export default function PerfilPage() {
     setRegistrosModal([]);
   }
 
-  // 🔥 FORMATAÇÃO
   function formatarTexto(texto: string) {
     if (!texto) return "";
 
@@ -174,7 +173,7 @@ export default function PerfilPage() {
 
       </div>
 
-      {/* 💣 MODAL */}
+      {/* MODAL */}
       {modalAberto && (
         <div
           className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
@@ -194,13 +193,19 @@ export default function PerfilPage() {
               ✕
             </button>
 
-            <div className="space-y-6 max-h-[60vh] overflow-y-auto">
+            <div className="space-y-10 max-h-[60vh] overflow-y-auto">
 
               {registrosModal.map((item, index) => (
-                <div key={index} className="space-y-4">
+                <div key={index} className="space-y-6">
 
+                  {/* LINHA DOURADA */}
+                  <div className="flex justify-center">
+                    <div className="w-10 h-[2px] bg-[#C6A46A]/70 rounded-full" />
+                  </div>
+
+                  {/* TEXTO */}
                   <div
-                    className="text-sm leading-7 text-[#70412d]/80"
+                    className="text-[16px] leading-8 text-[#70412d]/85"
                     dangerouslySetInnerHTML={{
                       __html: formatarTexto(item.texto),
                     }}
