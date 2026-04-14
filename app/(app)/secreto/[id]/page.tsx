@@ -26,7 +26,7 @@ export default function EstudoPage() {
   const [loading, setLoading] = useState(true);
   const [estudo, setEstudo] = useState<Estudo | null>(null);
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   // 🔥 CARREGAR ESTUDO
   useEffect(() => {
@@ -51,15 +51,17 @@ export default function EstudoPage() {
     carregar();
   }, [estudoId]);
 
-  // 🔥 SALVAR SCROLL DO CONTAINER
+  // 🔥 SALVAR SCROLL
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
     function salvar() {
+      if (!containerRef.current) return;
+
       sessionStorage.setItem(
         `scroll-${estudoId}`,
-        String(el.scrollTop)
+        String(containerRef.current.scrollTop)
       );
     }
 
@@ -71,19 +73,20 @@ export default function EstudoPage() {
     };
   }, [estudoId]);
 
-  // 🔥 RESTAURAR SCROLL DO CONTAINER
+  // 🔥 RESTAURAR SCROLL
   useEffect(() => {
-    const el = containerRef.current;
     const saved = sessionStorage.getItem(`scroll-${estudoId}`);
+    if (!saved) return;
 
-    if (el && saved) {
-      setTimeout(() => {
-        el.scrollTo({
-          top: Number(saved),
-          behavior: "instant",
-        });
-      }, 100);
-    }
+    const el = containerRef.current;
+    if (!el) return;
+
+    setTimeout(() => {
+      el.scrollTo({
+        top: Number(saved),
+        behavior: "instant",
+      });
+    }, 100);
   }, [estudo]);
 
   if (loading) return <div className="h-screen bg-[#f9f5e9]" />;
