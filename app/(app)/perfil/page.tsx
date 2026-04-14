@@ -103,6 +103,7 @@ export default function PerfilPage() {
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
 
+      {/* HEADER */}
       <div className="px-8 mb-10">
         <h1 className="text-xl font-serif tracking-wide">Perfil</h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
@@ -180,24 +181,16 @@ export default function PerfilPage() {
         >
 
           <div
-            className="bg-[#f9f5e9] w-[90%] max-w-md rounded-2xl p-6 relative"
+            className="bg-[#f9f5e9] w-[90%] max-w-md rounded-2xl p-6"
             onClick={(e) => e.stopPropagation()}
           >
-
-            {/* X MAIS SUAVE */}
-            <button
-              onClick={fecharModal}
-              className="absolute top-4 right-4 text-[#70412d]/40"
-            >
-              ✕
-            </button>
 
             <div className="space-y-10 max-h-[60vh] overflow-y-auto">
 
               {registrosModal.map((item, index) => (
                 <div key={index} className="space-y-6">
 
-                  {/* LINHA DOURADA */}
+                  {/* LINHA PADRÃO */}
                   <div className="flex justify-center">
                     <div className="w-10 h-[2px] bg-[#C6A46A]/70 rounded-full" />
                   </div>
@@ -209,10 +202,6 @@ export default function PerfilPage() {
                       __html: formatarTexto(item.texto),
                     }}
                   />
-
-                  {index !== registrosModal.length - 1 && (
-                    <div className="h-[1px] bg-[#e9d5bb]" />
-                  )}
 
                 </div>
               ))}
