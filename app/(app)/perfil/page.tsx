@@ -81,7 +81,6 @@ export default function PerfilPage() {
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
 
-      {/* HEADER */}
       <div className="px-8 mb-10">
         <h1 className="text-xl font-serif tracking-wide">Perfil</h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
@@ -89,7 +88,7 @@ export default function PerfilPage() {
 
       <div className="max-w-md mx-auto px-6 space-y-12">
 
-        {/* 💣 PROGRESSO */}
+        {/* PROGRESSO */}
         <div>
           <div className="flex items-center justify-between mb-2">
 
@@ -103,8 +102,8 @@ export default function PerfilPage() {
 
           </div>
 
-          {/* 🔥 BARRA MAIS GROSSA */}
-          <div className="relative w-full h-[14px] bg-[#e9d5bb]/50 rounded-full overflow-hidden">
+          {/* 🔥 MAIS GROSSA */}
+          <div className="relative w-full h-[18px] bg-[#e9d5bb]/50 rounded-full overflow-hidden">
             <div
               className="absolute top-0 left-0 h-full bg-[#C6A46A] rounded-full transition-all duration-700"
               style={{ width: `${porcentagem}%` }}
@@ -140,9 +139,9 @@ export default function PerfilPage() {
                   key={`${dia}-${i}`}
                   onClick={() => ativo && setDiaSelecionado(dia)}
                   className={`
-                    w-10 h-10 flex items-center justify-center rounded-full text-sm
+                    w-10 h-10 flex items-center justify-center rounded-full text-sm transition
                     ${ativo
-                      ? "bg-[#C6A46A] text-white cursor-pointer"
+                      ? "bg-[#C6A46A] text-white scale-110 shadow-sm cursor-pointer"
                       : "text-[#70412d]/30"}
                     ${selecionado ? "ring-2 ring-[#70412d]" : ""}
                   `}
