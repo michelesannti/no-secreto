@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase";
 import ConcluirButton from "./ConcluirButton";
 
@@ -21,6 +21,7 @@ interface Estudo {
 
 export default function EstudoPage() {
   const params = useParams();
+  const router = useRouter();
   const estudoId = Number(params.id);
 
   const [loading, setLoading] = useState(true);
@@ -28,11 +29,49 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 🔥 CARREGAR ESTUDO
+  // 🔥 CARREGAMENTO + TRAVA DE ACESSO
   useEffect(() => {
     async function carregar() {
       const supabase = getSupabaseClient();
 
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      // 🔥 TODOS OS ESTUDOS DA JORNADA
+      const { data: estudos } = await supabase
+        .from("estudos")
+        .select("id, ordem")
+        .eq("jornada", "genesis-1")
+        .order("ordem", { ascending: true });
+
+      if (!estudos || estudos.length === 0) {
+        setLoading(false);
+        return;
+      }
+
+      // 🔥 PROGRESSO DO USUÁRIO
+      const { data: progresso } = await supabase
+        .from("progresso")
+        .select("estudo_id")
+        .eq("user_id", user.id);
+
+      const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
+
+      // 🔥 PRÓXIMO LIBERADO
+      const proximo =
+        estudos.find((e) => !concluidosIds.includes(e.id)) ||
+        estudos[estudos.length - 1];
+
+      // 🔥 SE TENTOU PULAR
+      if (proximo && estudoId !== proximo.id) {
+        router.replace(`/secreto/${proximo.id}`);
+        return;
+      }
+
+      // 🔥 CARREGA ESTUDO
       const { data: estudoAtual } = await supabase
         .from("estudos")
         .select("*")
@@ -49,9 +88,9 @@ export default function EstudoPage() {
     }
 
     carregar();
-  }, [estudoId]);
+  }, [estudoId, router]);
 
-  // 🔥 SALVAR SCROLL
+  // 🔥 SALVAR SCROLL (container)
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -90,12 +129,14 @@ export default function EstudoPage() {
   }, [estudo]);
 
   if (loading) return <div className="h-screen bg-[#f9f5e9]" />;
-  if (!estudo)
+
+  if (!estudo) {
     return (
       <div className="p-6 text-[#70412d]">
         estudo não encontrado
       </div>
     );
+  }
 
   const referencia =
     estudo.versiculo_inicio !== estudo.versiculo_fim
