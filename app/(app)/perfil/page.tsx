@@ -5,9 +5,9 @@ import { getSupabaseClient } from "@/lib/supabase";
 
 export default function PerfilPage() {
   const [porcentagem, setPorcentagem] = useState(0);
-  const [diasAtivos, setDiasAtivos] = useState<string[]>([]);
-  const [historico, setHistorico] = useState<any[]>([]);
-  const [diaSelecionado, setDiaSelecionado] = useState<string | null>(null);
+  const [diasAtivos, setDiasAtivos] = useState<number[]>([]);
+  const [diarios, setDiarios] = useState<any[]>([]);
+  const [diaSelecionado, setDiaSelecionado] = useState<number | null>(null);
 
   const jornada = "genesis-1";
 
@@ -48,7 +48,7 @@ export default function PerfilPage() {
 
       const { data: progresso } = await supabase
         .from("progresso")
-        .select("estudo_id, created_at")
+        .select("created_at")
         .eq("user_id", user.id)
         .eq("jornada", jornada);
 
@@ -56,52 +56,52 @@ export default function PerfilPage() {
 
       setPorcentagem(total ? (feitos / total) * 100 : 0);
 
-      const dias = progresso?.map((p) =>
-        new Date(p.created_at).toLocaleDateString("sv-SE")
-      ) || [];
+      const dias =
+        progresso?.map((p) => new Date(p.created_at).getDate()) || [];
 
       setDiasAtivos(dias);
-      setHistorico(progresso || []);
+
+      const { data: diario } = await supabase
+        .from("diario")
+        .select("*")
+        .eq("user_id", user.id);
+
+      setDiarios(diario || []);
     }
 
     carregar();
   }, []);
 
-  function getDateKey(dia: number) {
-    return new Date(ano, mes, dia).toLocaleDateString("sv-SE");
-  }
-
-  const historicoFiltrado = diaSelecionado
-    ? historico.filter(
-        (item) =>
-          new Date(item.created_at).toLocaleDateString("sv-SE") === diaSelecionado
+  const registrosDoDia = diaSelecionado
+    ? diarios.filter(
+        (d) => new Date(d.created_at).getDate() === diaSelecionado
       )
     : [];
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
-
       {/* HEADER */}
       <div className="px-8 mb-10">
         <h1 className="text-xl font-serif tracking-wide">Perfil</h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
-      <div className="max-w-md mx-auto px-6 space-y-10">
-
+      <div className="max-w-md mx-auto px-6 space-y-12">
         {/* PROGRESSO */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-[#70412d]/60">
-              Seu progresso
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            {/* TEXTO DOURADO */}
+            <p className="text-sm text-[#B8955B]">
+              Meu Progresso
             </p>
 
-            <p className="text-sm font-semibold">
+            {/* PORCENTAGEM MARROM + NEGRITO */}
+            <p className="text-sm font-semibold text-[#70412d]">
               {Math.round(porcentagem)}%
             </p>
           </div>
 
-          <div className="relative w-full h-[18px] bg-[#e9d5bb]/40 rounded-full overflow-hidden">
+          <div className="relative w-full h-[10px] bg-[#e9d5bb]/50 rounded-full overflow-hidden">
             <div
               className="absolute top-0 left-0 h-full bg-[#C6A46A] rounded-full transition-all duration-700"
               style={{ width: `${porcentagem}%` }}
@@ -111,73 +111,62 @@ export default function PerfilPage() {
 
         {/* CALENDÁRIO */}
         <div className="bg-[#e9d5bb]/40 rounded-2xl p-6 space-y-4">
-
           <p className="text-center text-sm font-semibold capitalize">
             {nomeMes}
           </p>
 
           <div className="grid grid-cols-7 text-xs font-semibold text-[#70412d]">
             {diasSemana.map((d, i) => (
-              <div key={i} className="text-center">{d}</div>
+              <div key={i} className="text-center">
+                {d}
+              </div>
             ))}
           </div>
 
           <div className="grid grid-cols-7 gap-3">
-
             {diasMes.map((dia, i) => {
               if (!dia) return <div key={`empty-${i}`} />;
 
-              const key = getDateKey(dia);
-              const ativo = diasAtivos.includes(key);
-              const selecionado = diaSelecionado === key;
+              const ativo = diasAtivos.includes(dia);
+              const selecionado = diaSelecionado === dia;
 
               return (
                 <div
                   key={`${dia}-${i}`}
-                  onClick={() => ativo && setDiaSelecionado(key)}
+                  onClick={() => ativo && setDiaSelecionado(dia)}
                   className={`
-                    w-10 h-10 flex items-center justify-center rounded-full text-sm transition-all duration-200
-
+                    w-10 h-10 flex items-center justify-center rounded-full text-sm
                     ${ativo
-                      ? "bg-[#C6A46A] text-white shadow-md scale-105 cursor-pointer"
+                      ? "bg-[#C6A46A] text-white cursor-pointer"
                       : "text-[#70412d]/30"}
-
-                    ${selecionado
-                      ? "ring-2 ring-[#70412d]"
-                      : ""}
+                    ${selecionado ? "ring-2 ring-[#70412d]" : ""}
                   `}
                 >
                   {dia}
                 </div>
               );
             })}
-
           </div>
-
         </div>
 
         {/* HISTÓRICO */}
-        {historicoFiltrado.length > 0 && (
-          <div className="space-y-4 mt-6">
-
-            {historicoFiltrado.map((item, index) => (
+        {diaSelecionado && registrosDoDia.length > 0 && (
+          <div className="space-y-4">
+            {registrosDoDia.map((_, index) => (
               <div
                 key={index}
-                className="bg-[#e9d5bb]/40 rounded-xl p-4 flex items-center justify-between"
+                className="bg-[#e9d5bb]/50 rounded-2xl p-5 flex items-center justify-between"
               >
-                <div className="text-sm">
-                  Estudo concluído
-                </div>
+                <p className="text-sm">
+                  Meu momento com Deus
+                </p>
 
                 <div className="w-2 h-2 bg-[#C6A46A] rounded-full" />
               </div>
             ))}
-
           </div>
         )}
-
       </div>
-
     </div>
   );
 }
