@@ -30,6 +30,19 @@ export default function PerfilPage() {
     month: "long",
   });
 
+  // 🔥 FUNÇÃO PRA AJUSTAR FUSO (BRASIL)
+  function getDiaBrasil(dataString: string) {
+    const data = new Date(dataString);
+
+    const brasil = new Date(
+      data.toLocaleString("en-US", {
+        timeZone: "America/Sao_Paulo",
+      })
+    );
+
+    return brasil.getDate();
+  }
+
   useEffect(() => {
     async function carregar() {
       const supabase = getSupabaseClient();
@@ -57,8 +70,9 @@ export default function PerfilPage() {
 
       setPorcentagem(total ? (feitos / total) * 100 : 0);
 
+      // 🔥 CORRIGIDO (CALENDÁRIO)
       const dias =
-        progresso?.map((p) => new Date(p.created_at).getDate()) || [];
+        progresso?.map((p) => getDiaBrasil(p.created_at)) || [];
 
       setDiasAtivos(dias);
 
@@ -75,8 +89,9 @@ export default function PerfilPage() {
   }, []);
 
   function abrirModal(dia: number) {
+    // 🔥 CORRIGIDO (MODAL)
     const registros = diarios.filter(
-      (d) => new Date(d.created_at).getDate() === dia
+      (d) => getDiaBrasil(d.created_at) === dia
     );
 
     if (registros.length === 0) return;
@@ -190,7 +205,7 @@ export default function PerfilPage() {
               {registrosModal.map((item, index) => (
                 <div key={index} className="space-y-6">
 
-                  {/* LINHA PADRÃO */}
+                  {/* LINHA */}
                   <div className="flex justify-center">
                     <div className="w-10 h-[2px] bg-[#C6A46A]/70 rounded-full" />
                   </div>
