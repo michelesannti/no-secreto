@@ -42,7 +42,7 @@ export default function HojePage() {
           animate-buttonEntrance
         "
       >
-        Iniciar meu tempo com Deus
+        Começar meu tempo com Deus
       </Link>
 
       <style jsx>{`

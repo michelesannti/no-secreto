@@ -57,7 +57,7 @@ export default function LoginPage() {
       return;
     }
 
-    setMessage("Te enviei um link no email ✨");
+    setMessage("Link de acesso enviado no email 🤎");
     setLoading(false);
   }
 
