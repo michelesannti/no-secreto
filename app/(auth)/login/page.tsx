@@ -9,7 +9,6 @@ export default function LoginPage() {
   const supabase = getSupabaseClient();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -21,65 +20,45 @@ export default function LoginPage() {
 
       if (!user) return;
 
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
         .from("profiles")
         .select("ativo")
         .eq("id", user.id)
         .single();
 
-      console.log("CHECK USER PROFILE:", profile);
-
-      if (profile?.ativo) {
-        router.replace("/hoje");
+      if (error || !profile?.ativo) {
+        setMessage("Seu acesso ainda não foi liberado");
+        return;
       }
+
+      router.replace("/hoje");
     }
 
     checkUser();
-  }, []);
+  }, [router, supabase]);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const redirectTo = `${window.location.origin}/login`;
+
+    const { error } = await supabase.auth.signInWithOtp({
       email,
-      password,
+      options: {
+        emailRedirectTo: redirectTo,
+      },
     });
 
-    console.log("LOGIN RESPONSE:", data);
-
     if (error) {
-      console.log("LOGIN ERROR:", error);
-      setMessage("Email ou senha inválidos");
+      setMessage("Erro ao enviar link de acesso");
       setLoading(false);
       return;
     }
 
-    const user = data.user;
-
-    if (!user) {
-      setMessage("Erro ao entrar");
-      setLoading(false);
-      return;
-    }
-
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("ativo")
-      .eq("id", user.id)
-      .single();
-
-    console.log("PROFILE RESULT:", profile);
-    console.log("PROFILE ERROR:", profileError);
-
-    if (!profile?.ativo) {
-      setMessage("Seu acesso ainda não foi liberado");
-      setLoading(false);
-      return;
-    }
-
-    router.replace("/hoje");
+    setMessage("Te enviei um link no email ✨");
+    setLoading(false);
   }
 
   return (
@@ -104,15 +83,6 @@ export default function LoginPage() {
             className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none"
           />
 
-          <input
-            type="password"
-            placeholder="Senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none"
-          />
-
           <button
             type="submit"
             disabled={loading}
@@ -122,11 +92,11 @@ export default function LoginPage() {
               disabled:opacity-60 mt-2 self-center
             "
           >
-            {loading ? "Entrando..." : "Entrar"}
+            {loading ? "Enviando..." : "Entrar"}
           </button>
 
           {message && (
-            <p className="text-sm text-center text-red-500">
+            <p className="text-sm text-center text-[#70412d]/80">
               {message}
             </p>
           )}
