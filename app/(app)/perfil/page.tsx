@@ -30,7 +30,6 @@ export default function PerfilPage() {
     month: "long",
   });
 
-  // 🔥 FUNÇÃO PRA AJUSTAR FUSO (BRASIL)
   function getDiaBrasil(dataString: string) {
     const data = new Date(dataString);
 
@@ -70,7 +69,6 @@ export default function PerfilPage() {
 
       setPorcentagem(total ? (feitos / total) * 100 : 0);
 
-      // 🔥 CORRIGIDO (CALENDÁRIO)
       const dias =
         progresso?.map((p) => getDiaBrasil(p.created_at)) || [];
 
@@ -89,7 +87,6 @@ export default function PerfilPage() {
   }, []);
 
   function abrirModal(dia: number) {
-    // 🔥 CORRIGIDO (MODAL)
     const registros = diarios.filter(
       (d) => getDiaBrasil(d.created_at) === dia
     );
@@ -118,7 +115,6 @@ export default function PerfilPage() {
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
 
-      {/* HEADER */}
       <div className="px-8 mb-10">
         <h1 className="text-xl font-serif tracking-wide">Perfil</h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
@@ -126,7 +122,6 @@ export default function PerfilPage() {
 
       <div className="max-w-md mx-auto px-6 space-y-12">
 
-        {/* PROGRESSO */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm text-[#70412d]/60">
@@ -146,7 +141,6 @@ export default function PerfilPage() {
           </div>
         </div>
 
-        {/* CALENDÁRIO */}
         <div className="bg-[#e9d5bb]/40 rounded-2xl p-6 space-y-4">
 
           <p className="text-center text-sm font-semibold capitalize">
@@ -171,7 +165,7 @@ export default function PerfilPage() {
                   key={`${dia}-${i}`}
                   onClick={() => ativo && abrirModal(dia)}
                   className={`
-                    w-10 h-10 flex items-center justify-center rounded-full text-sm transition
+                    w-9 h-9 flex items-center justify-center rounded-full text-sm transition
                     ${ativo
                       ? "bg-[#C6A46A] text-white scale-110 shadow-sm cursor-pointer"
                       : "text-[#70412d]/30"}
@@ -188,7 +182,6 @@ export default function PerfilPage() {
 
       </div>
 
-      {/* MODAL */}
       {modalAberto && (
         <div
           className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
@@ -205,12 +198,10 @@ export default function PerfilPage() {
               {registrosModal.map((item, index) => (
                 <div key={index} className="space-y-6">
 
-                  {/* LINHA */}
                   <div className="flex justify-center">
                     <div className="w-10 h-[2px] bg-[#C6A46A]/70 rounded-full" />
                   </div>
 
-                  {/* TEXTO */}
                   <div
                     className="text-[16px] leading-8 text-[#70412d]/85"
                     dangerouslySetInnerHTML={{
