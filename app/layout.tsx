@@ -20,6 +20,7 @@ const cormorant = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: "No Secreto",
   description: "Seu tempo com Deus começa aqui.",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
