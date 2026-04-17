@@ -19,8 +19,31 @@ const cormorant = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   title: "No Secreto",
-  description: "Seu tempo com Deus começa aqui.",
+  description: "Seu tempo com Deus começa aqui 🤎",
   manifest: "/manifest.json",
+
+  openGraph: {
+    title: "No Secreto",
+    description: "Seu tempo com Deus começa aqui 🤎",
+    url: "https://no-secreto-ten.vercel.app",
+    siteName: "No Secreto",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "pt_BR",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "No Secreto",
+    description: "Seu tempo com Deus começa aqui 🤎",
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({
