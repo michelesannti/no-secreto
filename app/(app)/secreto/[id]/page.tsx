@@ -29,6 +29,15 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
+  // 🔥 FORMATAR VERSÍCULOS (NÚMEROS EM SUPERSCRIPT)
+  function formatarVersiculos(texto: string) {
+    return texto.replace(
+      /(^|\n)(\d+)/g,
+      (_, before, numero) =>
+        `${before}<sup class="text-[10px] align-super mr-1">${numero}</sup>`
+    );
+  }
+
   // 🔥 CARREGAMENTO + TRAVA DE ACESSO
   useEffect(() => {
     async function carregar() {
@@ -40,7 +49,6 @@ export default function EstudoPage() {
 
       if (!user) return;
 
-      // 🔥 TODOS OS ESTUDOS DA JORNADA
       const { data: estudos } = await supabase
         .from("estudos")
         .select("id, ordem")
@@ -52,7 +60,6 @@ export default function EstudoPage() {
         return;
       }
 
-      // 🔥 PROGRESSO DO USUÁRIO
       const { data: progresso } = await supabase
         .from("progresso")
         .select("estudo_id")
@@ -60,18 +67,15 @@ export default function EstudoPage() {
 
       const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
-      // 🔥 PRÓXIMO LIBERADO
       const proximo =
         estudos.find((e) => !concluidosIds.includes(e.id)) ||
         estudos[estudos.length - 1];
 
-      // 🔥 SE TENTOU PULAR
       if (proximo && estudoId !== proximo.id) {
         router.replace(`/secreto/${proximo.id}`);
         return;
       }
 
-      // 🔥 CARREGA ESTUDO
       const { data: estudoAtual } = await supabase
         .from("estudos")
         .select("*")
@@ -90,7 +94,7 @@ export default function EstudoPage() {
     carregar();
   }, [estudoId, router]);
 
-  // 🔥 SALVAR SCROLL (container)
+  // 🔥 SALVAR SCROLL
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -148,7 +152,6 @@ export default function EstudoPage() {
       ref={containerRef}
       className="h-screen overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]"
     >
-
       {/* TOPO */}
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">
@@ -166,9 +169,12 @@ export default function EstudoPage() {
 
         {/* VERSÍCULO */}
         <div className="flex justify-center mb-12">
-          <p className="italic text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch] whitespace-pre-line">
-            {estudo.texto}
-          </p>
+          <p
+            className="italic text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch] whitespace-pre-line"
+            dangerouslySetInnerHTML={{
+              __html: formatarVersiculos(estudo.texto),
+            }}
+          />
         </div>
 
         {/* CONTEXTO */}
@@ -202,7 +208,6 @@ export default function EstudoPage() {
         <ConcluirButton estudoId={estudo.id} />
 
       </div>
-
     </div>
   );
 }
