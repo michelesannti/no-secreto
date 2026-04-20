@@ -29,15 +29,16 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 🔥 FORMATAR VERSÍCULOS (NÚMEROS BONITOS E CONSISTENTES)
+  // 🔥 FORMATAR VERSÍCULOS (ESTILO MAIS PRÓXIMO DA BÍBLIA)
   function formatarVersiculos(texto: string) {
     return texto.replace(
       /(^|\n)(\d+)/g,
       (_, before, numero) =>
-        `${before}<sup class="text-[11px] align-super">${numero}</sup>`
+        `${before}<span class="text-[11px] align-[0.2em] mr-[2px]">${numero}</span>`
     );
   }
 
+  // 🔥 CARREGAMENTO + TRAVA DE ACESSO
   useEffect(() => {
     async function carregar() {
       const supabase = getSupabaseClient();
@@ -93,6 +94,7 @@ export default function EstudoPage() {
     carregar();
   }, [estudoId, router]);
 
+  // 🔥 SALVAR SCROLL
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -114,6 +116,7 @@ export default function EstudoPage() {
     };
   }, [estudoId]);
 
+  // 🔥 RESTAURAR SCROLL
   useEffect(() => {
     const saved = sessionStorage.getItem(`scroll-${estudoId}`);
     if (!saved) return;
@@ -157,7 +160,6 @@ export default function EstudoPage() {
       </div>
 
       <div className="max-w-2xl mx-auto px-8">
-
         <p className="text-sm tracking-widest text-[#70412d]/50 text-center mb-4">
           {referencia}
         </p>
@@ -198,7 +200,6 @@ export default function EstudoPage() {
         </div>
 
         <ConcluirButton estudoId={estudo.id} />
-
       </div>
     </div>
   );
