@@ -29,16 +29,15 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 🔥 FORMATAÇÃO FINAL (DISCRETA E INTEGRADA)
+  // 🔥 FORMATAÇÃO FINAL PERFEITA
   function formatarVersiculos(texto: string) {
     return texto.replace(
       /(^|\n)(\d+)/g,
       (_, before, numero) =>
-        `${before}<span class="text-[10px] align-[0.15em] mr-[2px] opacity-70">${numero}</span>`
+        `${before}<span class="text-[10px] align-[0.35em] mr-[2px] opacity-70">${numero}</span>`
     );
   }
 
-  // 🔥 CARREGAMENTO + TRAVA
   useEffect(() => {
     async function carregar() {
       const supabase = getSupabaseClient();
@@ -94,7 +93,6 @@ export default function EstudoPage() {
     carregar();
   }, [estudoId, router]);
 
-  // 🔥 SALVAR SCROLL
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -116,7 +114,6 @@ export default function EstudoPage() {
     };
   }, [estudoId]);
 
-  // 🔥 RESTAURAR SCROLL
   useEffect(() => {
     const saved = sessionStorage.getItem(`scroll-${estudoId}`);
     if (!saved) return;
