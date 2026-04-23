@@ -29,12 +29,12 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 🔥 mantém seu visual
+  // 💣 VERSÃO ESTÁVEL (SEM CORTE)
   function formatarVersiculos(texto: string) {
     return texto.replace(
       /(^|\n)(\d+)/g,
       (_, before, numero) =>
-        `${before}<span class="text-[10px] align-[0.35em] mr-[2px] opacity-70">${numero}</span>`
+        `${before}<span class="text-[10px] mr-[4px] opacity-70">${numero}</span>`
     );
   }
 
@@ -93,10 +93,50 @@ export default function EstudoPage() {
     carregar();
   }, [estudoId, router]);
 
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    function salvar() {
+      if (!containerRef.current) return;
+
+      sessionStorage.setItem(
+        `scroll-${estudoId}`,
+        String(containerRef.current.scrollTop)
+      );
+    }
+
+    el.addEventListener("scroll", salvar);
+
+    return () => {
+      salvar();
+      el.removeEventListener("scroll", salvar);
+    };
+  }, [estudoId]);
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem(`scroll-${estudoId}`);
+    if (!saved) return;
+
+    const el = containerRef.current;
+    if (!el) return;
+
+    setTimeout(() => {
+      el.scrollTo({
+        top: Number(saved),
+        behavior: "instant",
+      });
+    }, 100);
+  }, [estudo]);
+
   if (loading) return <div className="h-screen bg-[#f9f5e9]" />;
 
   if (!estudo) {
-    return <div className="p-6 text-[#70412d]">estudo não encontrado</div>;
+    return (
+      <div className="p-6 text-[#70412d]">
+        estudo não encontrado
+      </div>
+    );
   }
 
   const referencia =
@@ -105,46 +145,58 @@ export default function EstudoPage() {
       : `${estudo.livro} ${estudo.capitulo}:${estudo.versiculo_inicio}`;
 
   return (
-    <div className="h-screen overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
-
+    <div
+      ref={containerRef}
+      className="h-screen overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]"
+    >
+      {/* TOPO */}
       <div className="px-8 mb-12">
-        <h1 className="text-xl font-serif tracking-wide">Secreto</h1>
+        <h1 className="text-xl font-serif tracking-wide">
+          Secreto
+        </h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
       <div className="max-w-2xl mx-auto px-8">
 
+        {/* REFERÊNCIA */}
         <p className="text-sm tracking-widest text-[#70412d]/50 text-center mb-4">
           {referencia}
         </p>
 
-        {/* 💣 FIX REAL */}
+        {/* VERSÍCULO */}
         <div className="flex justify-center mb-12">
-          <div className="max-w-[48ch] text-center">
-            <p
-              className="
-                italic text-base text-[#70412d]/85 whitespace-pre-line
-                leading-[2.6]
-                py-[6px]
-                overflow-visible
-                [text-rendering:optimizeLegibility]
-              "
-              dangerouslySetInnerHTML={{
-                __html: formatarVersiculos(estudo.texto),
-              }}
-            />
-          </div>
+          <p
+            className="italic text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch] whitespace-pre-line"
+            dangerouslySetInnerHTML={{
+              __html: formatarVersiculos(estudo.texto),
+            }}
+          />
         </div>
 
+        {/* CONTEXTO */}
         <div className="mb-14">
-          <p className="text-sm tracking-widest text-[#70412d]/50 mb-2">CONTEXTO</p>
+          <div className="inline-block mb-4">
+            <p className="text-sm tracking-widest text-[#70412d]/50">
+              CONTEXTO
+            </p>
+            <div className="h-[2px] bg-[#e9d5bb] w-full mt-1"></div>
+          </div>
+
           <p className="text-base leading-8 text-[#70412d]/85 whitespace-pre-line">
             {estudo.contexto}
           </p>
         </div>
 
+        {/* APLICAÇÃO */}
         <div className="mb-10">
-          <p className="text-sm tracking-widest text-[#70412d]/50 mb-2">APLICAÇÃO</p>
+          <div className="inline-block mb-4">
+            <p className="text-sm tracking-widest text-[#70412d]/50">
+              APLICAÇÃO
+            </p>
+            <div className="h-[2px] bg-[#e9d5bb] w-full mt-1"></div>
+          </div>
+
           <p className="text-base leading-8 text-[#70412d]/85 whitespace-pre-line">
             {estudo.aplicacao}
           </p>
