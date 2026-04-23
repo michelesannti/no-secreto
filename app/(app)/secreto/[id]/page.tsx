@@ -29,26 +29,12 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 💣 FORMATAÇÃO DEFINITIVA (SEM INLINE BUG)
   function formatarVersiculos(texto: string) {
-    return texto
-      .split("\n")
-      .map((linha) => {
-        const match = linha.match(/^(\d+)\s?(.*)/);
-
-        if (!match) return linha;
-
-        const numero = match[1];
-        const conteudo = match[2];
-
-        return `
-          <span class="inline-block w-full">
-            <span class="text-[10px] opacity-70 mr-[3px] align-top">${numero}</span>
-            ${conteudo}
-          </span>
-        `;
-      })
-      .join("<br/>");
+    return texto.replace(
+      /(^|\n)(\d+)/g,
+      (_, before, numero) =>
+        `${before}<span class="text-[10px] mr-[2px] opacity-70">${numero}</span>`
+    );
   }
 
   useEffect(() => {
@@ -122,7 +108,6 @@ export default function EstudoPage() {
       ref={containerRef}
       className="h-screen overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]"
     >
-      {/* TOPO */}
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">
           Secreto
@@ -132,22 +117,24 @@ export default function EstudoPage() {
 
       <div className="max-w-2xl mx-auto px-8">
 
-        {/* REFERÊNCIA */}
         <p className="text-sm tracking-widest text-[#70412d]/50 text-center mb-4">
           {referencia}
         </p>
 
-        {/* 💣 VERSÍCULO (FINAL REAL) */}
+        {/* 💣 FIX REAL */}
         <div className="flex justify-center mb-12">
           <p
-            className="italic text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch]"
+            className="
+              text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch]
+              whitespace-pre-line
+              transform skew-x-[-8deg]
+            "
             dangerouslySetInnerHTML={{
               __html: formatarVersiculos(estudo.texto),
             }}
           />
         </div>
 
-        {/* CONTEXTO */}
         <div className="mb-14">
           <div className="inline-block mb-4">
             <p className="text-sm tracking-widest text-[#70412d]/50">
@@ -161,7 +148,6 @@ export default function EstudoPage() {
           </p>
         </div>
 
-        {/* APLICAÇÃO */}
         <div className="mb-10">
           <div className="inline-block mb-4">
             <p className="text-sm tracking-widest text-[#70412d]/50">
