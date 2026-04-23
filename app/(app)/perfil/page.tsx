@@ -12,6 +12,14 @@ export default function PerfilPage() {
 
   const jornada = "genesis-1";
 
+  // 🔥 nomes bonitos das jornadas
+  const nomesJornadas: Record<string, string> = {
+    "genesis-1": "Gênesis 1",
+    "genesis-2": "Gênesis 2",
+  };
+
+  const nomeJornadaAtual = nomesJornadas[jornada] || jornada;
+
   const hoje = new Date();
   const ano = hoje.getFullYear();
   const mes = hoje.getMonth();
@@ -122,6 +130,7 @@ export default function PerfilPage() {
 
       <div className="max-w-md mx-auto px-6 space-y-12">
 
+        {/* 🔥 PROGRESSO */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm text-[#70412d]/60">
@@ -139,8 +148,14 @@ export default function PerfilPage() {
               style={{ width: `${porcentagem}%` }}
             />
           </div>
+
+          {/* 🔥 NOVO: NOME DA JORNADA */}
+          <p className="text-[12px] text-[#70412d]/40 mt-2 text-center">
+            {nomeJornadaAtual}
+          </p>
         </div>
 
+        {/* CALENDÁRIO */}
         <div className="bg-[#e9d5bb]/40 rounded-2xl p-6 space-y-4">
 
           <p className="text-center text-sm font-semibold capitalize">
@@ -182,6 +197,7 @@ export default function PerfilPage() {
 
       </div>
 
+      {/* MODAL */}
       {modalAberto && (
         <div
           className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
