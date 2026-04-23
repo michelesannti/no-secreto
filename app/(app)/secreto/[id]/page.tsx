@@ -29,13 +29,26 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 🔥 FIX REAL (SEM ALIGN = SEM CORTE)
+  // 💣 FORMATAÇÃO DEFINITIVA (SEM INLINE BUG)
   function formatarVersiculos(texto: string) {
-    return texto.replace(
-      /(^|\n)(\d+)/g,
-      (_, before, numero) =>
-        `${before}<span class="text-[10px] mr-[2px] opacity-70 inline-block translate-y-[-2px]">${numero}</span>`
-    );
+    return texto
+      .split("\n")
+      .map((linha) => {
+        const match = linha.match(/^(\d+)\s?(.*)/);
+
+        if (!match) return linha;
+
+        const numero = match[1];
+        const conteudo = match[2];
+
+        return `
+          <span class="inline-block w-full">
+            <span class="text-[10px] opacity-70 mr-[3px] align-top">${numero}</span>
+            ${conteudo}
+          </span>
+        `;
+      })
+      .join("<br/>");
   }
 
   useEffect(() => {
@@ -124,10 +137,10 @@ export default function EstudoPage() {
           {referencia}
         </p>
 
-        {/* VERSÍCULO */}
+        {/* 💣 VERSÍCULO (FINAL REAL) */}
         <div className="flex justify-center mb-12">
           <p
-            className="italic text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch] whitespace-pre-line"
+            className="italic text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch]"
             dangerouslySetInnerHTML={{
               __html: formatarVersiculos(estudo.texto),
             }}
