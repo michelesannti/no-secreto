@@ -9,16 +9,9 @@ export default function PerfilPage() {
   const [diarios, setDiarios] = useState<any[]>([]);
   const [modalAberto, setModalAberto] = useState(false);
   const [registrosModal, setRegistrosModal] = useState<any[]>([]);
+  const [nomeJornadaAtual, setNomeJornadaAtual] = useState("");
 
   const jornada = "genesis-1";
-
-  // 🔥 nomes bonitos das jornadas
-  const nomesJornadas: Record<string, string> = {
-    "genesis-1": "Gênesis 1",
-    "genesis-2": "Gênesis 2",
-  };
-
-  const nomeJornadaAtual = nomesJornadas[jornada] || jornada;
 
   const hoje = new Date();
   const ano = hoje.getFullYear();
@@ -60,12 +53,18 @@ export default function PerfilPage() {
 
       if (!user) return;
 
+      // 🔥 pega estudos + nome da jornada
       const { data: estudos } = await supabase
         .from("estudos")
-        .select("id")
+        .select("id, jornada_exibicao")
         .eq("jornada", jornada);
 
       const total = estudos?.length || 0;
+
+      // 🔥 pega nome da jornada (primeiro item já serve)
+      if (estudos && estudos.length > 0) {
+        setNomeJornadaAtual(estudos[0].jornada_exibicao);
+      }
 
       const { data: progresso } = await supabase
         .from("progresso")
@@ -130,7 +129,7 @@ export default function PerfilPage() {
 
       <div className="max-w-md mx-auto px-6 space-y-12">
 
-        {/* 🔥 PROGRESSO */}
+        {/* PROGRESSO */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm text-[#70412d]/60">
@@ -149,7 +148,7 @@ export default function PerfilPage() {
             />
           </div>
 
-          {/* 🔥 NOVO: NOME DA JORNADA */}
+          {/* 🔥 nome da jornada vindo do banco */}
           <p className="text-[12px] text-[#70412d]/40 mt-2 text-center">
             {nomeJornadaAtual}
           </p>
