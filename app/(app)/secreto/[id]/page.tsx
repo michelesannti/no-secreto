@@ -29,13 +29,28 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 🔥 mantém seu visual original
+  // 🔥 FORMATAÇÃO DEFINITIVA (SEM CORTE IOS)
   function formatarVersiculos(texto: string) {
-    return texto.replace(
-      /(^|\n)(\d+)/g,
-      (_, before, numero) =>
-        `${before}<span class="text-[10px] align-[0.35em] mr-[2px] opacity-70">${numero}</span>`
-    );
+    return texto
+      .split("\n")
+      .map((linha) => {
+        const match = linha.match(/^(\d+)\s?(.*)/);
+
+        if (!match) {
+          return `<div class="mb-2">${linha}</div>`;
+        }
+
+        const numero = match[1];
+        const conteudo = match[2];
+
+        return `
+          <div class="flex items-start gap-1 mb-2">
+            <span class="text-[10px] opacity-70 mt-[4px]">${numero}</span>
+            <span>${conteudo}</span>
+          </div>
+        `;
+      })
+      .join("");
   }
 
   useEffect(() => {
@@ -164,10 +179,10 @@ export default function EstudoPage() {
           {referencia}
         </p>
 
-        {/* 💣 VERSÍCULO (FIX REAL) */}
+        {/* 💣 VERSÍCULO (SEM CORTE DEFINITIVO) */}
         <div className="flex justify-center mb-12">
-          <p
-            className="italic text-base leading-[2.4] overflow-visible pt-[2px] text-[#70412d]/85 text-center max-w-[48ch] whitespace-pre-line"
+          <div
+            className="italic text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch]"
             dangerouslySetInnerHTML={{
               __html: formatarVersiculos(estudo.texto),
             }}
