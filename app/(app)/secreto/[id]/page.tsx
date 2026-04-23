@@ -29,12 +29,16 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 🔥 FIX DEFINITIVO IOS (SEM MUDAR VISUAL)
+  // 🔥 FIX DEFINITIVO IOS (SEM CORTE, VISUAL IGUAL)
   function formatarVersiculos(texto: string) {
     return texto.replace(
       /(^|\n)(\d+)/g,
       (_, before, numero) =>
-        `${before}<span class="text-[10px] mr-[2px] opacity-70 relative -top-[2px] inline-block">${numero}</span>`
+        `${before}<span class="relative inline-block pl-[10px]">
+          <span class="absolute left-0 top-[-4px] text-[10px] opacity-70 leading-none">
+            ${numero}
+          </span>
+        </span>`
     );
   }
 
