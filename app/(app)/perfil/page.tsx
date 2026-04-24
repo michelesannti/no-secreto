@@ -53,7 +53,7 @@ export default function PerfilPage() {
 
       if (!user) return;
 
-      // 🔥 pega estudos + nome da jornada
+      // 🔥 pega estudos da jornada
       const { data: estudos } = await supabase
         .from("estudos")
         .select("id, jornada_exibicao")
@@ -61,23 +61,32 @@ export default function PerfilPage() {
 
       const total = estudos?.length || 0;
 
-      // 🔥 pega nome da jornada (primeiro item já serve)
       if (estudos && estudos.length > 0) {
         setNomeJornadaAtual(estudos[0].jornada_exibicao);
       }
 
+      const estudosIds = estudos?.map((e) => e.id) || [];
+
+      // 🔥 pega progresso SEM jornada
       const { data: progresso } = await supabase
         .from("progresso")
-        .select("created_at")
-        .eq("user_id", user.id)
-        .eq("jornada", jornada);
+        .select("estudo_id, created_at")
+        .eq("user_id", user.id);
 
-      const feitos = progresso?.length || 0;
+      // 🔥 filtra só os estudos da jornada
+      const progressoFiltrado =
+        progresso?.filter((p) =>
+          estudosIds.includes(p.estudo_id)
+        ) || [];
+
+      const feitos = progressoFiltrado.length;
 
       setPorcentagem(total ? (feitos / total) * 100 : 0);
 
       const dias =
-        progresso?.map((p) => getDiaBrasil(p.created_at)) || [];
+        progressoFiltrado.map((p) =>
+          getDiaBrasil(p.created_at)
+        ) || [];
 
       setDiasAtivos(dias);
 
@@ -148,7 +157,6 @@ export default function PerfilPage() {
             />
           </div>
 
-          {/* 🔥 nome da jornada vindo do banco */}
           <p className="text-[12px] text-[#70412d]/40 mt-2 text-center">
             {nomeJornadaAtual}
           </p>
