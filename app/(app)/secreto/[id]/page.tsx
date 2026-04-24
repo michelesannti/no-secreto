@@ -121,18 +121,19 @@ export default function EstudoPage() {
           {referencia}
         </p>
 
-        {/* 💣 FIX REAL */}
+        {/* 💣 FIX DO ALINHAMENTO */}
         <div className="flex justify-center mb-12">
-          <p
-            className="
-              text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch]
-              whitespace-pre-line
-              transform skew-x-[-8deg]
-            "
-            dangerouslySetInnerHTML={{
-              __html: formatarVersiculos(estudo.texto),
-            }}
-          />
+          <div className="transform skew-x-[-8deg]">
+            <p
+              className="
+                text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch]
+                whitespace-pre-line
+              "
+              dangerouslySetInnerHTML={{
+                __html: formatarVersiculos(estudo.texto),
+              }}
+            />
+          </div>
         </div>
 
         <div className="mb-14">
