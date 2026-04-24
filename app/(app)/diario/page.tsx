@@ -93,7 +93,6 @@ function DiarioContent() {
 
     const supabase = getSupabaseClient();
 
-    // salva diário
     await supabase.from("diario").upsert({
       user_id: userId,
       estudo_id: estudoId,
@@ -101,13 +100,11 @@ function DiarioContent() {
       texto,
     });
 
-    // salva progresso
     await supabase.from("progresso").upsert({
       user_id: userId,
       estudo_id: estudoId,
     });
 
-    // 🔥 verifica se finalizou jornada
     const { data: estudosJornada } = await supabase
       .from("estudos")
       .select("id")
@@ -212,12 +209,20 @@ function DiarioContent() {
         </div>
       </div>
 
-      {/* 💣 MOMENTO DE CONCLUSÃO */}
+      {/* 💣 MOMENTO PREMIUM */}
       {finalizou && (
         <div className="fixed inset-0 bg-[#f9f5e9] flex items-center justify-center z-50">
-          <p className="text-lg font-serif text-[#70412d] animate-fade">
-            {jornadaNome} concluído
-          </p>
+
+          <div className="text-center space-y-4 animate-fadeUp">
+
+            <p className="text-2xl font-serif text-[#70412d]">
+              {jornadaNome} concluído
+            </p>
+
+            <div className="w-16 h-[2px] bg-[#C6A46A] mx-auto opacity-70"></div>
+
+          </div>
+
         </div>
       )}
     </>
