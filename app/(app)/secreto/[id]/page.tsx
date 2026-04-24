@@ -29,11 +29,12 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
+  // 💣 FIX DEFINITIVO DO NÚMERO
   function formatarVersiculos(texto: string) {
     return texto.replace(
       /(^|\n)(\d+)/g,
       (_, before, numero) =>
-        `${before}<span class="text-[10px] mr-[2px] opacity-70 align-super">${numero}</span>`
+        `${before}<span class="text-[10px] mr-[3px] opacity-70 relative -top-[2px]">${numero}</span>`
     );
   }
 
@@ -121,7 +122,7 @@ export default function EstudoPage() {
           {referencia}
         </p>
 
-        {/* TEXTO ALINHADO PERFEITO */}
+        {/* TEXTO FINAL PERFEITO */}
         <div className="flex justify-center mb-12">
           <p
             className="
