@@ -17,6 +17,7 @@ interface Estudo {
   destaque: string;
   jornada: string;
   ordem: number;
+  jornada_ordem: number;
 }
 
 export default function EstudoPage() {
@@ -29,14 +30,10 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 💣 FUNÇÃO NOVA (SEM INLINE BUGADO)
   function quebrarVersiculos(texto: string) {
     return texto.split("\n").map((linha) => {
       const match = linha.match(/^(\d+)(.*)/);
-
-      if (!match) {
-        return { numero: null, texto: linha };
-      }
+      if (!match) return { numero: null, texto: linha };
 
       return {
         numero: match[1],
@@ -57,8 +54,8 @@ export default function EstudoPage() {
 
       const { data: estudos } = await supabase
         .from("estudos")
-        .select("id, ordem")
-        .eq("jornada", "genesis-1")
+        .select("*")
+        .order("jornada_ordem", { ascending: true })
         .order("ordem", { ascending: true });
 
       if (!estudos || estudos.length === 0) {
@@ -82,18 +79,7 @@ export default function EstudoPage() {
         return;
       }
 
-      const { data: estudoAtual } = await supabase
-        .from("estudos")
-        .select("*")
-        .eq("id", estudoId)
-        .single();
-
-      if (!estudoAtual) {
-        setLoading(false);
-        return;
-      }
-
-      setEstudo(estudoAtual);
+      setEstudo(proximo);
       setLoading(false);
     }
 
@@ -127,26 +113,20 @@ export default function EstudoPage() {
           {referencia}
         </p>
 
-        {/* 💣 TEXTO SEM CORTE */}
         <div className="flex justify-center mb-12">
           <div className="space-y-2 text-left max-w-[48ch]">
-
             {quebrarVersiculos(estudo.texto).map((linha, i) => (
               <div key={i} className="flex items-start gap-2">
-
                 {linha.numero && (
                   <span className="text-[10px] opacity-70 mt-[4px]">
                     {linha.numero}
                   </span>
                 )}
-
                 <span className="text-base leading-8 text-[#70412d]/85 italic tracking-[0.01em]">
                   {linha.texto}
                 </span>
-
               </div>
             ))}
-
           </div>
         </div>
 

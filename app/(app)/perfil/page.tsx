@@ -52,6 +52,7 @@ export default function PerfilPage() {
 
       if (!user) return;
 
+      // 🔥 pega todos os estudos organizados
       const { data: estudos } = await supabase
         .from("estudos")
         .select("*")
@@ -60,6 +61,7 @@ export default function PerfilPage() {
 
       if (!estudos || estudos.length === 0) return;
 
+      // 🔥 progresso completo do usuário
       const { data: progresso } = await supabase
         .from("progresso")
         .select("estudo_id, created_at")
@@ -67,6 +69,7 @@ export default function PerfilPage() {
 
       const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
+      // 🔥 agrupar jornadas
       const jornadasMap = new Map();
 
       estudos.forEach((e) => {
@@ -103,11 +106,9 @@ export default function PerfilPage() {
 
         if (!jornadaAtual && feitos < data.total) {
           jornadaAtual = {
-            id: jornadaId,
             nome: data.nome,
             feitos,
             total: data.total,
-            estudosIds: estudosDaJornada,
           };
         }
       }
@@ -118,17 +119,15 @@ export default function PerfilPage() {
 
       setNomeJornadaAtual(jornadaAtual.nome);
 
-      const porcentagemCalc =
-        (jornadaAtual.feitos / jornadaAtual.total) * 100;
+      setPorcentagem(
+        (jornadaAtual.feitos / jornadaAtual.total) * 100
+      );
 
-      setPorcentagem(porcentagemCalc);
-
+      // 💣 CALENDÁRIO COM HISTÓRICO COMPLETO
       const dias =
-        progresso
-          ?.filter((p) =>
-            jornadaAtual.estudosIds.includes(p.estudo_id)
-          )
-          .map((p) => getDiaBrasil(p.created_at)) || [];
+        progresso?.map((p) =>
+          getDiaBrasil(p.created_at)
+        ) || [];
 
       setDiasAtivos(dias);
 
