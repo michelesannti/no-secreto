@@ -15,11 +15,14 @@ function DiarioContent() {
 
   const [userId, setUserId] = useState<string | null>(null);
   const [estudoId, setEstudoId] = useState<number | null>(null);
-  const [jornada, setJornada] = useState<string>("");
+  const [jornada, setJornada] = useState("");
+  const [jornadaNome, setJornadaNome] = useState("");
 
   const [ready, setReady] = useState(false);
   const [saving, setSaving] = useState(false);
   const [podeFinalizar, setPodeFinalizar] = useState(false);
+
+  const [finalizou, setFinalizou] = useState(false);
 
   useEffect(() => {
     async function carregar() {
@@ -44,7 +47,8 @@ function DiarioContent() {
         .select("estudo_id")
         .eq("user_id", user.id);
 
-      const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
+      const concluidosIds =
+        progresso?.map((p) => p.estudo_id) || [];
 
       const estudoAtual =
         estudos?.find((e) => !concluidosIds.includes(e.id)) ||
@@ -55,12 +59,15 @@ function DiarioContent() {
       setEstudoId(estudoAtual.id);
       setDestaque(estudoAtual.destaque);
       setJornada(estudoAtual.jornada);
+      setJornadaNome(estudoAtual.jornada_exibicao);
 
       if (veioDoConcluir) {
         localStorage.setItem("liberado-finalizar", "true");
       }
 
-      const liberado = localStorage.getItem("liberado-finalizar") === "true";
+      const liberado =
+        localStorage.getItem("liberado-finalizar") === "true";
+
       setPodeFinalizar(liberado);
 
       const draftKey = `diario-${user.id}-${estudoAtual.id}`;
@@ -72,7 +79,7 @@ function DiarioContent() {
     }
 
     carregar();
-  }, [veioDoConcluir]);
+  }, []);
 
   useEffect(() => {
     if (!userId || !estudoId) return;
@@ -86,6 +93,7 @@ function DiarioContent() {
 
     const supabase = getSupabaseClient();
 
+    // salva diário
     await supabase.from("diario").upsert({
       user_id: userId,
       estudo_id: estudoId,
@@ -93,95 +101,126 @@ function DiarioContent() {
       texto,
     });
 
+    // salva progresso
     await supabase.from("progresso").upsert({
       user_id: userId,
       estudo_id: estudoId,
     });
 
-    localStorage.removeItem("liberado-finalizar");
-    localStorage.removeItem(`diario-${userId}-${estudoId}`);
+    // 🔥 verifica se finalizou jornada
+    const { data: estudosJornada } = await supabase
+      .from("estudos")
+      .select("id")
+      .eq("jornada", jornada);
+
+    const { data: progresso } = await supabase
+      .from("progresso")
+      .select("estudo_id")
+      .eq("user_id", userId);
+
+    const concluidosIds =
+      progresso?.map((p) => p.estudo_id) || [];
+
+    const todosIds =
+      estudosJornada?.map((e) => e.id) || [];
+
+    const finalizouJornada =
+      todosIds.every((id) =>
+        concluidosIds.includes(id)
+      );
+
+    if (finalizouJornada) {
+      setFinalizou(true);
+
+      setTimeout(() => {
+        router.push("/perfil");
+      }, 2000);
+
+      return;
+    }
 
     router.push("/perfil");
   }
 
-  if (!ready) return <div className="min-h-screen bg-[#f9f5e9]" />;
+  if (!ready)
+    return <div className="min-h-screen bg-[#f9f5e9]" />;
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
-      <div className="pt-6 pb-40">
+    <>
+      <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
+        <div className="pt-6 pb-40">
 
-        {/* TOPO */}
-        <div className="px-8 mb-12">
-          <h1 className="text-xl font-serif tracking-wide">Diário</h1>
-          <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
-        </div>
+          <div className="px-8 mb-12">
+            <h1 className="text-xl font-serif tracking-wide">Diário</h1>
+            <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
+          </div>
 
-        <div className="max-w-2xl mx-auto px-8">
+          <div className="max-w-2xl mx-auto px-8">
 
-          {/* DESTAQUE COM LINHAS */}
-          <div className="flex justify-center mt-16 mb-10">
-            <div className="flex items-center gap-4">
+            <div className="flex justify-center mt-16 mb-10">
+              <div className="flex items-center gap-4">
+                <div className="w-[2px] h-8 bg-[#e9d5bb]" />
 
-              <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
+                <div className="text-center font-serif text-lg font-semibold">
+                  {destaque.split("\n").map((linha, i) => (
+                    <div key={i} style={{ whiteSpace: "nowrap" }}>
+                      {linha}
+                    </div>
+                  ))}
+                </div>
 
-              <div className="text-center font-serif text-lg font-semibold">
-                {destaque.split("\n").map((linha, i) => (
-                  <div key={i} style={{ whiteSpace: "nowrap" }}>
-                    {linha}
-                  </div>
-                ))}
+                <div className="w-[2px] h-8 bg-[#e9d5bb]" />
               </div>
-
-              <div className="w-[2px] h-8 bg-[#e9d5bb]"></div>
-
             </div>
-          </div>
 
-          {/* TEXTO */}
-          <div className="relative min-h-[600px] mb-8">
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                backgroundImage:
-                  "repeating-linear-gradient(to bottom, transparent, transparent 31px, #e9d5bb 31px, #e9d5bb 32px)",
-              }}
-            />
+            <div className="relative min-h-[600px] mb-8">
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  backgroundImage:
+                    "repeating-linear-gradient(to bottom, transparent, transparent 31px, #e9d5bb 31px, #e9d5bb 32px)",
+                }}
+              />
 
-            <textarea
-              value={texto}
-              onChange={(e) => setTexto(e.target.value)}
-              placeholder="O que Deus falou com você?"
-              className="relative w-full bg-transparent resize-none outline-none text-base placeholder:text-[#70412d]/40"
-              style={{ lineHeight: "32px", minHeight: "600px" }}
-            />
-          </div>
-
-          {/* BOTÃO */}
-          {podeFinalizar && (
-            <div className="mt-16 flex justify-center">
-              <button
-                onClick={handleFinalizar}
-                disabled={saving}
-                className="
-                  px-6
-                  py-2
-                  rounded-full
-                  bg-[#70412d]
-                  text-[#f9f5e9]
-                  text-sm
-                  tracking-wide
-                  transition
-                  hover:opacity-90
-                "
-              >
-                {saving ? "Finalizando..." : "Finalizar"}
-              </button>
+              <textarea
+                value={texto}
+                onChange={(e) => setTexto(e.target.value)}
+                placeholder="O que Deus falou com você?"
+                className="relative w-full bg-transparent resize-none outline-none text-base placeholder:text-[#70412d]/40"
+                style={{ lineHeight: "32px", minHeight: "600px" }}
+              />
             </div>
-          )}
 
+            {podeFinalizar && (
+              <div className="mt-16 flex justify-center">
+                <button
+                  onClick={handleFinalizar}
+                  disabled={saving}
+                  className="
+                    px-6 py-2 rounded-full
+                    bg-[#70412d] text-[#f9f5e9]
+                    text-sm tracking-wide
+                    transition hover:opacity-90
+                  "
+                >
+                  {saving ? "Finalizando..." : "Finalizar"}
+                </button>
+              </div>
+            )}
+
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* 💣 MOMENTO DE CONCLUSÃO */}
+      {finalizou && (
+        <div className="fixed inset-0 bg-[#f9f5e9] flex items-center justify-center z-50">
+          <p className="text-lg font-serif text-[#70412d] animate-fade">
+            {jornadaNome} concluído
+          </p>
+        </div>
+      )}
+    </>
   );
 }
 
