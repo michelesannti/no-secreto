@@ -33,7 +33,7 @@ export default function EstudoPage() {
     return texto.replace(
       /(^|\n)(\d+)/g,
       (_, before, numero) =>
-        `${before}<span class="text-[10px] mr-[2px] opacity-70">${numero}</span>`
+        `${before}<span class="text-[10px] mr-[2px] opacity-70 align-super">${numero}</span>`
     );
   }
 
@@ -121,19 +121,19 @@ export default function EstudoPage() {
           {referencia}
         </p>
 
-        {/* 💣 FIX DO ALINHAMENTO */}
+        {/* TEXTO ALINHADO PERFEITO */}
         <div className="flex justify-center mb-12">
-          <div className="transform skew-x-[-8deg]">
-            <p
-              className="
-                text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch]
-                whitespace-pre-line
-              "
-              dangerouslySetInnerHTML={{
-                __html: formatarVersiculos(estudo.texto),
-              }}
-            />
-          </div>
+          <p
+            className="
+              text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch]
+              whitespace-pre-line
+              italic
+              tracking-[0.01em]
+            "
+            dangerouslySetInnerHTML={{
+              __html: formatarVersiculos(estudo.texto),
+            }}
+          />
         </div>
 
         <div className="mb-14">
