@@ -29,13 +29,20 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 💣 FIX DEFINITIVO (iOS SAFE)
-  function formatarVersiculos(texto: string) {
-    return texto.replace(
-      /(^|\n)(\d+)/g,
-      (_, before, numero) =>
-        `${before}<span class="inline-flex items-start text-[10px] leading-none mr-[3px] opacity-70">${numero}</span>`
-    );
+  // 💣 FUNÇÃO NOVA (SEM INLINE BUGADO)
+  function quebrarVersiculos(texto: string) {
+    return texto.split("\n").map((linha) => {
+      const match = linha.match(/^(\d+)(.*)/);
+
+      if (!match) {
+        return { numero: null, texto: linha };
+      }
+
+      return {
+        numero: match[1],
+        texto: match[2],
+      };
+    });
   }
 
   useEffect(() => {
@@ -110,9 +117,7 @@ export default function EstudoPage() {
       className="h-screen overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]"
     >
       <div className="px-8 mb-12">
-        <h1 className="text-xl font-serif tracking-wide">
-          Secreto
-        </h1>
+        <h1 className="text-xl font-serif tracking-wide">Secreto</h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
@@ -122,19 +127,27 @@ export default function EstudoPage() {
           {referencia}
         </p>
 
-        {/* TEXTO */}
+        {/* 💣 TEXTO SEM CORTE */}
         <div className="flex justify-center mb-12">
-          <p
-            className="
-              text-base leading-8 text-[#70412d]/85 text-center max-w-[48ch]
-              whitespace-pre-line
-              italic
-              tracking-[0.01em]
-            "
-            dangerouslySetInnerHTML={{
-              __html: formatarVersiculos(estudo.texto),
-            }}
-          />
+          <div className="space-y-2 text-left max-w-[48ch]">
+
+            {quebrarVersiculos(estudo.texto).map((linha, i) => (
+              <div key={i} className="flex items-start gap-2">
+
+                {linha.numero && (
+                  <span className="text-[10px] opacity-70 mt-[4px]">
+                    {linha.numero}
+                  </span>
+                )}
+
+                <span className="text-base leading-8 text-[#70412d]/85 italic tracking-[0.01em]">
+                  {linha.texto}
+                </span>
+
+              </div>
+            ))}
+
+          </div>
         </div>
 
         <div className="mb-14">
