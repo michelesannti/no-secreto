@@ -10,6 +10,7 @@ export default function PerfilPage() {
   const [modalAberto, setModalAberto] = useState(false);
   const [registrosModal, setRegistrosModal] = useState<any[]>([]);
   const [nomeJornadaAtual, setNomeJornadaAtual] = useState("");
+  const [concluidas, setConcluidas] = useState<string[]>([]);
 
   const hoje = new Date();
   const ano = hoje.getFullYear();
@@ -51,7 +52,6 @@ export default function PerfilPage() {
 
       if (!user) return;
 
-      // 🔥 TODOS OS ESTUDOS
       const { data: estudos } = await supabase
         .from("estudos")
         .select("*")
@@ -60,7 +60,6 @@ export default function PerfilPage() {
 
       if (!estudos || estudos.length === 0) return;
 
-      // 🔥 PROGRESSO DO USUÁRIO
       const { data: progresso } = await supabase
         .from("progresso")
         .select("estudo_id, created_at")
@@ -68,7 +67,6 @@ export default function PerfilPage() {
 
       const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
-      // 🔥 AGRUPAR POR JORNADA
       const jornadasMap = new Map();
 
       estudos.forEach((e) => {
@@ -83,12 +81,12 @@ export default function PerfilPage() {
         jornadasMap.get(e.jornada).total++;
       });
 
-      // 🔥 CONTAR PROGRESSO POR JORNADA
-      let jornadaAtual = null;
-
       const jornadasOrdenadas = [...jornadasMap.entries()].sort(
         (a, b) => a[1].ordem - b[1].ordem
       );
+
+      let jornadaAtual = null;
+      const jornadasConcluidas: string[] = [];
 
       for (let [jornadaId, data] of jornadasOrdenadas) {
         const estudosDaJornada = estudos
@@ -99,7 +97,11 @@ export default function PerfilPage() {
           concluidosIds.includes(id)
         ).length;
 
-        if (feitos < data.total) {
+        if (feitos === data.total) {
+          jornadasConcluidas.push(data.nome);
+        }
+
+        if (!jornadaAtual && feitos < data.total) {
           jornadaAtual = {
             id: jornadaId,
             nome: data.nome,
@@ -107,9 +109,10 @@ export default function PerfilPage() {
             total: data.total,
             estudosIds: estudosDaJornada,
           };
-          break;
         }
       }
+
+      setConcluidas(jornadasConcluidas);
 
       if (!jornadaAtual) return;
 
@@ -120,7 +123,6 @@ export default function PerfilPage() {
 
       setPorcentagem(porcentagemCalc);
 
-      // 🔥 DIAS ATIVOS (SÓ DA JORNADA ATUAL)
       const dias =
         progresso
           ?.filter((p) =>
@@ -130,7 +132,6 @@ export default function PerfilPage() {
 
       setDiasAtivos(dias);
 
-      // 🔥 DIÁRIO
       const { data: diario } = await supabase
         .from("diario")
         .select("*")
@@ -217,7 +218,6 @@ export default function PerfilPage() {
           </div>
 
           <div className="grid grid-cols-7 gap-3">
-
             {diasMes.map((dia, i) => {
               if (!dia) return <div key={`empty-${i}`} />;
 
@@ -238,10 +238,20 @@ export default function PerfilPage() {
                 </div>
               );
             })}
-
           </div>
 
         </div>
+
+        {/* JORNADAS CONCLUÍDAS */}
+        {concluidas.length > 0 && (
+          <div className="space-y-2 text-center">
+            {concluidas.map((nome, i) => (
+              <p key={i} className="text-[12px] text-[#70412d]/50">
+                {nome} concluído
+              </p>
+            ))}
+          </div>
+        )}
 
       </div>
 
@@ -273,6 +283,7 @@ export default function PerfilPage() {
           </div>
         </div>
       )}
+
     </div>
   );
 }
