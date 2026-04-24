@@ -29,12 +29,12 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 💣 FIX DEFINITIVO — SEM SUBIR O NÚMERO
+  // 💣 FIX DEFINITIVO (iOS SAFE)
   function formatarVersiculos(texto: string) {
     return texto.replace(
       /(^|\n)(\d+)/g,
       (_, before, numero) =>
-        `${before}<span class="text-[10px] mr-[4px] opacity-70">${numero}</span>`
+        `${before}<span class="inline-flex items-start text-[10px] leading-none mr-[3px] opacity-70">${numero}</span>`
     );
   }
 
@@ -122,7 +122,7 @@ export default function EstudoPage() {
           {referencia}
         </p>
 
-        {/* TEXTO FINAL LIMPO */}
+        {/* TEXTO */}
         <div className="flex justify-center mb-12">
           <p
             className="
