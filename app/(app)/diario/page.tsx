@@ -36,17 +36,15 @@ function DiarioContent() {
       const { data: estudos } = await supabase
         .from("estudos")
         .select("*")
-        .eq("jornada", "genesis-1")
+        .order("jornada_ordem", { ascending: true })
         .order("ordem", { ascending: true });
 
       const { data: progresso } = await supabase
         .from("progresso")
         .select("estudo_id")
-        .eq("user_id", user.id)
-        .eq("jornada", "genesis-1");
+        .eq("user_id", user.id);
 
-      const concluidosIds =
-        progresso?.map((p) => p.estudo_id) || [];
+      const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
       const estudoAtual =
         estudos?.find((e) => !concluidosIds.includes(e.id)) ||
@@ -74,7 +72,7 @@ function DiarioContent() {
     }
 
     carregar();
-  }, []);
+  }, [veioDoConcluir]);
 
   useEffect(() => {
     if (!userId || !estudoId) return;
@@ -98,7 +96,6 @@ function DiarioContent() {
     await supabase.from("progresso").upsert({
       user_id: userId,
       estudo_id: estudoId,
-      jornada: jornada,
     });
 
     localStorage.removeItem("liberado-finalizar");
