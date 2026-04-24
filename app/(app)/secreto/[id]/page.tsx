@@ -29,12 +29,12 @@ export default function EstudoPage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 💣 FIX DEFINITIVO DO NÚMERO
+  // 💣 FIX DEFINITIVO DOS VERSÍCULOS (SEM CORTE)
   function formatarVersiculos(texto: string) {
     return texto.replace(
       /(^|\n)(\d+)/g,
       (_, before, numero) =>
-        `${before}<span class="text-[10px] mr-[3px] opacity-70 relative -top-[2px]">${numero}</span>`
+        `${before}<span class="inline-block text-[10px] mr-[3px] opacity-70 translate-y-[-2px]">${numero}</span>`
     );
   }
 
@@ -122,7 +122,7 @@ export default function EstudoPage() {
           {referencia}
         </p>
 
-        {/* TEXTO FINAL PERFEITO */}
+        {/* 💣 TEXTO FINAL (SEM CORTE NO IPHONE) */}
         <div className="flex justify-center mb-12">
           <p
             className="
@@ -130,6 +130,7 @@ export default function EstudoPage() {
               whitespace-pre-line
               italic
               tracking-[0.01em]
+              pt-[4px]
             "
             dangerouslySetInnerHTML={{
               __html: formatarVersiculos(estudo.texto),
