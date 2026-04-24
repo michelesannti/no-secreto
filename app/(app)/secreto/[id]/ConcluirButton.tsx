@@ -12,17 +12,16 @@ export default function ConcluirButton({ estudoId }: Props) {
   const [mostrar, setMostrar] = useState(false);
 
   useEffect(() => {
-    const bloqueado = localStorage.getItem("liberado-finalizar") === "true";
+    const liberado =
+      localStorage.getItem(`liberado-finalizar-${estudoId}`) === "true";
 
-    // 🔥 se já clicou em concluir, não mostra mais
-    if (!bloqueado) {
+    if (!liberado) {
       setMostrar(true);
     }
-  }, []);
+  }, [estudoId]);
 
   function handleClick() {
-    // 🔥 marca que iniciou fluxo
-    localStorage.setItem("liberado-finalizar", "true");
+    localStorage.setItem(`liberado-finalizar-${estudoId}`, "true");
 
     router.push("/diario?from=concluir");
   }
@@ -34,15 +33,10 @@ export default function ConcluirButton({ estudoId }: Props) {
       <button
         onClick={handleClick}
         className="
-          px-6
-          py-2
-          rounded-full
-          bg-[#70412d]
-          text-[#f9f5e9]
-          text-sm
-          tracking-wide
-          transition
-          hover:opacity-90
+          px-6 py-2 rounded-full
+          bg-[#70412d] text-[#f9f5e9]
+          text-sm tracking-wide
+          transition hover:opacity-90
         "
       >
         Concluir

@@ -1,14 +1,11 @@
 "use client";
 
 import { Suspense, useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase";
 
 function DiarioContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const veioDoConcluir = searchParams.get("from") === "concluir";
 
   const [texto, setTexto] = useState("");
   const [destaque, setDestaque] = useState("");
@@ -61,12 +58,11 @@ function DiarioContent() {
       setJornada(estudoAtual.jornada);
       setJornadaNome(estudoAtual.jornada_exibicao);
 
-      if (veioDoConcluir) {
-        localStorage.setItem("liberado-finalizar", "true");
-      }
-
+      // 💣 CONTROLE CORRETO DO BOTÃO FINALIZAR
       const liberado =
-        localStorage.getItem("liberado-finalizar") === "true";
+        localStorage.getItem(
+          `liberado-finalizar-${estudoAtual.id}`
+        ) === "true";
 
       setPodeFinalizar(liberado);
 
@@ -93,6 +89,7 @@ function DiarioContent() {
 
     const supabase = getSupabaseClient();
 
+    // 🔥 salva diário
     await supabase.from("diario").upsert({
       user_id: userId,
       estudo_id: estudoId,
@@ -100,11 +97,21 @@ function DiarioContent() {
       texto,
     });
 
+    // 🔥 salva progresso (AQUI QUE CONCLUI)
     await supabase.from("progresso").upsert({
       user_id: userId,
       estudo_id: estudoId,
     });
 
+    // 💣 limpa estado local daquele estudo
+    localStorage.removeItem(
+      `liberado-finalizar-${estudoId}`
+    );
+    localStorage.removeItem(
+      `diario-${userId}-${estudoId}`
+    );
+
+    // 🔥 verifica se finalizou a jornada
     const { data: estudosJornada } = await supabase
       .from("estudos")
       .select("id")
@@ -147,6 +154,7 @@ function DiarioContent() {
       <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
         <div className="pt-6 pb-40">
 
+          {/* TOPO */}
           <div className="px-8 mb-12">
             <h1 className="text-xl font-serif tracking-wide">Diário</h1>
             <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
@@ -154,6 +162,7 @@ function DiarioContent() {
 
           <div className="max-w-2xl mx-auto px-8">
 
+            {/* DESTAQUE */}
             <div className="flex justify-center mt-16 mb-10">
               <div className="flex items-center gap-4">
                 <div className="w-[2px] h-8 bg-[#e9d5bb]" />
@@ -170,6 +179,7 @@ function DiarioContent() {
               </div>
             </div>
 
+            {/* TEXTO */}
             <div className="relative min-h-[600px] mb-8">
               <div
                 className="absolute inset-0 pointer-events-none"
@@ -188,6 +198,7 @@ function DiarioContent() {
               />
             </div>
 
+            {/* BOTÃO FINALIZAR */}
             {podeFinalizar && (
               <div className="mt-16 flex justify-center">
                 <button
@@ -212,17 +223,12 @@ function DiarioContent() {
       {/* 💣 MOMENTO PREMIUM */}
       {finalizou && (
         <div className="fixed inset-0 bg-[#f9f5e9] flex items-center justify-center z-50">
-
           <div className="text-center space-y-4 animate-fadeUp">
-
             <p className="text-2xl font-serif text-[#70412d]">
               {jornadaNome} concluído
             </p>
-
             <div className="w-16 h-[2px] bg-[#C6A46A] mx-auto opacity-70"></div>
-
           </div>
-
         </div>
       )}
     </>
