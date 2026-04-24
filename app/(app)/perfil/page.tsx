@@ -11,8 +11,6 @@ export default function PerfilPage() {
   const [registrosModal, setRegistrosModal] = useState<any[]>([]);
   const [nomeJornadaAtual, setNomeJornadaAtual] = useState("");
 
-  const jornada = "genesis-1";
-
   const hoje = new Date();
   const ano = hoje.getFullYear();
   const mes = hoje.getMonth();
@@ -53,43 +51,86 @@ export default function PerfilPage() {
 
       if (!user) return;
 
-      // 🔥 pega estudos da jornada
+      // 🔥 TODOS OS ESTUDOS
       const { data: estudos } = await supabase
         .from("estudos")
-        .select("id, jornada_exibicao")
-        .eq("jornada", jornada);
+        .select("*")
+        .order("jornada_ordem", { ascending: true })
+        .order("ordem", { ascending: true });
 
-      const total = estudos?.length || 0;
+      if (!estudos || estudos.length === 0) return;
 
-      if (estudos && estudos.length > 0) {
-        setNomeJornadaAtual(estudos[0].jornada_exibicao);
-      }
-
-      const estudosIds = estudos?.map((e) => e.id) || [];
-
-      // 🔥 pega progresso SEM jornada
+      // 🔥 PROGRESSO DO USUÁRIO
       const { data: progresso } = await supabase
         .from("progresso")
         .select("estudo_id, created_at")
         .eq("user_id", user.id);
 
-      // 🔥 filtra só os estudos da jornada
-      const progressoFiltrado =
-        progresso?.filter((p) =>
-          estudosIds.includes(p.estudo_id)
-        ) || [];
+      const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
-      const feitos = progressoFiltrado.length;
+      // 🔥 AGRUPAR POR JORNADA
+      const jornadasMap = new Map();
 
-      setPorcentagem(total ? (feitos / total) * 100 : 0);
+      estudos.forEach((e) => {
+        if (!jornadasMap.has(e.jornada)) {
+          jornadasMap.set(e.jornada, {
+            nome: e.jornada_exibicao,
+            total: 0,
+            ordem: e.jornada_ordem,
+          });
+        }
 
+        jornadasMap.get(e.jornada).total++;
+      });
+
+      // 🔥 CONTAR PROGRESSO POR JORNADA
+      let jornadaAtual = null;
+
+      const jornadasOrdenadas = [...jornadasMap.entries()].sort(
+        (a, b) => a[1].ordem - b[1].ordem
+      );
+
+      for (let [jornadaId, data] of jornadasOrdenadas) {
+        const estudosDaJornada = estudos
+          .filter((e) => e.jornada === jornadaId)
+          .map((e) => e.id);
+
+        const feitos = estudosDaJornada.filter((id) =>
+          concluidosIds.includes(id)
+        ).length;
+
+        if (feitos < data.total) {
+          jornadaAtual = {
+            id: jornadaId,
+            nome: data.nome,
+            feitos,
+            total: data.total,
+            estudosIds: estudosDaJornada,
+          };
+          break;
+        }
+      }
+
+      if (!jornadaAtual) return;
+
+      setNomeJornadaAtual(jornadaAtual.nome);
+
+      const porcentagemCalc =
+        (jornadaAtual.feitos / jornadaAtual.total) * 100;
+
+      setPorcentagem(porcentagemCalc);
+
+      // 🔥 DIAS ATIVOS (SÓ DA JORNADA ATUAL)
       const dias =
-        progressoFiltrado.map((p) =>
-          getDiaBrasil(p.created_at)
-        ) || [];
+        progresso
+          ?.filter((p) =>
+            jornadaAtual.estudosIds.includes(p.estudo_id)
+          )
+          .map((p) => getDiaBrasil(p.created_at)) || [];
 
       setDiasAtivos(dias);
 
+      // 🔥 DIÁRIO
       const { data: diario } = await supabase
         .from("diario")
         .select("*")
@@ -204,23 +245,18 @@ export default function PerfilPage() {
 
       </div>
 
-      {/* MODAL */}
       {modalAberto && (
         <div
           className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
           onClick={fecharModal}
         >
-
           <div
             className="bg-[#f9f5e9] w-[90%] max-w-md rounded-2xl p-6"
             onClick={(e) => e.stopPropagation()}
           >
-
             <div className="space-y-10 max-h-[60vh] overflow-y-auto">
-
               {registrosModal.map((item, index) => (
                 <div key={index} className="space-y-6">
-
                   <div className="flex justify-center">
                     <div className="w-10 h-[2px] bg-[#C6A46A]/70 rounded-full" />
                   </div>
@@ -231,17 +267,12 @@ export default function PerfilPage() {
                       __html: formatarTexto(item.texto),
                     }}
                   />
-
                 </div>
               ))}
-
             </div>
-
           </div>
-
         </div>
       )}
-
     </div>
   );
 }
