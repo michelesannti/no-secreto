@@ -58,7 +58,6 @@ function DiarioContent() {
       setJornada(estudoAtual.jornada);
       setJornadaNome(estudoAtual.jornada_exibicao);
 
-      // 💣 CONTROLE CORRETO DO BOTÃO FINALIZAR
       const liberado =
         localStorage.getItem(
           `liberado-finalizar-${estudoAtual.id}`
@@ -89,7 +88,7 @@ function DiarioContent() {
 
     const supabase = getSupabaseClient();
 
-    // 🔥 salva diário
+    // salva diário
     await supabase.from("diario").upsert({
       user_id: userId,
       estudo_id: estudoId,
@@ -97,13 +96,13 @@ function DiarioContent() {
       texto,
     });
 
-    // 🔥 salva progresso (AQUI QUE CONCLUI)
+    // salva progresso (conclusão real)
     await supabase.from("progresso").upsert({
       user_id: userId,
       estudo_id: estudoId,
     });
 
-    // 💣 limpa estado local daquele estudo
+    // limpa estado local
     localStorage.removeItem(
       `liberado-finalizar-${estudoId}`
     );
@@ -111,7 +110,7 @@ function DiarioContent() {
       `diario-${userId}-${estudoId}`
     );
 
-    // 🔥 verifica se finalizou a jornada
+    // verifica se finalizou jornada
     const { data: estudosJornada } = await supabase
       .from("estudos")
       .select("id")
@@ -134,6 +133,12 @@ function DiarioContent() {
       );
 
     if (finalizouJornada) {
+
+      // 💣 VIBRAÇÃO SUTIL (PREMIUM)
+      if (typeof navigator !== "undefined" && navigator.vibrate) {
+        navigator.vibrate(10);
+      }
+
       setFinalizou(true);
 
       setTimeout(() => {
@@ -154,7 +159,6 @@ function DiarioContent() {
       <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
         <div className="pt-6 pb-40">
 
-          {/* TOPO */}
           <div className="px-8 mb-12">
             <h1 className="text-xl font-serif tracking-wide">Diário</h1>
             <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
@@ -162,7 +166,7 @@ function DiarioContent() {
 
           <div className="max-w-2xl mx-auto px-8">
 
-            {/* DESTAQUE */}
+            {/* destaque */}
             <div className="flex justify-center mt-16 mb-10">
               <div className="flex items-center gap-4">
                 <div className="w-[2px] h-8 bg-[#e9d5bb]" />
@@ -179,7 +183,7 @@ function DiarioContent() {
               </div>
             </div>
 
-            {/* TEXTO */}
+            {/* textarea */}
             <div className="relative min-h-[600px] mb-8">
               <div
                 className="absolute inset-0 pointer-events-none"
@@ -198,7 +202,7 @@ function DiarioContent() {
               />
             </div>
 
-            {/* BOTÃO FINALIZAR */}
+            {/* botão finalizar */}
             {podeFinalizar && (
               <div className="mt-16 flex justify-center">
                 <button
