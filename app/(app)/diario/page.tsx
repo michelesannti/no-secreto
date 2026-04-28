@@ -21,6 +21,24 @@ function DiarioContent() {
 
   const [finalizou, setFinalizou] = useState(false);
 
+  // 🔥 FUNÇÃO NOVA (data_local)
+  function getHojeBrasil() {
+    const formatter = new Intl.DateTimeFormat("pt-BR", {
+      timeZone: "America/Sao_Paulo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+
+    const partes = formatter.formatToParts(new Date());
+
+    const dia = partes.find((p) => p.type === "day")?.value;
+    const mes = partes.find((p) => p.type === "month")?.value;
+    const ano = partes.find((p) => p.type === "year")?.value;
+
+    return `${ano}-${mes}-${dia}`;
+  }
+
   useEffect(() => {
     async function carregar() {
       const supabase = getSupabaseClient();
@@ -88,18 +106,22 @@ function DiarioContent() {
 
     const supabase = getSupabaseClient();
 
+    const dataLocal = getHojeBrasil(); // 🔥 NOVO
+
     // salva diário
     await supabase.from("diario").upsert({
       user_id: userId,
       estudo_id: estudoId,
       destaque,
       texto,
+      data_local: dataLocal, // 🔥 NOVO
     });
 
     // salva progresso
     await supabase.from("progresso").upsert({
       user_id: userId,
       estudo_id: estudoId,
+      data_local: dataLocal, // 🔥 NOVO
     });
 
     // limpa estado local
@@ -116,13 +138,13 @@ function DiarioContent() {
       .select("id")
       .eq("jornada", jornada);
 
-    const { data: progresso } = await supabase
+    const { data: progressoAtualizado } = await supabase
       .from("progresso")
       .select("estudo_id")
       .eq("user_id", userId);
 
     const concluidosIds =
-      progresso?.map((p) => p.estudo_id) || [];
+      progressoAtualizado?.map((p) => p.estudo_id) || [];
 
     const todosIds =
       estudosJornada?.map((e) => e.id) || [];
@@ -153,7 +175,6 @@ function DiarioContent() {
       <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
         <div className="pt-6 pb-40">
 
-          {/* TOPO */}
           <div className="px-8 mb-12">
             <h1 className="text-xl font-serif tracking-wide">Diário</h1>
             <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
@@ -161,7 +182,6 @@ function DiarioContent() {
 
           <div className="max-w-2xl mx-auto px-8">
 
-            {/* DESTAQUE */}
             <div className="flex justify-center mt-16 mb-10">
               <div className="flex items-center gap-4">
                 <div className="w-[2px] h-8 bg-[#e9d5bb]" />
@@ -178,7 +198,6 @@ function DiarioContent() {
               </div>
             </div>
 
-            {/* TEXTO */}
             <div className="relative min-h-[600px] mb-8">
               <div
                 className="absolute inset-0 pointer-events-none"
@@ -197,7 +216,6 @@ function DiarioContent() {
               />
             </div>
 
-            {/* BOTÃO FINALIZAR */}
             {podeFinalizar && (
               <div className="mt-16 flex justify-center">
                 <button
@@ -219,7 +237,6 @@ function DiarioContent() {
         </div>
       </div>
 
-      {/* 💣 MOMENTO PREMIUM */}
       {finalizou && (
         <div className="fixed inset-0 bg-[#f9f5e9] flex items-center justify-center z-50">
           <div className="text-center space-y-4 animate-fadeUp">

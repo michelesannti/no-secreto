@@ -5,7 +5,7 @@ import { getSupabaseClient } from "@/lib/supabase";
 
 export default function PerfilPage() {
   const [porcentagem, setPorcentagem] = useState(0);
-  const [diasAtivos, setDiasAtivos] = useState<number[]>([]);
+  const [datasAtivas, setDatasAtivas] = useState<string[]>([]);
   const [diarios, setDiarios] = useState<any[]>([]);
   const [modalAberto, setModalAberto] = useState(false);
   const [registrosModal, setRegistrosModal] = useState<any[]>([]);
@@ -30,16 +30,8 @@ export default function PerfilPage() {
     month: "long",
   });
 
-  function getDiaBrasil(dataString: string) {
-    const data = new Date(dataString);
-
-    const brasil = new Date(
-      data.toLocaleString("en-US", {
-        timeZone: "America/Sao_Paulo",
-      })
-    );
-
-    return brasil.getDate();
+  function getDataAtualBrasil(dia: number) {
+    return `${ano}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
   }
 
   useEffect(() => {
@@ -52,7 +44,6 @@ export default function PerfilPage() {
 
       if (!user) return;
 
-      // 🔥 pega todos os estudos organizados
       const { data: estudos } = await supabase
         .from("estudos")
         .select("*")
@@ -61,15 +52,13 @@ export default function PerfilPage() {
 
       if (!estudos || estudos.length === 0) return;
 
-      // 🔥 progresso completo do usuário
       const { data: progresso } = await supabase
         .from("progresso")
-        .select("estudo_id, created_at")
+        .select("estudo_id, data_local")
         .eq("user_id", user.id);
 
       const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
-      // 🔥 agrupar jornadas
       const jornadasMap = new Map();
 
       estudos.forEach((e) => {
@@ -123,13 +112,10 @@ export default function PerfilPage() {
         (jornadaAtual.feitos / jornadaAtual.total) * 100
       );
 
-      // 💣 CALENDÁRIO COM HISTÓRICO COMPLETO
-      const dias =
-        progresso?.map((p) =>
-          getDiaBrasil(p.created_at)
-        ) || [];
+      const datas =
+        progresso?.map((p) => p.data_local).filter(Boolean) || [];
 
-      setDiasAtivos(dias);
+      setDatasAtivas(datas);
 
       const { data: diario } = await supabase
         .from("diario")
@@ -144,8 +130,10 @@ export default function PerfilPage() {
   }, []);
 
   function abrirModal(dia: number) {
+    const dataSelecionada = getDataAtualBrasil(dia);
+
     const registros = diarios.filter(
-      (d) => getDiaBrasil(d.created_at) === dia
+      (d) => d.data_local === dataSelecionada
     );
 
     if (registros.length === 0) return;
@@ -220,7 +208,9 @@ export default function PerfilPage() {
             {diasMes.map((dia, i) => {
               if (!dia) return <div key={`empty-${i}`} />;
 
-              const ativo = diasAtivos.includes(dia);
+              const dataAtual = getDataAtualBrasil(dia);
+
+              const ativo = datasAtivas.includes(dataAtual);
 
               return (
                 <div
