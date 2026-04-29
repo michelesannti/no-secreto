@@ -33,20 +33,24 @@ export default function HojePage() {
         Começar meu tempo com Deus
       </Link>
 
-      {/* CARD */}
+      {/* MODAL */}
       {mostrarInstall && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#70412d] text-[#f9f5e9] px-5 py-4 rounded-xl shadow-lg max-w-sm text-center z-50">
+        <div className="fixed inset-0 flex items-center justify-center z-50">
           
-          <p className="text-sm">
-            Adicione o app à sua tela de início 🤎
-          </p>
+          <div className="bg-[#f9f5e9] text-[#70412d] px-6 py-6 rounded-2xl shadow-lg max-w-sm text-center border border-[#e9d5bb]">
+            
+            <p className="text-base">
+              Adicione o app à sua tela de início 🤎
+            </p>
 
-          <button
-            onClick={fecharInstall}
-            className="mt-3 text-xs opacity-70"
-          >
-            Entendi
-          </button>
+            <button
+              onClick={fecharInstall}
+              className="mt-6 px-5 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm"
+            >
+              Entendi
+            </button>
+
+          </div>
         </div>
       )}
 
