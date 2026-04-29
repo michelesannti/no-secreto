@@ -8,12 +8,17 @@ export default function HojePage() {
   const [mostrarInstall, setMostrarInstall] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      setMostrarInstall(true);
-    }, 1000);
+    const jaViu = localStorage.getItem("installPrompt");
+
+    if (!jaViu) {
+      setTimeout(() => {
+        setMostrarInstall(true);
+      }, 1000);
+    }
   }, []);
 
   function fecharInstall() {
+    localStorage.setItem("installPrompt", "true");
     setMostrarInstall(false);
   }
 
