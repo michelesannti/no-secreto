@@ -1,83 +1,54 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function HojePage() {
 
-  // 🔥 BLOQUEIA SCROLL GLOBAL
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
+  const [mostrarInstall, setMostrarInstall] = useState(false);
 
-    return () => {
-      document.body.style.overflow = "auto";
-    };
+  useEffect(() => {
+    setTimeout(() => {
+      setMostrarInstall(true);
+    }, 1000);
   }, []);
 
+  function fecharInstall() {
+    setMostrarInstall(false);
+  }
+
   return (
-    <div className="h-[100dvh] overflow-hidden bg-[#f9f5e9] flex flex-col items-center justify-center px-8 text-center gap-16">
+    <div className="h-[100dvh] bg-[#f9f5e9] flex flex-col items-center justify-center px-8 text-center gap-16">
 
       {/* LOGO */}
-      <div className="flex flex-col items-center animate-logoEntrance">
-        <img
-          src="/logo.png"
-          alt="No Secreto"
-          className="w-[360px]"
-        />
+      <div>
+        <img src="/logo.png" alt="No Secreto" className="w-[360px]" />
       </div>
 
       {/* BOTÃO */}
       <Link
         href="/secreto"
-        className="
-          px-6
-          py-2
-          rounded-full
-          bg-[#70412d]
-          text-[#f9f5e9]
-          text-sm
-          tracking-wide
-          transition
-          hover:opacity-90
-          animate-buttonEntrance
-        "
+        className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]"
       >
         Começar meu tempo com Deus
       </Link>
 
-      <style jsx>{`
-        @keyframes logoEntrance {
-          0% {
-            opacity: 0;
-            transform: translateY(-20px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
+      {/* CARD */}
+      {mostrarInstall && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#70412d] text-[#f9f5e9] px-5 py-4 rounded-xl shadow-lg max-w-sm text-center z-50">
+          
+          <p className="text-sm">
+            Adicione o app à sua tela de início 🤎
+          </p>
 
-        @keyframes buttonEntrance {
-          0% {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-logoEntrance {
-          animation: logoEntrance 1s ease-out;
-        }
-
-        .animate-buttonEntrance {
-          animation: buttonEntrance 1s ease-out;
-          animation-delay: 0.5s;
-          animation-fill-mode: both;
-        }
-      `}</style>
+          <button
+            onClick={fecharInstall}
+            className="mt-3 text-xs opacity-70"
+          >
+            Entendi
+          </button>
+        </div>
+      )}
 
     </div>
   );
