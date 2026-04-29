@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase";
 import ConcluirButton from "./ConcluirButton";
@@ -27,8 +27,6 @@ export default function EstudoPage() {
 
   const [loading, setLoading] = useState(true);
   const [estudo, setEstudo] = useState<Estudo | null>(null);
-
-  const containerRef = useRef<HTMLDivElement | null>(null);
 
   function quebrarVersiculos(texto: string) {
     return texto.split("\n").map((linha) => {
@@ -98,17 +96,13 @@ export default function EstudoPage() {
       : `${estudo.livro} ${estudo.capitulo}:${estudo.versiculo_inicio}`;
 
   return (
-    <div
-      ref={containerRef}
-      className="h-screen overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]"
-    >
+    <div className="h-screen overflow-y-auto bg-[#f9f5e9] pt-6 pb-40 text-[#70412d]">
       <div className="px-8 mb-12">
         <h1 className="text-xl font-serif tracking-wide">Secreto</h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
       <div className="max-w-2xl mx-auto px-8">
-
         <p className="text-sm tracking-widest text-[#70412d]/50 text-center mb-4">
           {referencia}
         </p>
@@ -122,6 +116,7 @@ export default function EstudoPage() {
                     {linha.numero}
                   </span>
                 )}
+
                 <span className="text-base leading-8 text-[#70412d]/85 italic tracking-[0.01em]">
                   {linha.texto}
                 </span>
@@ -157,7 +152,6 @@ export default function EstudoPage() {
         </div>
 
         <ConcluirButton estudoId={estudo.id} />
-
       </div>
     </div>
   );
