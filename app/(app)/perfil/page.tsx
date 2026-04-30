@@ -105,9 +105,13 @@ export default function PerfilPage() {
       if (!jornadaAtual) return;
 
       setNomeJornadaAtual(jornadaAtual.nome);
-      setPorcentagem((jornadaAtual.feitos / jornadaAtual.total) * 100);
+      setPorcentagem(
+        (jornadaAtual.feitos / jornadaAtual.total) * 100
+      );
 
-      const datas = progresso?.map((p) => p.data_local).filter(Boolean) || [];
+      const datas =
+        progresso?.map((p) => p.data_local).filter(Boolean) || [];
+
       setDatasAtivas(datas);
 
       const { data: diario } = await supabase
@@ -124,7 +128,10 @@ export default function PerfilPage() {
 
   function abrirModal(dia: number) {
     const dataSelecionada = getDataAtualBrasil(dia);
-    const registros = diarios.filter((d) => d.data_local === dataSelecionada);
+
+    const registros = diarios.filter(
+      (d) => d.data_local === dataSelecionada
+    );
 
     if (registros.length === 0) return;
 
@@ -149,16 +156,21 @@ export default function PerfilPage() {
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
+
       <div className="px-8 mb-10">
         <h1 className="text-xl font-serif tracking-wide">Perfil</h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
       </div>
 
       <div className="max-w-md mx-auto px-6 space-y-12">
-        {/* PROGRESSO */}
+
+        {/* 🔥 JORNADA ATUAL AGORA COMO TÍTULO */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-[#70412d]/60">Meu Progresso</p>
+            <p className="text-sm font-medium text-[#70412d]">
+              {nomeJornadaAtual}
+            </p>
+
             <p className="text-sm font-semibold text-[#70412d]">
               {Math.round(porcentagem)}%
             </p>
@@ -170,23 +182,18 @@ export default function PerfilPage() {
               style={{ width: `${porcentagem}%` }}
             />
           </div>
-
-          <p className="text-[12px] text-[#70412d] mt-2 text-center">
-            {nomeJornadaAtual}
-          </p>
         </div>
 
         {/* CALENDÁRIO */}
         <div className="bg-[#e9d5bb]/40 rounded-2xl p-6 space-y-4">
+
           <p className="text-center text-sm font-semibold capitalize">
             {nomeMes}
           </p>
 
           <div className="grid grid-cols-7 text-xs font-semibold text-[#70412d]">
             {diasSemana.map((d, i) => (
-              <div key={i} className="text-center">
-                {d}
-              </div>
+              <div key={i} className="text-center">{d}</div>
             ))}
           </div>
 
@@ -195,6 +202,7 @@ export default function PerfilPage() {
               if (!dia) return <div key={`empty-${i}`} />;
 
               const dataAtual = getDataAtualBrasil(dia);
+
               const ativo = datasAtivas.includes(dataAtual);
 
               return (
@@ -203,11 +211,9 @@ export default function PerfilPage() {
                   onClick={() => ativo && abrirModal(dia)}
                   className={`
                     w-9 h-9 flex items-center justify-center rounded-full text-sm transition
-                    ${
-                      ativo
-                        ? "bg-[#C6A46A] text-white scale-110 shadow-sm cursor-pointer"
-                        : "text-[#70412d]/30"
-                    }
+                    ${ativo
+                      ? "bg-[#C6A46A] text-white scale-110 shadow-sm cursor-pointer"
+                      : "text-[#70412d]/30"}
                   `}
                 >
                   {dia}
@@ -215,9 +221,10 @@ export default function PerfilPage() {
               );
             })}
           </div>
+
         </div>
 
-        {/* JORNADAS CONCLUÍDAS */}
+        {/* CONCLUÍDAS */}
         {concluidas.length > 0 && (
           <div className="flex flex-wrap justify-center gap-2">
             {concluidas.map((nome, i) => (
@@ -234,14 +241,12 @@ export default function PerfilPage() {
               >
                 <div className="px-3 py-1">{nome}</div>
 
-                <div
-                  className="
-                    flex items-center justify-center
-                    bg-[#C6A46A]
-                    rounded-full
-                    w-6 h-6
-                  "
-                >
+                <div className="
+                  flex items-center justify-center
+                  bg-[#C6A46A]
+                  rounded-full
+                  w-6 h-6
+                ">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-3.5 h-3.5 text-white"
@@ -259,6 +264,7 @@ export default function PerfilPage() {
             ))}
           </div>
         )}
+
       </div>
 
       {modalAberto && (
@@ -289,6 +295,7 @@ export default function PerfilPage() {
           </div>
         </div>
       )}
+
     </div>
   );
 }
