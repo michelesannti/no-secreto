@@ -161,7 +161,8 @@ export default function PerfilPage() {
             />
           </div>
 
-          <p className="text-[12px] text-[#70412d]/40 mt-2 text-center">
+          {/* 🔥 JORNADA ATUAL AGORA COM DESTAQUE */}
+          <p className="text-[13px] font-medium text-[#70412d] mt-2 text-center">
             {nomeJornadaAtual}
           </p>
         </div>
@@ -203,7 +204,7 @@ export default function PerfilPage() {
           </div>
         </div>
 
-        {/* BADGE COM HIERARQUIA */}
+        {/* BADGES CONCLUÍDOS MAIS SUAVES */}
         {concluidas.length > 0 && (
           <div className="flex flex-wrap justify-center gap-2">
             {concluidas.map((nome, i) => (
@@ -212,9 +213,9 @@ export default function PerfilPage() {
                 className="
                   flex items-center
                   rounded-full
-                  bg-[#e9d5bb]/40
+                  bg-[#e9d5bb]/30
                   text-[12px]
-                  text-[#70412d]/70
+                  text-[#70412d]/50
                   p-[2px]
                 "
               >
@@ -222,17 +223,25 @@ export default function PerfilPage() {
                   {nome}
                 </div>
 
-                <div
-                  className="
-                    flex items-center justify-center
-                    bg-[#C6A46A]
-                    rounded-full
-                    px-2 py-1
-                  "
-                >
-                  <span className="text-white text-[11px]">
-                    ✓
-                  </span>
+                <div className="
+                  flex items-center justify-center
+                  bg-[#C6A46A]/80
+                  rounded-full
+                  px-2 py-1
+                ">
+                  {/* SVG CHECK BONITO */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-3.5 h-3.5 text-white"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3.25-3.25a1 1 0 011.414-1.414l2.543 2.543 6.543-6.543a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
                 </div>
               </div>
             ))}
