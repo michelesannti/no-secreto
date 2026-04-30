@@ -161,8 +161,8 @@ export default function PerfilPage() {
             />
           </div>
 
-          {/* 🔥 JORNADA ATUAL AGORA COM DESTAQUE */}
-          <p className="text-[13px] font-medium text-[#70412d] mt-2 text-center">
+          {/* 🔥 SÓ COR MAIS FORTE */}
+          <p className="text-[12px] text-[#70412d] mt-2 text-center">
             {nomeJornadaAtual}
           </p>
         </div>
@@ -204,7 +204,7 @@ export default function PerfilPage() {
           </div>
         </div>
 
-        {/* BADGES CONCLUÍDOS MAIS SUAVES */}
+        {/* 🔥 MESMO LAYOUT, SÓ CORES MAIS SUAVES */}
         {concluidas.length > 0 && (
           <div className="flex flex-wrap justify-center gap-2">
             {concluidas.map((nome, i) => (
@@ -215,7 +215,7 @@ export default function PerfilPage() {
                   rounded-full
                   bg-[#e9d5bb]/30
                   text-[12px]
-                  text-[#70412d]/50
+                  text-[#70412d]/60
                   p-[2px]
                 "
               >
@@ -225,11 +225,10 @@ export default function PerfilPage() {
 
                 <div className="
                   flex items-center justify-center
-                  bg-[#C6A46A]/80
+                  bg-[#C6A46A]
                   rounded-full
                   px-2 py-1
                 ">
-                  {/* SVG CHECK BONITO */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-3.5 h-3.5 text-white"
