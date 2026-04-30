@@ -35,16 +35,23 @@ export default function PerfilPage() {
   useEffect(() => {
     async function carregar() {
       const supabase = getSupabaseClient();
-      const { data: { user } } = await supabase.auth.getUser();
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       if (!user) return;
 
-      const { data: estudos } = await supabase.from("estudos").select("*")
+      const { data: estudos } = await supabase
+        .from("estudos")
+        .select("*")
         .order("jornada_ordem", { ascending: true })
         .order("ordem", { ascending: true });
 
       if (!estudos || estudos.length === 0) return;
 
-      const { data: progresso } = await supabase.from("progresso")
+      const { data: progresso } = await supabase
+        .from("progresso")
         .select("estudo_id, data_local")
         .eq("user_id", user.id);
 
@@ -60,6 +67,7 @@ export default function PerfilPage() {
             ordem: e.jornada_ordem,
           });
         }
+
         jornadasMap.get(e.jornada).total++;
       });
 
@@ -117,7 +125,9 @@ export default function PerfilPage() {
   function abrirModal(dia: number) {
     const dataSelecionada = getDataAtualBrasil(dia);
     const registros = diarios.filter((d) => d.data_local === dataSelecionada);
+
     if (registros.length === 0) return;
+
     setRegistrosModal(registros);
     setModalAberto(true);
   }
@@ -129,6 +139,7 @@ export default function PerfilPage() {
 
   function formatarTexto(texto: string) {
     if (!texto) return "";
+
     return texto
       .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
       .replace(/_(.*?)_/g, "<em>$1</em>")
@@ -144,7 +155,6 @@ export default function PerfilPage() {
       </div>
 
       <div className="max-w-md mx-auto px-6 space-y-12">
-
         {/* PROGRESSO */}
         <div>
           <div className="flex items-center justify-between mb-2">
@@ -161,7 +171,6 @@ export default function PerfilPage() {
             />
           </div>
 
-          {/* 🔥 SÓ COR MAIS FORTE */}
           <p className="text-[12px] text-[#70412d] mt-2 text-center">
             {nomeJornadaAtual}
           </p>
@@ -175,7 +184,9 @@ export default function PerfilPage() {
 
           <div className="grid grid-cols-7 text-xs font-semibold text-[#70412d]">
             {diasSemana.map((d, i) => (
-              <div key={i} className="text-center">{d}</div>
+              <div key={i} className="text-center">
+                {d}
+              </div>
             ))}
           </div>
 
@@ -192,9 +203,11 @@ export default function PerfilPage() {
                   onClick={() => ativo && abrirModal(dia)}
                   className={`
                     w-9 h-9 flex items-center justify-center rounded-full text-sm transition
-                    ${ativo
-                      ? "bg-[#C6A46A] text-white scale-110 shadow-sm cursor-pointer"
-                      : "text-[#70412d]/30"}
+                    ${
+                      ativo
+                        ? "bg-[#C6A46A] text-white scale-110 shadow-sm cursor-pointer"
+                        : "text-[#70412d]/30"
+                    }
                   `}
                 >
                   {dia}
@@ -204,7 +217,7 @@ export default function PerfilPage() {
           </div>
         </div>
 
-        {/* 🔥 MESMO LAYOUT, SÓ CORES MAIS SUAVES */}
+        {/* JORNADAS CONCLUÍDAS */}
         {concluidas.length > 0 && (
           <div className="flex flex-wrap justify-center gap-2">
             {concluidas.map((nome, i) => (
@@ -219,16 +232,16 @@ export default function PerfilPage() {
                   p-[2px]
                 "
               >
-                <div className="px-3 py-1">
-                  {nome}
-                </div>
+                <div className="px-3 py-1">{nome}</div>
 
-                <div className="
-                  flex items-center justify-center
-                  bg-[#C6A46A]
-                  rounded-full
-                  px-2 py-1
-                ">
+                <div
+                  className="
+                    flex items-center justify-center
+                    bg-[#C6A46A]
+                    rounded-full
+                    w-6 h-6
+                  "
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-3.5 h-3.5 text-white"
@@ -246,7 +259,6 @@ export default function PerfilPage() {
             ))}
           </div>
         )}
-
       </div>
 
       {modalAberto && (
