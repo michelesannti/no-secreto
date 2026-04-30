@@ -4,13 +4,18 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function HojePage() {
-
   const [mostrarInstall, setMostrarInstall] = useState(false);
 
   useEffect(() => {
     const jaViu = localStorage.getItem("installPrompt");
 
-    if (!jaViu) {
+    // 🔥 detecta se está no PWA
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+    // 👉 só mostra se:
+    // - nunca viu
+    // - NÃO está no app (PWA)
+    if (!jaViu && !isStandalone) {
       setTimeout(() => {
         setMostrarInstall(true);
       }, 1000);
@@ -80,7 +85,6 @@ export default function HojePage() {
           </div>
         </div>
       )}
-
     </div>
   );
 }
