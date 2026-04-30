@@ -26,9 +26,7 @@ export default function PerfilPage() {
 
   const diasSemana = ["D", "S", "T", "Q", "Q", "S", "S"];
 
-  const nomeMes = hoje.toLocaleDateString("pt-BR", {
-    month: "long",
-  });
+  const nomeMes = hoje.toLocaleDateString("pt-BR", { month: "long" });
 
   function getDataAtualBrasil(dia: number) {
     return `${ano}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
@@ -37,23 +35,16 @@ export default function PerfilPage() {
   useEffect(() => {
     async function carregar() {
       const supabase = getSupabaseClient();
-
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data: estudos } = await supabase
-        .from("estudos")
-        .select("*")
+      const { data: estudos } = await supabase.from("estudos").select("*")
         .order("jornada_ordem", { ascending: true })
         .order("ordem", { ascending: true });
 
       if (!estudos || estudos.length === 0) return;
 
-      const { data: progresso } = await supabase
-        .from("progresso")
+      const { data: progresso } = await supabase.from("progresso")
         .select("estudo_id, data_local")
         .eq("user_id", user.id);
 
@@ -69,7 +60,6 @@ export default function PerfilPage() {
             ordem: e.jornada_ordem,
           });
         }
-
         jornadasMap.get(e.jornada).total++;
       });
 
@@ -107,14 +97,9 @@ export default function PerfilPage() {
       if (!jornadaAtual) return;
 
       setNomeJornadaAtual(jornadaAtual.nome);
+      setPorcentagem((jornadaAtual.feitos / jornadaAtual.total) * 100);
 
-      setPorcentagem(
-        (jornadaAtual.feitos / jornadaAtual.total) * 100
-      );
-
-      const datas =
-        progresso?.map((p) => p.data_local).filter(Boolean) || [];
-
+      const datas = progresso?.map((p) => p.data_local).filter(Boolean) || [];
       setDatasAtivas(datas);
 
       const { data: diario } = await supabase
@@ -131,13 +116,8 @@ export default function PerfilPage() {
 
   function abrirModal(dia: number) {
     const dataSelecionada = getDataAtualBrasil(dia);
-
-    const registros = diarios.filter(
-      (d) => d.data_local === dataSelecionada
-    );
-
+    const registros = diarios.filter((d) => d.data_local === dataSelecionada);
     if (registros.length === 0) return;
-
     setRegistrosModal(registros);
     setModalAberto(true);
   }
@@ -149,7 +129,6 @@ export default function PerfilPage() {
 
   function formatarTexto(texto: string) {
     if (!texto) return "";
-
     return texto
       .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
       .replace(/_(.*?)_/g, "<em>$1</em>")
@@ -159,7 +138,6 @@ export default function PerfilPage() {
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
-
       <div className="px-8 mb-10">
         <h1 className="text-xl font-serif tracking-wide">Perfil</h1>
         <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
@@ -170,10 +148,7 @@ export default function PerfilPage() {
         {/* PROGRESSO */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-[#70412d]/60">
-              Meu Progresso
-            </p>
-
+            <p className="text-sm text-[#70412d]/60">Meu Progresso</p>
             <p className="text-sm font-semibold text-[#70412d]">
               {Math.round(porcentagem)}%
             </p>
@@ -193,7 +168,6 @@ export default function PerfilPage() {
 
         {/* CALENDÁRIO */}
         <div className="bg-[#e9d5bb]/40 rounded-2xl p-6 space-y-4">
-
           <p className="text-center text-sm font-semibold capitalize">
             {nomeMes}
           </p>
@@ -209,7 +183,6 @@ export default function PerfilPage() {
               if (!dia) return <div key={`empty-${i}`} />;
 
               const dataAtual = getDataAtualBrasil(dia);
-
               const ativo = datasAtivas.includes(dataAtual);
 
               return (
@@ -228,16 +201,40 @@ export default function PerfilPage() {
               );
             })}
           </div>
-
         </div>
 
-        {/* JORNADAS CONCLUÍDAS */}
+        {/* BADGE COM HIERARQUIA */}
         {concluidas.length > 0 && (
-          <div className="space-y-2 text-center">
+          <div className="flex flex-wrap justify-center gap-2">
             {concluidas.map((nome, i) => (
-              <p key={i} className="text-[12px] text-[#70412d]/50">
-                {nome} concluído
-              </p>
+              <div
+                key={i}
+                className="
+                  flex items-center
+                  rounded-full
+                  bg-[#e9d5bb]/40
+                  text-[12px]
+                  text-[#70412d]/70
+                  p-[2px]
+                "
+              >
+                <div className="px-3 py-1">
+                  {nome}
+                </div>
+
+                <div
+                  className="
+                    flex items-center justify-center
+                    bg-[#C6A46A]
+                    rounded-full
+                    px-2 py-1
+                  "
+                >
+                  <span className="text-white text-[11px]">
+                    ✓
+                  </span>
+                </div>
+              </div>
             ))}
           </div>
         )}
@@ -272,7 +269,6 @@ export default function PerfilPage() {
           </div>
         </div>
       )}
-
     </div>
   );
 }
