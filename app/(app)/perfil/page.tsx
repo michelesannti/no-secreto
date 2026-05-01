@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getSupabaseClient } from "@/lib/supabase";
 
 export default function PerfilPage() {
@@ -13,11 +13,15 @@ export default function PerfilPage() {
   const [concluidas, setConcluidas] = useState<string[]>([]);
 
   const hoje = new Date();
-  const ano = hoje.getFullYear();
-  const mes = hoje.getMonth();
+  const [mesAtual, setMesAtual] = useState(hoje.getMonth());
+  const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
+  const [mesesComRegistro, setMesesComRegistro] = useState<string[]>([]);
 
-  const primeiroDia = new Date(ano, mes, 1).getDay();
-  const totalDias = new Date(ano, mes + 1, 0).getDate();
+  // 👉 controle universal de swipe (touch + mouse)
+  const startX = useRef<number | null>(null);
+
+  const primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
+  const totalDias = new Date(anoAtual, mesAtual + 1, 0).getDate();
 
   const diasMes = [
     ...Array(primeiroDia).fill(null),
@@ -26,10 +30,62 @@ export default function PerfilPage() {
 
   const diasSemana = ["D", "S", "T", "Q", "Q", "S", "S"];
 
-  const nomeMes = hoje.toLocaleDateString("pt-BR", { month: "long" });
+  const nomeMes = new Date(anoAtual, mesAtual).toLocaleDateString("pt-BR", {
+    month: "long",
+  });
 
   function getDataAtualBrasil(dia: number) {
-    return `${ano}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+    return `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+  }
+
+  function voltarMes() {
+    const anterior =
+      mesAtual === 0
+        ? `${anoAtual - 1}-12`
+        : `${anoAtual}-${String(mesAtual).padStart(2, "0")}`;
+
+    if (!mesesComRegistro.includes(anterior)) return;
+
+    if (mesAtual === 0) {
+      setMesAtual(11);
+      setAnoAtual((prev) => prev - 1);
+    } else {
+      setMesAtual((prev) => prev - 1);
+    }
+  }
+
+  function avancarMes() {
+    const hojeMes = hoje.getMonth();
+    const hojeAno = hoje.getFullYear();
+
+    if (anoAtual > hojeAno || (anoAtual === hojeAno && mesAtual >= hojeMes)) {
+      return;
+    }
+
+    if (mesAtual === 11) {
+      setMesAtual(0);
+      setAnoAtual((prev) => prev + 1);
+    } else {
+      setMesAtual((prev) => prev + 1);
+    }
+  }
+
+  // 👉 swipe handlers (touch + mouse)
+  function handleStart(clientX: number) {
+    startX.current = clientX;
+  }
+
+  function handleEnd(clientX: number) {
+    if (startX.current === null) return;
+
+    const diff = startX.current - clientX;
+
+    if (Math.abs(diff) < 50) return;
+
+    if (diff > 50) avancarMes();
+    if (diff < -50) voltarMes();
+
+    startX.current = null;
   }
 
   useEffect(() => {
@@ -56,6 +112,14 @@ export default function PerfilPage() {
         .eq("user_id", user.id);
 
       const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
+
+      const meses = new Set<string>();
+      progresso?.forEach((p) => {
+        if (!p.data_local) return;
+        const [ano, mes] = p.data_local.split("-");
+        meses.add(`${ano}-${mes}`);
+      });
+      setMesesComRegistro(Array.from(meses));
 
       const jornadasMap = new Map();
 
@@ -164,7 +228,7 @@ export default function PerfilPage() {
 
       <div className="max-w-md mx-auto px-6 space-y-12">
 
-        {/* 🔥 JORNADA ATUAL AGORA COMO TÍTULO */}
+        {/* JORNADA */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-medium text-[#70412d]">
@@ -184,9 +248,14 @@ export default function PerfilPage() {
           </div>
         </div>
 
-        {/* CALENDÁRIO */}
-        <div className="bg-[#e9d5bb]/40 rounded-2xl p-6 space-y-4">
-
+        {/* CALENDÁRIO COM SWIPE */}
+        <div
+          className="bg-[#e9d5bb]/40 rounded-2xl p-6 space-y-4 select-none"
+          onTouchStart={(e) => handleStart(e.touches[0].clientX)}
+          onTouchEnd={(e) => handleEnd(e.changedTouches[0].clientX)}
+          onMouseDown={(e) => handleStart(e.clientX)}
+          onMouseUp={(e) => handleEnd(e.clientX)}
+        >
           <p className="text-center text-sm font-semibold capitalize">
             {nomeMes}
           </p>
@@ -202,7 +271,6 @@ export default function PerfilPage() {
               if (!dia) return <div key={`empty-${i}`} />;
 
               const dataAtual = getDataAtualBrasil(dia);
-
               const ativo = datasAtivas.includes(dataAtual);
 
               return (
@@ -221,7 +289,6 @@ export default function PerfilPage() {
               );
             })}
           </div>
-
         </div>
 
         {/* CONCLUÍDAS */}
@@ -230,23 +297,11 @@ export default function PerfilPage() {
             {concluidas.map((nome, i) => (
               <div
                 key={i}
-                className="
-                  flex items-center
-                  rounded-full
-                  bg-[#e9d5bb]/30
-                  text-[12px]
-                  text-[#70412d]/60
-                  p-[2px]
-                "
+                className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[12px] text-[#70412d]/60 p-[2px]"
               >
                 <div className="px-3 py-1">{nome}</div>
 
-                <div className="
-                  flex items-center justify-center
-                  bg-[#C6A46A]
-                  rounded-full
-                  w-6 h-6
-                ">
+                <div className="flex items-center justify-center bg-[#C6A46A] rounded-full w-6 h-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-3.5 h-3.5 text-white"
