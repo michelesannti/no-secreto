@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase";
 
 export default function PerfilPage() {
@@ -11,18 +11,11 @@ export default function PerfilPage() {
   const [registrosModal, setRegistrosModal] = useState<any[]>([]);
   const [nomeJornadaAtual, setNomeJornadaAtual] = useState("");
   const [concluidas, setConcluidas] = useState<string[]>([]);
+  const [mesesComRegistro, setMesesComRegistro] = useState<string[]>([]);
 
   const hoje = new Date();
   const [mesAtual, setMesAtual] = useState(hoje.getMonth());
   const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
-  const [mesesComRegistro, setMesesComRegistro] = useState<string[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
-
-  const startX = useRef<number | null>(null);
-
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-  }, []);
 
   const primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
   const totalDias = new Date(anoAtual, mesAtual + 1, 0).getDate();
@@ -38,17 +31,25 @@ export default function PerfilPage() {
     month: "long",
   });
 
+  const mesAtualKey = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
+  const mesAnteriorKey =
+    mesAtual === 0
+      ? `${anoAtual - 1}-12`
+      : `${anoAtual}-${String(mesAtual).padStart(2, "0")}`;
+
+  const hojeKey = `${hoje.getFullYear()}-${String(
+    hoje.getMonth() + 1
+  ).padStart(2, "0")}`;
+
+  const podeVoltar = mesesComRegistro.includes(mesAnteriorKey);
+  const podeAvancar = mesAtualKey !== hojeKey;
+
   function getDataAtualBrasil(dia: number) {
     return `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
   }
 
   function voltarMes() {
-    const anterior =
-      mesAtual === 0
-        ? `${anoAtual - 1}-12`
-        : `${anoAtual}-${String(mesAtual).padStart(2, "0")}`;
-
-    if (!mesesComRegistro.includes(anterior)) return;
+    if (!podeVoltar) return;
 
     if (mesAtual === 0) {
       setMesAtual(11);
@@ -59,12 +60,7 @@ export default function PerfilPage() {
   }
 
   function avancarMes() {
-    const hojeMes = hoje.getMonth();
-    const hojeAno = hoje.getFullYear();
-
-    if (anoAtual > hojeAno || (anoAtual === hojeAno && mesAtual >= hojeMes)) {
-      return;
-    }
+    if (!podeAvancar) return;
 
     if (mesAtual === 11) {
       setMesAtual(0);
@@ -72,23 +68,6 @@ export default function PerfilPage() {
     } else {
       setMesAtual((prev) => prev + 1);
     }
-  }
-
-  function handleStart(clientX: number) {
-    startX.current = clientX;
-  }
-
-  function handleEnd(clientX: number) {
-    if (startX.current === null) return;
-
-    const diff = startX.current - clientX;
-
-    if (Math.abs(diff) < 50) return;
-
-    if (diff > 50) avancarMes();
-    if (diff < -50) voltarMes();
-
-    startX.current = null;
   }
 
   useEffect(() => {
@@ -116,6 +95,7 @@ export default function PerfilPage() {
 
       const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
+      // meses com registro
       const meses = new Set<string>();
       progresso?.forEach((p) => {
         if (!p.data_local) return;
@@ -252,30 +232,30 @@ export default function PerfilPage() {
         </div>
 
         {/* CALENDÁRIO */}
-        <div
-          className="bg-[#e9d5bb]/40 rounded-2xl p-6 space-y-4 select-none"
-          {...(isMobile && {
-            onTouchStart: (e: any) => handleStart(e.touches[0].clientX),
-            onTouchMove: (e: any) => e.preventDefault(),
-            onTouchEnd: (e: any) => handleEnd(e.changedTouches[0].clientX),
-          })}
-        >
+        <div className="bg-[#e9d5bb]/40 rounded-2xl p-6 space-y-4">
+
           <div className="flex items-center justify-between">
-            {!isMobile && (
+
+            {podeVoltar ? (
               <button onClick={voltarMes} className="text-sm opacity-60">
                 ←
               </button>
+            ) : (
+              <div className="w-5" />
             )}
 
-            <p className="text-center text-sm font-semibold capitalize">
+            <p className="text-center text-sm font-semibold capitalize flex-1">
               {nomeMes}
             </p>
 
-            {!isMobile && (
+            {podeAvancar ? (
               <button onClick={avancarMes} className="text-sm opacity-60">
                 →
               </button>
+            ) : (
+              <div className="w-5" />
             )}
+
           </div>
 
           <div className="grid grid-cols-7 text-xs font-semibold text-[#70412d]">
@@ -307,6 +287,7 @@ export default function PerfilPage() {
               );
             })}
           </div>
+
         </div>
 
         {/* CONCLUÍDAS */}
@@ -339,35 +320,6 @@ export default function PerfilPage() {
         )}
 
       </div>
-
-      {modalAberto && (
-        <div
-          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-          onClick={fecharModal}
-        >
-          <div
-            className="bg-[#f9f5e9] w-[90%] max-w-md rounded-2xl p-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="space-y-10 max-h-[60vh] overflow-y-auto">
-              {registrosModal.map((item, index) => (
-                <div key={index} className="space-y-6">
-                  <div className="flex justify-center">
-                    <div className="w-10 h-[2px] bg-[#C6A46A]/70 rounded-full" />
-                  </div>
-
-                  <div
-                    className="text-[16px] leading-8 text-[#70412d]/85"
-                    dangerouslySetInnerHTML={{
-                      __html: formatarTexto(item.texto),
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
     </div>
   );
