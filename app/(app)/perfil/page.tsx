@@ -16,9 +16,13 @@ export default function PerfilPage() {
   const [mesAtual, setMesAtual] = useState(hoje.getMonth());
   const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
   const [mesesComRegistro, setMesesComRegistro] = useState<string[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // 👉 controle universal de swipe (touch + mouse)
   const startX = useRef<number | null>(null);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
 
   const primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
   const totalDias = new Date(anoAtual, mesAtual + 1, 0).getDate();
@@ -70,7 +74,6 @@ export default function PerfilPage() {
     }
   }
 
-  // 👉 swipe handlers (touch + mouse)
   function handleStart(clientX: number) {
     startX.current = clientX;
   }
@@ -248,17 +251,32 @@ export default function PerfilPage() {
           </div>
         </div>
 
-        {/* CALENDÁRIO COM SWIPE */}
+        {/* CALENDÁRIO */}
         <div
           className="bg-[#e9d5bb]/40 rounded-2xl p-6 space-y-4 select-none"
-          onTouchStart={(e) => handleStart(e.touches[0].clientX)}
-          onTouchEnd={(e) => handleEnd(e.changedTouches[0].clientX)}
-          onMouseDown={(e) => handleStart(e.clientX)}
-          onMouseUp={(e) => handleEnd(e.clientX)}
+          {...(isMobile && {
+            onTouchStart: (e: any) => handleStart(e.touches[0].clientX),
+            onTouchMove: (e: any) => e.preventDefault(),
+            onTouchEnd: (e: any) => handleEnd(e.changedTouches[0].clientX),
+          })}
         >
-          <p className="text-center text-sm font-semibold capitalize">
-            {nomeMes}
-          </p>
+          <div className="flex items-center justify-between">
+            {!isMobile && (
+              <button onClick={voltarMes} className="text-sm opacity-60">
+                ←
+              </button>
+            )}
+
+            <p className="text-center text-sm font-semibold capitalize">
+              {nomeMes}
+            </p>
+
+            {!isMobile && (
+              <button onClick={avancarMes} className="text-sm opacity-60">
+                →
+              </button>
+            )}
+          </div>
 
           <div className="grid grid-cols-7 text-xs font-semibold text-[#70412d]">
             {diasSemana.map((d, i) => (
