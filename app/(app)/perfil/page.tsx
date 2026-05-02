@@ -13,6 +13,9 @@ export default function PerfilPage() {
   const [concluidas, setConcluidas] = useState<string[]>([]);
   const [mesesComRegistro, setMesesComRegistro] = useState<string[]>([]);
 
+  // 🔥 NOVO
+  const [mensagemConclusao, setMensagemConclusao] = useState<string | null>(null);
+
   const hoje = new Date();
   const [mesAtual, setMesAtual] = useState(hoje.getMonth());
   const [anoAtual, setAnoAtual] = useState(hoje.getFullYear());
@@ -65,6 +68,18 @@ export default function PerfilPage() {
     }
   }
 
+  // 🔥 LER localStorage
+  useEffect(() => {
+    const jornadaFinalizada = localStorage.getItem("jornadaConcluidaNome");
+
+    if (jornadaFinalizada) {
+      setTimeout(() => {
+        setMensagemConclusao(jornadaFinalizada);
+        localStorage.removeItem("jornadaConcluidaNome");
+      }, 1500);
+    }
+  }, []);
+
   useEffect(() => {
     async function carregar() {
       const supabase = getSupabaseClient();
@@ -87,7 +102,6 @@ export default function PerfilPage() {
 
       const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
-      // meses com registro
       const meses = new Set<string>();
       progresso?.forEach((p) => {
         if (!p.data_local) return;
@@ -331,6 +345,18 @@ export default function PerfilPage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* 🔥 NOVO */}
+      {mensagemConclusao && (
+        <div className="fixed inset-0 bg-[#f9f5e9] flex items-center justify-center z-50">
+          <div className="text-center space-y-4">
+            <p className="text-2xl font-serif text-[#70412d]">
+              {mensagemConclusao} concluído
+            </p>
+            <div className="w-16 h-[2px] bg-[#C6A46A] mx-auto opacity-70"></div>
           </div>
         </div>
       )}

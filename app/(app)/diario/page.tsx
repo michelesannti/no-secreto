@@ -19,9 +19,6 @@ function DiarioContent() {
   const [saving, setSaving] = useState(false);
   const [podeFinalizar, setPodeFinalizar] = useState(false);
 
-  const [finalizou, setFinalizou] = useState(false);
-
-  // 🔥 FUNÇÃO NOVA (data_local)
   function getHojeBrasil() {
     const formatter = new Intl.DateTimeFormat("pt-BR", {
       timeZone: "America/Sao_Paulo",
@@ -106,25 +103,22 @@ function DiarioContent() {
 
     const supabase = getSupabaseClient();
 
-    const dataLocal = getHojeBrasil(); // 🔥 NOVO
+    const dataLocal = getHojeBrasil();
 
-    // salva diário
     await supabase.from("diario").upsert({
       user_id: userId,
       estudo_id: estudoId,
       destaque,
       texto,
-      data_local: dataLocal, // 🔥 NOVO
+      data_local: dataLocal,
     });
 
-    // salva progresso
     await supabase.from("progresso").upsert({
       user_id: userId,
       estudo_id: estudoId,
-      data_local: dataLocal, // 🔥 NOVO
+      data_local: dataLocal,
     });
 
-    // limpa estado local
     localStorage.removeItem(
       `liberado-finalizar-${estudoId}`
     );
@@ -132,7 +126,6 @@ function DiarioContent() {
       `diario-${userId}-${estudoId}`
     );
 
-    // verifica se finalizou jornada
     const { data: estudosJornada } = await supabase
       .from("estudos")
       .select("id")
@@ -155,12 +148,8 @@ function DiarioContent() {
       );
 
     if (finalizouJornada) {
-      setFinalizou(true);
-
-      setTimeout(() => {
-        router.push("/perfil");
-      }, 2000);
-
+      localStorage.setItem("jornadaConcluidaNome", jornadaNome);
+      router.push("/perfil");
       return;
     }
 
@@ -171,83 +160,70 @@ function DiarioContent() {
     return <div className="min-h-screen bg-[#f9f5e9]" />;
 
   return (
-    <>
-      <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
-        <div className="pt-6 pb-40">
+    <div className="min-h-screen bg-[#f9f5e9] text-[#70412d]">
+      <div className="pt-6 pb-40">
 
-          <div className="px-8 mb-12">
-            <h1 className="text-xl font-serif tracking-wide">Diário</h1>
-            <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
+        <div className="px-8 mb-12">
+          <h1 className="text-xl font-serif tracking-wide">Diário</h1>
+          <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2"></div>
+        </div>
+
+        <div className="max-w-2xl mx-auto px-8">
+
+          <div className="flex justify-center mt-16 mb-10">
+            <div className="flex items-center gap-4">
+              <div className="w-[2px] h-8 bg-[#e9d5bb]" />
+
+              <div className="text-center font-serif text-lg font-semibold">
+                {destaque.split("\n").map((linha, i) => (
+                  <div key={i} style={{ whiteSpace: "nowrap" }}>
+                    {linha}
+                  </div>
+                ))}
+              </div>
+
+              <div className="w-[2px] h-8 bg-[#e9d5bb]" />
+            </div>
           </div>
 
-          <div className="max-w-2xl mx-auto px-8">
+          <div className="relative min-h-[600px] mb-8">
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage:
+                  "repeating-linear-gradient(to bottom, transparent, transparent 31px, #e9d5bb 31px, #e9d5bb 32px)",
+              }}
+            />
 
-            <div className="flex justify-center mt-16 mb-10">
-              <div className="flex items-center gap-4">
-                <div className="w-[2px] h-8 bg-[#e9d5bb]" />
-
-                <div className="text-center font-serif text-lg font-semibold">
-                  {destaque.split("\n").map((linha, i) => (
-                    <div key={i} style={{ whiteSpace: "nowrap" }}>
-                      {linha}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="w-[2px] h-8 bg-[#e9d5bb]" />
-              </div>
-            </div>
-
-            <div className="relative min-h-[600px] mb-8">
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(to bottom, transparent, transparent 31px, #e9d5bb 31px, #e9d5bb 32px)",
-                }}
-              />
-
-              <textarea
-                value={texto}
-                onChange={(e) => setTexto(e.target.value)}
-                placeholder="O que Deus falou com você?"
-                className="relative w-full bg-transparent resize-none outline-none text-base placeholder:text-[#70412d]/40"
-                style={{ lineHeight: "32px", minHeight: "600px" }}
-              />
-            </div>
-
-            {podeFinalizar && (
-              <div className="mt-16 flex justify-center">
-                <button
-                  onClick={handleFinalizar}
-                  disabled={saving}
-                  className="
-                    px-6 py-2 rounded-full
-                    bg-[#70412d] text-[#f9f5e9]
-                    text-sm tracking-wide
-                    transition hover:opacity-90
-                  "
-                >
-                  {saving ? "Finalizando..." : "Finalizar"}
-                </button>
-              </div>
-            )}
-
+            <textarea
+              value={texto}
+              onChange={(e) => setTexto(e.target.value)}
+              placeholder="O que Deus falou com você?"
+              className="relative w-full bg-transparent resize-none outline-none text-base placeholder:text-[#70412d]/40"
+              style={{ lineHeight: "32px", minHeight: "600px" }}
+            />
           </div>
+
+          {podeFinalizar && (
+            <div className="mt-16 flex justify-center">
+              <button
+                onClick={handleFinalizar}
+                disabled={saving}
+                className="
+                  px-6 py-2 rounded-full
+                  bg-[#70412d] text-[#f9f5e9]
+                  text-sm tracking-wide
+                  transition hover:opacity-90
+                "
+              >
+                {saving ? "Finalizando..." : "Finalizar"}
+              </button>
+            </div>
+          )}
+
         </div>
       </div>
-
-      {finalizou && (
-        <div className="fixed inset-0 bg-[#f9f5e9] flex items-center justify-center z-50">
-          <div className="text-center space-y-4 animate-fadeUp">
-            <p className="text-2xl font-serif text-[#70412d]">
-              {jornadaNome} concluído
-            </p>
-            <div className="w-16 h-[2px] bg-[#C6A46A] mx-auto opacity-70"></div>
-          </div>
-        </div>
-      )}
-    </>
+    </div>
   );
 }
 
