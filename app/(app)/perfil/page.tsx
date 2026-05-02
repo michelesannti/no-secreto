@@ -31,25 +31,17 @@ export default function PerfilPage() {
     month: "long",
   });
 
-  const mesAtualKey = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
-  const mesAnteriorKey =
-    mesAtual === 0
-      ? `${anoAtual - 1}-12`
-      : `${anoAtual}-${String(mesAtual).padStart(2, "0")}`;
-
-  const hojeKey = `${hoje.getFullYear()}-${String(
-    hoje.getMonth() + 1
-  ).padStart(2, "0")}`;
-
-  const podeVoltar = mesesComRegistro.includes(mesAnteriorKey);
-  const podeAvancar = mesAtualKey !== hojeKey;
-
   function getDataAtualBrasil(dia: number) {
     return `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
   }
 
   function voltarMes() {
-    if (!podeVoltar) return;
+    const anterior =
+      mesAtual === 0
+        ? `${anoAtual - 1}-12`
+        : `${anoAtual}-${String(mesAtual).padStart(2, "0")}`;
+
+    if (!mesesComRegistro.includes(anterior)) return;
 
     if (mesAtual === 0) {
       setMesAtual(11);
@@ -60,7 +52,10 @@ export default function PerfilPage() {
   }
 
   function avancarMes() {
-    if (!podeAvancar) return;
+    const hojeMes = hoje.getMonth();
+    const hojeAno = hoje.getFullYear();
+
+    if (anoAtual > hojeAno || (anoAtual === hojeAno && mesAtual >= hojeMes)) return;
 
     if (mesAtual === 11) {
       setMesAtual(0);
@@ -74,10 +69,7 @@ export default function PerfilPage() {
     async function carregar() {
       const supabase = getSupabaseClient();
 
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       const { data: estudos } = await supabase
@@ -86,7 +78,7 @@ export default function PerfilPage() {
         .order("jornada_ordem", { ascending: true })
         .order("ordem", { ascending: true });
 
-      if (!estudos || estudos.length === 0) return;
+      if (!estudos) return;
 
       const { data: progresso } = await supabase
         .from("progresso")
@@ -114,7 +106,6 @@ export default function PerfilPage() {
             ordem: e.jornada_ordem,
           });
         }
-
         jornadasMap.get(e.jornada).total++;
       });
 
@@ -134,9 +125,7 @@ export default function PerfilPage() {
           concluidosIds.includes(id)
         ).length;
 
-        if (feitos === data.total) {
-          jornadasConcluidas.push(data.nome);
-        }
+        if (feitos === data.total) jornadasConcluidas.push(data.nome);
 
         if (!jornadaAtual && feitos < data.total) {
           jornadaAtual = {
@@ -152,13 +141,9 @@ export default function PerfilPage() {
       if (!jornadaAtual) return;
 
       setNomeJornadaAtual(jornadaAtual.nome);
-      setPorcentagem(
-        (jornadaAtual.feitos / jornadaAtual.total) * 100
-      );
+      setPorcentagem((jornadaAtual.feitos / jornadaAtual.total) * 100);
 
-      const datas =
-        progresso?.map((p) => p.data_local).filter(Boolean) || [];
-
+      const datas = progresso?.map((p) => p.data_local).filter(Boolean) || [];
       setDatasAtivas(datas);
 
       const { data: diario } = await supabase
@@ -175,13 +160,8 @@ export default function PerfilPage() {
 
   function abrirModal(dia: number) {
     const dataSelecionada = getDataAtualBrasil(dia);
-
-    const registros = diarios.filter(
-      (d) => d.data_local === dataSelecionada
-    );
-
+    const registros = diarios.filter((d) => d.data_local === dataSelecionada);
     if (registros.length === 0) return;
-
     setRegistrosModal(registros);
     setModalAberto(true);
   }
@@ -193,13 +173,23 @@ export default function PerfilPage() {
 
   function formatarTexto(texto: string) {
     if (!texto) return "";
-
     return texto
       .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
       .replace(/_(.*?)_/g, "<em>$1</em>")
       .replace(/~(.*?)~/g, "<s>$1</s>")
       .replace(/\n/g, "<br/>");
   }
+
+  const mesAtualKey = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
+  const mesAnteriorKey =
+    mesAtual === 0
+      ? `${anoAtual - 1}-12`
+      : `${anoAtual}-${String(mesAtual).padStart(2, "0")}`;
+
+  const hojeKey = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}`;
+
+  const podeVoltar = mesesComRegistro.includes(mesAnteriorKey);
+  const podeAvancar = mesAtualKey !== hojeKey;
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
@@ -211,7 +201,7 @@ export default function PerfilPage() {
 
       <div className="max-w-md mx-auto px-6 space-y-12">
 
-        {/* JORNADA */}
+        {/* PROGRESSO */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-medium text-[#70412d]">
@@ -237,9 +227,7 @@ export default function PerfilPage() {
           <div className="flex items-center justify-between">
 
             {podeVoltar ? (
-              <button onClick={voltarMes} className="text-sm opacity-60">
-                ←
-              </button>
+              <button onClick={voltarMes}>←</button>
             ) : (
               <div className="w-5" />
             )}
@@ -249,9 +237,7 @@ export default function PerfilPage() {
             </p>
 
             {podeAvancar ? (
-              <button onClick={avancarMes} className="text-sm opacity-60">
-                →
-              </button>
+              <button onClick={avancarMes}>→</button>
             ) : (
               <div className="w-5" />
             )}
@@ -266,21 +252,20 @@ export default function PerfilPage() {
 
           <div className="grid grid-cols-7 gap-3">
             {diasMes.map((dia, i) => {
-              if (!dia) return <div key={`empty-${i}`} />;
+              if (!dia) return <div key={i} />;
 
               const dataAtual = getDataAtualBrasil(dia);
               const ativo = datasAtivas.includes(dataAtual);
 
               return (
                 <div
-                  key={`${dia}-${i}`}
+                  key={i}
                   onClick={() => ativo && abrirModal(dia)}
-                  className={`
-                    w-9 h-9 flex items-center justify-center rounded-full text-sm transition
-                    ${ativo
+                  className={`w-9 h-9 flex items-center justify-center rounded-full text-sm transition ${
+                    ativo
                       ? "bg-[#C6A46A] text-white scale-110 shadow-sm cursor-pointer"
-                      : "text-[#70412d]/30"}
-                  `}
+                      : "text-[#70412d]/30"
+                  }`}
                 >
                   {dia}
                 </div>
@@ -320,6 +305,35 @@ export default function PerfilPage() {
         )}
 
       </div>
+
+      {modalAberto && (
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+          onClick={fecharModal}
+        >
+          <div
+            className="bg-[#f9f5e9] w-[90%] max-w-md rounded-2xl p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="space-y-10 max-h-[60vh] overflow-y-auto">
+              {registrosModal.map((item, index) => (
+                <div key={index} className="space-y-6">
+                  <div className="flex justify-center">
+                    <div className="w-10 h-[2px] bg-[#C6A46A]/70 rounded-full" />
+                  </div>
+
+                  <div
+                    className="text-[16px] leading-8 text-[#70412d]/85"
+                    dangerouslySetInnerHTML={{
+                      __html: formatarTexto(item.texto),
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
