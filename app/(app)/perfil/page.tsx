@@ -13,8 +13,8 @@ export default function PerfilPage() {
   const [concluidas, setConcluidas] = useState<string[]>([]);
   const [mesesComRegistro, setMesesComRegistro] = useState<string[]>([]);
 
-  // 🔥 NOVO
   const [mensagemConclusao, setMensagemConclusao] = useState<string | null>(null);
+  const [jornadaConcluidaVisual, setJornadaConcluidaVisual] = useState<string | null>(null);
 
   const hoje = new Date();
   const [mesAtual, setMesAtual] = useState(hoje.getMonth());
@@ -68,16 +68,27 @@ export default function PerfilPage() {
     }
   }
 
-  // 🔥 LER localStorage
   useEffect(() => {
     const jornadaFinalizada = localStorage.getItem("jornadaConcluidaNome");
 
-    if (jornadaFinalizada) {
-      setTimeout(() => {
-        setMensagemConclusao(jornadaFinalizada);
-        localStorage.removeItem("jornadaConcluidaNome");
-      }, 1500);
-    }
+    if (!jornadaFinalizada) return;
+
+    setJornadaConcluidaVisual(jornadaFinalizada);
+
+    const timerMensagem = setTimeout(() => {
+      setMensagemConclusao(jornadaFinalizada);
+    }, 1500);
+
+    const timerFechar = setTimeout(() => {
+      setMensagemConclusao(null);
+      setJornadaConcluidaVisual(null);
+      localStorage.removeItem("jornadaConcluidaNome");
+    }, 3500);
+
+    return () => {
+      clearTimeout(timerMensagem);
+      clearTimeout(timerFechar);
+    };
   }, []);
 
   useEffect(() => {
@@ -205,6 +216,9 @@ export default function PerfilPage() {
   const podeVoltar = mesesComRegistro.includes(mesAnteriorKey);
   const podeAvancar = mesAtualKey !== hojeKey;
 
+  const nomeJornadaExibida = jornadaConcluidaVisual || nomeJornadaAtual;
+  const porcentagemExibida = jornadaConcluidaVisual ? 100 : porcentagem;
+
   return (
     <div className="min-h-screen bg-[#f9f5e9] pt-6 pb-32 text-[#70412d]">
 
@@ -219,18 +233,18 @@ export default function PerfilPage() {
         <div>
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-medium text-[#70412d]">
-              {nomeJornadaAtual}
+              {nomeJornadaExibida}
             </p>
 
             <p className="text-sm font-semibold text-[#70412d]">
-              {Math.round(porcentagem)}%
+              {Math.round(porcentagemExibida)}%
             </p>
           </div>
 
           <div className="relative w-full h-[18px] bg-[#e9d5bb]/50 rounded-full overflow-hidden">
             <div
               className="absolute top-0 left-0 h-full bg-[#C6A46A] rounded-full transition-all duration-700"
-              style={{ width: `${porcentagem}%` }}
+              style={{ width: `${porcentagemExibida}%` }}
             />
           </div>
         </div>
@@ -349,10 +363,9 @@ export default function PerfilPage() {
         </div>
       )}
 
-      {/* 🔥 NOVO */}
       {mensagemConclusao && (
         <div className="fixed inset-0 bg-[#f9f5e9] flex items-center justify-center z-50">
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-4 animate-fadeUp">
             <p className="text-2xl font-serif text-[#70412d]">
               {mensagemConclusao} concluído
             </p>
