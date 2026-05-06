@@ -12,10 +12,20 @@ export async function POST(req: Request) {
 
     console.log("Webhook recebido:", body);
 
+    // 🧠 pega dados do cliente
     const email =
       body?.customer?.email ||
-      body?.email ||
-      body?.buyer?.email;
+      body?.buyer?.email ||
+      body?.email;
+
+    const nome =
+      body?.customer?.name ||
+      body?.buyer?.name ||
+      "";
+
+    const status =
+      body?.status ||
+      body?.payment_status;
 
     if (!email) {
       return NextResponse.json(
@@ -24,7 +34,13 @@ export async function POST(req: Request) {
       );
     }
 
-    // cria usuário
+    // 🔥 só libera acesso se pagamento aprovado
+    const pagamentoAprovado =
+      status === "paid" ||
+      status === "approved" ||
+      status === "completed";
+
+    // 👤 tenta criar usuário
     const { data: userData, error: createError } =
       await supabase.auth.admin.createUser({
         email,
@@ -33,7 +49,7 @@ export async function POST(req: Request) {
 
     let userId = userData?.user?.id;
 
-    // se já existir, busca
+    // 🔁 se já existir, busca
     if (createError && createError.message.includes("already registered")) {
       const { data: users } = await supabase.auth.admin.listUsers();
       const existingUser = users.users.find((u) => u.email === email);
@@ -47,11 +63,12 @@ export async function POST(req: Request) {
       );
     }
 
-    // ativa acesso
+    // 🧾 salva/atualiza profile
     await supabase.from("profiles").upsert({
       id: userId,
       email,
-      ativo: true,
+      nome,
+      ativo: pagamentoAprovado, // 👈 aqui é o segredo
     });
 
     return NextResponse.json({ success: true });
