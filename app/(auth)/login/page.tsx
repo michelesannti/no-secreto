@@ -27,7 +27,7 @@ export default function LoginPage() {
         .single();
 
       if (error || !profile?.ativo) {
-        setMessage("Seu acesso ainda não foi liberado");
+        setMessage("Esse email ainda não possui acesso");
         return;
       }
 
@@ -39,11 +39,26 @@ export default function LoginPage() {
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
+
     setLoading(true);
     setMessage("");
 
+    // ✅ verifica se existe profile ativo
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("ativo")
+      .eq("email", email)
+      .single();
+
+    if (profileError || !profile?.ativo) {
+      setMessage("Esse email ainda não possui acesso");
+      setLoading(false);
+      return;
+    }
+
     const redirectTo = `${window.location.origin}/login`;
 
+    // ✅ agora sim envia magic link
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
@@ -69,6 +84,7 @@ export default function LoginPage() {
           <h1 className="text-xl font-serif tracking-wide">
             No Secreto
           </h1>
+
           <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
         </div>
 
