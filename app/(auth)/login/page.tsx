@@ -24,7 +24,7 @@ export default function LoginPage() {
         .from("profiles")
         .select("ativo")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
 
       if (error || !profile?.ativo) {
         setMessage("Esse email ainda não possui acesso");
@@ -43,12 +43,14 @@ export default function LoginPage() {
     setLoading(true);
     setMessage("");
 
-    // ✅ verifica se existe profile ativo
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // ✅ verifica se email possui acesso
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("ativo")
-      .eq("email", email)
-      .single();
+      .ilike("email", normalizedEmail)
+      .maybeSingle();
 
     if (profileError || !profile?.ativo) {
       setMessage("Esse email ainda não possui acesso");
@@ -58,9 +60,9 @@ export default function LoginPage() {
 
     const redirectTo = `${window.location.origin}/login`;
 
-    // ✅ agora sim envia magic link
+    // ✅ envia magic link apenas pra quem possui acesso
     const { error } = await supabase.auth.signInWithOtp({
-      email,
+      email: normalizedEmail,
       options: {
         emailRedirectTo: redirectTo,
       },
