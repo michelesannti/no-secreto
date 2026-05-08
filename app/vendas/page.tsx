@@ -51,7 +51,7 @@ export default function VendaPage() {
 
             <div>
 
-              <h1 className="text-[30px] leading-[1.12] font-serif tracking-tight">
+              <h1 className="text-[28px] leading-[1.12] font-serif tracking-tight">
                 você não precisa
                 <br />
                 viver assim
