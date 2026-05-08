@@ -94,10 +94,10 @@ export default function VendaPage() {
               relative
               w-[145px]
               rounded-[28px]
-              border-[6px]
-              border-black
+              border-[4px]
+              border-black/80
               bg-black
-              shadow-2xl
+              shadow-xl
               overflow-hidden
             ">
 
@@ -117,7 +117,7 @@ export default function VendaPage() {
               <img
                 src="/portal.png"
                 alt="Portal No Secreto"
-                className="w-full block"
+                className="w-full h-full object-cover scale-[1.28]"
               />
 
             </div>
@@ -127,17 +127,20 @@ export default function VendaPage() {
           {/* TEXTO */}
           <div className="flex-1 text-left space-y-5">
 
-            <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
-
-            <p className="text-[30px] leading-[1.05] font-serif">
+            <p className="text-[26px] leading-[1.15] font-serif">
               não é falta
               <br />
-              de disciplina
+              de
+              <span className="italic opacity-80"> disciplina</span>
             </p>
 
-            <p className="text-[19px] leading-[1.35] font-serif opacity-75">
-              você só nunca teve
-              um lugar pra permanecer
+            <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+
+            <p className="text-[26px] leading-[1.15] font-serif">
+              é falta de um lugar
+              <br />
+              para
+              <span className="italic opacity-80"> permanecer</span>
             </p>
 
           </div>
