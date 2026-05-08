@@ -67,13 +67,12 @@ export default function VendaPage() {
             href="https://pay.cakto.com.br/aovfbto_873529"
             className="
               block
-              w-full
               bg-[#70412D]
               text-white
-              py-5
+              py-4
               rounded-full
-              text-base
-              font-semibold
+              text-sm
+              font-medium
               shadow-xl
               shadow-[#70412D]/20
               active:scale-[0.98]
@@ -83,8 +82,37 @@ export default function VendaPage() {
             Quero constância com Deus 🤎
           </a>
 
+        </section>
+
+        {/* 2º SCROLL */}
+        <section className="text-center space-y-10">
+
+          {/* FRASE IMPACTO */}
+          <div className="space-y-5 px-4">
+
+            <p className="text-[32px] leading-[1.15] font-serif">
+              talvez não seja
+              <br />
+              falta de disciplina
+            </p>
+
+            <div className="w-12 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+            <p className="text-[24px] leading-[1.3] font-serif opacity-75">
+              talvez você só nunca teve
+              um lugar pra permanecer
+            </p>
+
+          </div>
+
+          {/* CONTEXTO */}
+          <p className="text-sm leading-relaxed opacity-70 max-w-[280px] mx-auto">
+            um espaço que te ajuda a continuar,
+            mesmo nos dias em que você falha
+          </p>
+
           {/* MOCKUP TOPO */}
-          <div className="pt-2">
+          <div>
 
             <div className="
               relative
@@ -121,17 +149,13 @@ export default function VendaPage() {
 
           </div>
 
-        </section>
-
-        {/* FRASE IMPACTO */}
-        <section className="text-center space-y-3">
-          <p className="text-3xl leading-tight font-serif">
-            talvez não seja falta de disciplina
+          {/* TEXTO FINAL */}
+          <p className="text-sm leading-relaxed opacity-70 max-w-[260px] mx-auto">
+            você abre…
+            <br />
+            e sabe exatamente por onde continuar
           </p>
 
-          <p className="text-3xl leading-tight font-serif opacity-80">
-            talvez você só nunca teve um lugar pra permanecer
-          </p>
         </section>
 
         {/* IDENTIFICAÇÃO */}
@@ -369,14 +393,13 @@ export default function VendaPage() {
           href="https://pay.cakto.com.br/aovfbto_873529"
           className="
             block
-            w-full
             text-center
             bg-[#70412D]
             text-white
-            py-5
+            py-4
             rounded-full
-            text-base
-            font-semibold
+            text-sm
+            font-medium
             shadow-xl
             shadow-[#70412D]/20
             active:scale-[0.98]
