@@ -51,11 +51,12 @@ export default function VendaPage() {
 
             <div>
 
-              <h1 className="text-[26px] leading-[1.15] font-serif tracking-tight px-2">
+              <h1 className="text-[26px] leading-[1.15] font-serif tracking-tight">
                 você não precisa
                 <br />
                 viver assim
-                <span className="italic opacity-80"> com Deus</span>
+                <br />
+                <span className="italic opacity-80">com Deus</span>
               </h1>
 
             </div>
