@@ -135,7 +135,8 @@ export default function VendaPage() {
 
             <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
-            <p className="text-[22px] leading-[1.15] font-serif">
+            {/* 🔧 AJUSTE AQUI (ÚNICA MUDANÇA) */}
+            <p className="text-[20px] leading-[1.15] font-serif">
               é falta de um lugar
               <br />
               para
