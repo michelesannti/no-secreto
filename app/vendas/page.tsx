@@ -27,23 +27,23 @@ export default function VendaPage() {
           </div>
 
           {/* HEADLINE */}
-          <div className="space-y-6 pt-1">
+          <div className="space-y-7 pt-1">
 
-            <div className="space-y-2 leading-none">
+            <div className="space-y-3 leading-none">
 
-              <p className="text-[14px] tracking-[0.25em] uppercase opacity-40">
+              <p className="text-[18px] tracking-[0.22em] uppercase opacity-35 font-light">
                 parar
               </p>
 
-              <p className="text-[14px] tracking-[0.25em] uppercase opacity-40">
+              <p className="text-[18px] tracking-[0.22em] uppercase opacity-35 font-light">
                 voltar
               </p>
 
-              <p className="text-[14px] tracking-[0.25em] uppercase opacity-40">
+              <p className="text-[18px] tracking-[0.22em] uppercase opacity-35 font-light">
                 desistir
               </p>
 
-              <p className="text-[14px] tracking-[0.25em] uppercase opacity-40">
+              <p className="text-[18px] tracking-[0.22em] uppercase opacity-35 font-light">
                 recomeçar
               </p>
 
@@ -51,7 +51,7 @@ export default function VendaPage() {
 
             <div>
 
-              <h1 className="text-[34px] leading-[1.08] font-serif tracking-tight">
+              <h1 className="text-[36px] leading-[1.08] font-serif tracking-tight">
                 você não precisa
                 <br />
                 viver assim
