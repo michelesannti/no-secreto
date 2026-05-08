@@ -85,41 +85,16 @@ export default function VendaPage() {
         </section>
 
         {/* 2º SCROLL */}
-        <section className="text-center space-y-10">
+        <section className="flex items-center justify-between gap-5">
 
-          {/* FRASE IMPACTO */}
-          <div className="space-y-5 px-4">
-
-            <p className="text-[32px] leading-[1.15] font-serif">
-              talvez não seja
-              <br />
-              falta de disciplina
-            </p>
-
-            <div className="w-12 h-[2px] bg-[#E9D5BB] mx-auto"></div>
-
-            <p className="text-[24px] leading-[1.3] font-serif opacity-75">
-              talvez você só nunca teve
-              um lugar pra permanecer
-            </p>
-
-          </div>
-
-          {/* CONTEXTO */}
-          <p className="text-sm leading-relaxed opacity-70 max-w-[280px] mx-auto">
-            um espaço que te ajuda a continuar,
-            mesmo nos dias em que você falha
-          </p>
-
-          {/* MOCKUP TOPO */}
-          <div>
+          {/* MOCKUP */}
+          <div className="shrink-0">
 
             <div className="
               relative
-              mx-auto
-              w-[240px]
-              rounded-[38px]
-              border-[9px]
+              w-[145px]
+              rounded-[28px]
+              border-[6px]
               border-black
               bg-black
               shadow-2xl
@@ -132,10 +107,10 @@ export default function VendaPage() {
                 top-0
                 left-1/2
                 -translate-x-1/2
-                w-28
-                h-5
+                w-16
+                h-3
                 bg-black
-                rounded-b-3xl
+                rounded-b-2xl
                 z-10
               "></div>
 
@@ -149,12 +124,23 @@ export default function VendaPage() {
 
           </div>
 
-          {/* TEXTO FINAL */}
-          <p className="text-sm leading-relaxed opacity-70 max-w-[260px] mx-auto">
-            você abre…
-            <br />
-            e sabe exatamente por onde continuar
-          </p>
+          {/* TEXTO */}
+          <div className="flex-1 text-left space-y-5">
+
+            <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+
+            <p className="text-[30px] leading-[1.05] font-serif">
+              não é falta
+              <br />
+              de disciplina
+            </p>
+
+            <p className="text-[19px] leading-[1.35] font-serif opacity-75">
+              você só nunca teve
+              um lugar pra permanecer
+            </p>
+
+          </div>
 
         </section>
 
