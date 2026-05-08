@@ -27,23 +27,23 @@ export default function VendaPage() {
           </div>
 
           {/* HEADLINE */}
-          <div className="space-y-6 pt-2">
+          <div className="space-y-6 pt-1">
 
             <div className="space-y-2 leading-none">
 
-              <p className="text-[15px] tracking-[0.25em] uppercase opacity-40">
+              <p className="text-[14px] tracking-[0.25em] uppercase opacity-40">
                 parar
               </p>
 
-              <p className="text-[15px] tracking-[0.25em] uppercase opacity-40">
+              <p className="text-[14px] tracking-[0.25em] uppercase opacity-40">
                 voltar
               </p>
 
-              <p className="text-[15px] tracking-[0.25em] uppercase opacity-40">
+              <p className="text-[14px] tracking-[0.25em] uppercase opacity-40">
                 desistir
               </p>
 
-              <p className="text-[15px] tracking-[0.25em] uppercase opacity-40">
+              <p className="text-[14px] tracking-[0.25em] uppercase opacity-40">
                 recomeçar
               </p>
 
@@ -51,7 +51,7 @@ export default function VendaPage() {
 
             <div>
 
-              <h1 className="text-[40px] leading-[1.05] font-serif tracking-tight">
+              <h1 className="text-[34px] leading-[1.08] font-serif tracking-tight">
                 você não precisa
                 <br />
                 viver assim
@@ -83,14 +83,14 @@ export default function VendaPage() {
           </a>
 
           {/* MOCKUP TOPO */}
-          <div className="pt-6">
+          <div className="pt-2">
 
             <div className="
               relative
               mx-auto
-              w-[290px]
-              rounded-[42px]
-              border-[10px]
+              w-[240px]
+              rounded-[38px]
+              border-[9px]
               border-black
               bg-black
               shadow-2xl
@@ -103,8 +103,8 @@ export default function VendaPage() {
                 top-0
                 left-1/2
                 -translate-x-1/2
-                w-32
-                h-6
+                w-28
+                h-5
                 bg-black
                 rounded-b-3xl
                 z-10
