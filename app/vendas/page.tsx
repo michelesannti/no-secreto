@@ -54,8 +54,8 @@ export default function VendaPage() {
               <h1 className="text-[26px] leading-[1.15] font-serif px-2">
                 você não precisa
                 <br />
-                viver assim com
-                <span className="italic opacity-80"> Deus</span>
+                viver assim
+                <span className="italic opacity-80"> com Deus</span>
               </h1>
 
             </div>
@@ -66,16 +66,18 @@ export default function VendaPage() {
           <a
             href="https://pay.cakto.com.br/aovfbto_873529"
             className="
-              inline-block
-              px-6
-              py-2
-              rounded-full
+              block
+              w-full
               bg-[#70412D]
-              text-[#F9F5E9]
-              text-sm
-              tracking-wide
+              text-white
+              py-5
+              rounded-full
+              text-base
+              font-semibold
+              shadow-xl
+              shadow-[#70412D]/20
+              active:scale-[0.98]
               transition
-              hover:opacity-90
             "
           >
             Quero constância com Deus 🤎
@@ -366,16 +368,19 @@ export default function VendaPage() {
         <a
           href="https://pay.cakto.com.br/aovfbto_873529"
           className="
-            inline-block
-            px-6
-            py-2
-            rounded-full
+            block
+            w-full
+            text-center
             bg-[#70412D]
-            text-[#F9F5E9]
-            text-sm
-            tracking-wide
+            text-white
+            py-5
+            rounded-full
+            text-base
+            font-semibold
+            shadow-xl
+            shadow-[#70412D]/20
+            active:scale-[0.98]
             transition
-            hover:opacity-90
           "
         >
           Quero parar de recomeçar 🤎
