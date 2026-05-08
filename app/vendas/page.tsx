@@ -101,7 +101,6 @@ export default function VendaPage() {
               overflow-hidden
             ">
 
-              {/* NOTCH */}
               <div className="
                 absolute
                 top-0
@@ -125,9 +124,9 @@ export default function VendaPage() {
           </div>
 
           {/* TEXTO */}
-          <div className="flex-1 text-left space-y-5">
+          <div className="flex-1 text-left space-y-4">
 
-            <p className="text-[26px] leading-[1.15] font-serif">
+            <p className="text-[24px] leading-[1.15] font-serif">
               não é falta
               <br />
               de
@@ -136,7 +135,7 @@ export default function VendaPage() {
 
             <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
-            <p className="text-[26px] leading-[1.15] font-serif">
+            <p className="text-[22px] leading-[1.15] font-serif">
               é falta de um lugar
               <br />
               para
