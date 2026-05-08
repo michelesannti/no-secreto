@@ -27,7 +27,7 @@ export default function VendaPage() {
           </div>
 
           {/* HEADLINE */}
-          <div className="space-y-8 pt-2">
+          <div className="space-y-6 pt-2">
 
             <div className="space-y-2 leading-none">
 
@@ -49,19 +49,14 @@ export default function VendaPage() {
 
             </div>
 
-            <div className="space-y-5">
+            <div>
 
               <h1 className="text-[40px] leading-[1.05] font-serif tracking-tight">
                 você não precisa
                 <br />
                 viver assim
-                <span className="italic opacity-80"> com Deus.</span>
+                <span className="italic opacity-80"> com Deus</span>
               </h1>
-
-              <p className="text-[17px] leading-relaxed opacity-75 px-4">
-                talvez você só nunca tenha aprendido
-                a permanecer.
-              </p>
 
             </div>
 
