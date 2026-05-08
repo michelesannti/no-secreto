@@ -2,7 +2,7 @@
 
 export default function VendaPage() {
   return (
-    <div className="min-h-screen bg-[#F9F5E9] text-[#5a3828] overflow-hidden">
+    <div className="min-h-screen bg-[#F9F5E9] text-[#70412D] overflow-hidden">
 
       <div className="relative max-w-md mx-auto px-6 py-8 space-y-24">
 
@@ -22,7 +22,7 @@ export default function VendaPage() {
                 No Secreto
               </h2>
 
-              <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
+              <div className="w-10 h-[2px] bg-[#E9D5BB] mt-2 mx-auto"></div>
             </div>
           </div>
 
@@ -67,14 +67,14 @@ export default function VendaPage() {
             href="https://pay.cakto.com.br/aovfbto_873529"
             className="
               block
-              bg-[#5a3828]
+              bg-[#70412D]
               text-white
               py-4
               rounded-full
               text-sm
               font-medium
               shadow-xl
-              shadow-[#5a3828]/20
+              shadow-[#70412D]/20
               active:scale-[0.98]
               transition
             "
@@ -156,7 +156,7 @@ export default function VendaPage() {
         </section>
 
         {/* BLOCO DESTAQUE */}
-        <section className="bg-[#efe3d3] p-8 rounded-[32px] text-center shadow-sm">
+        <section className="bg-[#E9D5BB] p-8 rounded-[32px] text-center shadow-sm">
           <p className="text-2xl font-serif leading-snug">
             nunca foi falta de amor
           </p>
@@ -257,7 +257,7 @@ export default function VendaPage() {
 
         {/* PROVA */}
         <section className="
-          bg-[#efe3d3]
+          bg-[#E9D5BB]
           p-6
           rounded-[28px]
           text-center
@@ -369,14 +369,14 @@ export default function VendaPage() {
           className="
             block
             text-center
-            bg-[#5a3828]
+            bg-[#70412D]
             text-white
             py-5
             rounded-full
             text-base
             font-semibold
             shadow-xl
-            shadow-[#5a3828]/20
+            shadow-[#70412D]/20
             active:scale-[0.98]
             transition
           "
