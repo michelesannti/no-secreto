@@ -10,11 +10,12 @@
 }
 
 /* RESET + SCROLL FUNCIONAL */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow-y: auto; /* 🔥 CORREÇÃO */
+  overflow-y: auto;
 }
 
 /* BASE */
@@ -25,7 +26,9 @@ body {
 }
 
 /* TIPOGRAFIA */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: var(--font-playfair);
 }
 
@@ -33,12 +36,13 @@ h1, h2, h3 {
   font-family: var(--font-cormorant);
 }
 
-/* 💣 ANIMAÇÃO PREMIUM */
+/* ANIMAÇÃO BASE */
 @keyframes fadeUp {
   0% {
     opacity: 0;
     transform: translateY(12px) scale(0.97);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -47,4 +51,59 @@ h1, h2, h3 {
 
 .animate-fadeUp {
   animation: fadeUp 0.6s ease-out;
+}
+
+/* SCROLL 2 — CINEMATIC */
+@keyframes cinematicReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes textReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes floatMockup {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-cinematicReveal {
+  animation: cinematicReveal 1s ease-out;
+}
+
+.animate-textReveal {
+  animation: textReveal 1.3s ease-out;
+}
+
+.animate-floatMockup {
+  animation: floatMockup 5s ease-in-out infinite;
 }

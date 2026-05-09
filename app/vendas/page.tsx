@@ -87,10 +87,15 @@ export default function VendaPage() {
         </section>
 
         {/* 2º SCROLL */}
-        <section className="flex items-center justify-between gap-5">
+        <section
+          className="
+            flex items-center justify-between gap-5
+            animate-cinematicReveal
+          "
+        >
 
           {/* MOCKUP */}
-          <div className="shrink-0">
+          <div className="shrink-0 animate-floatMockup">
 
             <div className="
               relative
@@ -118,7 +123,12 @@ export default function VendaPage() {
               <img
                 src="/portal.png"
                 alt="Portal No Secreto"
-                className="w-full h-full object-cover scale-[1.28]"
+                className="
+                  w-full
+                  h-full
+                  object-cover
+                  scale-[1.28]
+                "
               />
 
             </div>
@@ -126,7 +136,14 @@ export default function VendaPage() {
           </div>
 
           {/* TEXTO */}
-          <div className="flex-1 text-left space-y-4">
+          <div
+            className="
+              flex-1
+              text-left
+              space-y-4
+              animate-textReveal
+            "
+          >
 
             <p className="text-[24px] leading-[1.15] font-serif">
               não é falta
