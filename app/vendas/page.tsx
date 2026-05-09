@@ -31,19 +31,19 @@ export default function VendaPage() {
 
             <div className="space-y-3 leading-none">
 
-              <p className="text-[18px] tracking-[0.22em] uppercase opacity-35 font-light">
+              <p className="text-[18px] tracking-[0.22em] uppercase opacity-30 font-light">
                 parar
               </p>
 
-              <p className="text-[18px] tracking-[0.22em] uppercase opacity-35 font-light">
+              <p className="text-[18px] tracking-[0.22em] uppercase opacity-30 font-light">
                 voltar
               </p>
 
-              <p className="text-[18px] tracking-[0.22em] uppercase opacity-35 font-light">
+              <p className="text-[18px] tracking-[0.22em] uppercase opacity-30 font-light">
                 desistir
               </p>
 
-              <p className="text-[18px] tracking-[0.22em] uppercase opacity-35 font-light">
+              <p className="text-[18px] tracking-[0.22em] uppercase opacity-30 font-light">
                 recomeçar
               </p>
 
@@ -71,15 +71,17 @@ export default function VendaPage() {
               text-white
               py-4
               rounded-full
-              text-sm
+              text-[15px]
               font-medium
               shadow-xl
               shadow-[#70412D]/20
               active:scale-[0.98]
-              transition
+              hover:scale-[1.015]
+              transition-all
+              duration-300
             "
           >
-            Quero constância com Deus 🤎
+            Quero constância com Deus
           </a>
 
         </section>
@@ -135,7 +137,6 @@ export default function VendaPage() {
 
             <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
-            {/* 🔧 AJUSTE AQUI (ÚNICA MUDANÇA) */}
             <p className="text-[20px] leading-[1.15] font-serif">
               é falta de um lugar
               <br />
@@ -387,15 +388,17 @@ export default function VendaPage() {
             text-white
             py-4
             rounded-full
-            text-sm
+            text-[15px]
             font-medium
             shadow-xl
             shadow-[#70412D]/20
             active:scale-[0.98]
-            transition
+            hover:scale-[1.015]
+            transition-all
+            duration-300
           "
         >
-          Quero parar de recomeçar 🤎
+          Quero parar de recomeçar
         </a>
 
       </div>
