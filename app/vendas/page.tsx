@@ -87,12 +87,7 @@ export default function VendaPage() {
         </section>
 
         {/* 2º SCROLL */}
-        <section
-          className="
-            flex items-center justify-between gap-5
-            animate-cinematicReveal
-          "
-        >
+        <section className="flex items-center justify-between gap-5">
 
           {/* MOCKUP */}
           <div className="shrink-0 animate-floatMockup">
@@ -136,14 +131,7 @@ export default function VendaPage() {
           </div>
 
           {/* TEXTO */}
-          <div
-            className="
-              flex-1
-              text-left
-              space-y-4
-              animate-textReveal
-            "
-          >
+          <div className="flex-1 text-left space-y-4">
 
             <p className="text-[24px] leading-[1.15] font-serif">
               não é falta
