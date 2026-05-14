@@ -71,8 +71,8 @@ export default function VendaPage() {
               text-white
               py-4
               rounded-full
-              text-[15px]
-              font-medium
+              text-[16px]
+              font-semibold
               shadow-xl
               shadow-[#70412D]/20
               active:scale-[0.98]
@@ -103,17 +103,19 @@ export default function VendaPage() {
               overflow-hidden
             ">
 
-              <div className="
-                absolute
-                top-0
-                left-1/2
-                -translate-x-1/2
-                w-16
-                h-3
-                bg-black
-                rounded-b-2xl
-                z-10
-              "></div>
+              <div
+                className="
+                  absolute
+                  top-0
+                  left-1/2
+                  -translate-x-1/2
+                  w-16
+                  h-3
+                  bg-black
+                  rounded-b-2xl
+                  z-10
+                "
+              />
 
               <img
                 src="/portal.png"
@@ -153,33 +155,163 @@ export default function VendaPage() {
 
         </section>
 
-        {/* IDENTIFICAÇÃO */}
-        <section className="space-y-6 text-[16px] leading-relaxed">
+        {/* 3º SCROLL */}
+        <section className="space-y-9">
 
-          <p>Você ama Deus.</p>
+          {/* CONTEXTO */}
+          <div className="flex items-center justify-between gap-6">
 
-          <p>
-            Mas sua constância vai e volta.
-          </p>
+            {/* TEXTO */}
+            <div className="flex-1 space-y-4">
 
-          <p>
-            Você começa animada…
-            para alguns dias depois…
-            e sente culpa por isso.
-          </p>
+              <div className="space-y-3">
 
-          <p className="opacity-70 italic">
-            “se eu amasse Deus de verdade,
-            eu conseguiria manter”
-          </p>
+                <p className="
+                  text-[11px]
+                  uppercase
+                  tracking-[0.22em]
+                  opacity-35
+                ">
+                  estudo guiado
+                </p>
 
-        </section>
+                <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
-        {/* BLOCO DESTAQUE */}
-        <section className="bg-[#E9D5BB] p-8 rounded-[32px] text-center shadow-sm">
-          <p className="text-2xl font-serif leading-snug">
-            nunca foi falta de amor
-          </p>
+              </div>
+
+              <p className="text-[21px] leading-[1.15] font-serif">
+                sua forma de entender a
+                <span className="italic opacity-80"> Palavra</span>
+                <br />
+                é transformada
+              </p>
+
+            </div>
+
+            {/* MOCKUP */}
+            <div className="shrink-0">
+
+              <div className="
+                relative
+                w-[145px]
+                rounded-[28px]
+                border-[3px]
+                border-black
+                bg-black
+                shadow-xl
+                overflow-hidden
+              ">
+
+                <div
+                  className="
+                    absolute
+                    top-0
+                    left-1/2
+                    -translate-x-1/2
+                    w-16
+                    h-[4px]
+                    bg-black
+                    rounded-b-2xl
+                    z-10
+                  "
+                />
+
+                <img
+                  src="/contexto.png"
+                  alt="Contexto bíblico"
+                  className="
+                    w-full
+                    block
+                    object-contain
+                  "
+                />
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* APLICAÇÃO */}
+          <div className="flex items-center justify-between gap-6">
+
+            {/* MOCKUP */}
+            <div className="shrink-0">
+
+              <div className="
+                relative
+                w-[145px]
+                rounded-[28px]
+                border-[3px]
+                border-black
+                bg-black
+                shadow-xl
+                overflow-hidden
+              ">
+
+                <div
+                  className="
+                    absolute
+                    top-0
+                    left-1/2
+                    -translate-x-1/2
+                    w-16
+                    h-[4px]
+                    bg-black
+                    rounded-b-2xl
+                    z-10
+                  "
+                />
+
+                <img
+                  src="/aplicacao.png"
+                  alt="Aplicação bíblica"
+                  className="
+                    w-full
+                    block
+                    object-contain
+                  "
+                />
+
+              </div>
+
+            </div>
+
+            {/* TEXTO */}
+            <div className="flex-1 text-right space-y-4">
+
+              <div className="space-y-3">
+
+                <p className="
+                  text-[11px]
+                  uppercase
+                  tracking-[0.22em]
+                  opacity-35
+                ">
+                  aplicação real
+                </p>
+
+                <div className="w-10 h-[2px] bg-[#E9D5BB] ml-auto"></div>
+
+              </div>
+
+              <p className="text-[21px] leading-[1.15] font-serif">
+                você não está
+                <br />
+                só lendo a
+                <span className="italic opacity-80"> Bíblia</span>
+                <br />
+                <br />
+                está ouvindo
+                <br />
+                a
+                <span className="italic opacity-80"> voz de Deus</span>
+              </p>
+
+            </div>
+
+          </div>
+
         </section>
 
         {/* PERFIL */}
@@ -197,17 +329,19 @@ export default function VendaPage() {
             overflow-hidden
           ">
 
-            <div className="
-              absolute
-              top-0
-              left-1/2
-              -translate-x-1/2
-              w-32
-              h-6
-              bg-black
-              rounded-b-3xl
-              z-10
-            "></div>
+            <div
+              className="
+                absolute
+                top-0
+                left-1/2
+                -translate-x-1/2
+                w-32
+                h-6
+                bg-black
+                rounded-b-3xl
+                z-10
+              "
+            />
 
             <img
               src="/perfil.png"
@@ -222,44 +356,11 @@ export default function VendaPage() {
 
         </section>
 
-        {/* CONTEXTO */}
-        <section className="space-y-6 text-center">
-
-          <div className="
-            relative
-            mx-auto
-            w-[300px]
-            rounded-[42px]
-            border-[10px]
-            border-black
-            bg-black
-            shadow-2xl
-            overflow-hidden
-          ">
-
-            <div className="
-              absolute
-              top-0
-              left-1/2
-              -translate-x-1/2
-              w-32
-              h-6
-              bg-black
-              rounded-b-3xl
-              z-10
-            "></div>
-
-            <img
-              src="/contexto.png"
-              className="w-full block"
-            />
-
-          </div>
-
-          <p className="text-sm opacity-70">
-            você entende. você aplica.
+        {/* BLOCO DESTAQUE */}
+        <section className="bg-[#E9D5BB] p-8 rounded-[32px] text-center shadow-sm">
+          <p className="text-2xl font-serif leading-snug">
+            nunca foi falta de amor
           </p>
-
         </section>
 
         {/* FRASE */}
@@ -275,6 +376,49 @@ export default function VendaPage() {
 
         </section>
 
+        {/* DIÁRIO */}
+        <section className="text-center space-y-8">
+
+          <p className="text-3xl leading-tight font-serif">
+            sua história com Deus
+            começa a aparecer
+          </p>
+
+          <div className="
+            relative
+            mx-auto
+            w-[300px]
+            rounded-[42px]
+            border-[10px]
+            border-black
+            bg-black
+            shadow-2xl
+            overflow-hidden
+          ">
+
+            <div
+              className="
+                absolute
+                top-0
+                left-1/2
+                -translate-x-1/2
+                w-32
+                h-6
+                bg-black
+                rounded-b-3xl
+                z-10
+              "
+            />
+
+            <img
+              src="/diario.png"
+              className="w-full block"
+            />
+
+          </div>
+
+        </section>
+
         {/* PROVA */}
         <section className="
           bg-[#E9D5BB]
@@ -286,88 +430,6 @@ export default function VendaPage() {
           leading-relaxed
         ">
           “eu sinto vontade de voltar todos os dias”
-        </section>
-
-        {/* APLICAÇÃO */}
-        <section className="text-center">
-
-          <div className="
-            relative
-            mx-auto
-            w-[300px]
-            rounded-[42px]
-            border-[10px]
-            border-black
-            bg-black
-            shadow-2xl
-            overflow-hidden
-          ">
-
-            <div className="
-              absolute
-              top-0
-              left-1/2
-              -translate-x-1/2
-              w-32
-              h-6
-              bg-black
-              rounded-b-3xl
-              z-10
-            "></div>
-
-            <img
-              src="/aplicacao.png"
-              className="w-full block"
-            />
-
-          </div>
-
-        </section>
-
-        {/* DIÁRIO */}
-        <section className="text-center space-y-5">
-
-          <p className="text-3xl leading-tight font-serif">
-            sua história com Deus
-            começa a aparecer
-          </p>
-
-        </section>
-
-        {/* PRINT DIÁRIO */}
-        <section className="text-center">
-
-          <div className="
-            relative
-            mx-auto
-            w-[300px]
-            rounded-[42px]
-            border-[10px]
-            border-black
-            bg-black
-            shadow-2xl
-            overflow-hidden
-          ">
-
-            <div className="
-              absolute
-              top-0
-              left-1/2
-              -translate-x-1/2
-              w-32
-              h-6
-              bg-black
-              rounded-b-3xl
-              z-10
-            "></div>
-
-            <img
-              src="/diario.png"
-              className="w-full block"
-            />
-
-          </div>
-
         </section>
 
         {/* CLÍMAX */}
@@ -393,8 +455,8 @@ export default function VendaPage() {
             text-white
             py-4
             rounded-full
-            text-[15px]
-            font-medium
+            text-[16px]
+            font-semibold
             shadow-xl
             shadow-[#70412D]/20
             active:scale-[0.98]
