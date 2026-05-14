@@ -305,7 +305,7 @@ export default function VendaPage() {
         </section>
 
         {/* 4º SCROLL — DIÁRIO */}
-        <section className="text-center space-y-7">
+        <section className="text-center space-y-5">
 
           <div className="space-y-3">
 
@@ -322,7 +322,7 @@ export default function VendaPage() {
 
           </div>
 
-          <p className="text-[23px] leading-[1.14] font-serif">
+          <p className="text-[20px] leading-[1.12] font-serif">
             sua
             {" "}
             <span className="italic opacity-80">caminhada</span>
@@ -339,10 +339,11 @@ export default function VendaPage() {
             src="/diario.png"
             alt="Diário espiritual"
             className="
-              w-[270px]
+              w-[235px]
               mx-auto
-              rounded-[28px]
+              rounded-[24px]
               shadow-2xl
+              rotate-[-2deg]
             "
           />
 
