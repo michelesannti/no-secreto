@@ -169,7 +169,7 @@ export default function VendaPage() {
                 <p className="
                   text-[13px]
                   uppercase
-                  tracking-[0.24em]
+                  tracking-[0.18em]
                   opacity-35
                 ">
                   estudo guiado
@@ -285,7 +285,7 @@ export default function VendaPage() {
                 <p className="
                   text-[13px]
                   uppercase
-                  tracking-[0.24em]
+                  tracking-[0.12em]
                   opacity-35
                 ">
                   aplicação prática
@@ -309,14 +309,14 @@ export default function VendaPage() {
         </section>
 
         {/* 4º SCROLL — DIÁRIO */}
-        <section className="text-center space-y-8">
+        <section className="text-center space-y-6">
 
           <div className="space-y-3">
 
             <p className="
               text-[13px]
               uppercase
-              tracking-[0.24em]
+              tracking-[0.18em]
               opacity-35
             ">
               diário espiritual
@@ -326,7 +326,7 @@ export default function VendaPage() {
 
           </div>
 
-          <p className="text-[31px] leading-[1.12] font-serif">
+          <p className="text-[26px] leading-[1.12] font-serif">
             sua relação com Deus
             <br />
             deixa de acontecer
@@ -338,9 +338,9 @@ export default function VendaPage() {
           <div className="
             relative
             mx-auto
-            w-[300px]
-            rounded-[42px]
-            border-[10px]
+            w-[260px]
+            rounded-[36px]
+            border-[8px]
             border-black
             bg-black
             shadow-2xl
@@ -353,8 +353,8 @@ export default function VendaPage() {
                 top-0
                 left-1/2
                 -translate-x-1/2
-                w-32
-                h-6
+                w-28
+                h-5
                 bg-black
                 rounded-b-3xl
                 z-10
@@ -369,8 +369,8 @@ export default function VendaPage() {
           </div>
 
           <p className="
-            text-[18px]
-            leading-[1.4]
+            text-[17px]
+            leading-[1.35]
             font-serif
             italic
             opacity-75
