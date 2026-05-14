@@ -161,7 +161,6 @@ export default function VendaPage() {
           {/* CONTEXTO */}
           <div className="flex items-center justify-between gap-6">
 
-            {/* TEXTO */}
             <div className="flex-1 space-y-4">
 
               <div className="space-y-3">
@@ -188,7 +187,6 @@ export default function VendaPage() {
 
             </div>
 
-            {/* MOCKUP */}
             <div className="shrink-0">
 
               <div className="
@@ -235,7 +233,6 @@ export default function VendaPage() {
           {/* APLICAÇÃO */}
           <div className="flex items-center justify-between gap-6">
 
-            {/* MOCKUP */}
             <div className="shrink-0">
 
               <div className="
@@ -277,7 +274,6 @@ export default function VendaPage() {
 
             </div>
 
-            {/* TEXTO */}
             <div className="flex-1 text-right space-y-4">
 
               <div className="space-y-3">
@@ -328,11 +324,14 @@ export default function VendaPage() {
 
           <p className="text-[22px] leading-[1.14] font-serif">
             sua
-            <span className="italic opacity-80"> caminhada</span>
+            {" "}
+            <span className="italic opacity-80">caminhada</span>
+            {" "}
             com Deus
             <br />
             fica
-            <span className="italic opacity-80"> registrada</span>
+            {" "}
+            <span className="italic opacity-80">registrada</span>
           </p>
 
           {/* MOCKUP DIÁRIO */}
@@ -368,18 +367,6 @@ export default function VendaPage() {
             />
 
           </div>
-
-          <p className="
-            text-[17px]
-            leading-[1.35]
-            font-serif
-            italic
-            opacity-75
-          ">
-            não por obrigação.
-            <br />
-            por vontade.
-          </p>
 
         </section>
 
