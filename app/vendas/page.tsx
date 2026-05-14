@@ -326,12 +326,13 @@ export default function VendaPage() {
 
           </div>
 
-          <p className="text-[26px] leading-[1.12] font-serif">
-            sua relação com Deus
+          <p className="text-[22px] leading-[1.14] font-serif">
+            sua
+            <span className="italic opacity-80"> caminhada</span>
+            com Deus
             <br />
-            deixa de acontecer
-            <br />
-            só nos dias difíceis
+            fica
+            <span className="italic opacity-80"> registrada</span>
           </p>
 
           {/* MOCKUP DIÁRIO */}
