@@ -156,7 +156,7 @@ export default function VendaPage() {
         </section>
 
         {/* 3º SCROLL */}
-        <section className="space-y-9">
+        <section className="space-y-7">
 
           {/* CONTEXTO */}
           <div className="flex items-center justify-between gap-6">
@@ -288,7 +288,7 @@ export default function VendaPage() {
                   tracking-[0.24em]
                   opacity-35
                 ">
-                  aplicação real
+                  aplicação prática
                 </p>
 
                 <div className="w-10 h-[2px] bg-[#E9D5BB] ml-auto"></div>
@@ -308,8 +308,105 @@ export default function VendaPage() {
 
         </section>
 
-        {/* PERFIL */}
+        {/* 4º SCROLL — DIÁRIO */}
+        <section className="text-center space-y-8">
+
+          <div className="space-y-3">
+
+            <p className="
+              text-[13px]
+              uppercase
+              tracking-[0.24em]
+              opacity-35
+            ">
+              diário espiritual
+            </p>
+
+            <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+          </div>
+
+          <p className="text-[31px] leading-[1.12] font-serif">
+            sua relação com Deus
+            <br />
+            deixa de acontecer
+            <br />
+            só nos dias difíceis
+          </p>
+
+          {/* MOCKUP DIÁRIO */}
+          <div className="
+            relative
+            mx-auto
+            w-[300px]
+            rounded-[42px]
+            border-[10px]
+            border-black
+            bg-black
+            shadow-2xl
+            overflow-hidden
+          ">
+
+            <div
+              className="
+                absolute
+                top-0
+                left-1/2
+                -translate-x-1/2
+                w-32
+                h-6
+                bg-black
+                rounded-b-3xl
+                z-10
+              "
+            />
+
+            <img
+              src="/diario.png"
+              className="w-full block"
+            />
+
+          </div>
+
+          <p className="
+            text-[18px]
+            leading-[1.4]
+            font-serif
+            italic
+            opacity-75
+          ">
+            não por obrigação.
+            <br />
+            por vontade.
+          </p>
+
+        </section>
+
+        {/* 5º SCROLL — PERFIL */}
         <section className="space-y-6 text-center">
+
+          <div className="space-y-3">
+
+            <p className="
+              text-[13px]
+              uppercase
+              tracking-[0.24em]
+              opacity-35
+            ">
+              constância real
+            </p>
+
+            <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+          </div>
+
+          <p className="text-[31px] leading-[1.12] font-serif">
+            sua caminhada
+            <br />
+            com Deus começa
+            <br />
+            a ganhar forma
+          </p>
 
           <div className="
             relative
@@ -355,62 +452,6 @@ export default function VendaPage() {
           <p className="text-2xl font-serif leading-snug">
             nunca foi falta de amor
           </p>
-        </section>
-
-        {/* FRASE */}
-        <section className="text-center space-y-3">
-
-          <p className="text-3xl font-serif leading-tight">
-            você não precisa se forçar
-          </p>
-
-          <p className="text-3xl font-serif leading-tight opacity-80">
-            você começa a querer voltar
-          </p>
-
-        </section>
-
-        {/* DIÁRIO */}
-        <section className="text-center space-y-8">
-
-          <p className="text-3xl leading-tight font-serif">
-            sua história com Deus
-            começa a aparecer
-          </p>
-
-          <div className="
-            relative
-            mx-auto
-            w-[300px]
-            rounded-[42px]
-            border-[10px]
-            border-black
-            bg-black
-            shadow-2xl
-            overflow-hidden
-          ">
-
-            <div
-              className="
-                absolute
-                top-0
-                left-1/2
-                -translate-x-1/2
-                w-32
-                h-6
-                bg-black
-                rounded-b-3xl
-                z-10
-              "
-            />
-
-            <img
-              src="/diario.png"
-              className="w-full block"
-            />
-
-          </div>
-
         </section>
 
         {/* PROVA */}
