@@ -167,7 +167,7 @@ export default function VendaPage() {
               <div className="space-y-3">
 
                 <p className="
-                  text-[12px]
+                  text-[13px]
                   uppercase
                   tracking-[0.24em]
                   opacity-35
@@ -179,7 +179,7 @@ export default function VendaPage() {
 
               </div>
 
-              <p className="text-[18px] leading-[1.18] font-serif">
+              <p className="text-[17px] leading-[1.2] font-serif">
                 sua forma de entender a
                 <span className="italic opacity-80"> Palavra</span>
                 <br />
@@ -283,7 +283,7 @@ export default function VendaPage() {
               <div className="space-y-3">
 
                 <p className="
-                  text-[12px]
+                  text-[13px]
                   uppercase
                   tracking-[0.24em]
                   opacity-35
@@ -295,16 +295,10 @@ export default function VendaPage() {
 
               </div>
 
-              <p className="text-[19px] leading-[1.15] font-serif">
-                você não está
+              <p className="text-[18px] leading-[1.15] font-serif">
+                você começa a
                 <br />
-                só lendo a
-                <span className="italic opacity-80"> Bíblia</span>
-                <br />
-                <br />
-                está ouvindo
-                <br />
-                a
+                ouvir a
                 <span className="italic opacity-80"> voz de Deus</span>
               </p>
 
