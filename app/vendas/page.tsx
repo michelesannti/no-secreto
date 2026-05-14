@@ -167,9 +167,9 @@ export default function VendaPage() {
               <div className="space-y-3">
 
                 <p className="
-                  text-[11px]
+                  text-[12px]
                   uppercase
-                  tracking-[0.22em]
+                  tracking-[0.24em]
                   opacity-35
                 ">
                   estudo guiado
@@ -179,7 +179,7 @@ export default function VendaPage() {
 
               </div>
 
-              <p className="text-[21px] leading-[1.15] font-serif">
+              <p className="text-[18px] leading-[1.18] font-serif">
                 sua forma de entender a
                 <span className="italic opacity-80"> Palavra</span>
                 <br />
@@ -283,9 +283,9 @@ export default function VendaPage() {
               <div className="space-y-3">
 
                 <p className="
-                  text-[11px]
+                  text-[12px]
                   uppercase
-                  tracking-[0.22em]
+                  tracking-[0.24em]
                   opacity-35
                 ">
                   aplicação real
@@ -295,7 +295,7 @@ export default function VendaPage() {
 
               </div>
 
-              <p className="text-[21px] leading-[1.15] font-serif">
+              <p className="text-[19px] leading-[1.15] font-serif">
                 você não está
                 <br />
                 só lendo a
