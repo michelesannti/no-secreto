@@ -305,7 +305,7 @@ export default function VendaPage() {
         </section>
 
         {/* 4º SCROLL — DIÁRIO */}
-        <section className="text-center space-y-6">
+        <section className="text-center space-y-7">
 
           <div className="space-y-3">
 
@@ -322,7 +322,7 @@ export default function VendaPage() {
 
           </div>
 
-          <p className="text-[22px] leading-[1.14] font-serif">
+          <p className="text-[23px] leading-[1.14] font-serif">
             sua
             {" "}
             <span className="italic opacity-80">caminhada</span>
@@ -334,39 +334,17 @@ export default function VendaPage() {
             <span className="italic opacity-80">registrada</span>
           </p>
 
-          {/* MOCKUP DIÁRIO */}
-          <div className="
-            relative
-            mx-auto
-            w-[260px]
-            rounded-[36px]
-            border-[8px]
-            border-black
-            bg-black
-            shadow-2xl
-            overflow-hidden
-          ">
-
-            <div
-              className="
-                absolute
-                top-0
-                left-1/2
-                -translate-x-1/2
-                w-28
-                h-5
-                bg-black
-                rounded-b-3xl
-                z-10
-              "
-            />
-
-            <img
-              src="/diario.png"
-              className="w-full block"
-            />
-
-          </div>
+          {/* PRINT DIÁRIO */}
+          <img
+            src="/diario.png"
+            alt="Diário espiritual"
+            className="
+              w-[270px]
+              mx-auto
+              rounded-[28px]
+              shadow-2xl
+            "
+          />
 
         </section>
 
