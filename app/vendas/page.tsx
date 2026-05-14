@@ -89,7 +89,6 @@ export default function VendaPage() {
         {/* 2º SCROLL */}
         <section className="flex items-center justify-between gap-5">
 
-          {/* MOCKUP */}
           <div className="shrink-0 animate-floatMockup">
 
             <div className="
@@ -132,7 +131,6 @@ export default function VendaPage() {
 
           </div>
 
-          {/* TEXTO */}
           <div className="flex-1 text-left space-y-4">
 
             <p className="text-[24px] leading-[1.15] font-serif">
@@ -334,7 +332,6 @@ export default function VendaPage() {
             <span className="italic opacity-80">registrada</span>
           </p>
 
-          {/* PRINT DIÁRIO */}
           <img
             src="/diario.png"
             alt="Diário espiritual"
@@ -343,7 +340,6 @@ export default function VendaPage() {
               mx-auto
               rounded-[24px]
               shadow-2xl
-              rotate-[-2deg]
             "
           />
 
