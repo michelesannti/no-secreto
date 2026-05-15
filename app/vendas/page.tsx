@@ -336,9 +336,9 @@ export default function VendaPage() {
             src="/diario.png"
             alt="Diário espiritual"
             className="
-              w-[235px]
+              w-[200px]
               mx-auto
-              rounded-[24px]
+              rounded-[22px]
               shadow-2xl
             "
           />
