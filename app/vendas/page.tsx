@@ -350,7 +350,7 @@ export default function VendaPage() {
 
           <div className="space-y-8 relative z-10">
 
-            <div className="space-y-3 text-center">
+            <div className="space-y-3">
 
               <p className="
                 text-[13px]
@@ -358,10 +358,10 @@ export default function VendaPage() {
                 tracking-[0.18em]
                 opacity-35
               ">
-                constância real
+                constância
               </p>
 
-              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
             </div>
 
@@ -390,7 +390,6 @@ export default function VendaPage() {
 
           </div>
 
-          {/* PRINT EDITORIAL */}
           <img
             src="/perfil.png"
             alt="Constância espiritual"
@@ -403,39 +402,6 @@ export default function VendaPage() {
               shadow-2xl
             "
           />
-
-        </section>
-
-        {/* BLOCO DESTAQUE */}
-        <section className="bg-[#E9D5BB] p-8 rounded-[32px] text-center shadow-sm">
-          <p className="text-2xl font-serif leading-snug">
-            nunca foi falta de amor
-          </p>
-        </section>
-
-        {/* PROVA */}
-        <section className="
-          bg-[#E9D5BB]
-          p-6
-          rounded-[28px]
-          text-center
-          italic
-          text-[15px]
-          leading-relaxed
-        ">
-          “eu sinto vontade de voltar todos os dias”
-        </section>
-
-        {/* CLÍMAX */}
-        <section className="text-center space-y-4">
-
-          <p className="text-lg opacity-70">
-            isso não é sobre devocional
-          </p>
-
-          <p className="text-4xl font-serif leading-tight">
-            é sobre permanecer
-          </p>
 
         </section>
 
