@@ -346,7 +346,7 @@ export default function VendaPage() {
         </section>
 
         {/* 5º SCROLL — CONSTÂNCIA */}
-        <section className="relative overflow-hidden py-6">
+        <section className="relative py-6">
 
           <div className="space-y-8 relative z-10">
 
@@ -396,9 +396,9 @@ export default function VendaPage() {
             alt="Constância espiritual"
             className="
               absolute
-              right-[-35px]
-              bottom-[-10px]
-              w-[165px]
+              right-0
+              bottom-0
+              w-[155px]
               rounded-[26px]
               shadow-2xl
             "
