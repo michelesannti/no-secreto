@@ -345,68 +345,64 @@ export default function VendaPage() {
 
         </section>
 
-        {/* 5º SCROLL — PERFIL */}
-        <section className="space-y-6 text-center">
+        {/* 5º SCROLL — CONSTÂNCIA */}
+        <section className="relative overflow-hidden py-6">
 
-          <div className="space-y-3">
+          <div className="space-y-8 relative z-10">
+
+            <div className="space-y-3 text-center">
+
+              <p className="
+                text-[13px]
+                uppercase
+                tracking-[0.18em]
+                opacity-35
+              ">
+                constância real
+              </p>
+
+              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+            </div>
+
+            <div className="pl-1">
+
+              <p className="text-[36px] leading-[1.02] font-serif">
+                você para de
+                <br />
+                <span className="italic opacity-80">
+                  recomeçar
+                </span>
+              </p>
+
+            </div>
 
             <p className="
-              text-[13px]
-              uppercase
-              tracking-[0.24em]
-              opacity-35
+              text-[16px]
+              leading-[1.5]
+              opacity-70
+              max-w-[210px]
             ">
-              constância real
+              porque Deus deixa de ser
+              só alguém que você procura
+              quando tudo desmorona
             </p>
 
-            <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
-
           </div>
 
-          <p className="text-[31px] leading-[1.12] font-serif">
-            sua caminhada
-            <br />
-            com Deus começa
-            <br />
-            a ganhar forma
-          </p>
-
-          <div className="
-            relative
-            mx-auto
-            w-[300px]
-            rounded-[42px]
-            border-[10px]
-            border-black
-            bg-black
-            shadow-2xl
-            overflow-hidden
-          ">
-
-            <div
-              className="
-                absolute
-                top-0
-                left-1/2
-                -translate-x-1/2
-                w-32
-                h-6
-                bg-black
-                rounded-b-3xl
-                z-10
-              "
-            />
-
-            <img
-              src="/perfil.png"
-              className="w-full block"
-            />
-
-          </div>
-
-          <p className="text-sm opacity-70">
-            constância visível. progresso real.
-          </p>
+          {/* PRINT EDITORIAL */}
+          <img
+            src="/perfil.png"
+            alt="Constância espiritual"
+            className="
+              absolute
+              right-[-35px]
+              bottom-[-10px]
+              w-[165px]
+              rounded-[26px]
+              shadow-2xl
+            "
+          />
 
         </section>
 
