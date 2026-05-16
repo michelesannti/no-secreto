@@ -303,12 +303,12 @@ export default function VendaPage() {
         </section>
 
         {/* 4º SCROLL — DIÁRIO */}
-        <section className="text-center space-y-4 py-2 mb-10">
+        <section className="text-center space-y-5 mb-10">
 
           <div className="space-y-3">
 
             <p className="
-              text-[12px]
+              text-[13px]
               uppercase
               tracking-[0.18em]
               opacity-35
@@ -320,7 +320,7 @@ export default function VendaPage() {
 
           </div>
 
-          <p className="text-[17px] leading-[1.25] font-serif">
+          <p className="text-[19px] leading-[1.2] font-serif">
             sua caminhada fica
             <br />
             <span className="italic opacity-80">
@@ -332,19 +332,19 @@ export default function VendaPage() {
             src="/diario.png"
             alt="Diário espiritual"
             className="
-              w-[170px]
+              w-[200px]
               mx-auto
-              rounded-[20px]
-              shadow-xl
+              rounded-[22px]
+              shadow-2xl
             "
           />
 
         </section>
 
         {/* 5º SCROLL — CONSTÂNCIA */}
-        <section className="relative py-6 -mt-2 mb-24">
+        <section className="relative py-6 min-h-[360px] -mt-2 mb-24">
 
-          <div className="space-y-7 relative z-10">
+          <div className="space-y-6 relative z-10">
 
             <div className="space-y-3">
 
@@ -361,9 +361,9 @@ export default function VendaPage() {
 
             </div>
 
-            <div className="pl-1 space-y-5">
+            <div className="space-y-4">
 
-              <p className="text-[31px] leading-[1.02] font-serif">
+              <p className="text-[28px] leading-[1.02] font-serif">
                 pare de
                 <br />
                 <span className="italic opacity-80">
@@ -371,7 +371,7 @@ export default function VendaPage() {
                 </span>
               </p>
 
-              <p className="text-[31px] leading-[1.02] font-serif">
+              <p className="text-[24px] leading-[1.06] font-serif">
                 esse lugar te faz
                 <br />
                 <span className="italic opacity-80">
@@ -381,17 +381,19 @@ export default function VendaPage() {
 
             </div>
 
-            <div className="
+            <p className="
               text-[13px]
+              leading-[1.7]
               uppercase
-              tracking-[0.12em]
-              leading-[1.9]
+              tracking-[0.08em]
               opacity-45
             ">
-              <p>sem pressão</p>
-              <p>sem datas fixas</p>
-              <p>sem culpa</p>
-            </div>
+              sem pressão
+              <br />
+              sem datas fixas
+              <br />
+              sem culpa
+            </p>
 
           </div>
 
@@ -402,8 +404,8 @@ export default function VendaPage() {
               absolute
               right-0
               bottom-0
-              w-[145px]
-              rounded-[24px]
+              w-[155px]
+              rounded-[26px]
               shadow-2xl
             "
           />
