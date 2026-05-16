@@ -4,10 +4,10 @@ export default function VendaPage() {
   return (
     <div className="min-h-screen bg-[#F9F5E9] text-[#70412D] overflow-hidden">
 
-      <div className="relative max-w-md mx-auto px-6 py-8 space-y-24">
+      <div className="relative max-w-md mx-auto px-6 py-8">
 
         {/* HERO */}
-        <section className="text-center space-y-10 pt-2">
+        <section className="text-center space-y-10 pt-2 mb-24">
 
           {/* LOGO */}
           <div className="space-y-4">
@@ -87,7 +87,7 @@ export default function VendaPage() {
         </section>
 
         {/* 2º SCROLL */}
-        <section className="flex items-center justify-between gap-5">
+        <section className="flex items-center justify-between gap-5 mb-24">
 
           <div className="shrink-0 animate-floatMockup">
 
@@ -154,7 +154,7 @@ export default function VendaPage() {
         </section>
 
         {/* 3º SCROLL */}
-        <section className="space-y-7">
+        <section className="space-y-7 mb-24">
 
           {/* CONTEXTO */}
           <div className="flex items-center justify-between gap-6">
@@ -303,12 +303,12 @@ export default function VendaPage() {
         </section>
 
         {/* 4º SCROLL — DIÁRIO */}
-        <section className="text-center space-y-5">
+        <section className="text-center space-y-4 py-2 mb-10">
 
           <div className="space-y-3">
 
             <p className="
-              text-[13px]
+              text-[12px]
               uppercase
               tracking-[0.18em]
               opacity-35
@@ -320,7 +320,7 @@ export default function VendaPage() {
 
           </div>
 
-          <p className="text-[19px] leading-[1.2] font-serif">
+          <p className="text-[17px] leading-[1.25] font-serif">
             sua caminhada fica
             <br />
             <span className="italic opacity-80">
@@ -332,19 +332,19 @@ export default function VendaPage() {
             src="/diario.png"
             alt="Diário espiritual"
             className="
-              w-[200px]
+              w-[170px]
               mx-auto
-              rounded-[22px]
-              shadow-2xl
+              rounded-[20px]
+              shadow-xl
             "
           />
 
         </section>
 
         {/* 5º SCROLL — CONSTÂNCIA */}
-        <section className="relative py-6 min-h-[360px]">
+        <section className="relative py-6 -mt-2 mb-24">
 
-          <div className="space-y-6 relative z-10">
+          <div className="space-y-7 relative z-10">
 
             <div className="space-y-3">
 
@@ -361,9 +361,9 @@ export default function VendaPage() {
 
             </div>
 
-            <div className="space-y-4">
+            <div className="pl-1 space-y-5">
 
-              <p className="text-[28px] leading-[1.02] font-serif">
+              <p className="text-[31px] leading-[1.02] font-serif">
                 pare de
                 <br />
                 <span className="italic opacity-80">
@@ -371,7 +371,7 @@ export default function VendaPage() {
                 </span>
               </p>
 
-              <p className="text-[24px] leading-[1.06] font-serif">
+              <p className="text-[31px] leading-[1.02] font-serif">
                 esse lugar te faz
                 <br />
                 <span className="italic opacity-80">
@@ -381,19 +381,17 @@ export default function VendaPage() {
 
             </div>
 
-            <p className="
+            <div className="
               text-[13px]
-              leading-[1.7]
               uppercase
-              tracking-[0.08em]
+              tracking-[0.12em]
+              leading-[1.9]
               opacity-45
             ">
-              sem pressão
-              <br />
-              sem datas fixas
-              <br />
-              sem culpa
-            </p>
+              <p>sem pressão</p>
+              <p>sem datas fixas</p>
+              <p>sem culpa</p>
+            </div>
 
           </div>
 
@@ -404,8 +402,8 @@ export default function VendaPage() {
               absolute
               right-0
               bottom-0
-              w-[155px]
-              rounded-[26px]
+              w-[145px]
+              rounded-[24px]
               shadow-2xl
             "
           />
