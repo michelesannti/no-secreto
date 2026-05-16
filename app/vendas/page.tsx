@@ -321,14 +321,11 @@ export default function VendaPage() {
           </div>
 
           <p className="text-[20px] leading-[1.12] font-serif">
-            sua
-            {" "}
-            <span className="italic opacity-80">caminhada</span>
-            {" "}
+            sua{" "}
+            <span className="italic opacity-80">caminhada</span>{" "}
             com Deus
             <br />
-            fica
-            {" "}
+            fica{" "}
             <span className="italic opacity-80">registrada</span>
           </p>
 
@@ -346,9 +343,9 @@ export default function VendaPage() {
         </section>
 
         {/* 5º SCROLL — CONSTÂNCIA */}
-        <section className="relative py-6">
+        <section className="relative py-6 min-h-[360px]">
 
-          <div className="space-y-8 relative z-10">
+          <div className="space-y-7 relative z-10">
 
             <div className="space-y-3">
 
@@ -365,10 +362,10 @@ export default function VendaPage() {
 
             </div>
 
-            <div className="pl-1">
+            <div>
 
-              <p className="text-[36px] leading-[1.02] font-serif">
-                você para de
+              <p className="text-[34px] leading-[1.02] font-serif">
+                pare de
                 <br />
                 <span className="italic opacity-80">
                   recomeçar
@@ -378,14 +375,30 @@ export default function VendaPage() {
             </div>
 
             <p className="
-              text-[16px]
-              leading-[1.5]
-              opacity-70
-              max-w-[210px]
+              text-[17px]
+              leading-[1.45]
+              max-w-[220px]
+              font-serif
             ">
-              porque Deus deixa de ser
-              só alguém que você procura
-              quando tudo desmorona
+              existe um lugar
+              <br />
+              que te faz continuar
+            </p>
+
+            <p className="
+              text-[13px]
+              leading-[1.7]
+              uppercase
+              tracking-[0.08em]
+              opacity-45
+            ">
+              sem pressão.
+              <br />
+              sem datas fixas.
+              <br />
+              sem atrasos.
+              <br />
+              sem culpa.
             </p>
 
           </div>
