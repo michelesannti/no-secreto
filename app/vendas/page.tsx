@@ -151,6 +151,7 @@ export default function VendaPage() {
         {/* 3º SCROLL */}
         <section className="space-y-7 mb-20">
 
+          {/* CONTEXTO */}
           <div className="flex items-center justify-between gap-6">
 
             <div className="flex-1 space-y-4">
@@ -222,6 +223,7 @@ export default function VendaPage() {
 
           </div>
 
+          {/* APLICAÇÃO */}
           <div className="flex items-center justify-between gap-6">
 
             <div className="shrink-0">
@@ -296,40 +298,45 @@ export default function VendaPage() {
         </section>
 
         {/* 4º SCROLL */}
-        <section className="text-center mb-10">
+        <section className="flex items-center justify-between gap-6 mb-12">
 
-          <div className="space-y-3 mb-5">
+          <div className="flex-1 space-y-4">
 
-            <p className="
-              text-[13px]
-              uppercase
-              tracking-[0.18em]
-              opacity-35
-            ">
-              diário espiritual
+            <div className="space-y-3">
+
+              <p className="
+                text-[13px]
+                uppercase
+                tracking-[0.18em]
+                opacity-35
+              ">
+                diário espiritual
+              </p>
+
+              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+
+            </div>
+
+            <p className="text-[20px] leading-[1.15] font-serif">
+              sua caminhada
+              <br />
+              fica
+              {" "}
+              <span className="italic opacity-80">
+                registrada
+              </span>
             </p>
 
-            <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
-
           </div>
-
-          <p className="text-[20px] leading-[1.15] font-serif">
-            sua caminhada fica
-            <br />
-            <span className="italic opacity-80">
-              registrada
-            </span>
-          </p>
 
           <img
             src="/diario.png"
             alt="Diário espiritual"
             className="
-              w-[145px]
-              mx-auto
-              mt-5
-              rounded-[18px]
-              shadow-xl
+              w-[155px]
+              rounded-[22px]
+              shadow-2xl
+              shrink-0
             "
           />
 
