@@ -320,8 +320,9 @@ export default function VendaPage() {
 
           </div>
 
-          <p className="text-[19px] leading-[1.15] font-serif">
-            sua caminhada fica{" "}
+          <p className="text-[19px] leading-[1.2] font-serif">
+            sua caminhada fica
+            <br />
             <span className="italic opacity-80">
               registrada
             </span>
@@ -341,7 +342,7 @@ export default function VendaPage() {
         </section>
 
         {/* 5º SCROLL — CONSTÂNCIA */}
-        <section className="relative py-6 min-h-[370px]">
+        <section className="relative py-6 min-h-[360px]">
 
           <div className="space-y-6 relative z-10">
 
@@ -362,7 +363,7 @@ export default function VendaPage() {
 
             <div className="space-y-4">
 
-              <p className="text-[30px] leading-[1.02] font-serif">
+              <p className="text-[28px] leading-[1.02] font-serif">
                 pare de
                 <br />
                 <span className="italic opacity-80">
@@ -370,10 +371,9 @@ export default function VendaPage() {
                 </span>
               </p>
 
-              <p className="text-[26px] leading-[1.06] font-serif">
-                existe um lugar
+              <p className="text-[24px] leading-[1.06] font-serif">
+                esse lugar te faz
                 <br />
-                que te faz{" "}
                 <span className="italic opacity-80">
                   continuar
                 </span>
