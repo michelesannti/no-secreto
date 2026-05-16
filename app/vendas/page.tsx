@@ -9,7 +9,6 @@ export default function VendaPage() {
         {/* HERO */}
         <section className="text-center space-y-10 pt-2 mb-24">
 
-          {/* LOGO */}
           <div className="space-y-4">
             <img
               src="/logo.png"
@@ -26,7 +25,6 @@ export default function VendaPage() {
             </div>
           </div>
 
-          {/* HEADLINE */}
           <div className="space-y-7 pt-1">
 
             <div className="space-y-3 leading-none">
@@ -50,19 +48,16 @@ export default function VendaPage() {
             </div>
 
             <div>
-
               <h1 className="text-[26px] leading-[1.15] font-serif px-2">
                 você não precisa
                 <br />
                 viver assim
                 <span className="italic opacity-80"> com Deus</span>
               </h1>
-
             </div>
 
           </div>
 
-          {/* CTA */}
           <a
             href="https://pay.cakto.com.br/aovfbto_873529"
             className="
@@ -154,9 +149,8 @@ export default function VendaPage() {
         </section>
 
         {/* 3º SCROLL */}
-        <section className="space-y-7 mb-24">
+        <section className="space-y-7 mb-20">
 
-          {/* CONTEXTO */}
           <div className="flex items-center justify-between gap-6">
 
             <div className="flex-1 space-y-4">
@@ -228,7 +222,6 @@ export default function VendaPage() {
 
           </div>
 
-          {/* APLICAÇÃO */}
           <div className="flex items-center justify-between gap-6">
 
             <div className="shrink-0">
@@ -302,10 +295,10 @@ export default function VendaPage() {
 
         </section>
 
-        {/* 4º SCROLL — DIÁRIO */}
-        <section className="text-center space-y-5 mb-10">
+        {/* 4º SCROLL */}
+        <section className="text-center mb-10">
 
-          <div className="space-y-3">
+          <div className="space-y-3 mb-5">
 
             <p className="
               text-[13px]
@@ -320,7 +313,7 @@ export default function VendaPage() {
 
           </div>
 
-          <p className="text-[19px] leading-[1.2] font-serif">
+          <p className="text-[20px] leading-[1.15] font-serif">
             sua caminhada fica
             <br />
             <span className="italic opacity-80">
@@ -332,17 +325,18 @@ export default function VendaPage() {
             src="/diario.png"
             alt="Diário espiritual"
             className="
-              w-[200px]
+              w-[145px]
               mx-auto
-              rounded-[22px]
-              shadow-2xl
+              mt-5
+              rounded-[18px]
+              shadow-xl
             "
           />
 
         </section>
 
-        {/* 5º SCROLL — CONSTÂNCIA */}
-        <section className="relative py-6 min-h-[360px] -mt-2 mb-24">
+        {/* 5º SCROLL */}
+        <section className="relative py-6 min-h-[360px] mb-24">
 
           <div className="space-y-6 relative z-10">
 
