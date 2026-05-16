@@ -320,13 +320,11 @@ export default function VendaPage() {
 
           </div>
 
-          <p className="text-[20px] leading-[1.12] font-serif">
-            sua{" "}
-            <span className="italic opacity-80">caminhada</span>{" "}
-            com Deus
-            <br />
-            fica{" "}
-            <span className="italic opacity-80">registrada</span>
+          <p className="text-[19px] leading-[1.15] font-serif">
+            sua caminhada fica{" "}
+            <span className="italic opacity-80">
+              registrada
+            </span>
           </p>
 
           <img
@@ -343,9 +341,9 @@ export default function VendaPage() {
         </section>
 
         {/* 5º SCROLL — CONSTÂNCIA */}
-        <section className="relative py-6 min-h-[360px]">
+        <section className="relative py-6 min-h-[370px]">
 
-          <div className="space-y-7 relative z-10">
+          <div className="space-y-6 relative z-10">
 
             <div className="space-y-3">
 
@@ -362,9 +360,9 @@ export default function VendaPage() {
 
             </div>
 
-            <div>
+            <div className="space-y-4">
 
-              <p className="text-[34px] leading-[1.02] font-serif">
+              <p className="text-[30px] leading-[1.02] font-serif">
                 pare de
                 <br />
                 <span className="italic opacity-80">
@@ -372,18 +370,16 @@ export default function VendaPage() {
                 </span>
               </p>
 
-            </div>
+              <p className="text-[26px] leading-[1.06] font-serif">
+                existe um lugar
+                <br />
+                que te faz{" "}
+                <span className="italic opacity-80">
+                  continuar
+                </span>
+              </p>
 
-            <p className="
-              text-[17px]
-              leading-[1.45]
-              max-w-[220px]
-              font-serif
-            ">
-              existe um lugar
-              <br />
-              que te faz continuar
-            </p>
+            </div>
 
             <p className="
               text-[13px]
@@ -392,13 +388,11 @@ export default function VendaPage() {
               tracking-[0.08em]
               opacity-45
             ">
-              sem pressão.
+              sem pressão
               <br />
-              sem datas fixas.
+              sem datas fixas
               <br />
-              sem atrasos.
-              <br />
-              sem culpa.
+              sem culpa
             </p>
 
           </div>
@@ -438,7 +432,7 @@ export default function VendaPage() {
             duration-300
           "
         >
-          Quero parar de recomeçar
+          Quero viver isso com Deus
         </a>
 
       </div>
