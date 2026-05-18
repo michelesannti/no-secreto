@@ -297,48 +297,59 @@ export default function VendaPage() {
 
         </section>
 
-        {/* 4º SCROLL */}
-        <section className="flex items-center justify-between gap-6 mb-12">
+        {/* 4º SCROLL — EDITORIAL */}
+        <section className="relative mb-16">
 
-          <div className="flex-1 space-y-4">
+          <div className="space-y-3 mb-6">
 
-            <div className="space-y-3">
-
-              <p className="
-                text-[13px]
-                uppercase
-                tracking-[0.18em]
-                opacity-35
-              ">
-                diário espiritual
-              </p>
-
-              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
-
-            </div>
-
-            <p className="text-[20px] leading-[1.15] font-serif">
-              sua caminhada
-              <br />
-              fica
-              {" "}
-              <span className="italic opacity-80">
-                registrada
-              </span>
+            <p className="
+              text-[13px]
+              uppercase
+              tracking-[0.18em]
+              opacity-35
+            ">
+              diário espiritual
             </p>
+
+            <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
           </div>
 
-          <img
-            src="/diario.png"
-            alt="Diário espiritual"
-            className="
-              w-[155px]
-              rounded-[22px]
-              shadow-2xl
-              shrink-0
-            "
-          />
+          <div className="relative">
+
+            <img
+              src="/diario.png"
+              alt="Diário espiritual"
+              className="
+                w-full
+                rounded-[30px]
+                shadow-2xl
+              "
+            />
+
+            {/* TEXTO SOBREPOSTO */}
+            <div
+              className="
+                absolute
+                left-5
+                bottom-5
+                bg-[#F9F5E9]/85
+                backdrop-blur-sm
+                px-4
+                py-3
+                rounded-[18px]
+              "
+            >
+              <p className="text-[18px] leading-[1.12] font-serif">
+                sua caminhada fica
+                <br />
+                <span className="italic opacity-80">
+                  registrada
+                </span>
+              </p>
+            </div>
+
+          </div>
 
         </section>
 

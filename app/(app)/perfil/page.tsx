@@ -305,7 +305,7 @@ export default function PerfilPage() {
 
         {/* CONCLUÍDAS */}
         {concluidas.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap items-start gap-2">
             {concluidas.map((nome, i) => (
               <div
                 key={i}
