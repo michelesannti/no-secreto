@@ -297,21 +297,22 @@ export default function VendaPage() {
 
         </section>
 
-        {/* 4º + 5º SCROLL FUNDIDOS */}
+        {/* 4º + 5º */}
         <section className="relative mb-24">
 
           {/* 4º */}
-          <div className="flex items-start justify-between gap-5 mb-14">
+          <div className="flex items-center justify-between gap-5 mb-14">
 
-            <div className="flex-1 pt-2 space-y-4">
+            <div className="flex-1 space-y-4">
 
               <div className="space-y-3">
 
                 <p className="
                   text-[13px]
                   uppercase
-                  tracking-[0.18em]
+                  tracking-[0.12em]
                   opacity-35
+                  whitespace-nowrap
                 ">
                   diário espiritual
                 </p>
@@ -321,8 +322,10 @@ export default function VendaPage() {
               </div>
 
               <p className="text-[17px] leading-[1.2] font-serif">
-                sua caminhada fica
+                sua caminhada
                 <br />
+                fica
+                {" "}
                 <span className="italic opacity-80">
                   registrada
                 </span>
@@ -367,7 +370,7 @@ export default function VendaPage() {
                 src="/perfil.png"
                 alt="Constância espiritual"
                 className="
-                  w-[182px]
+                  w-[145px]
                   rounded-[26px]
                   shadow-2xl
                   shrink-0
@@ -442,6 +445,7 @@ export default function VendaPage() {
         </a>
 
       </div>
+
     </div>
   );
 }
