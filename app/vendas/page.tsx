@@ -364,20 +364,20 @@ export default function VendaPage() {
 
             </div>
 
-            <div className="flex items-end justify-between gap-5">
+            <div className="flex items-center justify-between gap-5">
 
               <img
                 src="/perfil.png"
                 alt="Constância espiritual"
                 className="
-                  w-[145px]
+                  w-[182px]
                   rounded-[26px]
                   shadow-2xl
                   shrink-0
                 "
               />
 
-              <div className="flex-1 text-left space-y-5 pb-2">
+              <div className="flex-1 text-left space-y-5">
 
                 <div className="space-y-4">
 
