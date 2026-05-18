@@ -297,66 +297,10 @@ export default function VendaPage() {
 
         </section>
 
-        {/* 4º SCROLL — EDITORIAL */}
-        <section className="relative mb-16">
+        {/* 4º SCROLL */}
+        <section className="flex items-center justify-between gap-6 mb-20">
 
-          <div className="space-y-3 mb-6">
-
-            <p className="
-              text-[13px]
-              uppercase
-              tracking-[0.18em]
-              opacity-35
-            ">
-              diário espiritual
-            </p>
-
-            <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
-
-          </div>
-
-          <div className="relative">
-
-            <img
-              src="/diario.png"
-              alt="Diário espiritual"
-              className="
-                w-full
-                rounded-[30px]
-                shadow-2xl
-              "
-            />
-
-            {/* TEXTO SOBREPOSTO */}
-            <div
-              className="
-                absolute
-                left-5
-                bottom-5
-                bg-[#F9F5E9]/85
-                backdrop-blur-sm
-                px-4
-                py-3
-                rounded-[18px]
-              "
-            >
-              <p className="text-[18px] leading-[1.12] font-serif">
-                sua caminhada fica
-                <br />
-                <span className="italic opacity-80">
-                  registrada
-                </span>
-              </p>
-            </div>
-
-          </div>
-
-        </section>
-
-        {/* 5º SCROLL */}
-        <section className="relative py-6 min-h-[360px] mb-24">
-
-          <div className="space-y-6 relative z-10">
+          <div className="flex-1 space-y-4">
 
             <div className="space-y-3">
 
@@ -366,61 +310,116 @@ export default function VendaPage() {
                 tracking-[0.18em]
                 opacity-35
               ">
-                constância
+                diário espiritual
               </p>
 
               <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
             </div>
 
-            <div className="space-y-4">
-
-              <p className="text-[28px] leading-[1.02] font-serif">
-                pare de
-                <br />
-                <span className="italic opacity-80">
-                  recomeçar
-                </span>
-              </p>
-
-              <p className="text-[24px] leading-[1.06] font-serif">
-                esse lugar te faz
-                <br />
-                <span className="italic opacity-80">
-                  continuar
-                </span>
-              </p>
-
-            </div>
-
-            <p className="
-              text-[13px]
-              leading-[1.7]
-              uppercase
-              tracking-[0.08em]
-              opacity-45
-            ">
-              sem pressão
+            <p className="text-[18px] leading-[1.15] font-serif">
+              sua caminhada fica
               <br />
-              sem datas fixas
-              <br />
-              sem culpa
+              <span className="italic opacity-80">
+                registrada
+              </span>
             </p>
 
           </div>
 
-          <img
-            src="/perfil.png"
-            alt="Constância espiritual"
-            className="
-              absolute
-              right-0
-              bottom-0
-              w-[155px]
-              rounded-[26px]
-              shadow-2xl
-            "
-          />
+          <div className="shrink-0">
+
+            <img
+              src="/diario.png"
+              alt="Diário espiritual"
+              className="
+                w-[165px]
+                rounded-[22px]
+                shadow-2xl
+              "
+            />
+
+          </div>
+
+        </section>
+
+        {/* 5º SCROLL */}
+        <section className="mb-24">
+
+          {/* TÍTULO */}
+          <div className="space-y-3 text-center mb-10">
+
+            <p className="
+              text-[13px]
+              uppercase
+              tracking-[0.18em]
+              opacity-35
+            ">
+              constância
+            </p>
+
+            <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+          </div>
+
+          {/* CONTEÚDO */}
+          <div className="flex items-end justify-between gap-5">
+
+            {/* PRINT */}
+            <div className="shrink-0">
+
+              <img
+                src="/perfil.png"
+                alt="Constância espiritual"
+                className="
+                  w-[155px]
+                  rounded-[26px]
+                  shadow-2xl
+                "
+              />
+
+            </div>
+
+            {/* TEXTOS */}
+            <div className="flex-1 text-right space-y-5 pb-2">
+
+              <div className="space-y-4">
+
+                <p className="text-[28px] leading-[1.02] font-serif">
+                  pare de
+                  <br />
+                  <span className="italic opacity-80">
+                    recomeçar
+                  </span>
+                </p>
+
+                <p className="text-[22px] leading-[1.08] font-serif">
+                  esse lugar te faz
+                  <br />
+                  <span className="italic opacity-80">
+                    continuar
+                  </span>
+                </p>
+
+              </div>
+
+              <p className="
+                text-[13px]
+                leading-[1.7]
+                uppercase
+                tracking-[0.08em]
+                opacity-45
+              ">
+                sem pressão
+                <br />
+                sem datas fixas
+                <br />
+                sem culpa
+              </p>
+
+            </div>
+
+          </div>
 
         </section>
 
@@ -448,6 +447,7 @@ export default function VendaPage() {
         </a>
 
       </div>
+
     </div>
   );
 }
