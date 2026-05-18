@@ -367,7 +367,7 @@ export default function VendaPage() {
                 src="/perfil.png"
                 alt="Constância espiritual"
                 className="
-                  w-[155px]
+                  w-[182px]
                   rounded-[26px]
                   shadow-2xl
                   shrink-0
@@ -385,8 +385,6 @@ export default function VendaPage() {
                       recomeçar
                     </span>
                   </p>
-
-                  <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
                   <p className="text-[24px] leading-[1.06] font-serif">
                     esse lugar te faz
