@@ -297,37 +297,38 @@ export default function VendaPage() {
 
         </section>
 
-        {/* 4º SCROLL */}
-        <section className="flex items-center justify-between gap-6 mb-20">
+        {/* 4º + 5º SCROLL FUNDIDOS */}
+        <section className="relative mb-24">
 
-          <div className="flex-1 space-y-4">
+          {/* 4º */}
+          <div className="flex items-start justify-between gap-5 mb-14">
 
-            <div className="space-y-3">
+            <div className="flex-1 pt-2 space-y-4">
 
-              <p className="
-                text-[13px]
-                uppercase
-                tracking-[0.18em]
-                opacity-35
-              ">
-                diário espiritual
+              <div className="space-y-3">
+
+                <p className="
+                  text-[13px]
+                  uppercase
+                  tracking-[0.18em]
+                  opacity-35
+                ">
+                  diário espiritual
+                </p>
+
+                <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+
+              </div>
+
+              <p className="text-[17px] leading-[1.2] font-serif">
+                sua caminhada fica
+                <br />
+                <span className="italic opacity-80">
+                  registrada
+                </span>
               </p>
 
-              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
-
             </div>
-
-            <p className="text-[18px] leading-[1.15] font-serif">
-              sua caminhada fica
-              <br />
-              <span className="italic opacity-80">
-                registrada
-              </span>
-            </p>
-
-          </div>
-
-          <div className="shrink-0">
 
             <img
               src="/diario.png"
@@ -336,37 +337,31 @@ export default function VendaPage() {
                 w-[165px]
                 rounded-[22px]
                 shadow-2xl
+                shrink-0
               "
             />
 
           </div>
 
-        </section>
+          {/* 5º */}
+          <div className="space-y-8">
 
-        {/* 5º SCROLL */}
-        <section className="mb-24">
+            <div className="space-y-3 text-center">
 
-          {/* TÍTULO */}
-          <div className="space-y-3 text-center mb-10">
+              <p className="
+                text-[13px]
+                uppercase
+                tracking-[0.18em]
+                opacity-35
+              ">
+                constância
+              </p>
 
-            <p className="
-              text-[13px]
-              uppercase
-              tracking-[0.18em]
-              opacity-35
-            ">
-              constância
-            </p>
+              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
 
-            <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+            </div>
 
-          </div>
-
-          {/* CONTEÚDO */}
-          <div className="flex items-end justify-between gap-5">
-
-            {/* PRINT */}
-            <div className="shrink-0">
+            <div className="flex items-end justify-between gap-5">
 
               <img
                 src="/perfil.png"
@@ -375,47 +370,49 @@ export default function VendaPage() {
                   w-[155px]
                   rounded-[26px]
                   shadow-2xl
+                  shrink-0
                 "
               />
 
-            </div>
+              <div className="flex-1 text-left space-y-5 pb-2">
 
-            {/* TEXTOS */}
-            <div className="flex-1 text-right space-y-5 pb-2">
+                <div className="space-y-4">
 
-              <div className="space-y-4">
+                  <p className="text-[28px] leading-[1.02] font-serif">
+                    pare de
+                    <br />
+                    <span className="italic opacity-80">
+                      recomeçar
+                    </span>
+                  </p>
 
-                <p className="text-[28px] leading-[1.02] font-serif">
-                  pare de
+                  <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+
+                  <p className="text-[24px] leading-[1.06] font-serif">
+                    esse lugar te faz
+                    <br />
+                    <span className="italic opacity-80">
+                      continuar
+                    </span>
+                  </p>
+
+                </div>
+
+                <p className="
+                  text-[13px]
+                  leading-[1.7]
+                  uppercase
+                  tracking-[0.08em]
+                  opacity-45
+                ">
+                  sem pressão
                   <br />
-                  <span className="italic opacity-80">
-                    recomeçar
-                  </span>
-                </p>
-
-                <p className="text-[22px] leading-[1.08] font-serif">
-                  esse lugar te faz
+                  sem datas fixas
                   <br />
-                  <span className="italic opacity-80">
-                    continuar
-                  </span>
+                  sem culpa
                 </p>
 
               </div>
-
-              <p className="
-                text-[13px]
-                leading-[1.7]
-                uppercase
-                tracking-[0.08em]
-                opacity-45
-              ">
-                sem pressão
-                <br />
-                sem datas fixas
-                <br />
-                sem culpa
-              </p>
 
             </div>
 
@@ -447,7 +444,6 @@ export default function VendaPage() {
         </a>
 
       </div>
-
     </div>
   );
 }
