@@ -390,8 +390,10 @@ export default function VendaPage() {
                   </p>
 
                   <p className="text-[24px] leading-[1.06] font-serif">
-                    esse lugar te faz
+                    esse lugar te
                     <br />
+                    faz
+                    {" "}
                     <span className="italic opacity-80">
                       continuar
                     </span>
