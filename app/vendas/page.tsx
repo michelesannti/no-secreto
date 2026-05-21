@@ -408,7 +408,7 @@ export default function VendaPage() {
                   tracking-[0.08em]
                   opacity-45
                 ">
-                  sem pressão
+                  nada zera
                   <br />
                   sem datas fixas
                   <br />
