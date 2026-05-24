@@ -28,15 +28,25 @@ export default function HojePage() {
   }
 
   return (
-    <div className="h-[100dvh] bg-[#f9f5e9] flex flex-col items-center justify-center px-8 text-center gap-16">
+    <div className="h-[100dvh] bg-[#f9f5e9] flex flex-col items-center justify-center px-8 text-center gap-14">
 
-      {/* LOGO */}
-      <div>
+      {/* LOGO + NOME */}
+      <div className="space-y-4">
+
         <img
           src="/logo.png"
           alt="No Secreto"
           className="w-[360px]"
         />
+
+        <div>
+          <h1 className="text-xl font-serif tracking-wide text-[#70412d]">
+            No Secreto
+          </h1>
+
+          <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
+        </div>
+
       </div>
 
       {/* BOTÃO PRINCIPAL */}
@@ -60,9 +70,9 @@ export default function HojePage() {
       {/* 💣 MODAL INSTALL */}
       {mostrarInstall && (
         <div className="fixed inset-0 flex items-end justify-center z-50 pb-24">
-          
+
           <div className="bg-[#f9f5e9] text-[#70412d] px-6 py-6 rounded-2xl shadow-xl max-w-sm text-center border border-[#e9d5bb]">
-            
+
             <p className="text-base leading-relaxed font-medium">
               Adicione o app à sua tela de início 🤎
             </p>
