@@ -74,12 +74,22 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#f9f5e9] flex items-center justify-center text-[#70412d] px-6">
       <div className="w-full max-w-sm">
 
-        <div className="mb-12 text-center">
-          <h1 className="text-xl font-serif tracking-wide">
-            No Secreto
-          </h1>
+        <div className="mb-12 text-center space-y-4">
 
-          <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
+          <img
+            src="/logo.png"
+            alt="No Secreto"
+            className="w-24 h-24 mx-auto object-contain"
+          />
+
+          <div>
+            <h1 className="text-xl font-serif tracking-wide">
+              No Secreto
+            </h1>
+
+            <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
+          </div>
+
         </div>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-8">
