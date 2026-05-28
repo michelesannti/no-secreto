@@ -20,12 +20,12 @@ export default function CreatorsPage() {
           </div>
 
           {/* TÍTULO */}
-          <div className="mb-12">
+          <div className="mb-10">
 
             <h1 className="text-[28px] leading-[1.12] font-serif uppercase">
               Briefing para
               <br />
-              <span className="italic opacity-80 pr-1">
+              <span className="italic opacity-80 normal-case">
                 creators
               </span>
             </h1>
@@ -98,7 +98,7 @@ export default function CreatorsPage() {
 
             </div>
 
-            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
+            <div className="space-y-7 text-[19px] leading-[1.55] font-serif">
 
               <p>
                 Não é só um aplicativo.
@@ -111,15 +111,13 @@ export default function CreatorsPage() {
               </p>
 
               <p>
-                Nasceu da dificuldade de permanecer,
-                <br />
-                da culpa de começar e parar,
-                <br />
-                da sensação de nunca conseguir manter
+                Nasceu da dificuldade de manter
                 {" "}
                 <span className="italic opacity-80">
-                  constância.
+                  constância espiritual
                 </span>
+                {" "}
+                e da culpa de sempre começar e parar.
               </p>
 
               <p>
