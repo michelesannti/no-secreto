@@ -2,60 +2,135 @@
 
 export default function CreatorsPage() {
   return (
-    <main className="bg-[#F9F5E9] text-[#70412D] min-h-screen py-20 px-6">
+    <main className="bg-[#F9F5E9] text-[#70412D] min-h-screen overflow-hidden">
 
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-md mx-auto px-6 py-10">
 
-        {/* CAPA */}
-        <section className="min-h-[85vh] flex flex-col items-center justify-center text-center border-b border-[#E9D5BB]">
+        {/* TOPO */}
+        <section className="text-center mb-28">
 
-          <img
-            src="/logo.png"
-            alt="No Secreto"
-            className="w-28 mb-12"
-          />
+          <div className="space-y-3 mb-14">
 
-          <h1 className="text-5xl md:text-6xl font-serif leading-tight max-w-2xl">
-            Não é só estudo —
-            <br />
-            é encontro com Deus
-          </h1>
+            <h2 className="text-xl font-serif tracking-wide">
+              No Secreto
+            </h2>
 
-          <div className="w-12 h-[2px] bg-[#E9D5BB] mt-10"></div>
+            <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
 
-          <p className="mt-10 uppercase tracking-[0.25em] text-sm opacity-40">
-            briefing para creators
-          </p>
+          </div>
+
+          {/* TÍTULO */}
+          <div className="mb-14">
+
+            <h1 className="text-[34px] leading-[1.05] font-serif uppercase">
+              Briefing para
+              <br />
+              <span className="italic opacity-80">
+                creators
+              </span>
+            </h1>
+
+          </div>
+
+          {/* MOCKUP */}
+          <div className="flex justify-center">
+
+            <div className="shrink-0 animate-floatMockup">
+
+              <div
+                className="
+                  relative
+                  w-[190px]
+                  rounded-[38px]
+                  border-[4px]
+                  border-black/80
+                  bg-black
+                  shadow-2xl
+                  overflow-hidden
+                "
+              >
+
+                <div
+                  className="
+                    absolute
+                    top-0
+                    left-1/2
+                    -translate-x-1/2
+                    w-20
+                    h-4
+                    bg-black
+                    rounded-b-2xl
+                    z-10
+                  "
+                />
+
+                <img
+                  src="/portal.png"
+                  alt="Portal No Secreto"
+                  className="
+                    w-full
+                    h-full
+                    object-cover
+                    scale-[1.28]
+                  "
+                />
+
+              </div>
+
+            </div>
+
+          </div>
 
         </section>
 
         {/* SOBRE */}
-        <section className="py-28 border-b border-[#E9D5BB]">
+        <section className="mb-28">
 
-          <div className="space-y-8">
+          <div className="space-y-10">
 
-            <p className="uppercase tracking-[0.2em] text-sm opacity-40">
-              Sobre o No Secreto
-            </p>
+            <div className="space-y-5">
 
-            <div className="w-12 h-[2px] bg-[#E9D5BB]"></div>
+              <p className="uppercase tracking-[0.18em] text-[13px] opacity-35">
+                Sobre o No Secreto
+              </p>
 
-            <div className="space-y-8 text-[28px] leading-[1.55] font-serif">
+              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+
+            </div>
+
+            <div className="space-y-8 text-[22px] leading-[1.45] font-serif">
 
               <p>
                 O No Secreto não é apenas um aplicativo.
-                É um lugar de encontro com Deus.
+                <br />
+                É um lugar de
+                {" "}
+                <span className="italic opacity-80">
+                  encontro com Deus
+                </span>
+                .
               </p>
 
               <p>
                 Nasceu da dificuldade de permanecer,
                 da culpa de começar e parar,
-                da sensação de nunca conseguir manter constância espiritual.
+                da sensação de nunca conseguir manter
+                {" "}
+                <span className="italic opacity-80">
+                  constância espiritual
+                </span>
+                .
               </p>
 
               <p>
                 Foi criado para mulheres que querem voltar para Deus
-                de forma leve, profunda e real.
+                de forma leve,
+                {" "}
+                <span className="italic opacity-80">
+                  profunda
+                </span>
+                {" "}
+                e real.
               </p>
 
             </div>
@@ -65,25 +140,29 @@ export default function CreatorsPage() {
         </section>
 
         {/* DORES */}
-        <section className="py-28 border-b border-[#E9D5BB]">
+        <section className="mb-28">
 
-          <div className="space-y-14">
+          <div className="space-y-10">
 
             <div className="space-y-5">
 
-              <p className="uppercase tracking-[0.2em] text-sm opacity-40">
+              <p className="uppercase tracking-[0.18em] text-[13px] opacity-35">
                 Principais dores
               </p>
 
-              <div className="w-12 h-[2px] bg-[#E9D5BB]"></div>
+              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
             </div>
 
-            <div className="space-y-8 text-[26px] leading-[1.6] font-serif">
+            <div className="space-y-7 text-[22px] leading-[1.45] font-serif">
 
               <p>
                 mulheres que querem se aproximar de Deus,
-                mas não conseguem manter constância
+                mas não conseguem manter
+                {" "}
+                <span className="italic opacity-80">
+                  constância
+                </span>
               </p>
 
               <p>
@@ -95,7 +174,11 @@ export default function CreatorsPage() {
               </p>
 
               <p>
-                sentem a vida desalinhada espiritualmente
+                sentem a vida desalinhada
+                {" "}
+                <span className="italic opacity-80">
+                  espiritualmente
+                </span>
               </p>
 
             </div>
@@ -105,31 +188,45 @@ export default function CreatorsPage() {
         </section>
 
         {/* TRANSFORMAÇÕES */}
-        <section className="py-28 border-b border-[#E9D5BB]">
+        <section className="mb-28">
 
-          <div className="space-y-14">
+          <div className="space-y-10">
 
             <div className="space-y-5">
 
-              <p className="uppercase tracking-[0.2em] text-sm opacity-40">
+              <p className="uppercase tracking-[0.18em] text-[13px] opacity-35">
                 Principais transformações
               </p>
 
-              <div className="w-12 h-[2px] bg-[#E9D5BB]"></div>
+              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
             </div>
 
-            <div className="space-y-8 text-[26px] leading-[1.6] font-serif">
+            <div className="space-y-7 text-[22px] leading-[1.45] font-serif">
 
-              <p>entender a Palavra com clareza</p>
+              <p>
+                entender a Palavra
+                {" "}
+                <span className="italic opacity-80">
+                  com clareza
+                </span>
+              </p>
 
-              <p>ter constância sem culpa</p>
+              <p>
+                ter constância sem culpa
+              </p>
 
-              <p>não depender de motivação</p>
+              <p>
+                não depender de motivação
+              </p>
 
               <p>
                 transformar o tempo com Deus
-                em parte da rotina
+                em parte da
+                {" "}
+                <span className="italic opacity-80">
+                  rotina
+                </span>
               </p>
 
             </div>
@@ -138,60 +235,73 @@ export default function CreatorsPage() {
 
         </section>
 
-        {/* CONTEÚDO */}
-        <section className="py-28 border-b border-[#E9D5BB]">
+        {/* FORMATOS */}
+        <section className="mb-28">
 
-          <div className="space-y-20">
+          <div className="space-y-10">
 
-            {/* funciona */}
-            <div className="space-y-12">
+            <div className="space-y-5">
 
-              <div className="space-y-5">
+              <p className="uppercase tracking-[0.18em] text-[13px] opacity-35">
+                Formatos que funcionam
+              </p>
 
-                <p className="uppercase tracking-[0.2em] text-sm opacity-40">
-                  Formatos que funcionam
-                </p>
-
-                <div className="w-12 h-[2px] bg-[#E9D5BB]"></div>
-
-              </div>
-
-              <div className="space-y-8 text-[26px] leading-[1.6] font-serif">
-
-                <p>relatos pessoais</p>
-
-                <p>rotina espiritual</p>
-
-                <p>reflexões profundas</p>
-
-                <p>experiência usando o No Secreto</p>
-
-              </div>
+              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
             </div>
 
-            {/* evitar */}
-            <div className="space-y-12">
+            <div className="space-y-7 text-[22px] leading-[1.45] font-serif">
 
-              <div className="space-y-5">
+              <p>relatos pessoais</p>
 
-                <p className="uppercase tracking-[0.2em] text-sm opacity-40">
-                  O que evitar
-                </p>
+              <p>rotina espiritual</p>
 
-                <div className="w-12 h-[2px] bg-[#E9D5BB]"></div>
+              <p>
+                reflexões
+                {" "}
+                <span className="italic opacity-80">
+                  profundas
+                </span>
+              </p>
 
-              </div>
+              <p>
+                experiência usando o No Secreto
+              </p>
 
-              <div className="space-y-8 text-[26px] leading-[1.6] font-serif">
+            </div>
 
-                <p>conteúdo forçado</p>
+          </div>
 
-                <p>publicidade agressiva</p>
+        </section>
 
-                <p>tom religioso pesado</p>
+        {/* EVITAR */}
+        <section className="mb-32">
 
-              </div>
+          <div className="space-y-10">
+
+            <div className="space-y-5">
+
+              <p className="uppercase tracking-[0.18em] text-[13px] opacity-35">
+                O que evitar
+              </p>
+
+              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+
+            </div>
+
+            <div className="space-y-7 text-[22px] leading-[1.45] font-serif">
+
+              <p>conteúdo forçado</p>
+
+              <p>
+                publicidade
+                {" "}
+                <span className="italic opacity-80">
+                  agressiva
+                </span>
+              </p>
+
+              <p>tom religioso pesado</p>
 
             </div>
 
@@ -200,23 +310,20 @@ export default function CreatorsPage() {
         </section>
 
         {/* FINAL */}
-        <section className="py-36 text-center">
+        <section className="text-center pb-24">
 
-          <div className="space-y-12">
+          <div className="space-y-10">
 
-            <p className="text-4xl md:text-5xl font-serif leading-[1.5]">
-              O conteúdo não deve parecer propaganda.
+            <p className="text-[30px] leading-[1.2] font-serif">
+              Mais do que divulgar
               <br />
-              Deve parecer experiência.
+              um aplicativo
             </p>
 
-            <div className="w-12 h-[2px] bg-[#E9D5BB] mx-auto"></div>
-
-            <p className="text-xl leading-[1.9] opacity-80 max-w-2xl mx-auto">
-              Mais do que divulgar o aplicativo,
+            <p className="text-[20px] leading-[1.7] opacity-80 font-serif px-3">
               o objetivo é fazer mulheres sentirem
               que existe um lugar seguro para voltar
-              e permanecer em Deus.
+              e permanecer em Deus
             </p>
 
           </div>
