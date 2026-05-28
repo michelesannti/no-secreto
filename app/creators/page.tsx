@@ -101,10 +101,12 @@ export default function CreatorsPage() {
             <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
 
               <p>
-                Não é só um aplicativo —
+                Não é só um aplicativo — é um lugar
+                <br />
+                de
                 {" "}
                 <span className="italic opacity-80">
-                  é um lugar de encontro com Deus.
+                  encontro com Deus.
                 </span>
               </p>
 
@@ -128,54 +130,6 @@ export default function CreatorsPage() {
                 </span>
                 {" "}
                 de forma leve, profunda e real.
-              </p>
-
-            </div>
-
-          </div>
-
-        </section>
-
-        {/* DORES */}
-        <section className="mb-28">
-
-          <div className="space-y-10">
-
-            <div className="space-y-5">
-
-              <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
-                Principais dores
-              </p>
-
-              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
-
-            </div>
-
-            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
-
-              <p>
-                mulheres que querem se aproximar de Deus,
-                mas não conseguem manter
-                {" "}
-                <span className="italic opacity-80">
-                  constância
-                </span>
-              </p>
-
-              <p>
-                se sentem culpadas por começar e parar
-              </p>
-
-              <p>
-                não sabem por onde estudar a Bíblia
-              </p>
-
-              <p>
-                sentem a vida desalinhada
-                {" "}
-                <span className="italic opacity-80">
-                  espiritualmente
-                </span>
               </p>
 
             </div>
@@ -223,6 +177,54 @@ export default function CreatorsPage() {
                 {" "}
                 <span className="italic opacity-80">
                   rotina
+                </span>
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* DORES */}
+        <section className="mb-28">
+
+          <div className="space-y-10">
+
+            <div className="space-y-5">
+
+              <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
+                Principais dores
+              </p>
+
+              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+
+            </div>
+
+            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
+
+              <p>
+                mulheres que querem se aproximar de Deus,
+                mas não conseguem manter
+                {" "}
+                <span className="italic opacity-80">
+                  constância
+                </span>
+              </p>
+
+              <p>
+                se sentem culpadas por começar e parar
+              </p>
+
+              <p>
+                não sabem por onde estudar a Bíblia
+              </p>
+
+              <p>
+                sentem a vida desalinhada
+                {" "}
+                <span className="italic opacity-80">
+                  espiritualmente
                 </span>
               </p>
 
