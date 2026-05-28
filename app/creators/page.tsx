@@ -22,7 +22,7 @@ export default function CreatorsPage() {
           {/* TÍTULO */}
           <div className="mb-14">
 
-            <h1 className="text-[34px] leading-[1.05] font-serif uppercase">
+            <h1 className="text-[30px] leading-[1.05] font-serif uppercase">
               Briefing para
               <br />
               <span className="italic opacity-80">
@@ -90,7 +90,7 @@ export default function CreatorsPage() {
 
             <div className="space-y-5">
 
-              <p className="uppercase tracking-[0.18em] text-[13px] opacity-35">
+              <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
                 Sobre o No Secreto
               </p>
 
@@ -98,7 +98,7 @@ export default function CreatorsPage() {
 
             </div>
 
-            <div className="space-y-8 text-[22px] leading-[1.45] font-serif">
+            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
 
               <p>
                 O No Secreto não é apenas um aplicativo.
@@ -146,7 +146,7 @@ export default function CreatorsPage() {
 
             <div className="space-y-5">
 
-              <p className="uppercase tracking-[0.18em] text-[13px] opacity-35">
+              <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
                 Principais dores
               </p>
 
@@ -154,7 +154,7 @@ export default function CreatorsPage() {
 
             </div>
 
-            <div className="space-y-7 text-[22px] leading-[1.45] font-serif">
+            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
 
               <p>
                 mulheres que querem se aproximar de Deus,
@@ -194,7 +194,7 @@ export default function CreatorsPage() {
 
             <div className="space-y-5">
 
-              <p className="uppercase tracking-[0.18em] text-[13px] opacity-35">
+              <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
                 Principais transformações
               </p>
 
@@ -202,7 +202,7 @@ export default function CreatorsPage() {
 
             </div>
 
-            <div className="space-y-7 text-[22px] leading-[1.45] font-serif">
+            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
 
               <p>
                 entender a Palavra
@@ -242,7 +242,7 @@ export default function CreatorsPage() {
 
             <div className="space-y-5">
 
-              <p className="uppercase tracking-[0.18em] text-[13px] opacity-35">
+              <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
                 Formatos que funcionam
               </p>
 
@@ -250,7 +250,7 @@ export default function CreatorsPage() {
 
             </div>
 
-            <div className="space-y-7 text-[22px] leading-[1.45] font-serif">
+            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
 
               <p>relatos pessoais</p>
 
@@ -281,7 +281,7 @@ export default function CreatorsPage() {
 
             <div className="space-y-5">
 
-              <p className="uppercase tracking-[0.18em] text-[13px] opacity-35">
+              <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
                 O que evitar
               </p>
 
@@ -289,7 +289,7 @@ export default function CreatorsPage() {
 
             </div>
 
-            <div className="space-y-7 text-[22px] leading-[1.45] font-serif">
+            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
 
               <p>conteúdo forçado</p>
 
@@ -314,13 +314,13 @@ export default function CreatorsPage() {
 
           <div className="space-y-10">
 
-            <p className="text-[30px] leading-[1.2] font-serif">
+            <p className="text-[27px] leading-[1.2] font-serif">
               Mais do que divulgar
               <br />
               um aplicativo
             </p>
 
-            <p className="text-[20px] leading-[1.7] opacity-80 font-serif px-3">
+            <p className="text-[18px] leading-[1.8] opacity-80 font-serif px-3">
               o objetivo é fazer mulheres sentirem
               que existe um lugar seguro para voltar
               e permanecer em Deus
