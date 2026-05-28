@@ -20,7 +20,7 @@ export default function CreatorsPage() {
           </div>
 
           {/* TÍTULO */}
-          <div className="mb-14">
+          <div className="mb-10">
 
             <h1 className="text-[30px] leading-[1.05] font-serif uppercase">
               Briefing para
@@ -101,36 +101,33 @@ export default function CreatorsPage() {
             <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
 
               <p>
-                O No Secreto não é apenas um aplicativo.
-                <br />
-                É um lugar de
+                Não é só um aplicativo —
                 {" "}
                 <span className="italic opacity-80">
-                  encontro com Deus
+                  é um lugar de encontro com Deus.
                 </span>
-                .
               </p>
 
               <p>
                 Nasceu da dificuldade de permanecer,
+                <br />
                 da culpa de começar e parar,
+                <br />
                 da sensação de nunca conseguir manter
                 {" "}
                 <span className="italic opacity-80">
-                  constância espiritual
+                  constância.
                 </span>
-                .
               </p>
 
               <p>
-                Foi criado para mulheres que querem voltar para Deus
-                de forma leve,
+                Foi criado para mulheres que querem
                 {" "}
                 <span className="italic opacity-80">
-                  profunda
+                  voltar para Deus
                 </span>
                 {" "}
-                e real.
+                de forma leve, profunda e real.
               </p>
 
             </div>
