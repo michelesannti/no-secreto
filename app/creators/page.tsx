@@ -139,7 +139,7 @@ export default function CreatorsPage() {
         {/* DORES + TRANSFORMAÇÕES */}
         <section className="mb-28">
 
-          <div className="grid grid-cols-2 gap-6 items-start">
+          <div className="grid grid-cols-2 gap-4 items-start">
 
             {/* DORES */}
             <div className="space-y-6">
@@ -163,14 +163,14 @@ export default function CreatorsPage() {
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[12px] text-[#70412d]/70 p-[2px]"
+                    className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[11px] whitespace-nowrap text-[#70412d]/70 p-[2px]"
                   >
 
                     <div className="flex items-center justify-center bg-[#D9C2A0] rounded-full min-w-[24px] w-6 h-6 text-white text-[10px] shrink-0">
                       ✕
                     </div>
 
-                    <div className="px-3 py-1 text-center">
+                    <div className="px-3 py-1 text-center whitespace-nowrap">
                       {item}
                     </div>
 
@@ -203,7 +203,7 @@ export default function CreatorsPage() {
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[12px] text-[#70412d]/70 p-[2px]"
+                    className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[11px] whitespace-nowrap text-[#70412d]/70 p-[2px]"
                   >
 
                     <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[24px] w-6 h-6 shrink-0">
@@ -221,7 +221,7 @@ export default function CreatorsPage() {
                       </svg>
                     </div>
 
-                    <div className="px-3 py-1 text-center">
+                    <div className="px-3 py-1 text-center whitespace-nowrap">
                       {item}
                     </div>
 
@@ -236,73 +236,100 @@ export default function CreatorsPage() {
 
         </section>
 
-        {/* FORMATOS */}
-        <section className="mb-28">
-
-          <div className="space-y-10">
-
-            <div className="space-y-5">
-
-              <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
-                Formatos que funcionam
-              </p>
-
-              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
-
-            </div>
-
-            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
-
-              <p>relatos pessoais</p>
-
-              <p>rotina espiritual</p>
-
-              <p>
-                reflexões
-                {" "}
-                <span className="italic opacity-80">
-                  profundas
-                </span>
-              </p>
-
-              <p>
-                experiência usando o No Secreto
-              </p>
-
-            </div>
-
-          </div>
-
-        </section>
-
-        {/* EVITAR */}
+        {/* FORMATOS + EVITAR */}
         <section className="mb-32">
 
-          <div className="space-y-10">
+          <div className="grid grid-cols-2 gap-4 items-start">
 
-            <div className="space-y-5">
+            {/* FORMATOS */}
+            <div className="space-y-6">
 
-              <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
-                O que evitar
-              </p>
+              <div className="space-y-3">
 
-              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+                <p className="uppercase tracking-[0.14em] text-[14px] opacity-35 text-center">
+                  Formatos
+                </p>
+
+                <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+              </div>
+
+              <div className="flex flex-col items-center gap-2">
+
+                {[
+                  "Relatos pessoais",
+                  "Rotina espiritual",
+                  "Reflexões profundas",
+                  "Experiência real",
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[11px] whitespace-nowrap text-[#70412d]/70 p-[2px]"
+                  >
+
+                    <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[24px] w-6 h-6 shrink-0">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-3.5 h-3.5 text-white"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3.25-3.25a1 1 0 011.414-1.414l2.543 2.543 6.543-6.543a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+
+                    <div className="px-3 py-1 text-center whitespace-nowrap">
+                      {item}
+                    </div>
+
+                  </div>
+                ))}
+
+              </div>
 
             </div>
 
-            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
+            {/* EVITAR */}
+            <div className="space-y-6">
 
-              <p>conteúdo forçado</p>
+              <div className="space-y-3">
 
-              <p>
-                publicidade
-                {" "}
-                <span className="italic opacity-80">
-                  agressiva
-                </span>
-              </p>
+                <p className="uppercase tracking-[0.14em] text-[14px] opacity-35 text-center">
+                  Evitar
+                </p>
 
-              <p>tom religioso pesado</p>
+                <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+              </div>
+
+              <div className="flex flex-col items-center gap-2">
+
+                {[
+                  "Publicidade agressiva",
+                  "Conteúdo forçado",
+                  "Tom religioso pesado",
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[11px] whitespace-nowrap text-[#70412d]/70 p-[2px]"
+                  >
+
+                    <div className="flex items-center justify-center bg-[#D9C2A0] rounded-full min-w-[24px] w-6 h-6 text-white text-[10px] shrink-0">
+                      ✕
+                    </div>
+
+                    <div className="px-3 py-1 text-center whitespace-nowrap">
+                      {item}
+                    </div>
+
+                  </div>
+                ))}
+
+              </div>
 
             </div>
 
