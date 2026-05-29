@@ -137,9 +137,9 @@ export default function CreatorsPage() {
         </section>
 
         {/* TRANSFORMAÇÕES */}
-        <section className="mb-28">
+        <section className="mb-32">
 
-          <div className="space-y-10">
+          <div className="space-y-12">
 
             <div className="space-y-5">
 
@@ -151,32 +151,67 @@ export default function CreatorsPage() {
 
             </div>
 
-            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
+            <div className="space-y-16 font-serif">
 
-              <p>
-                entender a Palavra
-                {" "}
-                <span className="italic opacity-80">
-                  com clareza
-                </span>
-              </p>
+              {/* item 1 */}
+              <div className="space-y-5">
 
-              <p>
-                ter constância sem culpa
-              </p>
+                <p className="text-[13px] uppercase tracking-[0.18em] opacity-30">
+                  clareza
+                </p>
 
-              <p>
-                não depender de motivação
-              </p>
+                <p className="text-[30px] leading-[1.05]">
+                  entender
+                  <br />
+                  a Palavra
+                </p>
 
-              <p>
-                transformar o tempo com Deus
-                em parte da
-                {" "}
-                <span className="italic opacity-80">
-                  rotina
-                </span>
-              </p>
+              </div>
+
+              {/* item 2 */}
+              <div className="space-y-5 text-right">
+
+                <p className="text-[13px] uppercase tracking-[0.18em] opacity-30">
+                  constância
+                </p>
+
+                <p className="text-[30px] leading-[1.05]">
+                  sem culpa
+                  <br />
+                  sem pressão
+                </p>
+
+              </div>
+
+              {/* item 3 */}
+              <div className="space-y-5">
+
+                <p className="text-[13px] uppercase tracking-[0.18em] opacity-30">
+                  permanência
+                </p>
+
+                <p className="text-[30px] leading-[1.05]">
+                  continuar
+                  <br />
+                  mesmo nos dias difíceis
+                </p>
+
+              </div>
+
+              {/* item 4 */}
+              <div className="space-y-5 text-right">
+
+                <p className="text-[13px] uppercase tracking-[0.18em] opacity-30">
+                  rotina espiritual
+                </p>
+
+                <p className="text-[30px] leading-[1.05]">
+                  transformar
+                  <br />
+                  o tempo com Deus
+                </p>
+
+              </div>
 
             </div>
 
