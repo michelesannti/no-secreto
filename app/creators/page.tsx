@@ -146,7 +146,7 @@ export default function CreatorsPage() {
 
               <div className="space-y-3">
 
-                <p className="uppercase tracking-[0.18em] text-[17px] opacity-35 text-center">
+                <p className="uppercase tracking-[0.14em] text-[14px] opacity-35 text-center">
                   Dores
                 </p>
 
@@ -159,7 +159,7 @@ export default function CreatorsPage() {
                 {[
                   "Inconstância espiritual",
                   "Dificuldade de entender a Palavra",
-                  "Vida desalinhada",
+                  "Vida sem propósito",
                 ].map((item, i) => (
                   <div
                     key={i}
@@ -186,7 +186,7 @@ export default function CreatorsPage() {
 
               <div className="space-y-3">
 
-                <p className="uppercase tracking-[0.18em] text-[17px] opacity-35 text-center">
+                <p className="uppercase tracking-[0.14em] text-[14px] opacity-35 text-center">
                   Transformações
                 </p>
 
