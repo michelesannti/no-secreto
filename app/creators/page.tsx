@@ -146,7 +146,7 @@ export default function CreatorsPage() {
 
               <div className="space-y-3">
 
-                <p className="uppercase tracking-[0.14em] text-[14px] opacity-35 text-center">
+                <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
                   Dores
                 </p>
 
@@ -163,14 +163,14 @@ export default function CreatorsPage() {
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[11px] whitespace-nowrap text-[#70412d]/70 p-[2px]"
+                    className="flex items-center w-full rounded-full bg-[#e9d5bb]/30 text-[11px] text-[#70412d]/70 p-[2px]"
                   >
 
                     <div className="flex items-center justify-center bg-[#D9C2A0] rounded-full min-w-[24px] w-6 h-6 text-white text-[10px] shrink-0">
                       ✕
                     </div>
 
-                    <div className="px-3 py-1 text-center whitespace-nowrap">
+                    <div className="px-3 py-1 whitespace-nowrap">
                       {item}
                     </div>
 
@@ -186,7 +186,7 @@ export default function CreatorsPage() {
 
               <div className="space-y-3">
 
-                <p className="uppercase tracking-[0.14em] text-[14px] opacity-35 text-center">
+                <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
                   Transformações
                 </p>
 
@@ -203,7 +203,7 @@ export default function CreatorsPage() {
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[11px] whitespace-nowrap text-[#70412d]/70 p-[2px]"
+                    className="flex items-center w-full rounded-full bg-[#e9d5bb]/30 text-[11px] text-[#70412d]/70 p-[2px]"
                   >
 
                     <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[24px] w-6 h-6 shrink-0">
@@ -221,7 +221,7 @@ export default function CreatorsPage() {
                       </svg>
                     </div>
 
-                    <div className="px-3 py-1 text-center whitespace-nowrap">
+                    <div className="px-3 py-1 whitespace-nowrap">
                       {item}
                     </div>
 
@@ -239,53 +239,34 @@ export default function CreatorsPage() {
         {/* FORMATOS + EVITAR */}
         <section className="mb-32">
 
-          <div className="grid grid-cols-2 gap-4 items-start">
+          <div className="space-y-14">
 
             {/* FORMATOS */}
-            <div className="space-y-6">
+            <div className="space-y-8">
 
-              <div className="space-y-3">
+              <div className="space-y-5">
 
-                <p className="uppercase tracking-[0.14em] text-[14px] opacity-35 text-center">
-                  Formatos
+                <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
+                  Formatos que funcionam
                 </p>
 
-                <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+                <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
               </div>
 
-              <div className="flex flex-col items-center gap-2">
+              <div className="flex flex-wrap gap-2">
 
                 {[
                   "Relatos pessoais",
                   "Rotina espiritual",
                   "Reflexões profundas",
-                  "Experiência real",
+                  "Experiência usando o app",
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[11px] whitespace-nowrap text-[#70412d]/70 p-[2px]"
+                    className="rounded-full bg-[#e9d5bb]/30 text-[13px] text-[#70412d]/70 px-4 py-2"
                   >
-
-                    <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[24px] w-6 h-6 shrink-0">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-3.5 h-3.5 text-white"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3.25-3.25a1 1 0 011.414-1.414l2.543 2.543 6.543-6.543a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-
-                    <div className="px-3 py-1 text-center whitespace-nowrap">
-                      {item}
-                    </div>
-
+                    {item}
                   </div>
                 ))}
 
@@ -294,38 +275,30 @@ export default function CreatorsPage() {
             </div>
 
             {/* EVITAR */}
-            <div className="space-y-6">
+            <div className="space-y-8">
 
-              <div className="space-y-3">
+              <div className="space-y-5">
 
-                <p className="uppercase tracking-[0.14em] text-[14px] opacity-35 text-center">
-                  Evitar
+                <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
+                  O que evitar
                 </p>
 
-                <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+                <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
               </div>
 
-              <div className="flex flex-col items-center gap-2">
+              <div className="flex flex-wrap gap-2">
 
                 {[
-                  "Publicidade agressiva",
                   "Conteúdo forçado",
+                  "Publicidade agressiva",
                   "Tom religioso pesado",
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[11px] whitespace-nowrap text-[#70412d]/70 p-[2px]"
+                    className="rounded-full bg-[#e9d5bb]/20 text-[13px] text-[#70412d]/45 px-4 py-2"
                   >
-
-                    <div className="flex items-center justify-center bg-[#D9C2A0] rounded-full min-w-[24px] w-6 h-6 text-white text-[10px] shrink-0">
-                      ✕
-                    </div>
-
-                    <div className="px-3 py-1 text-center whitespace-nowrap">
-                      {item}
-                    </div>
-
+                    {item}
                   </div>
                 ))}
 
