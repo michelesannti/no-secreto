@@ -20,12 +20,12 @@ export default function CreatorsPage() {
           </div>
 
           {/* TÍTULO */}
-          <div className="mb-10">
+          <div className="mb-12">
 
             <h1 className="text-[28px] leading-[1.12] font-serif uppercase">
               Briefing para
               <br />
-              <span className="italic opacity-80 normal-case">
+              <span className="italic opacity-80 pr-1">
                 creators
               </span>
             </h1>
@@ -98,7 +98,7 @@ export default function CreatorsPage() {
 
             </div>
 
-            <div className="space-y-7 text-[19px] leading-[1.55] font-serif">
+            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
 
               <p>
                 Não é só um aplicativo.
@@ -111,7 +111,7 @@ export default function CreatorsPage() {
               </p>
 
               <p>
-                Nasceu da dificuldade de manter
+                Nasceu da dificuldade de ter
                 {" "}
                 <span className="italic opacity-80">
                   constância espiritual
@@ -121,7 +121,7 @@ export default function CreatorsPage() {
               </p>
 
               <p>
-                Foi criado para mulheres que querem
+                Criado para mulheres que querem
                 {" "}
                 <span className="italic opacity-80">
                   voltar para Deus
