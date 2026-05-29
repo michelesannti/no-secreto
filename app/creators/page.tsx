@@ -158,7 +158,7 @@ export default function CreatorsPage() {
 
                 {[
                   "Inconstância espiritual",
-                  "Dificuldade de entender a Palavra",
+                  "Dificuldade na Palavra",
                   "Vida sem propósito",
                 ].map((item, i) => (
                   <div
@@ -198,7 +198,7 @@ export default function CreatorsPage() {
 
                 {[
                   "Constância sem culpa",
-                  "Entendimento com clareza",
+                  "Clareza bíblica",
                   "Intimidade com Deus",
                 ].map((item, i) => (
                   <div
