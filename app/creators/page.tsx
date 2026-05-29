@@ -136,130 +136,99 @@ export default function CreatorsPage() {
 
         </section>
 
-        {/* TRANSFORMAÇÕES */}
-        <section className="mb-32">
-
-          <div className="space-y-12">
-
-            <div className="space-y-5">
-
-              <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
-                Principais transformações
-              </p>
-
-              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
-
-            </div>
-
-            <div className="space-y-16 font-serif">
-
-              {/* item 1 */}
-              <div className="space-y-5">
-
-                <p className="text-[13px] uppercase tracking-[0.18em] opacity-30">
-                  clareza
-                </p>
-
-                <p className="text-[30px] leading-[1.05]">
-                  entender
-                  <br />
-                  a Palavra
-                </p>
-
-              </div>
-
-              {/* item 2 */}
-              <div className="space-y-5 text-right">
-
-                <p className="text-[13px] uppercase tracking-[0.18em] opacity-30">
-                  constância
-                </p>
-
-                <p className="text-[30px] leading-[1.05]">
-                  sem culpa
-                  <br />
-                  sem pressão
-                </p>
-
-              </div>
-
-              {/* item 3 */}
-              <div className="space-y-5">
-
-                <p className="text-[13px] uppercase tracking-[0.18em] opacity-30">
-                  permanência
-                </p>
-
-                <p className="text-[30px] leading-[1.05]">
-                  continuar
-                  <br />
-                  mesmo nos dias difíceis
-                </p>
-
-              </div>
-
-              {/* item 4 */}
-              <div className="space-y-5 text-right">
-
-                <p className="text-[13px] uppercase tracking-[0.18em] opacity-30">
-                  rotina espiritual
-                </p>
-
-                <p className="text-[30px] leading-[1.05]">
-                  transformar
-                  <br />
-                  o tempo com Deus
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-        {/* DORES */}
+        {/* DORES + TRANSFORMAÇÕES */}
         <section className="mb-28">
 
-          <div className="space-y-10">
+          <div className="grid grid-cols-2 gap-6 items-start">
 
-            <div className="space-y-5">
+            {/* DORES */}
+            <div className="space-y-6">
 
-              <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
-                Principais dores
-              </p>
+              <div className="space-y-3">
 
-              <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+                <p className="uppercase tracking-[0.18em] text-[17px] opacity-35 text-center">
+                  Dores
+                </p>
+
+                <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+              </div>
+
+              <div className="flex flex-col items-center gap-2">
+
+                {[
+                  "Inconstância espiritual",
+                  "Dificuldade de entender a Palavra",
+                  "Vida desalinhada",
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[12px] text-[#70412d]/70 p-[2px]"
+                  >
+
+                    <div className="flex items-center justify-center bg-[#D9C2A0] rounded-full min-w-[24px] w-6 h-6 text-white text-[10px] shrink-0">
+                      ✕
+                    </div>
+
+                    <div className="px-3 py-1 text-center">
+                      {item}
+                    </div>
+
+                  </div>
+                ))}
+
+              </div>
 
             </div>
 
-            <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
+            {/* TRANSFORMAÇÕES */}
+            <div className="space-y-6">
 
-              <p>
-                mulheres que querem se aproximar de Deus,
-                mas não conseguem manter
-                {" "}
-                <span className="italic opacity-80">
-                  constância
-                </span>
-              </p>
+              <div className="space-y-3">
 
-              <p>
-                se sentem culpadas por começar e parar
-              </p>
+                <p className="uppercase tracking-[0.18em] text-[17px] opacity-35 text-center">
+                  Transformações
+                </p>
 
-              <p>
-                não sabem por onde estudar a Bíblia
-              </p>
+                <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
 
-              <p>
-                sentem a vida desalinhada
-                {" "}
-                <span className="italic opacity-80">
-                  espiritualmente
-                </span>
-              </p>
+              </div>
+
+              <div className="flex flex-col items-center gap-2">
+
+                {[
+                  "Constância sem culpa",
+                  "Entendimento com clareza",
+                  "Intimidade com Deus",
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[12px] text-[#70412d]/70 p-[2px]"
+                  >
+
+                    <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[24px] w-6 h-6 shrink-0">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-3.5 h-3.5 text-white"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3.25-3.25a1 1 0 011.414-1.414l2.543 2.543 6.543-6.543a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+
+                    <div className="px-3 py-1 text-center">
+                      {item}
+                    </div>
+
+                  </div>
+                ))}
+
+              </div>
 
             </div>
 
