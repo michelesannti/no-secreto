@@ -84,7 +84,7 @@ export default function CreatorsPage() {
         </section>
 
         {/* SOBRE */}
-        <section className="mb-28">
+        <section className="mb-20">
 
           <div className="space-y-10">
 
