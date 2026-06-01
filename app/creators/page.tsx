@@ -139,22 +139,22 @@ export default function CreatorsPage() {
         {/* FORMATOS + EVITAR */}
         <section className="mb-32">
 
-          <div className="space-y-14">
+          <div className="grid grid-cols-2 gap-6 items-start">
 
             {/* FORMATOS */}
             <div className="space-y-8">
 
               <div className="space-y-5">
 
-                <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
+                <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
                   Formatos que funcionam
                 </p>
 
-                <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+                <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
 
               </div>
 
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap justify-center gap-2">
 
                 {[
                   "Relatos pessoais",
@@ -164,7 +164,7 @@ export default function CreatorsPage() {
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="rounded-full bg-[#e9d5bb]/30 text-[13px] text-[#70412d]/70 px-4 py-2"
+                    className="rounded-full bg-[#e9d5bb]/30 text-[12px] text-[#70412d]/70 px-4 py-2 text-center"
                   >
                     {item}
                   </div>
@@ -179,15 +179,15 @@ export default function CreatorsPage() {
 
               <div className="space-y-5">
 
-                <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
+                <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
                   O que evitar
                 </p>
 
-                <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+                <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
 
               </div>
 
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap justify-center gap-2">
 
                 {[
                   "Conteúdo forçado",
@@ -196,7 +196,7 @@ export default function CreatorsPage() {
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="rounded-full bg-[#e9d5bb]/20 text-[13px] text-[#70412d]/45 px-4 py-2"
+                    className="rounded-full bg-[#e9d5bb]/20 text-[12px] text-[#70412d]/45 px-4 py-2 text-center"
                   >
                     {item}
                   </div>
