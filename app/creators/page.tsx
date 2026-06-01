@@ -161,7 +161,16 @@ export default function CreatorsPage() {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-center w-full rounded-full bg-[#e9d5bb]/30 text-[13px] text-[#70412d]/75 p-[3px]"
+                  className="
+                    flex
+                    items-center
+                    w-[280px]
+                    rounded-full
+                    bg-[#e9d5bb]/30
+                    text-[13px]
+                    text-[#70412d]/75
+                    p-[3px]
+                  "
                 >
 
                   <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[28px] w-7 h-7 shrink-0">
@@ -216,7 +225,16 @@ export default function CreatorsPage() {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-center w-full rounded-full bg-[#e9d5bb]/30 text-[13px] text-[#70412d]/75 p-[3px]"
+                  className="
+                    flex
+                    items-center
+                    w-[280px]
+                    rounded-full
+                    bg-[#e9d5bb]/30
+                    text-[13px]
+                    text-[#70412d]/75
+                    p-[3px]
+                  "
                 >
 
                   <div className="flex items-center justify-center bg-[#D9C2A0] rounded-full min-w-[28px] w-7 h-7 text-white text-[11px] shrink-0">
