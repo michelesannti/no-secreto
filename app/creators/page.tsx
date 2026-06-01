@@ -103,30 +103,25 @@ export default function CreatorsPage() {
               <p>
                 Não é só um aplicativo.
                 <br />
-                É um lugar de
-                {" "}
+                É um lugar de{" "}
                 <span className="italic opacity-80">
                   encontro com Deus.
                 </span>
               </p>
 
               <p>
-                Nasceu da dificuldade de ter
-                {" "}
+                Nasceu da dificuldade de ter{" "}
                 <span className="italic opacity-80">
                   constância espiritual
-                </span>
-                {" "}
+                </span>{" "}
                 e da culpa de sempre começar e parar.
               </p>
 
               <p>
-                Criado para mulheres que querem
-                {" "}
+                Criado para mulheres que querem{" "}
                 <span className="italic opacity-80">
                   voltar para Deus
-                </span>
-                {" "}
+                </span>{" "}
                 de forma leve, profunda e real.
               </p>
 
@@ -139,22 +134,22 @@ export default function CreatorsPage() {
         {/* FORMATOS + EVITAR */}
         <section className="mb-32">
 
-          <div className="grid grid-cols-2 gap-6 items-start">
+          <div className="space-y-14">
 
             {/* FORMATOS */}
-            <div className="space-y-8">
+            <div className="w-[82%] space-y-7">
 
-              <div className="space-y-5">
+              <div className="space-y-4 text-left">
 
-                <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
+                <p className="uppercase tracking-[0.18em] text-[14px] opacity-35">
                   Formatos que funcionam
                 </p>
 
-                <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+                <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
               </div>
 
-              <div className="flex flex-wrap justify-center gap-2">
+              <div className="flex flex-col items-start gap-2">
 
                 {[
                   "Relatos pessoais",
@@ -164,7 +159,14 @@ export default function CreatorsPage() {
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="rounded-full bg-[#e9d5bb]/30 text-[12px] text-[#70412d]/70 px-4 py-2 text-center"
+                    className="
+                      rounded-full
+                      bg-[#e9d5bb]/30
+                      text-[12px]
+                      text-[#70412d]/70
+                      px-4
+                      py-2
+                    "
                   >
                     {item}
                   </div>
@@ -175,19 +177,19 @@ export default function CreatorsPage() {
             </div>
 
             {/* EVITAR */}
-            <div className="space-y-8">
+            <div className="w-[82%] ml-auto space-y-7">
 
-              <div className="space-y-5">
+              <div className="space-y-4 text-right">
 
-                <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
+                <p className="uppercase tracking-[0.18em] text-[14px] opacity-35">
                   O que evitar
                 </p>
 
-                <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+                <div className="w-10 h-[2px] bg-[#E9D5BB] ml-auto"></div>
 
               </div>
 
-              <div className="flex flex-wrap justify-center gap-2">
+              <div className="flex flex-col items-end gap-2">
 
                 {[
                   "Conteúdo forçado",
@@ -196,7 +198,14 @@ export default function CreatorsPage() {
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="rounded-full bg-[#e9d5bb]/20 text-[12px] text-[#70412d]/45 px-4 py-2 text-center"
+                    className="
+                      rounded-full
+                      bg-[#e9d5bb]/20
+                      text-[12px]
+                      text-[#70412d]/45
+                      px-4
+                      py-2
+                    "
                   >
                     {item}
                   </div>
