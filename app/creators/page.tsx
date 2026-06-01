@@ -151,7 +151,7 @@ export default function CreatorsPage() {
 
             </div>
 
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-3">
 
               {[
                 "Relatos pessoais",
@@ -161,13 +161,13 @@ export default function CreatorsPage() {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-center w-full rounded-full bg-[#e9d5bb]/30 text-[11px] text-[#70412d]/70 p-[2px]"
+                  className="flex items-center w-full rounded-full bg-[#e9d5bb]/30 text-[13px] text-[#70412d]/75 p-[3px]"
                 >
 
-                  <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[24px] w-6 h-6 shrink-0">
+                  <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[28px] w-7 h-7 shrink-0">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="w-3.5 h-3.5 text-white"
+                      className="w-4 h-4 text-white"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -179,7 +179,7 @@ export default function CreatorsPage() {
                     </svg>
                   </div>
 
-                  <div className="px-3 py-1 whitespace-nowrap">
+                  <div className="flex-1 text-center px-4 py-2">
                     {item}
                   </div>
 
@@ -207,7 +207,7 @@ export default function CreatorsPage() {
 
             </div>
 
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-3">
 
               {[
                 "Conteúdo forçado",
@@ -216,14 +216,14 @@ export default function CreatorsPage() {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-center w-full rounded-full bg-[#e9d5bb]/30 text-[11px] text-[#70412d]/70 p-[2px]"
+                  className="flex items-center w-full rounded-full bg-[#e9d5bb]/30 text-[13px] text-[#70412d]/75 p-[3px]"
                 >
 
-                  <div className="flex items-center justify-center bg-[#D9C2A0] rounded-full min-w-[24px] w-6 h-6 text-white text-[10px] shrink-0">
+                  <div className="flex items-center justify-center bg-[#D9C2A0] rounded-full min-w-[28px] w-7 h-7 text-white text-[11px] shrink-0">
                     ✕
                   </div>
 
-                  <div className="px-3 py-1 whitespace-nowrap">
+                  <div className="flex-1 text-center px-4 py-2">
                     {item}
                   </div>
 
