@@ -202,7 +202,7 @@ export default function CreatorsPage() {
         </section>
 
         {/* EVITAR */}
-        <section className="mb-32">
+        <section className="mb-20">
 
           <div className="space-y-6">
 
@@ -254,21 +254,19 @@ export default function CreatorsPage() {
 
         </section>
 
-        {/* FINAL */}
-        <section className="text-center pb-24">
+        {/* RESUMO FINAL */}
+        <section className="pb-24">
 
-          <div className="space-y-10">
+          <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
 
-            <p className="text-[27px] leading-[1.2] font-serif">
-              Mais do que divulgar
-              <br />
-              um aplicativo
-            </p>
-
-            <p className="text-[18px] leading-[1.8] opacity-80 font-serif px-3">
-              o objetivo é fazer mulheres sentirem
-              que existe um lugar seguro para voltar
-              e permanecer em Deus
+            <p>
+              Mais do que divulgar o app —
+              é fazer mulheres sentirem
+              que existe um lugar para
+              {" "}
+              <span className="italic opacity-80">
+                permanecer em Deus.
+              </span>
             </p>
 
           </div>
