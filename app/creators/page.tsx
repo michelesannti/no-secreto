@@ -261,11 +261,11 @@ export default function CreatorsPage() {
 
             <p>
               Mais do que divulgar o app —
-              é fazer mulheres sentirem
-              que existe um lugar para
+              é viver essa experiência e inspirar outras mulheres
+              a
               {" "}
               <span className="italic opacity-80">
-                permanecer em Deus.
+                permanecerem em Deus.
               </span>
             </p>
 
