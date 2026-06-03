@@ -398,7 +398,7 @@ export default function VendaPage() {
         </section>
 
         {/* 4º + 5º */}
-        <section className="relative mb-24">
+        <section className="relative mb-16">
 
           {/* 4º */}
           <div className="flex items-center justify-between gap-5 mb-14">
