@@ -264,9 +264,9 @@ export default function CreatorsPage() {
       <p>
         Mais do que divulgar o No Secreto —
         é viver essa experiência e inspirar outras mulheres
-        a{" "}
+        a criarem {" "}
         <span className="italic opacity-80">
-          permanecerem em Deus.
+        constância com Deus sem culpa.
         </span>
       </p>
 
