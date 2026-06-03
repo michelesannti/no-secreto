@@ -254,24 +254,51 @@ export default function CreatorsPage() {
 
         </section>
 
-        {/* RESUMO FINAL */}
-        <section className="pb-24">
+{/* RESUMO FINAL */}
+<section className="pb-24">
 
-          <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
+  <div className="space-y-8">
 
-            <p>
-              Mais do que divulgar o app —
-              é viver essa experiência e inspirar outras mulheres
-              a
-              {" "}
-              <span className="italic opacity-80">
-                permanecerem em Deus.
-              </span>
-            </p>
+    <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
 
-          </div>
+      <p>
+        Mais do que divulgar o app —
+        é viver essa experiência e inspirar outras mulheres
+        a{" "}
+        <span className="italic opacity-80">
+          permanecerem em Deus.
+        </span>
+      </p>
 
-        </section>
+    </div>
+
+    <a
+      href="https://app.cakto.com.br/affiliate/invite/90601d16-2aba-4917-b63b-af09f9f173e7"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="
+        block
+        text-center
+        bg-[#70412D]
+        text-white
+        py-4
+        rounded-full
+        text-[16px]
+        font-semibold
+        shadow-xl
+        shadow-[#70412D]/20
+        active:scale-[0.98]
+        hover:scale-[1.015]
+        transition-all
+        duration-300
+      "
+    >
+      Quero fazer parte disso
+    </a>
+
+  </div>
+
+</section>
 
       </div>
 
