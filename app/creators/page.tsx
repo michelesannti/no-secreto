@@ -121,10 +121,10 @@ export default function CreatorsPage() {
               </p>
 
               <p>
-                Criado para mulheres que querem
+                Criado para mulheres que desejam
                 {" "}
                 <span className="italic opacity-80">
-                  voltar para Deus
+                  permanecer em Deus
                 </span>
                 {" "}
                 de forma leve, profunda e real.
@@ -155,8 +155,8 @@ export default function CreatorsPage() {
 
               {[
                 "Relatos pessoais",
-                "Rotina espiritual",
-                "Reflexões profundas",
+                "Rotina com Deus",
+                "Reflexões e aprendizados",
                 "Experiência usando o app",
               ].map((item, i) => (
                 <div
@@ -262,7 +262,7 @@ export default function CreatorsPage() {
     <div className="space-y-7 text-[19px] leading-[1.5] font-serif">
 
       <p>
-        Mais do que divulgar o app —
+        Mais do que divulgar o No Secreto —
         é viver essa experiência e inspirar outras mulheres
         a{" "}
         <span className="italic opacity-80">
