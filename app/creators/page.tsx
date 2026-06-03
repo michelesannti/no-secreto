@@ -255,7 +255,7 @@ export default function CreatorsPage() {
         </section>
 
 {/* RESUMO FINAL */}
-<section className="pb-24">
+<section className="pb-10">
 
   <div className="space-y-8">
 
