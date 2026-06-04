@@ -261,7 +261,7 @@ export default function CreatorsPage() {
     <div className="space-y-3">
 
       <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
-        Entregáveis
+        Parceria
       </p>
 
       <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
@@ -272,7 +272,7 @@ export default function CreatorsPage() {
 
       {[
         "Marcar @nosecretoapp nos stories",
-        "Publicar conteúdos no feed em collab",
+        "Publicar conteúdos em collab no feed",
         "Utilizar seu link de indicação",
       ].map((item, i) => (
         <div
@@ -280,7 +280,8 @@ export default function CreatorsPage() {
           className="
             flex
             items-center
-            w-[280px]
+            w-[320px]
+            max-w-full
             rounded-full
             bg-[#e9d5bb]/30
             text-[13px]
@@ -304,7 +305,7 @@ export default function CreatorsPage() {
             </svg>
           </div>
 
-          <div className="flex-1 text-center px-4 py-2">
+          <div className="flex-1 text-center px-4 py-2 whitespace-nowrap">
             {item}
           </div>
 
