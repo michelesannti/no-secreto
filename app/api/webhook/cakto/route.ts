@@ -18,7 +18,10 @@ export async function POST(req: Request) {
 
     if (!email) {
       console.error("❌ Email não encontrado no webhook");
-      return NextResponse.json({ error: "Email não encontrado" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Email não encontrado" },
+        { status: 400 }
+      );
     }
 
     console.log("📧 Email:", email);
@@ -30,10 +33,16 @@ export async function POST(req: Request) {
 
     if (listError) {
       console.error("❌ Erro ao listar usuários:", listError);
-      return NextResponse.json({ error: "Erro ao buscar usuário" }, { status: 500 });
+      return NextResponse.json(
+        { error: "Erro ao buscar usuário" },
+        { status: 500 }
+      );
     }
 
-    let existingUser = usersList.users.find((u) => u.email === email);
+    let existingUser = usersList.users.find(
+      (u) => u.email === email
+    );
+
     let userId = existingUser?.id;
 
     // 👤 cria usuário se não existir
@@ -46,26 +55,38 @@ export async function POST(req: Request) {
 
       if (createError) {
         console.error("❌ Erro ao criar usuário:", createError);
-        return NextResponse.json({ error: "Erro ao criar usuário" }, { status: 500 });
+
+        return NextResponse.json(
+          { error: "Erro ao criar usuário" },
+          { status: 500 }
+        );
       }
 
       userId = userData.user.id;
+
       console.log("✅ Usuário criado:", userId);
     } else {
       console.log("♻️ Usuário já existe:", userId);
     }
 
     // 🔥 cria ou atualiza profile COM NOME
-    const { error: upsertError } = await supabase.from("profiles").upsert({
-      id: userId,
-      email,
-      nome: name || null,
-      ativo: true,
-    });
+    const { error: upsertError } = await supabase
+      .from("profiles")
+      .upsert({
+        id: userId,
+        email,
+        nome: name || null,
+        ativo: true,
+        acesso: "PAGO",
+      });
 
     if (upsertError) {
       console.error("❌ Erro ao salvar profile:", upsertError);
-      return NextResponse.json({ error: "Erro ao salvar profile" }, { status: 500 });
+
+      return NextResponse.json(
+        { error: "Erro ao salvar profile" },
+        { status: 500 }
+      );
     }
 
     console.log("🔥 Acesso liberado com sucesso");
@@ -74,6 +95,10 @@ export async function POST(req: Request) {
 
   } catch (err) {
     console.error("❌ Erro geral no webhook:", err);
-    return NextResponse.json({ error: "Erro interno" }, { status: 500 });
+
+    return NextResponse.json(
+      { error: "Erro interno" },
+      { status: 500 }
+    );
   }
 }
