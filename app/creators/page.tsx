@@ -253,7 +253,69 @@ export default function CreatorsPage() {
           </div>
 
         </section>
+{/* PARCERIA */}
+<section className="mb-20">
 
+  <div className="space-y-6">
+
+    <div className="space-y-3">
+
+      <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
+        Entregáveis
+      </p>
+
+      <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+    </div>
+
+    <div className="flex flex-col items-center gap-3">
+
+      {[
+        "Marcar @nosecretoapp nos stories",
+        "Publicar conteúdos no feed em collab",
+        "Utilizar seu link de indicação",
+      ].map((item, i) => (
+        <div
+          key={i}
+          className="
+            flex
+            items-center
+            w-[280px]
+            rounded-full
+            bg-[#e9d5bb]/30
+            text-[13px]
+            text-[#70412d]/75
+            p-[3px]
+          "
+        >
+
+          <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[28px] w-7 h-7 shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4 text-white"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3.25-3.25a1 1 0 011.414-1.414l2.543 2.543 6.543-6.543a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+
+          <div className="flex-1 text-center px-4 py-2">
+            {item}
+          </div>
+
+        </div>
+      ))}
+
+    </div>
+
+  </div>
+
+</section>
 {/* RESUMO FINAL */}
 <section className="pb-10">
 
