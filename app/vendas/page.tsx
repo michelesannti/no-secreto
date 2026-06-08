@@ -162,7 +162,7 @@ export default function VendaPage() {
           opacity-35
         "
       >
-        Veja por dentro
+        Conheça a experiência
       </p>
 
       <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
@@ -181,6 +181,7 @@ export default function VendaPage() {
         controls
         playsInline
         preload="metadata"
+        poster="/portal.png"
       >
         <source
           src="/videoapp.mp4"
