@@ -171,46 +171,22 @@ export default function VendaPage() {
 
     <div className="flex justify-center">
 
-      <div
+      <video
         className="
-          relative
-          w-[230px]
-          rounded-[38px]
-          border-[4px]
-          border-black/80
-          bg-black
+          w-[220px]
+          rounded-[26px]
           shadow-2xl
           overflow-hidden
         "
+        controls
+        playsInline
+        preload="metadata"
       >
-
-        <div
-          className="
-            absolute
-            top-0
-            left-1/2
-            -translate-x-1/2
-            w-20
-            h-4
-            bg-black
-            rounded-b-2xl
-            z-10
-          "
+        <source
+          src="/videoapp.mp4"
+          type="video/mp4"
         />
-
-        <video
-          className="w-full block"
-          controls
-          playsInline
-          preload="metadata"
-        >
-          <source
-            src="/videoapp.mp4"
-            type="video/mp4"
-          />
-        </video>
-
-      </div>
+      </video>
 
     </div>
 
