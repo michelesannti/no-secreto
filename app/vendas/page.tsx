@@ -1,6 +1,9 @@
 "use client";
 
+import { useState } from "react";
+
 export default function VendaPage() {
+  const [open, setOpen] = useState<number | null>(null);
   return (
     <div className="min-h-screen bg-[#F9F5E9] text-[#70412D] overflow-hidden">
 
@@ -603,6 +606,126 @@ export default function VendaPage() {
         >
           Quero viver isso com Deus
         </a>
+
+{/* DÚVIDAS */}
+<section className="mt-24 mb-12">
+
+  <div className="space-y-10">
+
+    <div className="text-center space-y-3">
+
+      <p
+        className="
+          text-[13px]
+          uppercase
+          tracking-[0.18em]
+          opacity-35
+        "
+      >
+        Dúvidas frequentes
+      </p>
+
+      <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+    </div>
+
+    <div className="space-y-3">
+
+      {[
+        {
+          pergunta: "Preciso baixar algum aplicativo?",
+          resposta:
+            "Não. O No Secreto funciona pelo navegador e pode ser adicionado à tela inicial do celular, funcionando como um aplicativo tanto no Android quanto no iPhone.",
+        },
+        {
+          pergunta: "E se eu não conseguir manter constância?",
+          resposta:
+            "O No Secreto foi criado justamente para mulheres que vivem esse ciclo. Você não precisa seguir datas fixas, cumprir metas ou recomeçar do zero. O objetivo é te ajudar a permanecer.",
+        },
+        {
+          pergunta: "Preciso já conhecer a Bíblia?",
+          resposta:
+            "Não. Os estudos são guiados e explicados de forma simples, ajudando você a entender o contexto e aplicar a Palavra na vida real.",
+        },
+        {
+          pergunta: "O acesso é por assinatura?",
+          resposta:
+            "Não. Hoje o acesso é liberado através de pagamento único.",
+        },
+      ].map((item, index) => (
+        <div
+          key={index}
+          className="
+            border-b
+            border-[#E9D5BB]/40
+            pb-3
+          "
+        >
+          <button
+            onClick={() =>
+              setOpen(open === index ? null : index)
+            }
+            className="
+              w-full
+              flex
+              items-center
+              justify-between
+              text-left
+              py-3
+            "
+          >
+            <span className="font-serif text-[18px]">
+              {item.pergunta}
+            </span>
+
+            <span className="text-xl opacity-50">
+              {open === index ? "−" : "+"}
+            </span>
+          </button>
+
+          {open === index && (
+            <p
+              className="
+                text-[15px]
+                leading-7
+                opacity-80
+                pb-2
+              "
+            >
+              {item.resposta}
+            </p>
+          )}
+        </div>
+      ))}
+
+    </div>
+
+  </div>
+
+</section>
+
+{/* CTA FINAL MESMO */}
+<a
+  href="https://pay.cakto.com.br/aovfbto_873529"
+  className="
+    block
+    text-center
+    bg-[#70412D]
+    text-white
+    py-4
+    rounded-full
+    text-[16px]
+    font-semibold
+    shadow-xl
+    shadow-[#70412D]/20
+    active:scale-[0.98]
+    hover:scale-[1.015]
+    transition-all
+    duration-300
+  "
+>
+  Quero começar meu tempo com Deus
+</a>
 
       </div>
 
