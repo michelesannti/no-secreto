@@ -294,154 +294,166 @@ export default function VendaPage() {
 
         </section>
 
-        {/* 3º SCROLL */}
-        <section className="space-y-7 mb-20">
+       {/* 3º SCROLL */}
+<section className="space-y-7 mb-20">
 
-          {/* CONTEXTO */}
-          <div className="flex items-center justify-between gap-6">
+  {/* CONTEXTO */}
+  <div className="flex items-center justify-between gap-6">
 
-            <div className="flex-1 space-y-4">
+    <div className="flex-1 space-y-4">
 
-              <div className="space-y-3">
+      <div className="space-y-3">
 
-                <p className="
-                  text-[13px]
-                  uppercase
-                  tracking-[0.18em]
-                  opacity-35
-                ">
-                  estudo guiado
-                </p>
+        <p
+          className="
+            text-[13px]
+            uppercase
+            tracking-[0.18em]
+            opacity-35
+          "
+        >
+          estudo guiado
+        </p>
 
-                <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+        <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
-              </div>
+      </div>
 
-              <p className="text-[17px] leading-[1.2] font-serif">
-                sua forma de entender a
-                <span className="italic opacity-80"> Palavra</span>
-                <br />
-                é transformada
-              </p>
+      <p className="text-[17px] leading-[1.2] font-serif">
+        sua forma de entender a
+        <span className="italic opacity-80"> Palavra</span>
+        <br />
+        é transformada
+      </p>
 
-            </div>
+    </div>
 
-            <div className="shrink-0">
+    <div className="shrink-0">
 
-              <div className="
-                relative
-                w-[145px]
-                rounded-[28px]
-                border-[3px]
-                border-black
-                bg-black
-                shadow-xl
-                overflow-hidden
-              ">
+      <div
+        className="
+          relative
+          w-[145px]
+          rounded-[28px]
+          border-[3px]
+          border-black
+          bg-[#F9F5E9]
+          shadow-xl
+          overflow-hidden
+        "
+      >
 
-                <div
-                  className="
-                    absolute
-                    top-0
-                    left-1/2
-                    -translate-x-1/2
-                    w-16
-                    h-[4px]
-                    bg-black
-                    rounded-b-2xl
-                    z-10
-                  "
-                />
+        <div
+          className="
+            absolute
+            top-0
+            left-1/2
+            -translate-x-1/2
+            w-16
+            h-[4px]
+            bg-black
+            rounded-b-2xl
+            z-10
+          "
+        />
 
-                <img
-                  src="/contexto.png"
-                  alt="Contexto bíblico"
-                  className="
-                    w-full
-                    block
-                    object-contain
-                  "
-                />
+        <img
+          src="/contexto.png"
+          alt="Contexto bíblico"
+          className="
+            w-full
+            block
+            object-contain
+          "
+          loading="eager"
+          decoding="async"
+        />
 
-              </div>
+      </div>
 
-            </div>
+    </div>
 
-          </div>
+  </div>
 
-          {/* APLICAÇÃO */}
-          <div className="flex items-center justify-between gap-6">
+  {/* APLICAÇÃO */}
+  <div className="flex items-center justify-between gap-6">
 
-            <div className="shrink-0">
+    <div className="shrink-0">
 
-              <div className="
-                relative
-                w-[145px]
-                rounded-[28px]
-                border-[3px]
-                border-black
-                bg-black
-                shadow-xl
-                overflow-hidden
-              ">
+      <div
+        className="
+          relative
+          w-[145px]
+          rounded-[28px]
+          border-[3px]
+          border-black
+          bg-[#F9F5E9]
+          shadow-xl
+          overflow-hidden
+        "
+      >
 
-                <div
-                  className="
-                    absolute
-                    top-0
-                    left-1/2
-                    -translate-x-1/2
-                    w-16
-                    h-[4px]
-                    bg-black
-                    rounded-b-2xl
-                    z-10
-                  "
-                />
+        <div
+          className="
+            absolute
+            top-0
+            left-1/2
+            -translate-x-1/2
+            w-16
+            h-[4px]
+            bg-black
+            rounded-b-2xl
+            z-10
+          "
+        />
 
-                <img
-                  src="/aplicacao.png"
-                  alt="Aplicação bíblica"
-                  className="
-                    w-full
-                    block
-                    object-contain
-                  "
-                />
+        <img
+          src="/aplicacao.png"
+          alt="Aplicação bíblica"
+          className="
+            w-full
+            block
+            object-contain
+          "
+          loading="eager"
+          decoding="async"
+        />
 
-              </div>
+      </div>
 
-            </div>
+    </div>
 
-            <div className="flex-1 text-right space-y-4">
+    <div className="flex-1 text-right space-y-4">
 
-              <div className="space-y-3">
+      <div className="space-y-3">
 
-                <p className="
-                  text-[13px]
-                  uppercase
-                  tracking-[0.12em]
-                  opacity-35
-                ">
-                  aplicação prática
-                </p>
+        <p
+          className="
+            text-[13px]
+            uppercase
+            tracking-[0.12em]
+            opacity-35
+          "
+        >
+          aplicação prática
+        </p>
 
-                <div className="w-10 h-[2px] bg-[#E9D5BB] ml-auto"></div>
+        <div className="w-10 h-[2px] bg-[#E9D5BB] ml-auto"></div>
 
-              </div>
+      </div>
 
-              <p className="text-[18px] leading-[1.15] font-serif">
-                você começa a
-                <br />
-                ouvir a
-                <span className="italic opacity-80"> voz de Deus</span>
-              </p>
+      <p className="text-[18px] leading-[1.15] font-serif">
+        você começa a
+        <br />
+        ouvir a
+        <span className="italic opacity-80"> voz de Deus</span>
+      </p>
 
-            </div>
+    </div>
 
-          </div>
+  </div>
 
-        </section>
+</section>
 
         {/* 4º + 5º */}
         <section className="relative mb-16">
