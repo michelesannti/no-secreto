@@ -147,7 +147,76 @@ export default function VendaPage() {
           </div>
 
         </section>
+{/* VÍDEO APP */}
+<section className="mb-24">
 
+  <div className="space-y-8">
+
+    <div className="text-center space-y-3">
+
+      <p
+        className="
+          text-[13px]
+          uppercase
+          tracking-[0.18em]
+          opacity-35
+        "
+      >
+        Veja por dentro
+      </p>
+
+      <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+    </div>
+
+    <div className="flex justify-center">
+
+      <div
+        className="
+          relative
+          w-[230px]
+          rounded-[38px]
+          border-[4px]
+          border-black/80
+          bg-black
+          shadow-2xl
+          overflow-hidden
+        "
+      >
+
+        <div
+          className="
+            absolute
+            top-0
+            left-1/2
+            -translate-x-1/2
+            w-20
+            h-4
+            bg-black
+            rounded-b-2xl
+            z-10
+          "
+        />
+
+        <video
+          className="w-full block"
+          controls
+          playsInline
+          preload="metadata"
+        >
+          <source
+            src="/videoapp.mp4"
+            type="video/mp4"
+          />
+        </video>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
         {/* DORES + TRANSFORMAÇÕES */}
         <section className="mb-24">
 
