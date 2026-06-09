@@ -635,7 +635,7 @@ export default function VendaPage() {
         {
           pergunta: "Preciso baixar o aplicativo?",
           resposta:
-            "Não, o acesso é feito pelo navegador. Ao adicionar à tela inicial funciona como um aplicativo, tanto no Android quanto no iPhone.",
+            "Não, o acesso é feito pelo navegador. Ao adicioná-lo à tela inicial funciona como um aplicativo, tanto no Android quanto no iPhone.",
         },
         {
           pergunta: "O acesso é por assinatura?",
