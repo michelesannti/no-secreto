@@ -640,7 +640,7 @@ export default function VendaPage() {
         {
           pergunta: "O acesso é por assinatura?",
           resposta:
-            "Não. O acesso é liberado através de pagamento único, sem mensalidades.",
+            "Não. O acesso é liberado através do pagamento único.",
         },
         {
           pergunta: "E se eu não souber por onde começar?",
