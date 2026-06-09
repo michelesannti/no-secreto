@@ -608,7 +608,7 @@ export default function VendaPage() {
         </a>
 
 {/* DÚVIDAS */}
-<section className="mt-24 mb-12">
+<section className="mt-24 mb-16">
 
   <div className="space-y-10">
 
@@ -622,43 +622,39 @@ export default function VendaPage() {
           opacity-35
         "
       >
-        Dúvidas frequentes
+        Dúvidas
       </p>
 
       <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
 
     </div>
 
-    <div className="space-y-3">
+    <div className="space-y-4">
 
       {[
         {
-          pergunta: "Preciso baixar algum aplicativo?",
+          pergunta: "Preciso baixar o aplicativo?",
           resposta:
-            "Não. O No Secreto funciona pelo navegador e pode ser adicionado à tela inicial do celular, funcionando como um aplicativo tanto no Android quanto no iPhone.",
-        },
-        {
-          pergunta: "E se eu não conseguir manter constância?",
-          resposta:
-            "O No Secreto foi criado justamente para mulheres que vivem esse ciclo. Você não precisa seguir datas fixas, cumprir metas ou recomeçar do zero. O objetivo é te ajudar a permanecer.",
-        },
-        {
-          pergunta: "Preciso já conhecer a Bíblia?",
-          resposta:
-            "Não. Os estudos são guiados e explicados de forma simples, ajudando você a entender o contexto e aplicar a Palavra na vida real.",
+            "Não, o acesso é feito pelo navegador. Ao adicionar à tela inicial funciona como um aplicativo, tanto no Android quanto no iPhone.",
         },
         {
           pergunta: "O acesso é por assinatura?",
           resposta:
-            "Não. Hoje o acesso é liberado através de pagamento único.",
+            "Não. O acesso é liberado através de pagamento único, sem mensalidades.",
+        },
+        {
+          pergunta: "Posso usar mesmo sem conhecer a Bíblia?",
+          resposta:
+            "Sim. Os estudos são guiados e explicados de forma simples, te ajudando a entender o contexto e aplicar a Palavra à sua vida.",
         },
       ].map((item, index) => (
         <div
           key={index}
           className="
-            border-b
-            border-[#E9D5BB]/40
-            pb-3
+            bg-[#EFE2CC]/45
+            rounded-[24px]
+            overflow-hidden
+            backdrop-blur-sm
           "
         >
           <button
@@ -670,30 +666,48 @@ export default function VendaPage() {
               flex
               items-center
               justify-between
+              px-5
+              py-5
               text-left
-              py-3
             "
           >
-            <span className="font-serif text-[18px]">
+            <span
+              className="
+                font-serif
+                text-[18px]
+                leading-[1.25]
+              "
+            >
               {item.pergunta}
             </span>
 
-            <span className="text-xl opacity-50">
+            <span
+              className="
+                text-[24px]
+                opacity-50
+                ml-4
+              "
+            >
               {open === index ? "−" : "+"}
             </span>
           </button>
 
           {open === index && (
-            <p
-              className="
-                text-[15px]
-                leading-7
-                opacity-80
-                pb-2
-              "
-            >
-              {item.resposta}
-            </p>
+            <div className="px-5 pb-5">
+
+              <div className="w-8 h-[2px] bg-[#D9C2A0] mb-4"></div>
+
+              <p
+                className="
+                  text-[15px]
+                  leading-7
+                  opacity-80
+                "
+              >
+                {item.resposta}
+              </p>
+
+            </div>
           )}
         </div>
       ))}
@@ -704,7 +718,7 @@ export default function VendaPage() {
 
 </section>
 
-{/* CTA FINAL MESMO */}
+{/* CTA FINAL */}
 <a
   href="https://pay.cakto.com.br/aovfbto_873529"
   className="
@@ -722,9 +736,10 @@ export default function VendaPage() {
     hover:scale-[1.015]
     transition-all
     duration-300
+    mb-10
   "
 >
-  Quero começar meu tempo com Deus
+  Começar meu tempo com Deus
 </a>
 
       </div>
