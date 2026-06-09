@@ -643,9 +643,9 @@ export default function VendaPage() {
             "Não. O acesso é liberado através de pagamento único, sem mensalidades.",
         },
         {
-          pergunta: "Posso usar mesmo sem conhecer a Bíblia?",
+          pergunta: "E se eu não souber por onde começar?",
           resposta:
-            "Sim. Os estudos são guiados e explicados de forma simples, te ajudando a entender o contexto e aplicar a Palavra à sua vida.",
+            "Os estudos são guiados e explicados de forma simples, te ajudando a entender o contexto e aplicar a Palavra à sua vida.",
         },
       ].map((item, index) => (
         <div
