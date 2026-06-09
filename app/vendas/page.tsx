@@ -208,7 +208,7 @@ export default function VendaPage() {
               <div className="space-y-3">
 
                 <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
-                  Dores
+                  Antes
                 </p>
 
                 <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
@@ -248,7 +248,7 @@ export default function VendaPage() {
               <div className="space-y-3">
 
                 <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
-                  Transformações
+                  Depois
                 </p>
 
                 <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
