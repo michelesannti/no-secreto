@@ -12,27 +12,68 @@ export async function POST(req: Request) {
 
     console.log("📩 Webhook recebido:", JSON.stringify(body, null, 2));
 
-    // ✅ ESTRUTURA CORRETA DA CAKTO
+    const event = body?.event;
     const email = body?.data?.customer?.email;
     const name = body?.data?.customer?.name;
 
     if (!email) {
       console.error("❌ Email não encontrado no webhook");
+
       return NextResponse.json(
         { error: "Email não encontrado" },
         { status: 400 }
       );
     }
 
+    console.log("📌 Evento:", event);
     console.log("📧 Email:", email);
     console.log("👤 Nome:", name);
 
-    // 🔍 tenta encontrar usuário existente
+    // ==========================
+    // REEMBOLSO
+    // ==========================
+
+    if (event === "refund") {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          ativo: false,
+          acesso: "REEMBOLSO",
+        })
+        .eq("email", email);
+
+      if (error) {
+        console.error("❌ Erro ao cancelar acesso:", error);
+
+        return NextResponse.json(
+          { error: "Erro ao cancelar acesso" },
+          { status: 500 }
+        );
+      }
+
+      console.log("🚫 Acesso cancelado por reembolso");
+
+      return NextResponse.json({ success: true });
+    }
+
+    // ==========================
+    // COMPRA APROVADA
+    // ==========================
+
+    if (event !== "purchase_approved") {
+      console.log("ℹ️ Evento ignorado:", event);
+
+      return NextResponse.json({ success: true });
+    }
+
+    // procura usuário
+
     const { data: usersList, error: listError } =
       await supabase.auth.admin.listUsers();
 
     if (listError) {
       console.error("❌ Erro ao listar usuários:", listError);
+
       return NextResponse.json(
         { error: "Erro ao buscar usuário" },
         { status: 500 }
@@ -45,7 +86,8 @@ export async function POST(req: Request) {
 
     let userId = existingUser?.id;
 
-    // 👤 cria usuário se não existir
+    // cria usuário se não existir
+
     if (!userId) {
       const { data: userData, error: createError } =
         await supabase.auth.admin.createUser({
@@ -69,7 +111,6 @@ export async function POST(req: Request) {
       console.log("♻️ Usuário já existe:", userId);
     }
 
-    // 🔥 cria ou atualiza profile COM NOME
     const { error: upsertError } = await supabase
       .from("profiles")
       .upsert({
