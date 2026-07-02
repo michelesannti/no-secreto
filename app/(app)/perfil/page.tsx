@@ -304,33 +304,35 @@ export default function PerfilPage() {
         </div>
 
         {/* CONCLUÍDAS */}
-        {concluidas.length > 0 && (
-          <div className="flex flex-wrap items-start gap-2">
-            {concluidas.map((nome, i) => (
-              <div
-                key={i}
-                className="flex items-center rounded-full bg-[#e9d5bb]/30 text-[12px] text-[#70412d]/60 p-[2px]"
-              >
-                <div className="px-3 py-1">{nome}</div>
+{concluidas.length > 0 && (
+  <div className="grid grid-cols-2 gap-2">
+    {concluidas.map((nome, i) => (
+      <div
+        key={i}
+        className="flex items-center justify-between rounded-full bg-[#e9d5bb]/30 text-[12px] text-[#70412d]/60 p-[2px] w-full"
+      >
+        <div className="px-3 py-1 truncate">
+          {nome}
+        </div>
 
-                <div className="flex items-center justify-center bg-[#C6A46A] rounded-full w-6 h-6">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3.5 h-3.5 text-white"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3.25-3.25a1 1 0 011.414-1.414l2.543 2.543 6.543-6.543a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="flex items-center justify-center bg-[#C6A46A] rounded-full w-5 h-5 shrink-0 mr-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-3 h-3 text-white"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3.25-3.25a1 1 0 011.414-1.414l2.543 2.543 6.543-6.543a1 1 0 011.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
 
       </div>
 
