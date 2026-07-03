@@ -15,6 +15,7 @@ export async function POST(req: Request) {
     const event = body?.event;
     const email = body?.data?.customer?.email;
     const name = body?.data?.customer?.name;
+    const affiliateEmail = body?.data?.affiliate;
 
     if (!email) {
       console.error("❌ Email não encontrado no webhook");
@@ -28,6 +29,7 @@ export async function POST(req: Request) {
     console.log("📌 Evento:", event);
     console.log("📧 Email:", email);
     console.log("👤 Nome:", name);
+    console.log("🤝 Afiliada:", affiliateEmail);
 
     // ==========================
     // REEMBOLSO
@@ -66,7 +68,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true });
     }
 
-    // procura usuário
+    // ==========================
+    // Procura afiliada pelo email
+    // ==========================
+
+    let creatorOrigem: string | null = null;
+
+    if (affiliateEmail) {
+      const { data: creator } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("email", affiliateEmail)
+        .single();
+
+      if (creator) {
+        creatorOrigem = creator.id;
+        console.log("✅ Creator origem:", creatorOrigem);
+      } else {
+        console.log("⚠️ Afiliada não encontrada no banco.");
+      }
+    } else {
+      console.log("ℹ️ Compra da produtora (sem afiliada).");
+    }
+
+    // ==========================
+    // Procura usuário
+    // ==========================
 
     const { data: usersList, error: listError } =
       await supabase.auth.admin.listUsers();
@@ -86,7 +113,9 @@ export async function POST(req: Request) {
 
     let userId = existingUser?.id;
 
-    // cria usuário se não existir
+    // ==========================
+    // Cria usuário se não existir
+    // ==========================
 
     if (!userId) {
       const { data: userData, error: createError } =
@@ -111,6 +140,10 @@ export async function POST(req: Request) {
       console.log("♻️ Usuário já existe:", userId);
     }
 
+    // ==========================
+    // Atualiza profile
+    // ==========================
+
     const { error: upsertError } = await supabase
       .from("profiles")
       .upsert({
@@ -119,6 +152,7 @@ export async function POST(req: Request) {
         nome: name || null,
         ativo: true,
         acesso: "PAGO",
+        creator_origem: creatorOrigem,
       });
 
     if (upsertError) {
