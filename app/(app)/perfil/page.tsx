@@ -39,33 +39,20 @@ export default function PerfilPage() {
   }
 
   function voltarMes() {
-  let ano = anoAtual;
-  let mes = mesAtual - 1;
+    const anterior =
+      mesAtual === 0
+        ? `${anoAtual - 1}-12`
+        : `${anoAtual}-${String(mesAtual).padStart(2, "0")}`;
 
-  while (true) {
-    if (mes < 0) {
-      mes = 11;
-      ano--;
+    if (!mesesComRegistro.includes(anterior)) return;
+
+    if (mesAtual === 0) {
+      setMesAtual(11);
+      setAnoAtual((prev) => prev - 1);
+    } else {
+      setMesAtual((prev) => prev - 1);
     }
-
-    const chave = `${ano}-${String(mes + 1).padStart(2, "0")}`;
-
-    if (mesesComRegistro.includes(chave)) {
-      setAnoAtual(ano);
-      setMesAtual(mes);
-      return;
-    }
-
-    // evita loop infinito caso não exista nenhum mês anterior
-    const primeiroMes = [...mesesComRegistro].sort()[0];
-
-    if (!primeiroMes) return;
-
-    if (chave <= primeiroMes) return;
-
-    mes--;
   }
-}
 
   function avancarMes() {
     const hojeMes = hoje.getMonth();
@@ -219,36 +206,14 @@ export default function PerfilPage() {
   }
 
   const mesAtualKey = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
-  const podeVoltar = (() => {
-  let ano = anoAtual;
-  let mes = mesAtual - 1;
+  const mesAnteriorKey =
+    mesAtual === 0
+      ? `${anoAtual - 1}-12`
+      : `${anoAtual}-${String(mesAtual).padStart(2, "0")}`;
 
-  while (true) {
-    if (mes < 0) {
-      mes = 11;
-      ano--;
-    }
+  const hojeKey = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}`;
 
-    const chave = `${ano}-${String(mes + 1).padStart(2, "0")}`;
-
-    if (mesesComRegistro.includes(chave)) {
-      return true;
-    }
-
-    const primeiroMes = [...mesesComRegistro].sort()[0];
-
-    if (!primeiroMes) return false;
-
-    if (chave <= primeiroMes) return false;
-
-    mes--;
-  }
-})();
-
-const hojeKey = `${hoje.getFullYear()}-${String(
-  hoje.getMonth() + 1
-).padStart(2, "0")}`;
-
+  const podeVoltar = mesesComRegistro.includes(mesAnteriorKey);
   const podeAvancar = mesAtualKey !== hojeKey;
 
   const nomeJornadaExibida = jornadaConcluidaVisual || nomeJornadaAtual;
