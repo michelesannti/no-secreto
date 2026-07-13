@@ -115,14 +115,14 @@ export default function PerfilPage() {
 
       const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
-      const meses = new Set<string>();
+const meses = new Set<string>();
 
 progresso?.forEach((p) => {
   if (!p.data_local) return;
 
   const [ano, mes] = p.data_local.split("-");
 
-const mesAtualKey = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
+  meses.add(`${ano}-${mes}`);
 });
 
 const hojeKey = `${hoje.getFullYear()}-${String(
@@ -131,7 +131,11 @@ const hojeKey = `${hoje.getFullYear()}-${String(
 
 meses.add(hojeKey);
 
-setMesesDisponiveis([...meses].sort());
+const mesesOrdenados = [...meses].sort(
+  (a, b) => new Date(a + "-01").getTime() - new Date(b + "-01").getTime()
+);
+
+setMesesDisponiveis(mesesOrdenados);
 
       const jornadasMap = new Map();
 
