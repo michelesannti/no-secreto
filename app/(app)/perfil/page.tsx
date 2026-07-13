@@ -11,7 +11,7 @@ export default function PerfilPage() {
   const [registrosModal, setRegistrosModal] = useState<any[]>([]);
   const [nomeJornadaAtual, setNomeJornadaAtual] = useState("");
   const [concluidas, setConcluidas] = useState<string[]>([]);
-  const [mesesComRegistro, setMesesComRegistro] = useState<string[]>([]);
+  const [mesesDisponiveis, setMesesDisponiveis] = useState<string[]>([]);
 
   const [mensagemConclusao, setMensagemConclusao] = useState<string | null>(null);
   const [jornadaConcluidaVisual, setJornadaConcluidaVisual] = useState<string | null>(null);
@@ -39,47 +39,36 @@ export default function PerfilPage() {
   }
 
   function voltarMes() {
-  let ano = anoAtual;
-  let mes = mesAtual - 1;
+  const chaveAtual = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
 
-  while (true) {
-    if (mes < 0) {
-      mes = 11;
-      ano--;
-    }
+  const indice = mesesDisponiveis.indexOf(chaveAtual);
 
-    const chave = `${ano}-${String(mes + 1).padStart(2, "0")}`;
+  if (indice <= 0) return;
 
-    if (mesesComRegistro.includes(chave)) {
-      setAnoAtual(ano);
-      setMesAtual(mes);
-      return;
-    }
+  const anterior = mesesDisponiveis[indice - 1];
 
-    // evita loop infinito caso não exista nenhum mês anterior
-    const primeiroMes = [...mesesComRegistro].sort()[0];
+  const [ano, mes] = anterior.split("-");
 
-    if (!primeiroMes) return;
-
-    if (chave <= primeiroMes) return;
-
-    mes--;
-  }
+  setAnoAtual(Number(ano));
+  setMesAtual(Number(mes) - 1);
 }
 
   function avancarMes() {
-    const hojeMes = hoje.getMonth();
-    const hojeAno = hoje.getFullYear();
+  const chaveAtual = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
 
-    if (anoAtual > hojeAno || (anoAtual === hojeAno && mesAtual >= hojeMes)) return;
+  const indice = mesesDisponiveis.indexOf(chaveAtual);
 
-    if (mesAtual === 11) {
-      setMesAtual(0);
-      setAnoAtual((prev) => prev + 1);
-    } else {
-      setMesAtual((prev) => prev + 1);
-    }
-  }
+  if (indice === -1) return;
+
+  if (indice >= mesesDisponiveis.length - 1) return;
+
+  const proximo = mesesDisponiveis[indice + 1];
+
+  const [ano, mes] = proximo.split("-");
+
+  setAnoAtual(Number(ano));
+  setMesAtual(Number(mes) - 1);
+}
 
   useEffect(() => {
     const jornadaFinalizada = localStorage.getItem("jornadaConcluidaNome");
@@ -127,12 +116,22 @@ export default function PerfilPage() {
       const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
 
       const meses = new Set<string>();
-      progresso?.forEach((p) => {
-        if (!p.data_local) return;
-        const [ano, mes] = p.data_local.split("-");
-        meses.add(`${ano}-${mes}`);
-      });
-      setMesesComRegistro(Array.from(meses));
+
+progresso?.forEach((p) => {
+  if (!p.data_local) return;
+
+  const [ano, mes] = p.data_local.split("-");
+
+const mesAtualKey = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
+});
+
+const hojeKey = `${hoje.getFullYear()}-${String(
+  hoje.getMonth() + 1
+).padStart(2, "0")}`;
+
+meses.add(hojeKey);
+
+setMesesDisponiveis([...meses].sort());
 
       const jornadasMap = new Map();
 
@@ -219,37 +218,14 @@ export default function PerfilPage() {
   }
 
   const mesAtualKey = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
-  const podeVoltar = (() => {
-  let ano = anoAtual;
-  let mes = mesAtual - 1;
 
-  while (true) {
-    if (mes < 0) {
-      mes = 11;
-      ano--;
-    }
+const indiceAtual = mesesDisponiveis.indexOf(mesAtualKey);
 
-    const chave = `${ano}-${String(mes + 1).padStart(2, "0")}`;
+const podeVoltar = indiceAtual > 0;
 
-    if (mesesComRegistro.includes(chave)) {
-      return true;
-    }
-
-    const primeiroMes = [...mesesComRegistro].sort()[0];
-
-    if (!primeiroMes) return false;
-
-    if (chave <= primeiroMes) return false;
-
-    mes--;
-  }
-})();
-
-const hojeKey = `${hoje.getFullYear()}-${String(
-  hoje.getMonth() + 1
-).padStart(2, "0")}`;
-
-  const podeAvancar = mesAtualKey !== hojeKey;
+const podeAvancar =
+  indiceAtual >= 0 &&
+  indiceAtual < mesesDisponiveis.length - 1;
 
   const nomeJornadaExibida = jornadaConcluidaVisual || nomeJornadaAtual;
   const porcentagemExibida = jornadaConcluidaVisual ? 100 : porcentagem;
