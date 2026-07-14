@@ -117,7 +117,7 @@ export default function LoginPage() {
   {loading
     ? "Enviando..."
     : linkEnviado
-    ? "✓ Acesso enviado no email"
+    ? "Acesso enviado no email"
     : "Entrar"}
 </button>
 
