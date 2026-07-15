@@ -11,7 +11,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [linkEnviado, setLinkEnviado] = useState(false);
 
   useEffect(() => {
     async function checkUser() {
@@ -53,19 +52,6 @@ export default function LoginPage() {
 
     const redirectTo = `${window.location.origin}/login`;
 
-    // verifica se o email possui acesso
-const { data: profile } = await supabase
-  .from("profiles")
-  .select("ativo")
-  .eq("email", normalizedEmail)
-  .maybeSingle();
-
-if (!profile?.ativo) {
-  setMessage("Esse email ainda não possui acesso");
-  setLoading(false);
-  return;
-}
-
     // ✅ envia magic link
     const { error } = await supabase.auth.signInWithOtp({
       email: normalizedEmail,
@@ -80,7 +66,7 @@ if (!profile?.ativo) {
       return;
     }
 
-    setLinkEnviado(true);
+    setMessage("Link de acesso enviado no email 🤎");
     setLoading(false);
   }
 
@@ -109,36 +95,31 @@ if (!profile?.ativo) {
         <form onSubmit={handleLogin} className="flex flex-col gap-8">
 
           <input
-  type="email"
-  placeholder="Email"
-  value={email}
-  onChange={(e) => setEmail(e.target.value)}
-  required
-  disabled={loading || linkEnviado}
-  className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60"
-/>
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none"
+          />
 
           <button
-  type="submit"
-  disabled={loading || linkEnviado}
-  className="
-    px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]
-    text-sm tracking-wide transition
-    disabled:opacity-80 mt-2 self-center
-  "
->
-  {loading
-    ? "Enviando..."
-    : linkEnviado
-    ? "Acesso enviado no email"
-    : "Entrar"}
-</button>
+            type="submit"
+            disabled={loading}
+            className="
+              px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]
+              text-sm tracking-wide transition hover:opacity-90
+              disabled:opacity-60 mt-2 self-center
+            "
+          >
+            {loading ? "Enviando..." : "Entrar"}
+          </button>
 
-          {message && !linkEnviado && (
-  <p className="text-sm text-center text-[#70412d]/80">
-    {message}
-  </p>
-)}
+          {message && (
+            <p className="text-sm text-center text-[#70412d]/80">
+              {message}
+            </p>
+          )}
 
         </form>
 
