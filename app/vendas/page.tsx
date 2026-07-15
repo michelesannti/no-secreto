@@ -315,7 +315,7 @@ export default function VendaPage() {
             opacity-35
           "
         >
-          estudo bíblico guiado
+          estudo guiado
         </p>
 
         <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
