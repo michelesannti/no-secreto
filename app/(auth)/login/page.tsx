@@ -53,6 +53,19 @@ export default function LoginPage() {
 
     const redirectTo = `${window.location.origin}/login`;
 
+    // verifica se o email possui acesso
+const { data: profile } = await supabase
+  .from("profiles")
+  .select("ativo")
+  .eq("email", normalizedEmail)
+  .maybeSingle();
+
+if (!profile?.ativo) {
+  setMessage("Esse email ainda não possui acesso");
+  setLoading(false);
+  return;
+}
+
     // ✅ envia magic link
     const { error } = await supabase.auth.signInWithOtp({
       email: normalizedEmail,
