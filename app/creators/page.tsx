@@ -272,7 +272,7 @@ export default function CreatorsPage() {
 
       {[
         "Marcar @nosecretoapp nos stories",
-        "Publicar conteúdos em collab no feed",
+        "Postar conteúdos em collab no feed",
         "Utilizar seu link de indicação",
       ].map((item, i) => (
         <div
