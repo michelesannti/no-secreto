@@ -11,6 +11,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [linkEnviado, setLinkEnviado] = useState(false);
 
   useEffect(() => {
     async function checkUser() {
@@ -21,14 +22,16 @@ export default function LoginPage() {
       if (!user) return;
 
       // ✅ procura profile pelo ID do usuário autenticado
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("ativo")
-        .eq("id", user.id)
-        .maybeSingle();
+      const { data: profile, error: profileError } = await supabase
+  .from("profiles")
+  .select("email, ativo")
+  .eq("id", user.id)
+  .maybeSingle();
+
+
 
       // ❌ sem acesso
-      if (error || !profile?.ativo) {
+      if (profileError || !profile?.ativo) {
         await supabase.auth.signOut();
 
         setMessage("Esse email ainda não possui acesso");
@@ -52,6 +55,23 @@ export default function LoginPage() {
 
     const redirectTo = `${window.location.origin}/login`;
 
+    // verifica se o email possui acesso
+const { data: profile, error: profileError } = await supabase
+  .from("profiles")
+  .select("email, ativo")
+  .eq("email", normalizedEmail)
+  .maybeSingle();
+
+console.log("EMAIL:", normalizedEmail);
+console.log("PROFILE:", profile);
+console.log("ERROR:", profileError);
+
+if (!profile?.ativo) {
+  setMessage("Esse email ainda não possui acesso");
+  setLoading(false);
+  return;
+}
+
     // ✅ envia magic link
     const { error } = await supabase.auth.signInWithOtp({
       email: normalizedEmail,
@@ -66,7 +86,7 @@ export default function LoginPage() {
       return;
     }
 
-    setMessage("Link de acesso enviado no email 🤎");
+    setLinkEnviado(true);
     setLoading(false);
   }
 
@@ -95,31 +115,36 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} className="flex flex-col gap-8">
 
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none"
-          />
+  type="email"
+  placeholder="Email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  required
+  disabled={loading || linkEnviado}
+  className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60"
+/>
 
           <button
-            type="submit"
-            disabled={loading}
-            className="
-              px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]
-              text-sm tracking-wide transition hover:opacity-90
-              disabled:opacity-60 mt-2 self-center
-            "
-          >
-            {loading ? "Enviando..." : "Entrar"}
-          </button>
+  type="submit"
+  disabled={loading || linkEnviado}
+  className="
+    px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]
+    text-sm tracking-wide transition
+    disabled:opacity-80 mt-2 self-center
+  "
+>
+  {loading
+    ? "Enviando..."
+    : linkEnviado
+    ? "Acesso enviado no email"
+    : "Entrar"}
+</button>
 
-          {message && (
-            <p className="text-sm text-center text-[#70412d]/80">
-              {message}
-            </p>
-          )}
+          {message && !linkEnviado && (
+  <p className="text-sm text-center text-[#70412d]/80">
+    {message}
+  </p>
+)}
 
         </form>
 
