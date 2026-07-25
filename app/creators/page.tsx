@@ -315,6 +315,12 @@ export default function CreatorsPage() {
     </div>
 
   </div>
+{/* OBSERVAÇÃO */}
+<div className="mt-8 text-center px-4">
+  <p className="text-[13px] leading-relaxed text-[#70412D]/60">
+    Alguns conteúdos poderão ser republicados nas redes oficiais do No Secreto com os devidos créditos.
+  </p>
+</div>
 
 </section>
 {/* RESUMO FINAL */}
