@@ -607,6 +607,48 @@ export default function VendaPage() {
           Quero viver isso com Deus
         </a>
 
+{/* TRANSFORMADAS */}
+<section className="mt-24 mb-24">
+
+  <div className="space-y-10">
+
+    <div className="text-center space-y-3">
+
+      <p
+        className="
+          text-[13px]
+          uppercase
+          tracking-[0.18em]
+          opacity-35
+        "
+      >
+        Transformadas
+      </p>
+
+      <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+    </div>
+
+    <div className="space-y-6">
+
+      <img
+        src="/feedback1.PNG"
+        alt="Feedback"
+        className="w-full"
+      />
+
+      <img
+        src="/feedback2.PNG"
+        alt="Feedback"
+        className="w-full"
+      />
+
+    </div>
+
+  </div>
+
+</section>
+
 {/* DÚVIDAS */}
 <section className="mt-24 mb-16">
 
