@@ -38,11 +38,11 @@ export default function SecretoPage() {
         .select("estudo_id")
         .eq("user_id", user.id);
 
-      const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
+      const concluidosIds = progresso?.map((p: any) => p.estudo_id) || [];
 
       // 🔥 PRÓXIMO ESTUDO
       const proximo =
-        estudos.find((e) => !concluidosIds.includes(e.id)) ||
+        estudos.find((e: any) => !concluidosIds.includes(e.id)) ||
         estudos[estudos.length - 1];
 
       if (proximo?.id) {
