@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { getSupabaseClient } from "@/lib/supabase";
 
 export default function LoginPage() {
@@ -9,9 +10,9 @@ export default function LoginPage() {
   const supabase = getSupabaseClient();
 
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [linkEnviado, setLinkEnviado] = useState(false);
 
   useEffect(() => {
     async function checkUser() {
@@ -21,21 +22,18 @@ export default function LoginPage() {
 
       if (!user) return;
 
-      // ✅ procura profile pelo ID do usuário autenticado
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("ativo")
         .eq("id", user.id)
         .maybeSingle();
 
-      // ❌ sem acesso
       if (profileError || !profile?.ativo) {
         await supabase.auth.signOut();
         setMessage("Esse email ainda não possui acesso");
         return;
       }
 
-      // ✅ acesso liberado
       router.replace("/hoje");
     }
 
@@ -50,32 +48,48 @@ export default function LoginPage() {
 
     const normalizedEmail = email.trim().toLowerCase();
 
-    const redirectTo = `${window.location.origin}/login`;
-
-    // ✅ envia magic link
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithPassword({
       email: normalizedEmail,
-      options: {
-        emailRedirectTo: redirectTo,
-      },
+      password,
     });
 
     if (error) {
-      setMessage("Erro ao enviar link de acesso");
+      setMessage("Email ou senha incorretos");
       setLoading(false);
       return;
     }
 
-    setLinkEnviado(true);
-    setLoading(false);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      setMessage("Não foi possível autenticar. Tente novamente.");
+      setLoading(false);
+      return;
+    }
+
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("ativo")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profileError || !profile?.ativo) {
+      await supabase.auth.signOut();
+      setMessage("Esse email ainda não possui acesso");
+      setLoading(false);
+      return;
+    }
+
+    router.replace("/hoje");
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f5e9] flex items-center justify-center text-[#70412d] px-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#f9f5e9] px-6">
       <div className="w-full max-w-sm">
 
         <div className="mb-12 text-center space-y-4">
-
           <img
             src="/logo.png"
             alt="No Secreto"
@@ -86,46 +100,66 @@ export default function LoginPage() {
             <h1 className="text-xl font-serif tracking-wide">
               No Secreto
             </h1>
-
             <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
           </div>
-
         </div>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-8">
-
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            disabled={loading || linkEnviado}
+            disabled={loading}
+            className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60"
+          />
+
+          <input
+            type="password"
+            placeholder="Senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            disabled={loading}
             className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60"
           />
 
           <button
             type="submit"
-            disabled={loading || linkEnviado}
+            disabled={loading}
             className="
               px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]
               text-sm tracking-wide transition
               disabled:opacity-80 mt-2 self-center
             "
           >
-            {loading
-              ? "Enviando..."
-              : linkEnviado
-              ? "Acesso enviado no email"
-              : "Entrar"}
+            {loading ? "Entrando..." : "Entrar"}
           </button>
 
-          {message && !linkEnviado && (
+          <div className="flex items-center justify-center gap-3 text-xs pt-2 text-[#70412d]/70">
+            <Link
+              href="/primeiro-acesso"
+              className="underline hover:text-[#70412d] transition"
+            >
+              Primeiro Acesso
+            </Link>
+
+            <span>•</span>
+
+            <Link
+              href="/redefinir-senha"
+              className="underline hover:text-[#70412d] transition"
+            >
+              Esqueci Minha Senha
+            </Link>
+          </div>
+
+          {message && (
             <p className="text-sm text-center text-[#70412d]/80">
               {message}
             </p>
           )}
-
         </form>
 
       </div>
