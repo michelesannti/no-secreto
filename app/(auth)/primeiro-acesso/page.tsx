@@ -175,7 +175,7 @@ function PrimeiroAcessoContent() {
 
             <input
               type="password"
-              placeholder="Confirme a nova senha"
+              placeholder="Confirme a senha"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
