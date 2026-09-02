@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createHash, randomBytes } from "crypto";
 import { createClient } from "@supabase/supabase-js";
-import { resend } from "@/lib/resend";
+import { getResend } from "@/lib/resend";
 
 export async function POST(req: Request) {
   try {
@@ -55,7 +55,9 @@ export async function POST(req: Request) {
       process.env.NEXT_PUBLIC_SITE_URL || "https://no-secreto-ten.vercel.app";
     const accessUrl = `${origin}/primeiro-acesso?token=${rawToken}`;
 
-    // 3. Dispara e-mail via Resend
+    // 3. Dispara e-mail via Resend (instanciado sob demanda)
+    const resend = getResend();
+
     await resend.emails.send({
       from: "No Secreto <suporte@nosecretoapp.com.br>",
       to: [normalizedEmail],
