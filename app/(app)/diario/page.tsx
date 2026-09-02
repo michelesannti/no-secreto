@@ -63,7 +63,7 @@ function DiarioContent() {
         progresso?.map((p: any) => p.estudo_id) || [];
 
       const estudoAtual =
-        estudos?.find((e) => !concluidosIds.includes(e.id)) ||
+        estudos?.find((e: any) => !concluidosIds.includes(e.id)) ||
         estudos?.[estudos.length - 1];
 
       if (!estudoAtual) return;
