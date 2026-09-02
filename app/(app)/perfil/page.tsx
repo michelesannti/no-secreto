@@ -39,36 +39,36 @@ export default function PerfilPage() {
   }
 
   function voltarMes() {
-  const chaveAtual = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
+    const chaveAtual = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
 
-  const indice = mesesDisponiveis.indexOf(chaveAtual);
+    const indice = mesesDisponiveis.indexOf(chaveAtual);
 
-  if (indice <= 0) return;
+    if (indice <= 0) return;
 
-  const anterior = mesesDisponiveis[indice - 1];
+    const anterior = mesesDisponiveis[indice - 1];
 
-  const [ano, mes] = anterior.split("-");
+    const [ano, mes] = anterior.split("-");
 
-  setAnoAtual(Number(ano));
-  setMesAtual(Number(mes) - 1);
-}
+    setAnoAtual(Number(ano));
+    setMesAtual(Number(mes) - 1);
+  }
 
   function avancarMes() {
-  const chaveAtual = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
+    const chaveAtual = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
 
-  const indice = mesesDisponiveis.indexOf(chaveAtual);
+    const indice = mesesDisponiveis.indexOf(chaveAtual);
 
-  if (indice === -1) return;
+    if (indice === -1) return;
 
-  if (indice >= mesesDisponiveis.length - 1) return;
+    if (indice >= mesesDisponiveis.length - 1) return;
 
-  const proximo = mesesDisponiveis[indice + 1];
+    const proximo = mesesDisponiveis[indice + 1];
 
-  const [ano, mes] = proximo.split("-");
+    const [ano, mes] = proximo.split("-");
 
-  setAnoAtual(Number(ano));
-  setMesAtual(Number(mes) - 1);
-}
+    setAnoAtual(Number(ano));
+    setMesAtual(Number(mes) - 1);
+  }
 
   useEffect(() => {
     const jornadaFinalizada = localStorage.getItem("jornadaConcluidaNome");
@@ -113,33 +113,33 @@ export default function PerfilPage() {
         .select("estudo_id, data_local")
         .eq("user_id", user.id);
 
-      const concluidosIds = progresso?.map((p) => p.estudo_id) || [];
+      const concluidosIds = progresso?.map((p: any) => p.estudo_id) || [];
 
-const meses = new Set<string>();
+      const meses = new Set<string>();
 
-progresso?.forEach((p) => {
-  if (!p.data_local) return;
+      progresso?.forEach((p: any) => {
+        if (!p.data_local) return;
 
-  const [ano, mes] = p.data_local.split("-");
+        const [ano, mes] = p.data_local.split("-");
 
-  meses.add(`${ano}-${mes}`);
-});
+        meses.add(`${ano}-${mes}`);
+      });
 
-const hojeKey = `${hoje.getFullYear()}-${String(
-  hoje.getMonth() + 1
-).padStart(2, "0")}`;
+      const hojeKey = `${hoje.getFullYear()}-${String(
+        hoje.getMonth() + 1
+      ).padStart(2, "0")}`;
 
-meses.add(hojeKey);
+      meses.add(hojeKey);
 
-const mesesOrdenados = [...meses].sort(
-  (a, b) => new Date(a + "-01").getTime() - new Date(b + "-01").getTime()
-);
+      const mesesOrdenados = [...meses].sort(
+        (a, b) => new Date(a + "-01").getTime() - new Date(b + "-01").getTime()
+      );
 
-setMesesDisponiveis(mesesOrdenados);
+      setMesesDisponiveis(mesesOrdenados);
 
       const jornadasMap = new Map();
 
-      estudos.forEach((e) => {
+      estudos.forEach((e: any) => {
         if (!jornadasMap.has(e.jornada)) {
           jornadasMap.set(e.jornada, {
             nome: e.jornada_exibicao,
@@ -159,10 +159,10 @@ setMesesDisponiveis(mesesOrdenados);
 
       for (let [jornadaId, data] of jornadasOrdenadas) {
         const estudosDaJornada = estudos
-          .filter((e) => e.jornada === jornadaId)
-          .map((e) => e.id);
+          .filter((e: any) => e.jornada === jornadaId)
+          .map((e: any) => e.id);
 
-        const feitos = estudosDaJornada.filter((id) =>
+        const feitos = estudosDaJornada.filter((id: any) =>
           concluidosIds.includes(id)
         ).length;
 
@@ -184,7 +184,7 @@ setMesesDisponiveis(mesesOrdenados);
       setNomeJornadaAtual(jornadaAtual.nome);
       setPorcentagem((jornadaAtual.feitos / jornadaAtual.total) * 100);
 
-      const datas = progresso?.map((p) => p.data_local).filter(Boolean) || [];
+      const datas = progresso?.map((p: any) => p.data_local).filter(Boolean) || [];
       setDatasAtivas(datas);
 
       const { data: diario } = await supabase
@@ -201,7 +201,7 @@ setMesesDisponiveis(mesesOrdenados);
 
   function abrirModal(dia: number) {
     const dataSelecionada = getDataAtualBrasil(dia);
-    const registros = diarios.filter((d) => d.data_local === dataSelecionada);
+    const registros = diarios.filter((d: any) => d.data_local === dataSelecionada);
     if (registros.length === 0) return;
     setRegistrosModal(registros);
     setModalAberto(true);
@@ -223,13 +223,13 @@ setMesesDisponiveis(mesesOrdenados);
 
   const mesAtualKey = `${anoAtual}-${String(mesAtual + 1).padStart(2, "0")}`;
 
-const indiceAtual = mesesDisponiveis.indexOf(mesAtualKey);
+  const indiceAtual = mesesDisponiveis.indexOf(mesAtualKey);
 
-const podeVoltar = indiceAtual > 0;
+  const podeVoltar = indiceAtual > 0;
 
-const podeAvancar =
-  indiceAtual >= 0 &&
-  indiceAtual < mesesDisponiveis.length - 1;
+  const podeAvancar =
+    indiceAtual >= 0 &&
+    indiceAtual < mesesDisponiveis.length - 1;
 
   const nomeJornadaExibida = jornadaConcluidaVisual || nomeJornadaAtual;
   const porcentagemExibida = jornadaConcluidaVisual ? 100 : porcentagem;
@@ -319,35 +319,35 @@ const podeAvancar =
         </div>
 
         {/* CONCLUÍDAS */}
-{concluidas.length > 0 && (
-  <div className="grid grid-cols-2 gap-2">
-    {concluidas.map((nome, i) => (
-      <div
-        key={i}
-        className="flex items-center justify-between rounded-full bg-[#e9d5bb]/30 text-[12px] text-[#70412d]/60 p-[2px] w-full"
-      >
-        <div className="px-3 py-1 truncate">
-          {nome}
-        </div>
+        {concluidas.length > 0 && (
+          <div className="grid grid-cols-2 gap-2">
+            {concluidas.map((nome, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between rounded-full bg-[#e9d5bb]/30 text-[12px] text-[#70412d]/60 p-[2px] w-full"
+              >
+                <div className="px-3 py-1 truncate">
+                  {nome}
+                </div>
 
-        <div className="flex items-center justify-center bg-[#C6A46A] rounded-full w-5 h-5 shrink-0 mr-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-3 h-3 text-white"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3.25-3.25a1 1 0 011.414-1.414l2.543 2.543 6.543-6.543a1 1 0 011.414 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </div>
-      </div>
-    ))}
-  </div>
-)}
+                <div className="flex items-center justify-center bg-[#C6A46A] rounded-full w-5 h-5 shrink-0 mr-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-3 h-3 text-white"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3.25-3.25a1 1 0 011.414-1.414l2.543 2.543 6.543-6.543a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
       </div>
 
