@@ -60,7 +60,7 @@ function DiarioContent() {
         .eq("user_id", user.id);
 
       const concluidosIds =
-        progresso?.map((p) => p.estudo_id) || [];
+        progresso?.map((p: any) => p.estudo_id) || [];
 
       const estudoAtual =
         estudos?.find((e) => !concluidosIds.includes(e.id)) ||
