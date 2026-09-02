@@ -29,9 +29,9 @@ function DiarioContent() {
 
     const partes = formatter.formatToParts(new Date());
 
-    const dia = partes.find((p) => p.type === "day")?.value;
-    const mes = partes.find((p) => p.type === "month")?.value;
-    const ano = partes.find((p) => p.type === "year")?.value;
+    const dia = partes.find((p: any) => p.type === "day")?.value;
+    const mes = partes.find((p: any) => p.type === "month")?.value;
+    const ano = partes.find((p: any) => p.type === "year")?.value;
 
     return `${ano}-${mes}-${dia}`;
   }
@@ -137,13 +137,13 @@ function DiarioContent() {
       .eq("user_id", userId);
 
     const concluidosIds =
-      progressoAtualizado?.map((p) => p.estudo_id) || [];
+      progressoAtualizado?.map((p: any) => p.estudo_id) || [];
 
     const todosIds =
-      estudosJornada?.map((e) => e.id) || [];
+      estudosJornada?.map((e: any) => e.id) || [];
 
     const finalizouJornada =
-      todosIds.every((id) =>
+      todosIds.every((id: any) =>
         concluidosIds.includes(id)
       );
 
@@ -175,7 +175,7 @@ function DiarioContent() {
               <div className="w-[2px] h-8 bg-[#e9d5bb]" />
 
               <div className="text-center font-serif text-lg font-semibold">
-                {destaque.split("\n").map((linha, i) => (
+                {destaque.split("\n").map((linha: string, i: number) => (
                   <div key={i} style={{ whiteSpace: "nowrap" }}>
                     {linha}
                   </div>
