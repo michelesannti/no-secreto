@@ -21,12 +21,12 @@ export async function POST(req: Request) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    // LIMPEZA AUTOMÁTICA: Remove tokens expirados há mais de 48 horas
-    const doisDiasAtras = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+    // LIMPEZA AUTOMÁTICA: Remove tokens expirados há mais de 24 horas
+    const umDiaAtras = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
     await supabaseAdmin
       .from("first_access_tokens")
       .delete()
-      .lt("expires_at", doisDiasAtras);
+      .lt("expires_at", umDiaAtras);
 
     // 1. Busca perfil ativo pelo e-mail
     const { data: profile } = await supabaseAdmin
@@ -37,14 +37,14 @@ export async function POST(req: Request) {
 
     if (!profile || !profile.ativo) {
       return NextResponse.json({
-        message: "Acesso enviado no email 🤎",
+        message: "Se o e-mail estiver cadastrado, você receberá as instruções 🤎",
       });
     }
 
-    // 2. Gera token seguro e insere na tabela (Validade: 48 horas)
+    // 2. Gera token seguro e salva na tabela (Validade: 2 horas)
     const rawToken = randomBytes(32).toString("hex");
     const tokenHash = createHash("sha256").update(rawToken).digest("hex");
-    const expiresAt = new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString();
+    const expiresAt = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString();
 
     await supabaseAdmin
       .from("first_access_tokens")
@@ -62,13 +62,13 @@ export async function POST(req: Request) {
       process.env.NEXT_PUBLIC_SITE_URL || "https://no-secreto-ten.vercel.app";
     const accessUrl = `${origin}/primeiro-acesso?token=${rawToken}`;
 
-    // 3. Dispara e-mail via Resend
+    // 3. Dispara o e-mail via Resend (100% padronizado)
     const resend = getResend();
 
     await resend.emails.send({
       from: "No Secreto <contato@nosecretoapp.com.br>",
       to: [normalizedEmail],
-      subject: "Acesso ao No Secreto",
+      subject: "Redefinir sua senha - No Secreto",
       html: `
         <div style="text-align: center; font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 20px;">
           <p style="
@@ -77,7 +77,7 @@ export async function POST(req: Request) {
             line-height: 1.5;
             margin-bottom: 24px;
           ">
-            Clique no botão abaixo para criar sua senha 🤎
+            Clique no botão abaixo para redefinir sua senha 🤎
           </p>
 
           <p style="margin: 24px 0 32px;">
@@ -94,7 +94,7 @@ export async function POST(req: Request) {
                 font-weight: bold;
               "
             >
-              CRIAR MINHA SENHA
+              REDEFINIR MINHA SENHA
             </a>
           </p>
 
@@ -122,10 +122,10 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({
-      message: "Acesso enviado no email 🤎",
+      message: "Se o e-mail estiver cadastrado, você receberá as instruções 🤎",
     });
   } catch (error) {
-    console.error("Erro ao solicitar primeiro acesso:", error);
+    console.error("Erro ao solicitar recuperação de senha:", error);
     return NextResponse.json(
       { error: "Erro ao processar solicitação." },
       { status: 500 }

@@ -2,11 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { getSupabaseClient } from "@/lib/supabase";
 
 export default function RedefinirSenhaPage() {
-  const supabase = getSupabaseClient();
-
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,29 +14,32 @@ export default function RedefinirSenhaPage() {
     setLoading(true);
     setMessage("");
 
-    const normalizedEmail = email.trim().toLowerCase();
+    try {
+      const res = await fetch("/api/recuperar-senha", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
-    const { error } = await supabase.auth.resetPasswordForEmail(
-      normalizedEmail,
-      {
-        redirectTo: `${window.location.origin}/nova-senha`,
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage(data.error || "Não foi possível enviar o email. Tente novamente.");
+        setLoading(false);
+        return;
       }
-    );
 
-    if (error) {
-      setMessage("Não foi possível enviar o email. Tente novamente.");
+      setMessage(data.message || "Se o e-mail estiver cadastrado, você receberá as instruções 🤎");
+    } catch {
+      setMessage("Erro ao solicitar redefinição. Tente novamente.");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    setMessage("Email de redefinição enviado");
-    setLoading(false);
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6 bg-[#f9f5e9]">
       <div className="w-full max-w-sm">
-
         <div className="mb-12 text-center space-y-4">
           <img
             src="/logo.png"
@@ -94,7 +94,6 @@ export default function RedefinirSenhaPage() {
             </Link>
           </div>
         </form>
-
       </div>
     </div>
   );
