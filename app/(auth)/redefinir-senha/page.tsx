@@ -29,7 +29,7 @@ export default function RedefinirSenhaPage() {
         return;
       }
 
-      setMessage(data.message || "Se o e-mail estiver cadastrado, você receberá as instruções 🤎");
+      setMessage(data.message || "Email de redefinição enviado 🤎");
     } catch {
       setMessage("Erro ao solicitar redefinição. Tente novamente.");
     } finally {

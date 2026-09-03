@@ -37,7 +37,7 @@ export async function POST(req: Request) {
 
     if (!profile || !profile.ativo) {
       return NextResponse.json({
-        message: "Se o e-mail estiver cadastrado, você receberá as instruções 🤎",
+        message: "Email de redefinição enviado 🤎",
       });
     }
 
@@ -62,13 +62,13 @@ export async function POST(req: Request) {
       process.env.NEXT_PUBLIC_SITE_URL || "https://no-secreto-ten.vercel.app";
     const accessUrl = `${origin}/primeiro-acesso?token=${rawToken}`;
 
-    // 3. Dispara o e-mail via Resend (100% padronizado)
+    // 3. Dispara o e-mail via Resend
     const resend = getResend();
 
     await resend.emails.send({
       from: "No Secreto <contato@nosecretoapp.com.br>",
       to: [normalizedEmail],
-      subject: "Redefinir sua senha - No Secreto",
+      subject: "Redefinir senha",
       html: `
         <div style="text-align: center; font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 20px;">
           <p style="
@@ -122,7 +122,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({
-      message: "Se o e-mail estiver cadastrado, você receberá as instruções 🤎",
+      message: "Email de redefinição enviado 🤎",
     });
   } catch (error) {
     console.error("Erro ao solicitar recuperação de senha:", error);
