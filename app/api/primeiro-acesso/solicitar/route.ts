@@ -59,7 +59,7 @@ export async function POST(req: Request) {
     const resend = getResend();
 
     await resend.emails.send({
-      from: "No Secreto <suporte@nosecretoapp.com.br>",
+      from: "No Secreto <contato@nosecretoapp.com.br>",
       to: [normalizedEmail],
       subject: "Acesso ao No Secreto",
       html: `
