@@ -4,6 +4,15 @@ import { createServerClient } from "@supabase/ssr";
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
+  const url = req.nextUrl;
+  const hostname = req.headers.get("host") || "";
+  const pathname = url.pathname;
+
+  // 1. Se acessar o domínio principal (nosecretoapp.com.br) na raiz (/), direciona para a página de vendas
+  const isMainDomain = hostname === "nosecretoapp.com.br" || hostname === "www.nosecretoapp.com.br";
+  if (isMainDomain && pathname === "/") {
+    return NextResponse.rewrite(new URL("/vendas", req.url));
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -27,9 +36,14 @@ export async function middleware(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const pathname = req.nextUrl.pathname;
-
   const isLogin = pathname.startsWith("/login");
+  const isVendas = pathname.startsWith("/vendas");
+  const isAuthRoute = pathname.startsWith("/primeiro-acesso") || pathname.startsWith("/redefinir-senha");
+
+  // Permite acesso livre à página de vendas e rotas públicas de autenticação
+  if (isVendas || isAuthRoute) {
+    return res;
+  }
 
   // 🚫 não logado → bloqueia tudo menos login
   if (!user && !isLogin) {
@@ -55,9 +69,11 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
+    "/",
     "/hoje",
     "/secreto/:path*",
     "/diario",
     "/perfil",
+    "/vendas",
   ],
 };
