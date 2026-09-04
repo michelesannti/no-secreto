@@ -10,16 +10,17 @@ export async function POST(req: Request) {
   try {
     const { nome, email, instagram } = await req.json();
 
-    if (!email || !nome) {
+    // Validação estrita: Nome, E-mail e Instagram são 100% obrigatórios
+    if (!email || !nome || !instagram) {
       return NextResponse.json(
-        { error: "Nome e e-mail são obrigatórios." },
+        { error: "Nome, e-mail e Instagram são obrigatórios." },
         { status: 400 }
       );
     }
 
     const emailFormatted = email.trim().toLowerCase();
     const nomeFormatted = nome.trim();
-    const instagramFormatted = instagram ? instagram.trim().replace("@", "") : null;
+    const instagramFormatted = instagram.trim().replace("@", "");
 
     // 1. Busca se a usuária já possui um perfil cadastrado na tabela 'profiles'
     const { data: existingProfile } = await supabaseAdmin
@@ -29,8 +30,8 @@ export async function POST(req: Request) {
       .maybeSingle();
 
     if (existingProfile) {
-      // Se a usuária já existe: apenas ativa a flag de creator e atualiza nome e instagram.
-      // Preserva intocadas as colunas 'ativo' e 'acesso' (vital para a gestão de assinaturas).
+      // Se a usuária já existe: ativa creator e atualiza nome e instagram.
+      // Preserva intocadas as colunas 'ativo' e 'acesso'.
       const { error: updateError } = await supabaseAdmin
         .from("profiles")
         .update({
