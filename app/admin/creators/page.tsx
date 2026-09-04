@@ -17,7 +17,7 @@ export default function AdminCreatorsPage() {
     if (!nome.trim() || !email.trim() || !instagram.trim()) {
       setMensagem({
         tipo: "erro",
-        texto: "Por favor, preencha todos os campos obrigatórios (Nome, E-mail e Instagram).",
+        texto: "Por favor, preencha todos os campos obrigatórios.",
       });
       return;
     }
@@ -57,82 +57,75 @@ export default function AdminCreatorsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] flex flex-col justify-center items-center px-4 py-8">
-      <div className="w-full max-w-md bg-white rounded-2xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-[#F0EBE1]">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold text-[#3C3835] tracking-tight mb-2">
-            Cadastrar Creator
-          </h1>
-          <p className="text-sm text-[#8C827A]">
-            Preencha os dados abaixo para dar acesso e permissão de Creator à usuária.
-          </p>
+    <div className="min-h-screen flex items-center justify-center bg-[#f9f5e9] px-6">
+      <div className="w-full max-w-sm">
+        {/* Cabeçalho Identidade No Secreto */}
+        <div className="mb-12 text-center space-y-4">
+          <img
+            src="/logo.png"
+            alt="No Secreto"
+            className="w-24 h-24 mx-auto object-contain"
+          />
+
+          <div>
+            <h1 className="text-xl font-serif tracking-wide text-[#70412d]">
+              Cadastrar Creator
+            </h1>
+            <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
+          </div>
         </div>
 
-        {mensagem && (
-          <div
-            className={`p-4 rounded-xl text-sm mb-6 ${
-              mensagem.tipo === "sucesso"
-                ? "bg-[#F2F7F2] text-[#2D5A27] border border-[#D3E4D1]"
-                : "bg-[#FDF2F2] text-[#9B2C2C] border border-[#F8D7DA]"
-            }`}
-          >
-            {mensagem.texto}
-          </div>
-        )}
+        {/* Formulário Estilo Login */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+          <input
+            type="text"
+            placeholder="Nome"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            required
+            disabled={loading}
+            className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60"
+          />
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label htmlFor="nome" className="block text-xs font-medium text-[#655E57] uppercase tracking-wider mb-2">
-              Nome Completo *
-            </label>
-            <input
-              id="nome"
-              type="text"
-              required
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              placeholder="Ex: Maria Silva"
-              className="w-full px-4 py-3.5 bg-[#FAFAFA] border border-[#E8E3DA] rounded-xl text-sm text-[#3C3835] placeholder-[#B5AEA7] focus:outline-none focus:ring-2 focus:ring-[#8C7A6B] focus:border-transparent transition-all"
-            />
-          </div>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            disabled={loading}
+            className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60"
+          />
 
-          <div>
-            <label htmlFor="email" className="block text-xs font-medium text-[#655E57] uppercase tracking-wider mb-2">
-              E-mail *
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="maria@email.com"
-              className="w-full px-4 py-3.5 bg-[#FAFAFA] border border-[#E8E3DA] rounded-xl text-sm text-[#3C3835] placeholder-[#B5AEA7] focus:outline-none focus:ring-2 focus:ring-[#8C7A6B] focus:border-transparent transition-all"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="instagram" className="block text-xs font-medium text-[#655E57] uppercase tracking-wider mb-2">
-              Instagram *
-            </label>
-            <input
-              id="instagram"
-              type="text"
-              required
-              value={instagram}
-              onChange={(e) => setInstagram(e.target.value)}
-              placeholder="@nomedeusuario"
-              className="w-full px-4 py-3.5 bg-[#FAFAFA] border border-[#E8E3DA] rounded-xl text-sm text-[#3C3835] placeholder-[#B5AEA7] focus:outline-none focus:ring-2 focus:ring-[#8C7A6B] focus:border-transparent transition-all"
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Instagram (ex: @nomedeusuario)"
+            value={instagram}
+            onChange={(e) => setInstagram(e.target.value)}
+            required
+            disabled={loading}
+            className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60"
+          />
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 py-4 px-6 bg-[#3C3835] hover:bg-[#2A2725] text-white font-medium rounded-xl text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+            className="
+              px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]
+              text-sm tracking-wide transition
+              disabled:opacity-80 mt-2 self-center
+            "
           >
             {loading ? "Cadastrando..." : "Cadastrar Creator"}
           </button>
+
+          {mensagem && (
+            <p className={`text-sm text-center ${
+              mensagem.tipo === "sucesso" ? "text-[#70412d]" : "text-[#9b2c2c]"
+            }`}>
+              {mensagem.texto}
+            </p>
+          )}
         </form>
       </div>
     </div>
