@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import crypto from "crypto";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
 
     const emailFormatted = email.trim().toLowerCase();
     const nomeFormatted = nome.trim();
-    // Remove espaços, @ e barras caso venha um link
+    // Sanitização do Instagram: remove @, espaços e links do Instagram
     const instagramFormatted = instagram
       .trim()
       .replace(/@/g, "")
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
       .replace(/\//g, "")
       .toLowerCase();
 
-    // 1. Busca se a usuária já possui um perfil cadastrado
+    // 1. Busca se a usuária já possui um perfil cadastrado na tabela 'profiles'
     const { data: existingProfile, error: searchError } = await supabaseAdmin
       .from("profiles")
       .select("id, email, ativo, acesso, creator")
@@ -43,6 +44,8 @@ export async function POST(req: Request) {
     }
 
     if (existingProfile) {
+      // Se a usuária já existe: apenas ativa a flag de creator e atualiza nome e instagram.
+      // Preserva intocadas as colunas 'ativo' e 'acesso'.
       const { error: updateError } = await supabaseAdmin
         .from("profiles")
         .update({
@@ -62,14 +65,17 @@ export async function POST(req: Request) {
 
       return NextResponse.json({
         success: true,
-        message: "Usuária existente identificada! Flag de Creator ativada.",
+        message: "Usuária existente identificada! Flag de Creator ativada mantendo o status de acesso original.",
       });
     }
 
-    // 2. Se for e-mail novo: insere
+    // 2. Se for um e-mail 100% novo: gera um UUID único para a coluna 'id' e insere o perfil.
+    const newUserId = crypto.randomUUID();
+
     const { error: insertError } = await supabaseAdmin
       .from("profiles")
       .insert({
+        id: newUserId,
         email: emailFormatted,
         nome: nomeFormatted,
         instagram: instagramFormatted,
