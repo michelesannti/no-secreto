@@ -62,7 +62,7 @@ export async function POST(req: Request) {
 
       return NextResponse.json({
         success: true,
-        message: "Usuária existente identificada! Flag de Creator ativada.",
+        message: "Creator cadastrada 🤎",
       });
     }
 
@@ -86,15 +86,18 @@ export async function POST(req: Request) {
     // 3. Atualiza ou insere (upsert) na tabela 'profiles' para evitar conflito com a Trigger automática do Supabase
     const { error: upsertError } = await supabaseAdmin
       .from("profiles")
-      .upsert({
-        id: newUserId,
-        email: emailFormatted,
-        nome: nomeFormatted,
-        instagram: instagramFormatted,
-        acesso: "GRATUITO",
-        ativo: true,
-        creator: true,
-      }, { onConflict: "id" });
+      .upsert(
+        {
+          id: newUserId,
+          email: emailFormatted,
+          nome: nomeFormatted,
+          instagram: instagramFormatted,
+          acesso: "GRATUITO",
+          ativo: true,
+          creator: true,
+        },
+        { onConflict: "id" }
+      );
 
     if (upsertError) {
       console.error("Erro no upsert da creator em profiles:", upsertError);
@@ -106,7 +109,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Nova Creator cadastrada com sucesso e integrada à autenticação!",
+      message: "Creator cadastrada 🤎",
     });
   } catch (error: any) {
     console.error("Erro interno no servidor:", error);
