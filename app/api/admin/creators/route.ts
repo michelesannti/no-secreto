@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import crypto from "crypto";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -69,9 +68,24 @@ export async function POST(req: Request) {
       });
     }
 
-    // 2. Se for um e-mail 100% novo: gera um UUID único para a coluna 'id' e insere o perfil.
-    const newUserId = crypto.randomUUID();
+    // 2. Se for um e-mail 100% novo: cria o usuário no Supabase Auth primeiro
+    const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
+      email: emailFormatted,
+      email_confirm: true, // Já marca o e-mail como confirmado no Auth
+      user_metadata: { nome: nomeFormatted },
+    });
 
+    if (authError || !authData.user) {
+      console.error("Erro ao criar usuário no Supabase Auth:", authError);
+      return NextResponse.json(
+        { error: `Erro ao criar autenticação da creator: ${authError?.message || "Erro desconhecido"}` },
+        { status: 500 }
+      );
+    }
+
+    const newUserId = authData.user.id;
+
+    // 3. Insere o registro na tabela 'profiles' sincronizado com o ID do Supabase Auth
     const { error: insertError } = await supabaseAdmin
       .from("profiles")
       .insert({
@@ -85,16 +99,16 @@ export async function POST(req: Request) {
       });
 
     if (insertError) {
-      console.error("Erro no insert da creator:", insertError);
+      console.error("Erro no insert da creator em profiles:", insertError);
       return NextResponse.json(
-        { error: `Erro ao cadastrar no banco: ${insertError.message}` },
+        { error: `Erro ao cadastrar no banco de dados: ${insertError.message}` },
         { status: 500 }
       );
     }
 
     return NextResponse.json({
       success: true,
-      message: "Nova Creator cadastrada com sucesso!",
+      message: "Nova Creator cadastrada com sucesso e integrada à autenticação!",
     });
   } catch (error: any) {
     console.error("Erro interno no servidor:", error);
