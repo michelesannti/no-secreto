@@ -26,12 +26,11 @@ export async function POST(req: Request) {
       .replace(/\//g, "")
       .toLowerCase();
 
-    // 1. Busca se a usuária já possui um perfil cadastrado na tabela 'profiles'
-    const { data: existingProfile, error: searchError } = await supabaseAdmin
+    // 1. Busca se E-MAIL, INSTAGRAM ou NOME já existem na tabela 'profiles'
+    const { data: existingProfiles, error: searchError } = await supabaseAdmin
       .from("profiles")
-      .select("id, email, ativo, acesso, creator")
-      .eq("email", emailFormatted)
-      .maybeSingle();
+      .select("id, email, nome, instagram, creator")
+      .or(`email.eq.${emailFormatted},instagram.eq.${instagramFormatted},nome.ilike.${nomeFormatted}`);
 
     if (searchError) {
       console.error("Erro ao buscar perfil existente:", searchError);
@@ -41,32 +40,39 @@ export async function POST(req: Request) {
       );
     }
 
-    if (existingProfile) {
-      // Se a usuária já existe em profiles: apenas atualiza as informações e ativa a flag creator.
-      const { error: updateError } = await supabaseAdmin
-        .from("profiles")
-        .update({
-          nome: nomeFormatted,
-          instagram: instagramFormatted,
-          creator: true,
-        })
-        .eq("id", existingProfile.id);
+    // Se encontrou qualquer registro correspondente por e-mail, instagram ou nome
+    if (existingProfiles && existingProfiles.length > 0) {
+      const found = existingProfiles[0];
 
-      if (updateError) {
-        console.error("Erro no update da creator existente:", updateError);
+      if (found.email === emailFormatted) {
+        if (found.creator) {
+          return NextResponse.json(
+            { error: "Este e-mail já está cadastrado como Creator 🤎" },
+            { status: 400 }
+          );
+        }
         return NextResponse.json(
-          { error: `Erro ao atualizar perfil existente: ${updateError.message}` },
-          { status: 500 }
+          { error: "Este e-mail pertence a uma cliente. Altere a coluna 'creator' para TRUE diretamente no banco de dados." },
+          { status: 400 }
         );
       }
 
-      return NextResponse.json({
-        success: true,
-        message: "Creator cadastrada 🤎",
-      });
+      if (found.instagram === instagramFormatted) {
+        return NextResponse.json(
+          { error: `O Instagram @${instagramFormatted} já está cadastrado no sistema.` },
+          { status: 400 }
+        );
+      }
+
+      if (found.nome.toLowerCase() === nomeFormatted.toLowerCase()) {
+        return NextResponse.json(
+          { error: `Já existe uma conta com o nome '${nomeFormatted}'. Verifique no banco se é a mesma pessoa.` },
+          { status: 400 }
+        );
+      }
     }
 
-    // 2. Se não existe em profiles: cria no Supabase Auth primeiro
+    // 2. Se NENHUM dos dados existe: cria no Supabase Auth (Creator Nova)
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: emailFormatted,
       email_confirm: true,
@@ -83,7 +89,7 @@ export async function POST(req: Request) {
 
     const newUserId = authData.user.id;
 
-    // 3. Atualiza ou insere (upsert) na tabela 'profiles' para evitar conflito com a Trigger automática do Supabase
+    // 3. Insere em 'profiles'
     const { error: upsertError } = await supabaseAdmin
       .from("profiles")
       .upsert(

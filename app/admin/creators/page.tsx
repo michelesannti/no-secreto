@@ -69,7 +69,7 @@ export default function AdminCreatorsPage() {
 
           <div>
             <h1 className="text-xl font-serif tracking-wide text-[#70412d]">
-              Cadastro Creator
+              Cadastro de Creators
             </h1>
             <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
           </div>
