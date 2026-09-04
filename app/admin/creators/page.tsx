@@ -69,7 +69,7 @@ export default function AdminCreatorsPage() {
 
           <div>
             <h1 className="text-xl font-serif tracking-wide text-[#70412d]">
-              Cadastrar Creator
+              Cadastro Creator
             </h1>
             <div className="w-10 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
           </div>
@@ -99,7 +99,7 @@ export default function AdminCreatorsPage() {
 
           <input
             type="text"
-            placeholder="Instagram (ex: @nomedeusuario)"
+            placeholder="Instagram"
             value={instagram}
             onChange={(e) => setInstagram(e.target.value)}
             required
