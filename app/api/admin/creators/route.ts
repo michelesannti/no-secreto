@@ -19,7 +19,6 @@ export async function POST(req: Request) {
 
     const emailFormatted = email.trim().toLowerCase();
     const nomeFormatted = nome.trim();
-    // Sanitização do Instagram: remove @, espaços e links do Instagram
     const instagramFormatted = instagram
       .trim()
       .replace(/@/g, "")
@@ -43,8 +42,7 @@ export async function POST(req: Request) {
     }
 
     if (existingProfile) {
-      // Se a usuária já existe: apenas ativa a flag de creator e atualiza nome e instagram.
-      // Preserva intocadas as colunas 'ativo' e 'acesso'.
+      // Se a usuária já existe em profiles: apenas atualiza as informações e ativa a flag creator.
       const { error: updateError } = await supabaseAdmin
         .from("profiles")
         .update({
@@ -55,23 +53,23 @@ export async function POST(req: Request) {
         .eq("id", existingProfile.id);
 
       if (updateError) {
-        console.error("Erro no update da creator:", updateError);
+        console.error("Erro no update da creator existente:", updateError);
         return NextResponse.json(
-          { error: `Erro ao atualizar perfil: ${updateError.message}` },
+          { error: `Erro ao atualizar perfil existente: ${updateError.message}` },
           { status: 500 }
         );
       }
 
       return NextResponse.json({
         success: true,
-        message: "Usuária existente identificada! Flag de Creator ativada mantendo o status de acesso original.",
+        message: "Usuária existente identificada! Flag de Creator ativada.",
       });
     }
 
-    // 2. Se for um e-mail 100% novo: cria o usuário no Supabase Auth primeiro
+    // 2. Se não existe em profiles: cria no Supabase Auth primeiro
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: emailFormatted,
-      email_confirm: true, // Já marca o e-mail como confirmado no Auth
+      email_confirm: true,
       user_metadata: { nome: nomeFormatted },
     });
 
@@ -85,10 +83,10 @@ export async function POST(req: Request) {
 
     const newUserId = authData.user.id;
 
-    // 3. Insere o registro na tabela 'profiles' sincronizado com o ID do Supabase Auth
-    const { error: insertError } = await supabaseAdmin
+    // 3. Atualiza ou insere (upsert) na tabela 'profiles' para evitar conflito com a Trigger automática do Supabase
+    const { error: upsertError } = await supabaseAdmin
       .from("profiles")
-      .insert({
+      .upsert({
         id: newUserId,
         email: emailFormatted,
         nome: nomeFormatted,
@@ -96,12 +94,12 @@ export async function POST(req: Request) {
         acesso: "GRATUITO",
         ativo: true,
         creator: true,
-      });
+      }, { onConflict: "id" });
 
-    if (insertError) {
-      console.error("Erro no insert da creator em profiles:", insertError);
+    if (upsertError) {
+      console.error("Erro no upsert da creator em profiles:", upsertError);
       return NextResponse.json(
-        { error: `Erro ao cadastrar no banco de dados: ${insertError.message}` },
+        { error: `Erro ao salvar dados do perfil: ${upsertError.message}` },
         { status: 500 }
       );
     }
