@@ -34,13 +34,15 @@ export const metadata: Metadata = {
   },
 
   icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
 
   openGraph: {
     title: "No Secreto",
     description: "Seu tempo com Deus começa aqui 🤎",
-    url: "https://no-secreto-ten.vercel.app",
+    url: "https://nosecretoapp.com.br",
     siteName: "No Secreto",
     images: [
       {
