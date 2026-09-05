@@ -59,7 +59,7 @@ export async function POST(req: Request) {
     });
 
     const origin =
-      process.env.NEXT_PUBLIC_SITE_URL || "https://no-secreto-ten.vercel.app";
+      process.env.NEXT_PUBLIC_SITE_URL || "https://app.nosecretoapp.com.br";
     const accessUrl = `${origin}/primeiro-acesso?token=${rawToken}`;
 
     // 3. Dispara e-mail via Resend
