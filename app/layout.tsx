@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "No Secreto",
     description: "Seu tempo com Deus começa aqui 🤎",
-    url: "https://nosecretoapp.com.br",
+    url: "https://app.nosecretoapp.com.br",
     siteName: "No Secreto",
     images: [
       {
