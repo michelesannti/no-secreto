@@ -69,6 +69,7 @@ export async function POST(req: Request) {
       from: "No Secreto <contato@nosecretoapp.com.br>",
       to: [normalizedEmail],
       subject: "Acesso ao No Secreto",
+      text: `Clique no link para criar sua senha no No Secreto: ${accessUrl}\n\nSuporte: (11) 98387-5882`,
       html: `
         <div style="text-align: center; font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 20px;">
           <p style="
