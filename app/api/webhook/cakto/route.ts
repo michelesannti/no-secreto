@@ -26,34 +26,66 @@ export async function POST(req: Request) {
       );
     }
 
-    // ==========================
-    // REEMBOLSO OU CANCELAMENTO
-    // ==========================
-    if (event === "refund" || event === "chargeback" || event === "subscription_canceled") {
+    // Busca profile existente para verificar regra de ouro de contas com acesso GRATUITO
+    const { data: existingProfile } = await supabase
+      .from("profiles")
+      .select("id, acesso")
+      .eq("email", email)
+      .maybeSingle();
+
+    // ==========================================================
+    // REEMBOLSO, CHARGEBACK OU CANCELAMENTO / SUSPENSÃO DE ASSINATURA
+    // ==========================================================
+    const isRefundOrChargeback = event === "refund" || event === "chargeback";
+    const isCancelEvent =
+      event === "subscription_canceled" ||
+      event === "subscription_late" ||
+      event === "subscription_unpaid";
+
+    if (isRefundOrChargeback || isCancelEvent) {
+      // REGRA DE SEGURANÇA: Se a conta possui acesso GRATUITO, o Webhook ignora e mantém liberado
+      if (existingProfile?.acesso === "GRATUITO") {
+        console.log(`🛡️ Evento ${event} ignorado pois o acesso é GRATUITO: ${email}`);
+        return NextResponse.json({
+          success: true,
+          message: "Acesso mantido por ser conta GRATUITO",
+        });
+      }
+
+      const novoStatusAcesso = isRefundOrChargeback ? "REEMBOLSO" : "CANCELADO";
+
       const { error } = await supabase
         .from("profiles")
         .update({
           ativo: false,
-          acesso: "CANCELADO",
+          acesso: novoStatusAcesso,
         })
         .eq("email", email);
 
       if (error) {
-        console.error("❌ Erro ao cancelar acesso:", error);
+        console.error("❌ Erro ao atualizar cancelamento/reembolso:", error);
         return NextResponse.json(
-          { error: "Erro ao cancelar acesso" },
+          { error: "Erro ao atualizar perfil" },
           { status: 500 }
         );
       }
 
-      console.log("🚫 Acesso cancelado");
+      console.log(`🚫 Acesso inativado (${novoStatusAcesso}) para:`, email);
       return NextResponse.json({ success: true });
     }
 
-    // ==========================
-    // COMPRA APROVADA
-    // ==========================
-    if (event !== "purchase_approved" && event !== "subscription_renewed") {
+    // ==========================================================
+    // COMPRA APROVADA, ASSINATURA CRIADA OU RENOVAÇÃO / REATIVAÇÃO
+    // ==========================================================
+    const isApprovalEvent =
+      event === "purchase_approved" ||
+      event === "subscription_created" ||
+      event === "subscription_renewed" ||
+      event === "subscription_renewed_success" ||
+      event === "subscription_approved" ||
+      event === "subscription_reactivated";
+
+    if (!isApprovalEvent) {
       console.log("ℹ️ Evento ignorado:", event);
       return NextResponse.json({ success: true });
     }
@@ -86,7 +118,7 @@ export async function POST(req: Request) {
     let existingUser = usersList.users.find((u) => u.email === email);
     let userId = existingUser?.id;
 
-    // Cria usuário se não existir
+    // Cria usuário no Auth se não existir
     if (!userId) {
       const { data: userData, error: createError } = await supabase.auth.admin.createUser({
         email,
@@ -105,7 +137,10 @@ export async function POST(req: Request) {
       console.log("✅ Usuário criado:", userId);
     }
 
-    // Atualiza profile
+    // Se já for GRATUITO (Fundadora/Creators/Teste), mantém GRATUITO; se for cliente, grava PAGO.
+    const novoAcesso = existingProfile?.acesso === "GRATUITO" ? "GRATUITO" : "PAGO";
+
+    // Atualiza perfil
     const { error: upsertError } = await supabase
       .from("profiles")
       .upsert({
@@ -113,7 +148,7 @@ export async function POST(req: Request) {
         email,
         nome: name || null,
         ativo: true,
-        acesso: "PAGO",
+        acesso: novoAcesso,
         creator_origem: creatorOrigem,
       });
 
@@ -125,7 +160,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Gera token de Primeiro Acesso e deixa pronto no banco
+    // Gera token de Primeiro Acesso
     try {
       const rawToken = randomBytes(32).toString("hex");
       const tokenHash = createHash("sha256").update(rawToken).digest("hex");
@@ -146,7 +181,6 @@ export async function POST(req: Request) {
         });
 
       console.log("🔑 Token de primeiro acesso gerado com sucesso para:", email);
-      // Disparo de e-mail automático desativado para a cliente solicitar diretamente na tela de login/primeiro-acesso.
     } catch (tokenErr) {
       console.error("⚠️ Erro ao gerar token de primeiro acesso:", tokenErr);
     }
