@@ -150,53 +150,55 @@ export default function VendaPage() {
           </div>
 
         </section>
-{/* VÍDEO APP */}
-<section className="mb-24">
 
-  <div className="space-y-8">
+        {/* VÍDEO APP */}
+        <section className="mb-24">
 
-    <div className="text-center space-y-3">
+          <div className="space-y-8">
 
-      <p
-        className="
-          text-[13px]
-          uppercase
-          tracking-[0.18em]
-          opacity-35
-        "
-      >
-        Conheça a experiência
-      </p>
+            <div className="text-center space-y-3">
 
-      <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+              <p
+                className="
+                  text-[13px]
+                  uppercase
+                  tracking-[0.18em]
+                  opacity-35
+                "
+              >
+                Conheça a experiência
+              </p>
 
-    </div>
+              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
 
-    <div className="flex justify-center">
+            </div>
 
-      <video
-        className="
-          w-[220px]
-          rounded-[26px]
-          shadow-2xl
-          overflow-hidden
-        "
-        controls
-        playsInline
-        preload="metadata"
-        poster="/portal.png"
-      >
-        <source
-          src="/videoapp.mp4"
-          type="video/mp4"
-        />
-      </video>
+            <div className="flex justify-center">
 
-    </div>
+              <video
+                className="
+                  w-[220px]
+                  rounded-[26px]
+                  shadow-2xl
+                  overflow-hidden
+                "
+                controls
+                playsInline
+                preload="metadata"
+                poster="/portal.png"
+              >
+                <source
+                  src="/videoapp.mp4"
+                  type="video/mp4"
+                />
+              </video>
 
-  </div>
+            </div>
 
-</section>
+          </div>
+
+        </section>
+
         {/* DORES + TRANSFORMAÇÕES */}
         <section className="mb-24">
 
@@ -297,166 +299,166 @@ export default function VendaPage() {
 
         </section>
 
-       {/* 3º SCROLL */}
-<section className="space-y-7 mb-20">
+        {/* 3º SCROLL */}
+        <section className="space-y-7 mb-20">
 
-  {/* CONTEXTO */}
-  <div className="flex items-center justify-between gap-6">
+          {/* CONTEXTO */}
+          <div className="flex items-center justify-between gap-6">
 
-    <div className="flex-1 space-y-4">
+            <div className="flex-1 space-y-4">
 
-      <div className="space-y-3">
+              <div className="space-y-3">
 
-        <p
-          className="
-            text-[13px]
-            uppercase
-            tracking-[0.18em]
-            opacity-35
-          "
-        >
-          estudo guiado
-        </p>
+                <p
+                  className="
+                    text-[13px]
+                    uppercase
+                    tracking-[0.18em]
+                    opacity-35
+                  "
+                >
+                  estudo guiado
+                </p>
 
-        <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+                <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
 
-      </div>
+              </div>
 
-      <p className="text-[17px] leading-[1.2] font-serif">
-        sua forma de entender a
-        <span className="italic opacity-80"> Palavra</span>
-        <br />
-        é transformada
-      </p>
+              <p className="text-[17px] leading-[1.2] font-serif">
+                sua forma de entender a
+                <span className="italic opacity-80"> Palavra</span>
+                <br />
+                é transformada
+              </p>
 
-    </div>
+            </div>
 
-    <div className="shrink-0">
+            <div className="shrink-0">
 
-      <div
-        className="
-          relative
-          w-[145px]
-          rounded-[28px]
-          border-[3px]
-          border-black
-          bg-[#F9F5E9]
-          shadow-xl
-          overflow-hidden
-        "
-      >
+              <div
+                className="
+                  relative
+                  w-[145px]
+                  rounded-[28px]
+                  border-[3px]
+                  border-black
+                  bg-[#F9F5E9]
+                  shadow-xl
+                  overflow-hidden
+                "
+              >
 
-        <div
-          className="
-            absolute
-            top-0
-            left-1/2
-            -translate-x-1/2
-            w-16
-            h-[4px]
-            bg-black
-            rounded-b-2xl
-            z-10
-          "
-        />
+                <div
+                  className="
+                    absolute
+                    top-0
+                    left-1/2
+                    -translate-x-1/2
+                    w-16
+                    h-[4px]
+                    bg-black
+                    rounded-b-2xl
+                    z-10
+                  "
+                />
 
-        <img
-          src="/contexto.png"
-          alt="Contexto bíblico"
-          className="
-            w-full
-            block
-            object-contain
-          "
-          loading="eager"
-          decoding="async"
-        />
+                <img
+                  src="/contexto.png"
+                  alt="Contexto bíblico"
+                  className="
+                    w-full
+                    block
+                    object-contain
+                  "
+                  loading="eager"
+                  decoding="async"
+                />
 
-      </div>
+              </div>
 
-    </div>
+            </div>
 
-  </div>
+          </div>
 
-  {/* APLICAÇÃO */}
-  <div className="flex items-center justify-between gap-6">
+          {/* APLICAÇÃO */}
+          <div className="flex items-center justify-between gap-6">
 
-    <div className="shrink-0">
+            <div className="shrink-0">
 
-      <div
-        className="
-          relative
-          w-[145px]
-          rounded-[28px]
-          border-[3px]
-          border-black
-          bg-[#F9F5E9]
-          shadow-xl
-          overflow-hidden
-        "
-      >
+              <div
+                className="
+                  relative
+                  w-[145px]
+                  rounded-[28px]
+                  border-[3px]
+                  border-black
+                  bg-[#F9F5E9]
+                  shadow-xl
+                  overflow-hidden
+                "
+              >
 
-        <div
-          className="
-            absolute
-            top-0
-            left-1/2
-            -translate-x-1/2
-            w-16
-            h-[4px]
-            bg-black
-            rounded-b-2xl
-            z-10
-          "
-        />
+                <div
+                  className="
+                    absolute
+                    top-0
+                    left-1/2
+                    -translate-x-1/2
+                    w-16
+                    h-[4px]
+                    bg-black
+                    rounded-b-2xl
+                    z-10
+                  "
+                />
 
-        <img
-          src="/aplicacao.png"
-          alt="Aplicação bíblica"
-          className="
-            w-full
-            block
-            object-contain
-          "
-          loading="eager"
-          decoding="async"
-        />
+                <img
+                  src="/aplicacao.png"
+                  alt="Aplicação bíblica"
+                  className="
+                    w-full
+                    block
+                    object-contain
+                  "
+                  loading="eager"
+                  decoding="async"
+                />
 
-      </div>
+              </div>
 
-    </div>
+            </div>
 
-    <div className="flex-1 text-right space-y-4">
+            <div className="flex-1 text-right space-y-4">
 
-      <div className="space-y-3">
+              <div className="space-y-3">
 
-        <p
-          className="
-            text-[13px]
-            uppercase
-            tracking-[0.12em]
-            opacity-35
-          "
-        >
-          aplicação prática
-        </p>
+                <p
+                  className="
+                    text-[13px]
+                    uppercase
+                    tracking-[0.12em]
+                    opacity-35
+                  "
+                >
+                  aplicação prática
+                </p>
 
-        <div className="w-10 h-[2px] bg-[#E9D5BB] ml-auto"></div>
+                <div className="w-10 h-[2px] bg-[#E9D5BB] ml-auto"></div>
 
-      </div>
+              </div>
 
-      <p className="text-[18px] leading-[1.15] font-serif">
-        você começa a
-        <br />
-        ouvir a
-        <span className="italic opacity-80"> voz de Deus</span>
-      </p>
+              <p className="text-[18px] leading-[1.15] font-serif">
+                você começa a
+                <br />
+                ouvir a
+                <span className="italic opacity-80"> voz de Deus</span>
+              </p>
 
-    </div>
+            </div>
 
-  </div>
+          </div>
 
-</section>
+        </section>
 
         {/* 4º + 5º */}
         <section className="relative mb-16">
@@ -607,182 +609,182 @@ export default function VendaPage() {
           Quero viver isso com Deus
         </a>
 
-{/* TRANSFORMADAS */}
-<section className="mt-24 mb-24">
+        {/* TRANSFORMADAS */}
+        <section className="mt-24 mb-24">
 
-  <div className="space-y-10">
+          <div className="space-y-10">
 
-    <div className="text-center space-y-3">
-
-      <p
-        className="
-          text-[13px]
-          uppercase
-          tracking-[0.18em]
-          opacity-35
-        "
-      >
-        Transformadas
-      </p>
-
-      <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
-
-    </div>
-
-    <div className="space-y-6">
-
-      <img
-        src="/feedback1.PNG"
-        alt="Feedback"
-        className="w-full"
-      />
-
-      <img
-        src="/feedback2.PNG"
-        alt="Feedback"
-        className="w-full"
-      />
-
-    </div>
-
-  </div>
-
-</section>
-
-{/* DÚVIDAS */}
-<section className="mt-24 mb-16">
-
-  <div className="space-y-10">
-
-    <div className="text-center space-y-3">
-
-      <p
-        className="
-          text-[13px]
-          uppercase
-          tracking-[0.18em]
-          opacity-35
-        "
-      >
-        Dúvidas
-      </p>
-
-      <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
-
-    </div>
-
-    <div className="space-y-4">
-
-      {[
-        {
-          pergunta: "Preciso baixar o aplicativo?",
-          resposta:
-            "Não, o acesso é feito pelo navegador. Ao adicioná-lo à tela inicial funciona como um aplicativo, tanto no Android quanto no iPhone.",
-        },
-        {
-          pergunta: "O acesso é por assinatura?",
-          resposta:
-            "Não. O acesso é liberado através do pagamento único.",
-        },
-        {
-          pergunta: "E se eu não souber por onde começar?",
-          resposta:
-            "Os estudos são guiados e explicados de forma simples, te ajudando a entender o contexto e aplicar a Palavra à sua vida.",
-        },
-      ].map((item, index) => (
-        <div
-          key={index}
-          className="
-            bg-[#EFE2CC]/45
-            rounded-[24px]
-            overflow-hidden
-            backdrop-blur-sm
-          "
-        >
-          <button
-            onClick={() =>
-              setOpen(open === index ? null : index)
-            }
-            className="
-              w-full
-              flex
-              items-center
-              justify-between
-              px-5
-              py-5
-              text-left
-            "
-          >
-            <span
-              className="
-                font-serif
-                text-[18px]
-                leading-[1.25]
-              "
-            >
-              {item.pergunta}
-            </span>
-
-            <span
-              className="
-                text-[24px]
-                opacity-50
-                ml-4
-              "
-            >
-              {open === index ? "−" : "+"}
-            </span>
-          </button>
-
-          {open === index && (
-            <div className="px-5 pb-5">
-
-              <div className="w-8 h-[2px] bg-[#D9C2A0] mb-4"></div>
+            <div className="text-center space-y-3">
 
               <p
                 className="
-                  text-[15px]
-                  leading-7
-                  opacity-80
+                  text-[13px]
+                  uppercase
+                  tracking-[0.18em]
+                  opacity-35
                 "
               >
-                {item.resposta}
+                Transformadas
               </p>
 
+              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
             </div>
-          )}
-        </div>
-      ))}
 
-    </div>
+            <div className="space-y-6">
 
-  </div>
+              <img
+                src="/feedback1.PNG"
+                alt="Feedback"
+                className="w-full"
+              />
 
-</section>
+              <img
+                src="/feedback2.PNG"
+                alt="Feedback"
+                className="w-full"
+              />
 
-{/* CTA FINAL */}
-<a
-  href="https://pay.cakto.com.br/aovfbto_873529"
-  className="
-    block
-    text-center
-    bg-[#70412D]
-    text-white
-    py-4
-    rounded-full
-    text-[16px]
-    font-semibold
-    shadow-xl
-    shadow-[#70412D]/20
-    active:scale-[0.98]
-    hover:scale-[1.015]
-    transition-all
-    duration-300
-    mb-10
-  "
->
-  Começar meu tempo com Deus
-</a>
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* DÚVIDAS */}
+        <section className="mt-24 mb-16">
+
+          <div className="space-y-10">
+
+            <div className="text-center space-y-3">
+
+              <p
+                className="
+                  text-[13px]
+                  uppercase
+                  tracking-[0.18em]
+                  opacity-35
+                "
+              >
+                Dúvidas
+              </p>
+
+              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+
+            </div>
+
+            <div className="space-y-4">
+
+              {[
+                {
+                  pergunta: "Preciso baixar o aplicativo?",
+                  resposta:
+                    "Não precisa, o acesso é feito pelo navegador. Ao adicioná-lo à tela inicial, ele funciona exatamente como um aplicativo, sem ocupar espaço na memória do seu aparelho (iPhone e Android).",
+                },
+                {
+                  pergunta: "Como funciona a assinatura?",
+                  resposta:
+                    "O acesso é feito por assinatura mensal. Você mantém sua jornada ativa com acesso ilimitado aos estudos e ao seu diário espiritual, tendo total liberdade para cancelar quando quiser, sem fidelidade ou multa.",
+                },
+                {
+                  pergunta: "Posso escolher qual livro ou capítulo estudar?",
+                  resposta:
+                    "Os estudos são guiados e seguem uma ordem pensada justamente para ajudar mulheres que querem criar constância e entender a Bíblia com mais facilidade. Sem precisar ficar pensando \"por onde eu começo?\" ou \"o que eu leio agora?\", o app conduz todo o seu processo de forma leve e prática.",
+                },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="
+                    bg-[#EFE2CC]/45
+                    rounded-[24px]
+                    overflow-hidden
+                    backdrop-blur-sm
+                  "
+                >
+                  <button
+                    onClick={() =>
+                      setOpen(open === index ? null : index)
+                    }
+                    className="
+                      w-full
+                      flex
+                      items-center
+                      justify-between
+                      px-5
+                      py-5
+                      text-left
+                    "
+                  >
+                    <span
+                      className="
+                        font-serif
+                        text-[18px]
+                        leading-[1.25]
+                      "
+                    >
+                      {item.pergunta}
+                    </span>
+
+                    <span
+                      className="
+                        text-[24px]
+                        opacity-50
+                        ml-4
+                      "
+                    >
+                      {open === index ? "−" : "+"}
+                    </span>
+                  </button>
+
+                  {open === index && (
+                    <div className="px-5 pb-5">
+
+                      <div className="w-8 h-[2px] bg-[#D9C2A0] mb-4"></div>
+
+                      <p
+                        className="
+                          text-[15px]
+                          leading-7
+                          opacity-80
+                        "
+                      >
+                        {item.resposta}
+                      </p>
+
+                    </div>
+                  )}
+                </div>
+              ))}
+
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* CTA FINAL */}
+        <a
+          href="https://pay.cakto.com.br/aovfbto_873529"
+          className="
+            block
+            text-center
+            bg-[#70412D]
+            text-white
+            py-4
+            rounded-full
+            text-[16px]
+            font-semibold
+            shadow-xl
+            shadow-[#70412D]/20
+            active:scale-[0.98]
+            hover:scale-[1.015]
+            transition-all
+            duration-300
+            mb-10
+          "
+        >
+          Começar meu tempo com Deus
+        </a>
 
       </div>
 
