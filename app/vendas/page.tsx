@@ -679,17 +679,17 @@ export default function VendaPage() {
                 {
                   pergunta: "Preciso baixar o aplicativo?",
                   resposta:
-                    "Não precisa, o acesso é feito pelo navegador. Ao adicioná-lo à tela inicial, ele funciona exatamente como um aplicativo, sem ocupar espaço na memória do seu aparelho (iPhone e Android).",
+                    "Não precisa, o acesso é feito pelo navegador. Ao adicioná-lo à tela inicial, ele funciona como um aplicativo, sem ocupar espaço na memória.",
                 },
                 {
                   pergunta: "Como funciona a assinatura?",
                   resposta:
-                    "O acesso é feito por assinatura mensal. Você mantém sua jornada ativa com acesso ilimitado aos estudos e ao seu diário espiritual, tendo total liberdade para cancelar quando quiser, sem fidelidade ou multa.",
+                    "O acesso é por assinatura mensal, mantendo sua jornada ativa com uso ilimitado dos estudos e diário espiritual, com liberdade para cancelar quando quiser.",
                 },
                 {
                   pergunta: "Posso escolher qual livro ou capítulo estudar?",
                   resposta:
-                    "Os estudos são guiados e seguem uma ordem pensada justamente para ajudar mulheres que querem criar constância e entender a Bíblia com mais facilidade. Sem precisar ficar pensando \"por onde eu começo?\" ou \"o que eu leio agora?\", o app conduz todo o seu processo de forma leve e prática.",
+                    "Os estudos seguem uma ordem guiada para te ajudar a criar constância, conduzindo seu processo com a Palavra de forma prática.",
                 },
               ].map((item, index) => (
                 <div
@@ -744,7 +744,7 @@ export default function VendaPage() {
                       <p
                         className="
                           text-[15px]
-                          leading-7
+                          leading-6
                           opacity-80
                         "
                       >
