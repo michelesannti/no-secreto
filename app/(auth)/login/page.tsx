@@ -30,7 +30,7 @@ export default function LoginPage() {
 
       if (profileError || !profile?.ativo) {
         await supabase.auth.signOut();
-        setMessage("Esse email ainda não possui acesso");
+        setMessage("Acesso não liberado");
         return;
       }
 
@@ -77,7 +77,7 @@ export default function LoginPage() {
 
     if (profileError || !profile?.ativo) {
       await supabase.auth.signOut();
-      setMessage("Esse email ainda não possui acesso");
+      setMessage("Acesso não liberado");
       setLoading(false);
       return;
     }

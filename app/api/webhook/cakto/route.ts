@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    console.log("📩 Webhook recebido:", JSON.stringify(body, null, 2));
+    console.log("📩 Webhook recebido da Cakto:", JSON.stringify(body, null, 2));
 
     const event = body?.event;
     const email = body?.data?.customer?.email?.trim().toLowerCase();
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Busca profile existente para verificar regra de ouro de contas com acesso GRATUITO
+    // Busca profile existente para verificar se é conta GRATUITO
     const { data: existingProfile } = await supabase
       .from("profiles")
       .select("id, acesso")
@@ -34,16 +34,14 @@ export async function POST(req: Request) {
       .maybeSingle();
 
     // ==========================================================
-    // REEMBOLSO, CHARGEBACK OU CANCELAMENTO / SUSPENSÃO DE ASSINATURA
+    // 1. INATIVAÇÃO DE ACESSO (Bloqueio)
     // ==========================================================
     const isRefundOrChargeback = event === "refund" || event === "chargeback";
     const isCancelEvent =
       event === "subscription_canceled" ||
-      event === "subscription_late" ||
-      event === "subscription_unpaid";
+      event === "subscription_renewal_refused";
 
     if (isRefundOrChargeback || isCancelEvent) {
-      // REGRA DE SEGURANÇA: Se a conta possui acesso GRATUITO, o Webhook ignora e mantém liberado
       if (existingProfile?.acesso === "GRATUITO") {
         console.log(`🛡️ Evento ${event} ignorado pois o acesso é GRATUITO: ${email}`);
         return NextResponse.json({
@@ -63,34 +61,34 @@ export async function POST(req: Request) {
         .eq("email", email);
 
       if (error) {
-        console.error("❌ Erro ao atualizar cancelamento/reembolso:", error);
+        console.error("❌ Erro ao inativar usuário no Supabase:", error);
         return NextResponse.json(
           { error: "Erro ao atualizar perfil" },
           { status: 500 }
         );
       }
 
-      console.log(`🚫 Acesso inativado (${novoStatusAcesso}) para:`, email);
+      console.log(`🚫 Acesso inativado (${novoStatusAcesso}) para: ${email}`);
       return NextResponse.json({ success: true });
     }
 
     // ==========================================================
-    // COMPRA APROVADA, ASSINATURA CRIADA OU RENOVAÇÃO / REATIVAÇÃO
+    // 2. LIBERAÇÃO / RENOVAÇÃO / REATIVAÇÃO DE ACESSO
     // ==========================================================
-    const isApprovalEvent =
-      event === "purchase_approved" ||
-      event === "subscription_created" ||
-      event === "subscription_renewed" ||
-      event === "subscription_renewed_success" ||
-      event === "subscription_approved" ||
-      event === "subscription_reactivated";
+    const isNewPurchase =
+      event === "purchase_approved" || event === "subscription_created";
+
+    const isRenewalOrResume =
+      event === "subscription_renewed" || event === "subscription_resumed";
+
+    const isApprovalEvent = isNewPurchase || isRenewalOrResume;
 
     if (!isApprovalEvent) {
-      console.log("ℹ️ Evento ignorado:", event);
+      console.log("ℹ️ Evento da Cakto não mapeado ou ignorado:", event);
       return NextResponse.json({ success: true });
     }
 
-    // Procura afiliada pelo email
+    // Busca afiliada pelo e-mail caso exista
     let creatorOrigem: string | null = null;
     if (affiliateEmail) {
       const { data: creator } = await supabase
@@ -104,11 +102,11 @@ export async function POST(req: Request) {
       }
     }
 
-    // Procura usuário no Auth
+    // Busca usuário no Supabase Auth
     const { data: usersList, error: listError } = await supabase.auth.admin.listUsers();
 
     if (listError) {
-      console.error("❌ Erro ao listar usuários:", listError);
+      console.error("❌ Erro ao listar usuários no Supabase Auth:", listError);
       return NextResponse.json(
         { error: "Erro ao buscar usuário" },
         { status: 500 }
@@ -118,7 +116,7 @@ export async function POST(req: Request) {
     let existingUser = usersList.users.find((u) => u.email === email);
     let userId = existingUser?.id;
 
-    // Cria usuário no Auth se não existir
+    // Se a usuária não existe no Auth, cria ela sem senha pré-definida
     if (!userId) {
       const { data: userData, error: createError } = await supabase.auth.admin.createUser({
         email,
@@ -126,7 +124,7 @@ export async function POST(req: Request) {
       });
 
       if (createError) {
-        console.error("❌ Erro ao criar usuário:", createError);
+        console.error("❌ Erro ao criar usuário no Auth:", createError);
         return NextResponse.json(
           { error: "Erro ao criar usuário" },
           { status: 500 }
@@ -134,13 +132,12 @@ export async function POST(req: Request) {
       }
 
       userId = userData.user.id;
-      console.log("✅ Usuário criado:", userId);
+      console.log("✅ Usuário criado no Auth:", userId);
     }
 
-    // Se já for GRATUITO (Fundadora/Creators/Teste), mantém GRATUITO; se for cliente, grava PAGO.
     const novoAcesso = existingProfile?.acesso === "GRATUITO" ? "GRATUITO" : "PAGO";
 
-    // Atualiza perfil
+    // Atualiza ou insere o perfil com ativo = true
     const { error: upsertError } = await supabase
       .from("profiles")
       .upsert({
@@ -153,42 +150,46 @@ export async function POST(req: Request) {
       });
 
     if (upsertError) {
-      console.error("❌ Erro ao salvar profile:", upsertError);
+      console.error("❌ Erro ao atualizar perfil na tabela profiles:", upsertError);
       return NextResponse.json(
         { error: "Erro ao salvar profile" },
         { status: 500 }
       );
     }
 
-    // Gera token de Primeiro Acesso
-    try {
-      const rawToken = randomBytes(32).toString("hex");
-      const tokenHash = createHash("sha256").update(rawToken).digest("hex");
-      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    // Gera o token de primeiro acesso APENAS na primeira compra
+    if (isNewPurchase) {
+      try {
+        const rawToken = randomBytes(32).toString("hex");
+        const tokenHash = createHash("sha256").update(rawToken).digest("hex");
+        const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 
-      await supabase
-        .from("first_access_tokens")
-        .update({ used_at: new Date().toISOString() })
-        .eq("user_id", userId)
-        .is("used_at", null);
+        await supabase
+          .from("first_access_tokens")
+          .update({ used_at: new Date().toISOString() })
+          .eq("user_id", userId)
+          .is("used_at", null);
 
-      await supabase
-        .from("first_access_tokens")
-        .insert({
-          user_id: userId,
-          token_hash: tokenHash,
-          expires_at: expiresAt,
-        });
+        await supabase
+          .from("first_access_tokens")
+          .insert({
+            user_id: userId,
+            token_hash: tokenHash,
+            expires_at: expiresAt,
+          });
 
-      console.log("🔑 Token de primeiro acesso gerado com sucesso para:", email);
-    } catch (tokenErr) {
-      console.error("⚠️ Erro ao gerar token de primeiro acesso:", tokenErr);
+        console.log("🔑 Token de primeiro acesso gerado com sucesso para:", email);
+      } catch (tokenErr) {
+        console.error("⚠️ Erro ao gerar token de primeiro acesso:", tokenErr);
+      }
+    } else {
+      console.log(`🔄 Renovação/Reativação realizada com sucesso (sem gerar novo token) para: ${email}`);
     }
 
     return NextResponse.json({ success: true });
 
   } catch (err) {
-    console.error("❌ Erro geral no webhook:", err);
+    console.error("❌ Erro interno no processamento do webhook:", err);
     return NextResponse.json(
       { error: "Erro interno" },
       { status: 500 }

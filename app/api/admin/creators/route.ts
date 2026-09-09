@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createHash, randomBytes } from "crypto";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -111,6 +112,31 @@ export async function POST(req: Request) {
         { error: `Erro ao salvar dados do perfil: ${upsertError.message}` },
         { status: 500 }
       );
+    }
+
+    // 4. Insere o token de primeiro acesso na tabela first_access_tokens
+    try {
+      const rawToken = randomBytes(32).toString("hex");
+      const tokenHash = createHash("sha256").update(rawToken).digest("hex");
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+      await supabaseAdmin
+        .from("first_access_tokens")
+        .update({ used_at: new Date().toISOString() })
+        .eq("user_id", newUserId)
+        .is("used_at", null);
+
+      await supabaseAdmin
+        .from("first_access_tokens")
+        .insert({
+          user_id: newUserId,
+          token_hash: tokenHash,
+          expires_at: expiresAt,
+        });
+
+      console.log("🔑 Token de primeiro acesso gerado para Creator:", emailFormatted);
+    } catch (tokenErr) {
+      console.error("⚠️ Erro ao gerar token para Creator:", tokenErr);
     }
 
     return NextResponse.json({
