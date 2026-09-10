@@ -568,10 +568,10 @@ export default function VendaPage() {
         {/* TRANSFORMADAS (PROVA SOCIAL) */}
         <section className="mb-4">
           <div className="space-y-2">
-            <div className="text-center space-y-1">
+            <div className="text-center space-y-3">
               <p
                 className="
-                  text-[12px]
+                  text-[13px]
                   uppercase
                   tracking-[0.18em]
                   opacity-35
@@ -579,7 +579,7 @@ export default function VendaPage() {
               >
                 Transformadas
               </p>
-              <div className="w-8 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
             </div>
 
             <div className="space-y-2">
