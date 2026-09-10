@@ -8,13 +8,16 @@ export default function CreatorsPage() {
       height: "367px",
       borderRadius: "38px",
       border: "4px solid rgba(0, 0, 0, 0.8)",
-      backgroundColor: "#000000",
+      backgroundColor: "transparent",
       overflow: "hidden",
     },
   };
 
   return (
     <main className="bg-[#F9F5E9] text-[#70412D] min-h-screen overflow-hidden">
+      {/* Pré-carregamento imediato no topo para exibição instantânea */}
+      <link rel="preload" href="/portal.webp" as="image" type="image/webp" />
+
       <div className="max-w-md mx-auto px-6 py-10">
 
         {/* TOPO */}
@@ -42,6 +45,7 @@ export default function CreatorsPage() {
           <div className="flex justify-center">
             <div className="shrink-0 animate-floatMockup">
               <div className="shadow-2xl" style={styles.mockupContainer}>
+                {/* Notch / Câmera superior */}
                 <div
                   className="
                     absolute
@@ -56,10 +60,20 @@ export default function CreatorsPage() {
                   "
                 />
 
+                {/* Imagem do Portal Pré-carregada */}
                 <img
                   src="/portal.webp"
                   alt="Portal No Secreto"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.28)" }}
+                  // @ts-ignore
+                  fetchPriority="high"
+                  loading="eager"
+                  decoding="sync"
+                  style={{ 
+                    width: "100%", 
+                    height: "100%", 
+                    objectFit: "cover", 
+                    transform: "scale(1.28)" 
+                  }}
                 />
               </div>
             </div>
