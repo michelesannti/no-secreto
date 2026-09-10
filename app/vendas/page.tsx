@@ -117,6 +117,7 @@ export default function VendaPage() {
                 alt="Portal No Secreto"
                 width={145}
                 height={280}
+                priority
                 className="
                   w-full
                   h-full
@@ -175,7 +176,7 @@ export default function VendaPage() {
                 "
                 controls
                 playsInline
-                preload="metadata"
+                preload="none"
                 poster="/portal.webp"
               >
                 <source
