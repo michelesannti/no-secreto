@@ -575,18 +575,18 @@ export default function VendaPage() {
               <div className="mx-auto" style={styles.divider}></div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 flex flex-col items-center">
               <img
                 src="/feedback1.webp"
                 alt="Feedback 1"
-                className="w-full h-auto rounded-2xl shadow-sm"
-                style={{ width: "100%", height: "auto", objectFit: "contain" }}
+                className="w-full h-auto block"
+                style={{ width: "100%", height: "auto" }}
               />
               <img
                 src="/feedback2.webp"
                 alt="Feedback 2"
-                className="w-full h-auto rounded-2xl shadow-sm"
-                style={{ width: "100%", height: "auto", objectFit: "contain" }}
+                className="w-full h-auto block"
+                style={{ width: "100%", height: "auto" }}
               />
             </div>
           </div>
