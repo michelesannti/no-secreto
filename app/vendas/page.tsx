@@ -6,35 +6,64 @@ import Image from "next/image";
 export default function VendaPage() {
   const [open, setOpen] = useState<number | null>(null);
 
+  // Estilos Críticos Inline para garantir renderização instantânea (Zero FOUT/FUC)
+  const styles = {
+    body: { backgroundColor: "#F9F5E9", color: "#70412D" },
+    logoContainer: { width: "112px", height: "112px", display: "flex", alignItems: "center", justifyContent: "center" },
+    divider: { backgroundColor: "#E9D5BB", width: "40px", height: "2px" },
+    ctaButton: {
+      backgroundColor: "#70412D",
+      color: "#FFFFFF",
+      borderRadius: "9999px",
+      display: "block",
+      paddingTop: "1rem",
+      paddingBottom: "1rem",
+      boxShadow: "0 20px 25px -5px rgba(112, 65, 45, 0.2)",
+    },
+    mockupContainer: {
+      position: "relative" as const,
+      width: "145px",
+      height: "280px",
+      borderRadius: "28px",
+      border: "4px solid rgba(0, 0, 0, 0.8)",
+      backgroundColor: "#000000",
+      overflow: "hidden",
+    },
+    contextoContainer: {
+      position: "relative" as const,
+      width: "145px",
+      height: "260px",
+      borderRadius: "28px",
+      border: "3px solid #000000",
+      backgroundColor: "#F9F5E9",
+      overflow: "hidden",
+    },
+  };
+
   return (
-    <div 
-      className="min-h-screen bg-[#F9F5E9] text-[#70412D] overflow-hidden"
-      style={{ backgroundColor: "#F9F5E9", color: "#70412D" }}
-    >
+    <div className="min-h-screen bg-[#F9F5E9] text-[#70412D] overflow-hidden" style={styles.body}>
       <div className="relative max-w-md mx-auto px-6 py-8">
 
         {/* HERO */}
         <section className="text-center space-y-10 pt-2 mb-24">
           <div className="space-y-4">
-            <div className="w-28 h-28 mx-auto relative">
+            <div className="mx-auto relative" style={styles.logoContainer}>
               <Image
                 src="/logo.webp"
                 alt="No Secreto"
                 width={112}
                 height={112}
                 priority
-                unoptimized
-                className="w-28 h-28 object-contain"
+                loading="eager"
+                className="object-contain"
+                style={{ width: "112px", height: "112px" }}
               />
             </div>
             <div>
               <h2 className="text-xl font-serif tracking-wide">
                 No Secreto
               </h2>
-              <div 
-                className="w-10 h-[2px] bg-[#E9D5BB] mt-2 mx-auto"
-                style={{ backgroundColor: "#E9D5BB" }}
-              ></div>
+              <div className="mt-2 mx-auto" style={styles.divider}></div>
             </div>
           </div>
 
@@ -67,20 +96,17 @@ export default function VendaPage() {
           <div className="space-y-3">
             <a
               href="https://pay.cakto.com.br/aovfbto_873529"
-              style={{
-                backgroundColor: "#70412D",
-                color: "#FFFFFF",
-                borderRadius: "9999px",
-                display: "block",
-                paddingTop: "1rem",
-                paddingBottom: "1rem",
-                boxShadow: "0 20px 25px -5px rgba(112, 65, 45, 0.2)",
-              }}
+              style={styles.ctaButton}
               className="
                 text-[16px]
                 font-semibold
                 text-center
+                shadow-xl
+                shadow-[#70412D]/20
                 active:scale-[0.98]
+                hover:scale-[1.015]
+                transition-transform
+                duration-300
               "
             >
               Quero constância com Deus
@@ -95,17 +121,7 @@ export default function VendaPage() {
         {/* 2º SCROLL */}
         <section className="flex items-center justify-between gap-5 mb-20">
           <div className="shrink-0 animate-floatMockup">
-            <div className="
-              relative
-              w-[145px]
-              h-[280px]
-              rounded-[28px]
-              border-[4px]
-              border-black/80
-              bg-black
-              shadow-xl
-              overflow-hidden
-            ">
+            <div className="shadow-xl" style={styles.mockupContainer}>
               <div
                 className="
                   absolute
@@ -125,13 +141,14 @@ export default function VendaPage() {
                 width={145}
                 height={280}
                 priority
-                unoptimized
+                loading="eager"
                 className="
                   w-full
                   h-full
                   object-cover
                   scale-[1.28]
                 "
+                style={{ width: "145px", height: "280px" }}
               />
             </div>
           </div>
@@ -144,7 +161,7 @@ export default function VendaPage() {
               <span className="italic opacity-80"> disciplina</span>
             </p>
 
-            <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+            <div className="bg-[#E9D5BB]" style={{ width: "40px", height: "2px" }}></div>
 
             <p className="text-[20px] leading-[1.15] font-serif">
               é falta de um lugar
@@ -169,7 +186,7 @@ export default function VendaPage() {
               >
                 Conheça a experiência
               </p>
-              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+              <div className="mx-auto" style={styles.divider}></div>
             </div>
 
             <div className="flex justify-center">
@@ -184,8 +201,9 @@ export default function VendaPage() {
                 "
                 controls
                 playsInline
-                preload="none"
+                preload="metadata"
                 poster="/portal.webp"
+                style={{ width: "220px", height: "390px" }}
               >
                 <source
                   src="/videoapp.mp4"
@@ -205,7 +223,7 @@ export default function VendaPage() {
                 <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
                   Antes
                 </p>
-                <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+                <div className="mx-auto" style={styles.divider}></div>
               </div>
 
               <div className="flex flex-col items-center gap-2">
@@ -218,7 +236,7 @@ export default function VendaPage() {
                     key={i}
                     className="flex items-center w-full rounded-full bg-[#e9d5bb]/30 text-[11px] text-[#70412d]/70 p-[2px]"
                   >
-                    <div className="flex items-center justify-center bg-[#D9C2A0] rounded-full min-w-[24px] w-6 h-6 text-white text-[10px] shrink-0">
+                    <div className="flex items-center justify-center bg-[#D9C2A0] rounded-full min-w-[24px] w-6 h-6 text-white text-[10px] shrink-0 shadow-inner">
                       ✕
                     </div>
                     <div className="px-3 py-1 whitespace-nowrap">
@@ -235,7 +253,7 @@ export default function VendaPage() {
                 <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
                   Depois
                 </p>
-                <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+                <div className="mx-auto" style={styles.divider}></div>
               </div>
 
               <div className="flex flex-col items-center gap-2">
@@ -248,7 +266,7 @@ export default function VendaPage() {
                     key={i}
                     className="flex items-center w-full rounded-full bg-[#e9d5bb]/30 text-[11px] text-[#70412d]/70 p-[2px]"
                   >
-                    <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[24px] w-6 h-6 shrink-0">
+                    <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[24px] w-6 h-6 shrink-0 shadow-inner">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="w-3.5 h-3.5 text-white"
@@ -288,7 +306,7 @@ export default function VendaPage() {
                 >
                   estudo guiado
                 </p>
-                <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+                <div style={styles.divider}></div>
               </div>
 
               <p className="text-[17px] leading-[1.2] font-serif">
@@ -300,19 +318,7 @@ export default function VendaPage() {
             </div>
 
             <div className="shrink-0">
-              <div
-                className="
-                  relative
-                  w-[145px]
-                  h-[260px]
-                  rounded-[28px]
-                  border-[3px]
-                  border-black
-                  bg-[#F9F5E9]
-                  shadow-xl
-                  overflow-hidden
-                "
-              >
+              <div className="shadow-xl" style={styles.contextoContainer}>
                 <div
                   className="
                     absolute
@@ -331,12 +337,13 @@ export default function VendaPage() {
                   alt="Contexto bíblico"
                   width={145}
                   height={260}
-                  unoptimized
+                  loading="eager"
                   className="
                     w-full
                     h-full
                     object-contain
                   "
+                  style={{ width: "145px", height: "260px" }}
                 />
               </div>
             </div>
@@ -345,19 +352,7 @@ export default function VendaPage() {
           {/* APLICAÇÃO */}
           <div className="flex items-center justify-between gap-6">
             <div className="shrink-0">
-              <div
-                className="
-                  relative
-                  w-[145px]
-                  h-[260px]
-                  rounded-[28px]
-                  border-[3px]
-                  border-black
-                  bg-[#F9F5E9]
-                  shadow-xl
-                  overflow-hidden
-                "
-              >
+              <div className="shadow-xl" style={styles.contextoContainer}>
                 <div
                   className="
                     absolute
@@ -376,12 +371,13 @@ export default function VendaPage() {
                   alt="Aplicação bíblica"
                   width={145}
                   height={260}
-                  unoptimized
+                  loading="eager"
                   className="
                     w-full
                     h-full
                     object-contain
                   "
+                  style={{ width: "145px", height: "260px" }}
                 />
               </div>
             </div>
@@ -398,7 +394,7 @@ export default function VendaPage() {
                 >
                   aplicação prática
                 </p>
-                <div className="w-10 h-[2px] bg-[#E9D5BB] ml-auto"></div>
+                <div className="ml-auto" style={styles.divider}></div>
               </div>
 
               <p className="text-[18px] leading-[1.15] font-serif">
@@ -426,7 +422,7 @@ export default function VendaPage() {
                 ">
                   diário espiritual
                 </p>
-                <div className="w-10 h-[2px] bg-[#E9D5BB]"></div>
+                <div style={styles.divider}></div>
               </div>
 
               <p className="text-[17px] leading-[1.2] font-serif">
@@ -444,7 +440,7 @@ export default function VendaPage() {
               alt="Diário espiritual"
               width={165}
               height={280}
-              unoptimized
+              loading="eager"
               className="
                 w-[165px]
                 h-auto
@@ -452,6 +448,7 @@ export default function VendaPage() {
                 shadow-2xl
                 shrink-0
               "
+              style={{ width: "165px", height: "280px" }}
             />
           </div>
 
@@ -466,7 +463,7 @@ export default function VendaPage() {
               ">
                 constância
               </p>
-              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+              <div className="mx-auto" style={styles.divider}></div>
             </div>
 
             <div className="flex items-center justify-between gap-5">
@@ -475,7 +472,7 @@ export default function VendaPage() {
                 alt="Constância espiritual"
                 width={182}
                 height={300}
-                unoptimized
+                loading="eager"
                 className="
                   w-[182px]
                   h-auto
@@ -483,6 +480,7 @@ export default function VendaPage() {
                   shadow-2xl
                   shrink-0
                 "
+                style={{ width: "182px", height: "300px" }}
               />
 
               <div className="flex-1 text-left space-y-5">
@@ -580,20 +578,17 @@ export default function VendaPage() {
 
           <a
             href="https://pay.cakto.com.br/aovfbto_873529"
-            style={{
-              backgroundColor: "#70412D",
-              color: "#FFFFFF",
-              borderRadius: "9999px",
-              display: "block",
-              paddingTop: "1rem",
-              paddingBottom: "1rem",
-              boxShadow: "0 20px 25px -5px rgba(112, 65, 45, 0.2)",
-            }}
+            style={styles.ctaButton}
             className="
               text-[16px]
               font-semibold
               text-center
+              shadow-xl
+              shadow-[#70412D]/20
               active:scale-[0.98]
+              hover:scale-[1.015]
+              transition-transform
+              duration-300
             "
           >
             Começar meu tempo com Deus
@@ -614,25 +609,27 @@ export default function VendaPage() {
               >
                 Transformadas
               </p>
-              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+              <div className="mx-auto" style={styles.divider}></div>
             </div>
 
             <div className="space-y-2">
               <Image
                 src="/feedback1.webp"
-                alt="Feedback"
+                alt="Feedback 1"
                 width={400}
                 height={200}
-                unoptimized
+                loading="eager"
                 className="w-full h-auto"
+                style={{ width: "400px", height: "200px" }}
               />
               <Image
                 src="/feedback2.webp"
-                alt="Feedback"
+                alt="Feedback 2"
                 width={400}
                 height={200}
-                unoptimized
+                loading="eager"
                 className="w-full h-auto"
+                style={{ width: "400px", height: "200px" }}
               />
             </div>
           </div>
@@ -652,7 +649,7 @@ export default function VendaPage() {
               >
                 Dúvidas
               </p>
-              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+              <div className="mx-auto" style={styles.divider}></div>
             </div>
 
             <div className="space-y-4">
@@ -741,20 +738,22 @@ export default function VendaPage() {
         <section className="mb-8">
           <a
             href="https://pay.cakto.com.br/aovfbto_873529"
-            style={{
-              backgroundColor: "#70412D",
-              color: "#FFFFFF",
-              borderRadius: "9999px",
-              display: "block",
-              paddingTop: "1rem",
-              paddingBottom: "1rem",
-              boxShadow: "0 20px 25px -5px rgba(112, 65, 45, 0.2)",
-            }}
+            style={styles.ctaButton}
             className="
+              block
+              text-center
+              bg-[#70412D]
+              text-white
+              py-4
+              rounded-full
               text-[16px]
               font-semibold
-              text-center
+              shadow-xl
+              shadow-[#70412D]/20
               active:scale-[0.98]
+              hover:scale-[1.015]
+              transition-transform
+              duration-300
             "
           >
             Quero viver isso com Deus
