@@ -13,7 +13,7 @@ export default function VendaPage() {
         <section className="text-center space-y-10 pt-2 mb-24">
           <div className="space-y-4">
             <img
-              src="/logo.png"
+              src="/logo.webp"
               alt="No Secreto"
               className="w-28 h-28 mx-auto object-contain"
             />
@@ -106,7 +106,7 @@ export default function VendaPage() {
                 "
               />
               <img
-                src="/portal.png"
+                src="/portal.webp"
                 alt="Portal No Secreto"
                 className="
                   w-full
@@ -165,7 +165,7 @@ export default function VendaPage() {
                 controls
                 playsInline
                 preload="metadata"
-                poster="/portal.png"
+                poster="/portal.webp"
               >
                 <source
                   src="/videoapp.mp4"
@@ -306,7 +306,7 @@ export default function VendaPage() {
                   "
                 />
                 <img
-                  src="/contexto.png"
+                  src="/contexto.webp"
                   alt="Contexto bíblico"
                   className="
                     w-full
@@ -349,7 +349,7 @@ export default function VendaPage() {
                   "
                 />
                 <img
-                  src="/aplicacao.png"
+                  src="/aplicacao.webp"
                   alt="Aplicação bíblica"
                   className="
                     w-full
@@ -416,7 +416,7 @@ export default function VendaPage() {
             </div>
 
             <img
-              src="/diario.png"
+              src="/diario.webp"
               alt="Diário espiritual"
               className="
                 w-[165px]
@@ -444,7 +444,7 @@ export default function VendaPage() {
 
             <div className="flex items-center justify-between gap-5">
               <img
-                src="/perfil.png"
+                src="/perfil.webp"
                 alt="Constância espiritual"
                 className="
                   w-[182px]
@@ -590,13 +590,13 @@ export default function VendaPage() {
 
             <div className="space-y-6">
               <img
-                src="/feedback1.PNG"
+                src="/feedback1.webp"
                 alt="Feedback"
                 className="w-full"
                 loading="lazy"
               />
               <img
-                src="/feedback2.PNG"
+                src="/feedback2.webp"
                 alt="Feedback"
                 className="w-full"
                 loading="lazy"
