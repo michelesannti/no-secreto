@@ -21,6 +21,8 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
 });
 
+export const metadataBase = new URL("https://nosecretoapp.com.br");
+
 export const metadata: Metadata = {
   title: "No Secreto",
   description: "Seu tempo com Deus começa aqui 🤎",

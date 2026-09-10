@@ -14,6 +14,9 @@ const images = [
 ];
 
 async function run() {
+  const targetNames = images.map((i) => i.name.toLowerCase());
+
+  // 1. Otimiza e gera os arquivos .webp
   for (const img of images) {
     const files = fs.readdirSync("./public");
     const found = files.find((f) => f.toLowerCase().startsWith(img.name + "."));
@@ -27,6 +30,18 @@ async function run() {
       console.log(`✅ Otimizada: ${img.name}.webp`);
     }
   }
+
+  // 2. Remove com segurança apenas os originais antigos que foram convertidos
+  const allFiles = fs.readdirSync("./public");
+  allFiles.forEach((file) => {
+    const ext = path.extname(file).toLowerCase();
+    const baseName = path.basename(file, path.extname(file)).toLowerCase();
+
+    if (targetNames.includes(baseName) && ext !== ".webp") {
+      fs.unlinkSync(path.join("./public", file));
+      console.log(`🗑️ Removido antigo com segurança: ${file}`);
+    }
+  });
 }
 
 run();

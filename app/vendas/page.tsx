@@ -566,8 +566,8 @@ export default function VendaPage() {
         </section>
 
         {/* TRANSFORMADAS (PROVA SOCIAL) */}
-        <section className="mb-24">
-          <div className="space-y-10">
+        <section className="mb-14">
+          <div className="space-y-6">
             <div className="text-center space-y-3">
               <p
                 className="
@@ -582,7 +582,7 @@ export default function VendaPage() {
               <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               <img
                 src="/feedback1.webp"
                 alt="Feedback"

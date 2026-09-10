@@ -1,16 +1,15 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const res = NextResponse.next();
   const url = req.nextUrl;
   const hostname = req.headers.get("host") || "";
   const pathname = url.pathname;
 
-  // 1. Se acessar o domínio principal (nosecretoapp.com.br) na raiz (/), direciona para a página de vendas
-  const isMainDomain = hostname === "nosecretoapp.com.br" || hostname === "www.nosecretoapp.com.br";
-  if (isMainDomain && pathname === "/") {
+  // Direciona a raiz (/) para a página de vendas em qualquer ambiente
+  if (pathname === "/") {
     return NextResponse.rewrite(new URL("/vendas", req.url));
   }
 
@@ -40,17 +39,15 @@ export async function middleware(req: NextRequest) {
   const isVendas = pathname.startsWith("/vendas");
   const isAuthRoute = pathname.startsWith("/primeiro-acesso") || pathname.startsWith("/redefinir-senha");
 
-  // Permite acesso livre à página de vendas e rotas públicas de autenticação
+  // Permite acesso livre à página de vendas e rotas públicas
   if (isVendas || isAuthRoute) {
     return res;
   }
 
-  // 🚫 não logado → bloqueia tudo menos login
   if (!user && !isLogin) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // 🔥 NÃO valida ativo na hora do login
   if (user && !isLogin) {
     const { data: profile } = await supabase
       .from("profiles")
@@ -59,7 +56,6 @@ export async function middleware(req: NextRequest) {
       .single();
 
     if (!profile?.ativo) {
-      // 👉 redireciona pra login SEM quebrar sessão
       return NextResponse.redirect(new URL("/login", req.url));
     }
   }
