@@ -7,7 +7,10 @@ export default function VendaPage() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#F9F5E9] text-[#70412D] overflow-hidden">
+    <div 
+      className="min-h-screen bg-[#F9F5E9] text-[#70412D] overflow-hidden"
+      style={{ backgroundColor: "#F9F5E9", color: "#70412D" }}
+    >
       <div className="relative max-w-md mx-auto px-6 py-8">
 
         {/* HERO */}
@@ -20,6 +23,7 @@ export default function VendaPage() {
                 width={112}
                 height={112}
                 priority
+                unoptimized
                 className="w-28 h-28 object-contain"
               />
             </div>
@@ -27,7 +31,10 @@ export default function VendaPage() {
               <h2 className="text-xl font-serif tracking-wide">
                 No Secreto
               </h2>
-              <div className="w-10 h-[2px] bg-[#E9D5BB] mt-2 mx-auto"></div>
+              <div 
+                className="w-10 h-[2px] bg-[#E9D5BB] mt-2 mx-auto"
+                style={{ backgroundColor: "#E9D5BB" }}
+              ></div>
             </div>
           </div>
 
@@ -60,6 +67,7 @@ export default function VendaPage() {
           <div className="space-y-3">
             <a
               href="https://pay.cakto.com.br/aovfbto_873529"
+              style={{ backgroundColor: "#70412D", color: "#FFFFFF" }}
               className="
                 block
                 bg-[#70412D]
@@ -118,6 +126,7 @@ export default function VendaPage() {
                 width={145}
                 height={280}
                 priority
+                unoptimized
                 className="
                   w-full
                   h-full
@@ -323,6 +332,7 @@ export default function VendaPage() {
                   alt="Contexto bíblico"
                   width={145}
                   height={260}
+                  unoptimized
                   className="
                     w-full
                     h-full
@@ -367,6 +377,7 @@ export default function VendaPage() {
                   alt="Aplicação bíblica"
                   width={145}
                   height={260}
+                  unoptimized
                   className="
                     w-full
                     h-full
@@ -434,6 +445,7 @@ export default function VendaPage() {
               alt="Diário espiritual"
               width={165}
               height={280}
+              unoptimized
               className="
                 w-[165px]
                 h-auto
@@ -464,6 +476,7 @@ export default function VendaPage() {
                 alt="Constância espiritual"
                 width={182}
                 height={300}
+                unoptimized
                 className="
                   w-[182px]
                   h-auto
@@ -568,6 +581,7 @@ export default function VendaPage() {
 
           <a
             href="https://pay.cakto.com.br/aovfbto_873529"
+            style={{ backgroundColor: "#70412D", color: "#FFFFFF" }}
             className="
               block
               text-center
@@ -612,6 +626,7 @@ export default function VendaPage() {
                 alt="Feedback"
                 width={400}
                 height={200}
+                unoptimized
                 className="w-full h-auto"
               />
               <Image
@@ -619,6 +634,7 @@ export default function VendaPage() {
                 alt="Feedback"
                 width={400}
                 height={200}
+                unoptimized
                 className="w-full h-auto"
               />
             </div>
@@ -728,6 +744,7 @@ export default function VendaPage() {
         <section className="mb-8">
           <a
             href="https://pay.cakto.com.br/aovfbto_873529"
+            style={{ backgroundColor: "#70412D", color: "#FFFFFF" }}
             className="
               block
               text-center

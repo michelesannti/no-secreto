@@ -14,7 +14,14 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow-y: auto; /* 🔥 CORREÇÃO */
+  overflow-y: auto;
+  background-color: #F9F5E9 !important;
+  color: #70412D !important;
+}
+
+/* PREVENÇÃO DE DELAY EM BOTÕES/LINKS NOS IN-APP BROWSERS */
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* BASE */
@@ -50,16 +57,13 @@ h1, h2, h3 {
 }
 
 /* FLOAT MOCKUP */
-
 @keyframes floatMockup {
   0% {
     transform: translateY(0px);
   }
-
   50% {
     transform: translateY(-8px);
   }
-
   100% {
     transform: translateY(0px);
   }
