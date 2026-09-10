@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 export default function VendaPage() {
   const [open, setOpen] = useState<number | null>(null);
@@ -12,11 +13,16 @@ export default function VendaPage() {
         {/* HERO */}
         <section className="text-center space-y-10 pt-2 mb-24">
           <div className="space-y-4">
-            <img
-              src="/logo.webp"
-              alt="No Secreto"
-              className="w-28 h-28 mx-auto object-contain"
-            />
+            <div className="w-28 h-28 mx-auto relative">
+              <Image
+                src="/logo.webp"
+                alt="No Secreto"
+                width={112}
+                height={112}
+                priority
+                className="w-28 h-28 object-contain"
+              />
+            </div>
             <div>
               <h2 className="text-xl font-serif tracking-wide">
                 No Secreto
@@ -73,7 +79,7 @@ export default function VendaPage() {
               Quero constância com Deus
             </a>
 
-            <p className="text-[11px] uppercase tracking-[0.05em] opacity-50 font-medium whitespace-nowrap sm:whitespace-normal">
+            <p className="text-[11px] uppercase tracking-[0.05em] opacity-50 font-medium text-center">
               por apenas R$29,90/mês • menos de R$1 por dia
             </p>
           </div>
@@ -85,6 +91,7 @@ export default function VendaPage() {
             <div className="
               relative
               w-[145px]
+              h-[280px]
               rounded-[28px]
               border-[4px]
               border-black/80
@@ -105,9 +112,11 @@ export default function VendaPage() {
                   z-10
                 "
               />
-              <img
+              <Image
                 src="/portal.webp"
                 alt="Portal No Secreto"
+                width={145}
+                height={280}
                 className="
                   w-full
                   h-full
@@ -158,9 +167,11 @@ export default function VendaPage() {
               <video
                 className="
                   w-[220px]
+                  h-[390px]
                   rounded-[26px]
                   shadow-2xl
                   overflow-hidden
+                  object-cover
                 "
                 controls
                 playsInline
@@ -284,6 +295,7 @@ export default function VendaPage() {
                 className="
                   relative
                   w-[145px]
+                  h-[260px]
                   rounded-[28px]
                   border-[3px]
                   border-black
@@ -305,12 +317,14 @@ export default function VendaPage() {
                     z-10
                   "
                 />
-                <img
+                <Image
                   src="/contexto.webp"
                   alt="Contexto bíblico"
+                  width={145}
+                  height={260}
                   className="
                     w-full
-                    block
+                    h-full
                     object-contain
                   "
                 />
@@ -325,6 +339,7 @@ export default function VendaPage() {
                 className="
                   relative
                   w-[145px]
+                  h-[260px]
                   rounded-[28px]
                   border-[3px]
                   border-black
@@ -346,12 +361,14 @@ export default function VendaPage() {
                     z-10
                   "
                 />
-                <img
+                <Image
                   src="/aplicacao.webp"
                   alt="Aplicação bíblica"
+                  width={145}
+                  height={260}
                   className="
                     w-full
-                    block
+                    h-full
                     object-contain
                   "
                 />
@@ -411,11 +428,14 @@ export default function VendaPage() {
               </p>
             </div>
 
-            <img
+            <Image
               src="/diario.webp"
               alt="Diário espiritual"
+              width={165}
+              height={280}
               className="
                 w-[165px]
+                h-auto
                 rounded-[22px]
                 shadow-2xl
                 shrink-0
@@ -438,11 +458,14 @@ export default function VendaPage() {
             </div>
 
             <div className="flex items-center justify-between gap-5">
-              <img
+              <Image
                 src="/perfil.webp"
                 alt="Constância espiritual"
+                width={182}
+                height={300}
                 className="
                   w-[182px]
+                  h-auto
                   rounded-[26px]
                   shadow-2xl
                   shrink-0
@@ -583,15 +606,19 @@ export default function VendaPage() {
             </div>
 
             <div className="space-y-2">
-              <img
+              <Image
                 src="/feedback1.webp"
                 alt="Feedback"
-                className="w-full"
+                width={400}
+                height={200}
+                className="w-full h-auto"
               />
-              <img
+              <Image
                 src="/feedback2.webp"
                 alt="Feedback"
-                className="w-full"
+                width={400}
+                height={200}
+                className="w-full h-auto"
               />
             </div>
           </div>
