@@ -313,8 +313,6 @@ export default function VendaPage() {
                     block
                     object-contain
                   "
-                  loading="eager"
-                  decoding="async"
                 />
               </div>
             </div>
@@ -356,8 +354,6 @@ export default function VendaPage() {
                     block
                     object-contain
                   "
-                  loading="eager"
-                  decoding="async"
                 />
               </div>
             </div>
@@ -424,7 +420,6 @@ export default function VendaPage() {
                 shadow-2xl
                 shrink-0
               "
-              loading="lazy"
             />
           </div>
 
@@ -452,7 +447,6 @@ export default function VendaPage() {
                   shadow-2xl
                   shrink-0
                 "
-                loading="lazy"
               />
 
               <div className="flex-1 text-left space-y-5">
@@ -593,13 +587,11 @@ export default function VendaPage() {
                 src="/feedback1.webp"
                 alt="Feedback"
                 className="w-full"
-                loading="lazy"
               />
               <img
                 src="/feedback2.webp"
                 alt="Feedback"
                 className="w-full"
-                loading="lazy"
               />
             </div>
           </div>
