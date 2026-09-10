@@ -73,7 +73,7 @@ export default function VendaPage() {
               Quero constância com Deus
             </a>
 
-            <p className="text-[12px] uppercase tracking-[0.08em] opacity-50 font-medium">
+            <p className="text-[11px] uppercase tracking-[0.05em] opacity-50 font-medium whitespace-nowrap sm:whitespace-normal">
               por apenas R$29,90/mês • menos de R$1 por dia
             </p>
           </div>
@@ -424,6 +424,7 @@ export default function VendaPage() {
                 shadow-2xl
                 shrink-0
               "
+              loading="lazy"
             />
           </div>
 
@@ -451,6 +452,7 @@ export default function VendaPage() {
                   shadow-2xl
                   shrink-0
                 "
+                loading="lazy"
               />
 
               <div className="flex-1 text-left space-y-5">
@@ -493,18 +495,18 @@ export default function VendaPage() {
 
         {/* ANCORAGEM VISUAL DE ASSINATURA + CTA PRINCIPAL */}
         <section className="mb-24 space-y-4">
-          <div className="bg-[#EFE2CC]/60 rounded-[28px] p-6 border border-[#E9D5BB] text-center space-y-5 backdrop-blur-sm">
-            <div className="space-y-1">
-              <p className="text-[12px] uppercase tracking-[0.2em] opacity-50 font-medium">
+          <div className="bg-[#EFE2CC]/60 rounded-[32px] p-8 sm:p-9 border border-[#E9D5BB] text-center space-y-7 backdrop-blur-sm shadow-sm">
+            <div className="space-y-3">
+              <p className="text-[13px] uppercase tracking-[0.22em] opacity-50 font-medium">
                 Plano Mensal
               </p>
 
-              {/* PREÇO EQUILIBRADO (FONT-BOLD + 40PX) */}
-              <div className="flex items-baseline justify-center gap-1.5 pt-1">
+              {/* PREÇO */}
+              <div className="flex items-baseline justify-center gap-1.5 pt-2">
                 <span className="text-[18px] font-sans font-semibold text-[#70412D]/80 leading-none">
                   R$
                 </span>
-                <span className="text-[40px] font-sans font-bold text-[#70412D] tracking-tight leading-none tabular-nums">
+                <span className="text-[42px] font-sans font-bold text-[#70412D] tracking-tight leading-none tabular-nums">
                   29,90
                 </span>
                 <span className="text-[14px] font-sans font-medium text-[#70412D]/60 leading-none">
@@ -512,38 +514,38 @@ export default function VendaPage() {
                 </span>
               </div>
 
-              <p className="text-[12px] uppercase tracking-[0.1em] opacity-45 pt-1">
+              <p className="text-[11px] uppercase tracking-[0.12em] opacity-45 pt-1">
                 menos de R$1 por dia
               </p>
             </div>
 
-            <div className="w-12 h-[1px] bg-[#D9C2A0] mx-auto"></div>
-
-            <ul className="text-[14px] space-y-2.5 text-left w-full px-2 mx-auto opacity-85">
-              <li className="flex items-start gap-2.5">
+            <ul className="text-[14px] space-y-3.5 text-left w-full px-1 mx-auto opacity-85">
+              <li className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
                 <span>Acesso ilimitado aos estudos</span>
               </li>
 
-              <li className="flex items-start gap-2.5">
+              <li className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
                 <span>Diário espiritual individual</span>
               </li>
 
-              <li className="flex items-start gap-2.5">
+              <li className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
                 <span>Registro da sua jornada</span>
               </li>
 
-              <li className="flex items-start gap-2.5">
+              <li className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
                 <span>Progresso sem datas fixas</span>
               </li>
             </ul>
 
-            <p className="text-[12px] uppercase tracking-[0.1em] opacity-45 pt-1">
-              Cancele quando quiser
-            </p>
+            <div className="pt-1">
+              <p className="text-[11px] uppercase tracking-[0.12em] opacity-45">
+                Cancele quando quiser
+              </p>
+            </div>
           </div>
 
           <a
@@ -591,11 +593,13 @@ export default function VendaPage() {
                 src="/feedback1.PNG"
                 alt="Feedback"
                 className="w-full"
+                loading="lazy"
               />
               <img
                 src="/feedback2.PNG"
                 alt="Feedback"
                 className="w-full"
+                loading="lazy"
               />
             </div>
           </div>
