@@ -10,12 +10,10 @@ function PrimeiroAcessoContent() {
   const router = useRouter();
   const token = searchParams.get("token");
 
-  // Estados para solicitar e-mail (sem token)
   const [email, setEmail] = useState("");
   const [requestLoading, setRequestLoading] = useState(false);
   const [requestMessage, setRequestMessage] = useState("");
 
-  // Estados para cadastrar senha (com token)
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [validatingToken, setValidatingToken] = useState(!!token);
@@ -113,7 +111,6 @@ function PrimeiroAcessoContent() {
     }
   }
 
-  // ESTADO 1: Validando token
   if (token && validatingToken) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f9f5e9] px-6">
@@ -122,7 +119,6 @@ function PrimeiroAcessoContent() {
     );
   }
 
-  // ESTADO 2: Token inválido ou expirado
   if (token && !tokenValid) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f9f5e9] px-6">
@@ -142,14 +138,13 @@ function PrimeiroAcessoContent() {
     );
   }
 
-  // ESTADO 3: Token válido (Criar Senha)
   if (token && tokenValid) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f9f5e9] px-6">
         <div className="w-full max-w-sm">
           <div className="mb-12 text-center space-y-4">
             <img
-              src="/logo.png"
+              src="/logo.webp"
               alt="No Secreto"
               className="w-24 h-24 mx-auto object-contain"
             />
@@ -213,13 +208,12 @@ function PrimeiroAcessoContent() {
     );
   }
 
-  // ESTADO 4: Pedir e-mail de Primeiro Acesso
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f9f5e9] px-6">
       <div className="w-full max-w-sm">
         <div className="mb-12 text-center space-y-4">
           <img
-            src="/logo.png"
+            src="/logo.webp"
             alt="No Secreto"
             className="w-24 h-24 mx-auto object-contain"
           />

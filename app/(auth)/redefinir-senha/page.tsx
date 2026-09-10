@@ -42,7 +42,7 @@ export default function RedefinirSenhaPage() {
       <div className="w-full max-w-sm">
         <div className="mb-12 text-center space-y-4">
           <img
-            src="/logo.png"
+            src="/logo.webp"
             alt="No Secreto"
             className="w-24 h-24 mx-auto object-contain"
           />

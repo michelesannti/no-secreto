@@ -22,7 +22,7 @@ export default function PortalIntro({
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#f9f5e9]">
 
         <img
-          src="/logo.png"
+          src="/logo.webp"
           alt="No Secreto"
           className="h-44 animate-pulse"
         />

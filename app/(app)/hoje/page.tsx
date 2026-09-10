@@ -34,7 +34,7 @@ export default function HojePage() {
       <div className="space-y-4">
 
         <img
-          src="/logo.png"
+          src="/logo.webp"
           alt="No Secreto"
           className="w-[360px]"
         />

@@ -65,7 +65,7 @@ export default function CreatorsPage() {
                 />
 
                 <img
-                  src="/portal.png"
+                  src="/portal.webp"
                   alt="Portal No Secreto"
                   className="
                     w-full

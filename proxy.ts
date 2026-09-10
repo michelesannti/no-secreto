@@ -8,8 +8,11 @@ export async function proxy(req: NextRequest) {
   const hostname = req.headers.get("host") || "";
   const pathname = url.pathname;
 
-  // Direciona a raiz (/) para a página de vendas em qualquer ambiente
+  // Direciona a raiz (/) para a página de vendas APENAS se NÃO for o subdomínio app.
   if (pathname === "/") {
+    if (hostname.includes("app.nosecretoapp.com.br")) {
+      return NextResponse.redirect(new URL("/hoje", req.url));
+    }
     return NextResponse.rewrite(new URL("/vendas", req.url));
   }
 
@@ -39,7 +42,6 @@ export async function proxy(req: NextRequest) {
   const isVendas = pathname.startsWith("/vendas");
   const isAuthRoute = pathname.startsWith("/primeiro-acesso") || pathname.startsWith("/redefinir-senha");
 
-  // Permite acesso livre à página de vendas e rotas públicas
   if (isVendas || isAuthRoute) {
     return res;
   }
