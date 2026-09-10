@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 
 export default function VendaPage() {
   const [open, setOpen] = useState<number | null>(null);
 
-  // Estilos Críticos Inline para garantir renderização instantânea (Zero FOUT/FUC)
   const styles = {
     body: { backgroundColor: "#F9F5E9", color: "#70412D" },
     logoContainer: { width: "112px", height: "112px", display: "flex", alignItems: "center", justifyContent: "center" },
@@ -48,15 +46,12 @@ export default function VendaPage() {
         <section className="text-center space-y-10 pt-2 mb-24">
           <div className="space-y-4">
             <div className="mx-auto relative" style={styles.logoContainer}>
-              <Image
+              <img
                 src="/logo.webp"
                 alt="No Secreto"
-                width={112}
-                height={112}
-                priority
-                loading="eager"
-                className="object-contain"
-                style={{ width: "112px", height: "112px" }}
+                width="112"
+                height="112"
+                style={{ width: "112px", height: "112px", objectFit: "contain" }}
               />
             </div>
             <div>
@@ -135,20 +130,10 @@ export default function VendaPage() {
                   z-10
                 "
               />
-              <Image
+              <img
                 src="/portal.webp"
                 alt="Portal No Secreto"
-                width={145}
-                height={280}
-                priority
-                loading="eager"
-                className="
-                  w-full
-                  h-full
-                  object-cover
-                  scale-[1.28]
-                "
-                style={{ width: "145px", height: "280px" }}
+                style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.28)" }}
               />
             </div>
           </div>
@@ -332,18 +317,10 @@ export default function VendaPage() {
                     z-10
                   "
                 />
-                <Image
+                <img
                   src="/contexto.webp"
                   alt="Contexto bíblico"
-                  width={145}
-                  height={260}
-                  loading="eager"
-                  className="
-                    w-full
-                    h-full
-                    object-contain
-                  "
-                  style={{ width: "145px", height: "260px" }}
+                  style={{ width: "100%", height: "100%", objectFit: "contain" }}
                 />
               </div>
             </div>
@@ -366,18 +343,10 @@ export default function VendaPage() {
                     z-10
                   "
                 />
-                <Image
+                <img
                   src="/aplicacao.webp"
                   alt="Aplicação bíblica"
-                  width={145}
-                  height={260}
-                  loading="eager"
-                  className="
-                    w-full
-                    h-full
-                    object-contain
-                  "
-                  style={{ width: "145px", height: "260px" }}
+                  style={{ width: "100%", height: "100%", objectFit: "contain" }}
                 />
               </div>
             </div>
@@ -435,12 +404,9 @@ export default function VendaPage() {
               </p>
             </div>
 
-            <Image
+            <img
               src="/diario.webp"
               alt="Diário espiritual"
-              width={165}
-              height={280}
-              loading="eager"
               className="
                 w-[165px]
                 h-auto
@@ -448,7 +414,7 @@ export default function VendaPage() {
                 shadow-2xl
                 shrink-0
               "
-              style={{ width: "165px", height: "280px" }}
+              style={{ width: "165px", height: "auto" }}
             />
           </div>
 
@@ -467,12 +433,9 @@ export default function VendaPage() {
             </div>
 
             <div className="flex items-center justify-between gap-5">
-              <Image
+              <img
                 src="/perfil.webp"
                 alt="Constância espiritual"
-                width={182}
-                height={300}
-                loading="eager"
                 className="
                   w-[182px]
                   h-auto
@@ -480,7 +443,7 @@ export default function VendaPage() {
                   shadow-2xl
                   shrink-0
                 "
-                style={{ width: "182px", height: "300px" }}
+                style={{ width: "182px", height: "auto" }}
               />
 
               <div className="flex-1 text-left space-y-5">
@@ -596,8 +559,8 @@ export default function VendaPage() {
         </section>
 
         {/* TRANSFORMADAS (PROVA SOCIAL) */}
-        <section className="mb-4">
-          <div className="space-y-2">
+        <section className="mb-12">
+          <div className="space-y-6">
             <div className="text-center space-y-3">
               <p
                 className="
@@ -612,24 +575,18 @@ export default function VendaPage() {
               <div className="mx-auto" style={styles.divider}></div>
             </div>
 
-            <div className="space-y-2">
-              <Image
+            <div className="space-y-4">
+              <img
                 src="/feedback1.webp"
                 alt="Feedback 1"
-                width={400}
-                height={200}
-                loading="eager"
-                className="w-full h-auto"
-                style={{ width: "400px", height: "200px" }}
+                className="w-full h-auto rounded-2xl shadow-sm"
+                style={{ width: "100%", height: "auto", objectFit: "contain" }}
               />
-              <Image
+              <img
                 src="/feedback2.webp"
                 alt="Feedback 2"
-                width={400}
-                height={200}
-                loading="eager"
-                className="w-full h-auto"
-                style={{ width: "400px", height: "200px" }}
+                className="w-full h-auto rounded-2xl shadow-sm"
+                style={{ width: "100%", height: "auto", objectFit: "contain" }}
               />
             </div>
           </div>
