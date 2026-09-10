@@ -67,21 +67,20 @@ export default function VendaPage() {
           <div className="space-y-3">
             <a
               href="https://pay.cakto.com.br/aovfbto_873529"
-              style={{ backgroundColor: "#70412D", color: "#FFFFFF" }}
+              style={{
+                backgroundColor: "#70412D",
+                color: "#FFFFFF",
+                borderRadius: "9999px",
+                display: "block",
+                paddingTop: "1rem",
+                paddingBottom: "1rem",
+                boxShadow: "0 20px 25px -5px rgba(112, 65, 45, 0.2)",
+              }}
               className="
-                block
-                bg-[#70412D]
-                text-white
-                py-4
-                rounded-full
                 text-[16px]
                 font-semibold
-                shadow-xl
-                shadow-[#70412D]/20
+                text-center
                 active:scale-[0.98]
-                hover:scale-[1.015]
-                transition-all
-                duration-300
               "
             >
               Quero constância com Deus
@@ -581,22 +580,20 @@ export default function VendaPage() {
 
           <a
             href="https://pay.cakto.com.br/aovfbto_873529"
-            style={{ backgroundColor: "#70412D", color: "#FFFFFF" }}
+            style={{
+              backgroundColor: "#70412D",
+              color: "#FFFFFF",
+              borderRadius: "9999px",
+              display: "block",
+              paddingTop: "1rem",
+              paddingBottom: "1rem",
+              boxShadow: "0 20px 25px -5px rgba(112, 65, 45, 0.2)",
+            }}
             className="
-              block
-              text-center
-              bg-[#70412D]
-              text-white
-              py-4
-              rounded-full
               text-[16px]
               font-semibold
-              shadow-xl
-              shadow-[#70412D]/20
+              text-center
               active:scale-[0.98]
-              hover:scale-[1.015]
-              transition-all
-              duration-300
             "
           >
             Começar meu tempo com Deus
@@ -744,22 +741,20 @@ export default function VendaPage() {
         <section className="mb-8">
           <a
             href="https://pay.cakto.com.br/aovfbto_873529"
-            style={{ backgroundColor: "#70412D", color: "#FFFFFF" }}
+            style={{
+              backgroundColor: "#70412D",
+              color: "#FFFFFF",
+              borderRadius: "9999px",
+              display: "block",
+              paddingTop: "1rem",
+              paddingBottom: "1rem",
+              boxShadow: "0 20px 25px -5px rgba(112, 65, 45, 0.2)",
+            }}
             className="
-              block
-              text-center
-              bg-[#70412D]
-              text-white
-              py-4
-              rounded-full
               text-[16px]
               font-semibold
-              shadow-xl
-              shadow-[#70412D]/20
+              text-center
               active:scale-[0.98]
-              hover:scale-[1.015]
-              transition-all
-              duration-300
             "
           >
             Quero viver isso com Deus
