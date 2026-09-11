@@ -513,7 +513,7 @@ export default function VendaPage() {
             <ul className="text-[14px] space-y-3.5 text-left w-full px-1 mx-auto opacity-85">
               <li className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
-                <span>Acesso ilimitado aos estudos</span>
+                <span>Estudos em ordem guiada</span>
               </li>
 
               <li className="flex items-start gap-3">
@@ -614,7 +614,7 @@ export default function VendaPage() {
                 {
                   pergunta: "Preciso baixar o aplicativo?",
                   resposta:
-                    "Não precisa, o acesso é feito pelo navegador. Ao adicioná-lo à tela inicial, ele funciona como um aplicativo, sem ocupar espaço na memória.",
+                    "O acesso é feito pelo navegador. Ao adicioná-lo à tela inicial, ele funciona como um aplicativo, sem ocupar espaço na memória.",
                 },
                 {
                   pergunta: "Como funciona a assinatura?",
@@ -624,7 +624,7 @@ export default function VendaPage() {
                 {
                   pergunta: "Posso escolher qual livro ou capítulo estudar?",
                   resposta:
-                    "Os estudos seguem uma ordem guiada para te ajudar a criar constância, conduzindo seu processo com a Palavra de forma prática.",
+                    "Esse é o maior segredo da sua constância: o app segue uma ordem guiada e intencional para te dar clareza no dia a dia e te conduzir a uma intimidade real com Deus.",
                 },
               ].map((item, index) => (
                 <div
