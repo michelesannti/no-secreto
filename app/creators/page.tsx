@@ -11,6 +11,7 @@ export default function CreatorsPage() {
       backgroundColor: "transparent",
       overflow: "hidden",
     },
+    divider: { backgroundColor: "#E9D5BB", width: "40px", height: "2px" },
   };
 
   return (
@@ -21,7 +22,7 @@ export default function CreatorsPage() {
       <div className="max-w-md mx-auto px-6 py-10">
 
         {/* TOPO */}
-        <section className="text-center mb-28">
+        <section className="text-center mb-20">
 
           <div className="space-y-3 mb-14">
             <h2 className="text-xl font-serif tracking-wide">
@@ -82,7 +83,7 @@ export default function CreatorsPage() {
         </section>
 
         {/* SOBRE */}
-        <section className="mb-24">
+        <section className="mb-20">
           <div className="space-y-10">
             <div className="space-y-5">
               <p className="uppercase tracking-[0.18em] text-[17px] opacity-35">
@@ -125,105 +126,87 @@ export default function CreatorsPage() {
           </div>
         </section>
 
-        {/* FORMATOS */}
+        {/* COMPARATIVO: O QUE FUNCIONA X O QUE EVITAR */}
         <section className="mb-20">
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
-                Formatos que funcionam
-              </p>
-              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+          <div className="grid grid-cols-2 gap-4 items-start">
+            
+            {/* O QUE FUNCIONA */}
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
+                  O que funciona
+                </p>
+                <div className="mx-auto" style={styles.divider}></div>
+              </div>
+
+              <div className="flex flex-col items-center gap-2">
+                {[
+                  "Relatos pessoais",
+                  "Rotina com Deus",
+                  "Experiência com o app",
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center w-full rounded-full bg-[#e9d5bb]/30 text-[11px] text-[#70412d]/70 p-[2px]"
+                  >
+                    <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[24px] w-6 h-6 shrink-0 shadow-inner">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-3.5 h-3.5 text-white"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3.25-3.25a1 1 0 011.414-1.414l2.543 2.543 6.543-6.543a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div className="px-3 py-1 whitespace-nowrap">
+                      {item}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="flex flex-col items-center gap-3">
-              {[
-                "Relatos pessoais",
-                "Rotina com Deus",
-                "Reflexões e aprendizados",
-                "Experiência usando o app",
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="
-                    flex
-                    items-center
-                    w-[280px]
-                    rounded-full
-                    bg-[#e9d5bb]/30
-                    text-[13px]
-                    text-[#70412d]/75
-                    p-[3px]
-                  "
-                >
-                  <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[28px] w-7 h-7 shrink-0">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-4 h-4 text-white"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3.25-3.25a1 1 0 011.414-1.414l2.543 2.543 6.543-6.543a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
+            {/* O QUE EVITAR */}
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
+                  O que evitar
+                </p>
+                <div className="mx-auto" style={styles.divider}></div>
+              </div>
 
-                  <div className="flex-1 text-center px-4 py-2">
-                    {item}
+              <div className="flex flex-col items-center gap-2">
+                {[
+                  "Conteúdo forçado",
+                  "Publicidade agressiva",
+                  "Tom religioso pesado",
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center w-full rounded-full bg-[#e9d5bb]/30 text-[11px] text-[#70412d]/70 p-[2px]"
+                  >
+                    <div className="flex items-center justify-center bg-[#D9C2A0] rounded-full min-w-[24px] w-6 h-6 text-white text-[10px] shrink-0 shadow-inner">
+                      ✕
+                    </div>
+                    <div className="px-3 py-1 whitespace-nowrap">
+                      {item}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* EVITAR */}
-        <section className="mb-20">
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
-                O que evitar
-              </p>
-              <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
+                ))}
+              </div>
             </div>
 
-            <div className="flex flex-col items-center gap-3">
-              {[
-                "Conteúdo forçado",
-                "Publicidade agressiva",
-                "Tom religioso pesado",
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="
-                    flex
-                    items-center
-                    w-[280px]
-                    rounded-full
-                    bg-[#e9d5bb]/30
-                    text-[13px]
-                    text-[#70412d]/75
-                    p-[3px]
-                  "
-                >
-                  <div className="flex items-center justify-center bg-[#D9C2A0] rounded-full min-w-[28px] w-7 h-7 text-white text-[11px] shrink-0">
-                    ✕
-                  </div>
-
-                  <div className="flex-1 text-center px-4 py-2">
-                    {item}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
         {/* PARCERIA */}
         <section className="mb-20">
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="space-y-3">
               <p className="uppercase tracking-[0.18em] text-[14px] opacity-35 text-center">
                 Parceria
@@ -231,54 +214,69 @@ export default function CreatorsPage() {
               <div className="w-10 h-[2px] bg-[#E9D5BB] mx-auto"></div>
             </div>
 
-            <div className="flex flex-col items-center gap-3">
-              {[
-                "Marcar @nosecretoapp nos stories",
-                "Postar conteúdos em collab no feed",
-                "Utilizar seu link de indicação",
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="
-                    flex
-                    items-center
-                    w-[320px]
-                    max-w-full
-                    rounded-full
-                    bg-[#e9d5bb]/30
-                    text-[13px]
-                    text-[#70412d]/75
-                    p-[3px]
-                  "
-                >
-                  <div className="flex items-center justify-center bg-[#C6A46A] rounded-full min-w-[28px] w-7 h-7 shrink-0">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-4 h-4 text-white"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3.25-3.25a1 1 0 011.414-1.414l2.543 2.543 6.543-6.543a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-
-                  <div className="flex-1 text-center px-4 py-2 whitespace-nowrap">
-                    {item}
-                  </div>
+            {/* CARD UNIFICADO DE PARCERIA & COMISSIONAMENTO */}
+            <div className="bg-[#EFE2CC]/60 rounded-[32px] p-7 border border-[#E9D5BB] text-center space-y-6 backdrop-blur-sm shadow-sm">
+              
+              {/* DESTAQUES COM MESMO PESO VISUAL */}
+              <div className="grid grid-cols-2 gap-3 items-center border-b border-[#E9D5BB]/60 pb-5">
+                {/* ASSINATURA */}
+                <div className="space-y-1">
+                  <p className="text-[11px] uppercase tracking-[0.12em] opacity-50 font-medium">
+                    Assinatura
+                  </p>
+                  <p className="text-[26px] font-sans font-bold text-[#70412D] tracking-tight leading-none tabular-nums">
+                    R$ 29,90
+                  </p>
+                  <p className="text-[10px] uppercase tracking-[0.08em] opacity-45 pt-0.5">
+                    /mês
+                  </p>
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* OBSERVAÇÃO */}
-          <div className="mt-8 text-center px-4">
-            <p className="text-[12px] leading-relaxed text-[#70412D]/60">
-              Alguns conteúdos poderão ser republicados nas redes oficiais do No Secreto com os devidos créditos.
-            </p>
+                {/* DIVISOR VERTICAL INTERNO */}
+                <div className="space-y-1 border-l border-[#E9D5BB]/80 pl-3">
+                  <p className="text-[11px] uppercase tracking-[0.12em] opacity-50 font-medium">
+                    Sua Comissão
+                  </p>
+                  <p className="text-[26px] font-sans font-bold text-[#70412D] tracking-tight leading-none tabular-nums">
+                    30%
+                  </p>
+                  <p className="text-[10px] uppercase tracking-[0.08em] opacity-45 pt-0.5">
+                    Recorrente
+                  </p>
+                </div>
+              </div>
+
+              {/* LISTA DE BENEFÍCIOS E REGRAS */}
+              <ul className="text-[13px] space-y-3.5 text-left w-full px-1 mx-auto opacity-85">
+                <li className="flex items-start gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
+                  <span>
+                    <strong>Alta Conversão:</strong> Menos de R$1/dia torna o app fácil de vender.
+                  </span>
+                </li>
+
+                <li className="flex items-start gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
+                  <span>
+                    <strong>Ganho Acumulativo:</strong> Você recebe a comissão todos os meses enquanto a indicada continuar assinante.
+                  </span>
+                </li>
+
+                <li className="flex items-start gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
+                  <span>
+                    <strong>Divulgação:</strong> Marcar <strong>@nosecretoapp</strong> nos stories e postar em collab no feed.
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            {/* OBSERVAÇÃO */}
+            <div className="text-center px-4">
+              <p className="text-[12px] leading-relaxed text-[#70412D]/60">
+                Alguns conteúdos poderão ser republicados nas redes oficiais do No Secreto com os devidos créditos.
+              </p>
+            </div>
           </div>
         </section>
 
