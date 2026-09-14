@@ -294,10 +294,10 @@ export default function VendaPage() {
                 <div style={styles.divider}></div>
               </div>
 
-              <p className="text-[17px] leading-[1.2] font-serif">
+              <p className="text-[17px] leading-[1.25] font-serif">
                 sua forma de entender
                 <br />
-                a <span className="italic opacity-80">Palavra</span> é transformada
+                a <span className="italic opacity-80">Palavra</span> transformada
                 <br />
                 em <span className="italic font-semibold opacity-90">apenas 7 minutos</span>
               </p>
