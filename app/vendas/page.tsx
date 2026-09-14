@@ -493,8 +493,13 @@ export default function VendaPage() {
                 Plano Mensal
               </p>
 
+              {/* TÍTULO DOS 7 MINUTOS DIÁRIOS */}
+              <p className="text-[15px] font-serif italic text-[#70412D]/90 opacity-80 pt-1">
+                7 minutos diários com Deus
+              </p>
+
               {/* PREÇO */}
-              <div className="flex items-baseline justify-center gap-1.5 pt-2">
+              <div className="flex items-baseline justify-center gap-1.5 pt-1">
                 <span className="text-[18px] font-sans font-semibold text-[#70412D]/80 leading-none">
                   R$
                 </span>
@@ -512,11 +517,6 @@ export default function VendaPage() {
             </div>
 
             <ul className="text-[14px] space-y-3.5 text-left w-full px-1 mx-auto opacity-85">
-              <li className="flex items-start gap-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
-                <span>Estudos diários de apenas 7 minutos</span>
-              </li>
-
               <li className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
                 <span>Estudos em ordem guiada</span>
