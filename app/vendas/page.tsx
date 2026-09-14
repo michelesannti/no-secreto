@@ -295,11 +295,11 @@ export default function VendaPage() {
               </div>
 
               <p className="text-[17px] leading-[1.25] font-serif">
-                sua forma de entender
+                <span className="font-semibold opacity-90">7 minutos</span> para
                 <br />
-                a <span className="italic opacity-80">Palavra</span> transformada
+                entender a <span className="italic opacity-80">Palavra</span>
                 <br />
-                em <span className="italic font-semibold opacity-90">apenas 7 minutos</span>
+                de forma simples
               </p>
             </div>
 
