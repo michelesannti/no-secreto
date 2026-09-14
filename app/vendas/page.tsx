@@ -295,10 +295,11 @@ export default function VendaPage() {
               </div>
 
               <p className="text-[17px] leading-[1.2] font-serif">
-                sua forma de entender a
-                <span className="italic opacity-80"> Palavra</span>
+                sua forma de entender
                 <br />
-                é transformada
+                a <span className="italic opacity-80">Palavra</span> é transformada
+                <br />
+                em <span className="italic font-semibold opacity-90">apenas 7 minutos</span>
               </p>
             </div>
 
@@ -511,6 +512,11 @@ export default function VendaPage() {
             </div>
 
             <ul className="text-[14px] space-y-3.5 text-left w-full px-1 mx-auto opacity-85">
+              <li className="flex items-start gap-3">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
+                <span>Estudos diários de apenas 7 minutos</span>
+              </li>
+
               <li className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
                 <span>Estudos em ordem guiada</span>
