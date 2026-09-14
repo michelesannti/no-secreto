@@ -487,19 +487,21 @@ export default function VendaPage() {
 
         {/* ANCORAGEM VISUAL DE ASSINATURA + CTA PRINCIPAL */}
         <section className="mb-24 space-y-4">
-          <div className="bg-[#EFE2CC]/60 rounded-[32px] p-8 sm:p-9 border border-[#E9D5BB] text-center space-y-7 backdrop-blur-sm shadow-sm">
-            <div className="space-y-3">
-              <p className="text-[13px] uppercase tracking-[0.22em] opacity-50 font-medium">
-                Plano Mensal
-              </p>
+          <div className="bg-[#EFE2CC]/60 rounded-[32px] p-8 sm:p-9 border border-[#E9D5BB] text-center space-y-6 backdrop-blur-sm shadow-sm">
+            
+            {/* 1. PLANO MENSAL (Rótulo / Categorização clara - caixa alta, tom suave) */}
+            <p className="text-[13px] uppercase tracking-[0.22em] opacity-50 font-medium">
+              Plano Mensal
+            </p>
 
-              {/* TÍTULO DOS 7 MINUTOS DIÁRIOS */}
-              <p className="text-[15px] font-serif italic text-[#70412D]/90 opacity-80 pt-1">
-                7 minutos diários com Deus
-              </p>
+            {/* 2. 7 MINUTOS DIÁRIOS COM DEUS (Benefício e transformação - sans-serif, destaque médio) */}
+            <p className="text-[17px] font-sans font-medium text-[#70412D]/90 leading-snug">
+              7 minutos diários com Deus
+            </p>
 
-              {/* PREÇO */}
-              <div className="flex items-baseline justify-center gap-1.5 pt-1">
+            {/* 3. PREÇO (O preço - número grande e bem visível) & 4. MENOS DE R$ 1 POR DIA (Anestesia do preço) */}
+            <div className="space-y-2 pt-1">
+              <div className="flex items-baseline justify-center gap-1.5">
                 <span className="text-[18px] font-sans font-semibold text-[#70412D]/80 leading-none">
                   R$
                 </span>
@@ -511,12 +513,13 @@ export default function VendaPage() {
                 </span>
               </div>
 
-              <p className="text-[11px] uppercase tracking-[0.12em] opacity-45 pt-1">
+              <p className="text-[11px] uppercase tracking-[0.12em] opacity-45">
                 menos de R$1 por dia
               </p>
             </div>
 
-            <ul className="text-[14px] space-y-3.5 text-left w-full px-1 mx-auto opacity-85">
+            {/* LISTA DE BENEFÍCIOS */}
+            <ul className="text-[14px] space-y-3.5 text-left w-full px-1 mx-auto opacity-85 pt-2">
               <li className="flex items-start gap-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
                 <span>Estudos em ordem guiada</span>
