@@ -539,8 +539,8 @@ export default function VendaPage() {
                 </li>
               </ul>
 
-              {/* COLUNA 2: CARD 7 MIN EM DESTAQUE */}
-              <div className="border-l border-[#E9D5BB] pl-2.5 flex flex-col justify-center items-center text-center space-y-1">
+              {/* COLUNA 2: CARD 7 MIN EM DESTAQUE (AFASTADO LEVEMENTE PARA A DIREITA) */}
+              <div className="border-l border-[#E9D5BB] pl-4 ml-1 flex flex-col justify-center items-center text-center space-y-1">
                 <p className="text-[32px] font-sans font-bold text-[#70412D] leading-none">
                   7 min
                 </p>
