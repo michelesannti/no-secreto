@@ -487,20 +487,15 @@ export default function VendaPage() {
 
         {/* ANCORAGEM VISUAL DE ASSINATURA + CTA PRINCIPAL */}
         <section className="mb-24 space-y-4">
-          <div className="bg-[#EFE2CC]/60 rounded-[32px] p-8 sm:p-9 border border-[#E9D5BB] text-center space-y-6 backdrop-blur-sm shadow-sm">
+          <div className="bg-[#EFE2CC]/60 rounded-[32px] p-7 border border-[#E9D5BB] text-center space-y-6 backdrop-blur-sm shadow-sm">
             
-            {/* 1. PLANO MENSAL (Rótulo / Categorização clara - caixa alta, tom suave) */}
+            {/* 1. PLANO MENSAL */}
             <p className="text-[13px] uppercase tracking-[0.22em] opacity-50 font-medium">
               Plano Mensal
             </p>
 
-            {/* 2. 7 MINUTOS DIÁRIOS COM DEUS (Benefício e transformação - sans-serif, destaque médio) */}
-            <p className="text-[17px] font-sans font-medium text-[#70412D]/90 leading-snug">
-              7 minutos diários com Deus
-            </p>
-
-            {/* 3. PREÇO (O preço - número grande e bem visível) & 4. MENOS DE R$ 1 POR DIA (Anestesia do preço) */}
-            <div className="space-y-2 pt-1">
+            {/* 2. PREÇO & 3. ANESTESIA DO PREÇO */}
+            <div className="space-y-2 pt-1 border-b border-[#E9D5BB]/60 pb-6">
               <div className="flex items-baseline justify-center gap-1.5">
                 <span className="text-[18px] font-sans font-semibold text-[#70412D]/80 leading-none">
                   R$
@@ -518,30 +513,46 @@ export default function VendaPage() {
               </p>
             </div>
 
-            {/* LISTA DE BENEFÍCIOS */}
-            <ul className="text-[14px] space-y-3.5 text-left w-full px-1 mx-auto opacity-85 pt-2">
-              <li className="flex items-start gap-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
-                <span>Estudos em ordem guiada</span>
-              </li>
+            {/* DIVISÃO LADO A LADO: BENEFÍCIOS X TEMPO */}
+            <div className="grid grid-cols-2 gap-4 items-center text-left pt-1">
+              
+              {/* COLUNA 1: LISTA DE BENEFÍCIOS */}
+              <ul className="text-[12px] leading-tight space-y-2.5 opacity-85">
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-1" />
+                  <span>Estudos em ordem guiada</span>
+                </li>
 
-              <li className="flex items-start gap-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
-                <span>Diário espiritual individual</span>
-              </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-1" />
+                  <span>Diário espiritual individual</span>
+                </li>
 
-              <li className="flex items-start gap-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
-                <span>Registro da sua jornada</span>
-              </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-1" />
+                  <span>Registro da sua jornada</span>
+                </li>
 
-              <li className="flex items-start gap-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
-                <span>Progresso sem datas fixas</span>
-              </li>
-            </ul>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-1" />
+                  <span className="whitespace-nowrap">Progresso sem datas fixas</span>
+                </li>
+              </ul>
 
-            <div className="pt-1">
+              {/* COLUNA 2: MINUTOS / PROMESSA */}
+              <div className="border-l border-[#E9D5BB]/80 pl-4 space-y-1 text-center flex flex-col justify-center h-full">
+                <p className="text-[32px] font-sans font-bold text-[#70412D] tracking-tight leading-none tabular-nums">
+                  7 min
+                </p>
+                <p className="text-[12px] font-sans font-medium text-[#70412D]/90 leading-snug">
+                  diários para construir constância com Deus
+                </p>
+              </div>
+
+            </div>
+
+            {/* CANCELE QUANDO QUISER */}
+            <div className="pt-2 border-t border-[#E9D5BB]/40">
               <p className="text-[11px] uppercase tracking-[0.12em] opacity-45">
                 Cancele quando quiser
               </p>
@@ -700,20 +711,15 @@ export default function VendaPage() {
           </div>
         </section>
 
-        {/* CTA FINAL (APÓS O FAQ) */}
+        {/* CTA FINAL */}
         <section className="mb-8">
           <a
             href="https://pay.cakto.com.br/aovfbto_873529"
             style={styles.ctaButton}
             className="
-              block
-              text-center
-              bg-[#70412D]
-              text-white
-              py-4
-              rounded-full
               text-[16px]
               font-semibold
+              text-center
               shadow-xl
               shadow-[#70412D]/20
               active:scale-[0.98]
