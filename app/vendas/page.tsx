@@ -539,7 +539,7 @@ export default function VendaPage() {
                 </li>
               </ul>
 
-              {/* COLUNA 2: CARD 7 MIN EM DESTAQUE (AFASTADO LEVEMENTE PARA A DIREITA) */}
+              {/* COLUNA 2: CARD 7 MIN EM DESTAQUE */}
               <div className="border-l border-[#E9D5BB] pl-4 ml-1 flex flex-col justify-center items-center text-center space-y-1">
                 <p className="text-[32px] font-sans font-bold text-[#70412D] leading-none">
                   7 min
@@ -644,6 +644,11 @@ export default function VendaPage() {
                   pergunta: "Posso escolher qual livro ou capítulo estudar?",
                   resposta:
                     "Esse é o maior segredo da sua constância: o app segue uma ordem guiada e intencional para te dar clareza no dia a dia e te conduzir a uma intimidade real com Deus.",
+                },
+                {
+                  pergunta: "Quanto tempo preciso dedicar por dia?",
+                  resposta:
+                    "Apenas 7 minutos. É um momento prático para você ouvir a voz de Deus mesmo em meio à correria da rotina.",
                 },
               ].map((item, index) => (
                 <div
