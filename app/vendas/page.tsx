@@ -487,20 +487,20 @@ export default function VendaPage() {
 
         {/* ANCORAGEM VISUAL DE ASSINATURA + CTA PRINCIPAL */}
         <section className="mb-24 space-y-4">
-          <div className="bg-[#EFE2CC]/60 rounded-[32px] p-7 border border-[#E9D5BB] text-center space-y-6 backdrop-blur-sm shadow-sm">
+          <div className="bg-[#EFE2CC]/60 rounded-[32px] p-6 sm:p-8 border border-[#E9D5BB] backdrop-blur-sm shadow-sm space-y-6">
             
-            {/* 1. PLANO MENSAL */}
-            <p className="text-[13px] uppercase tracking-[0.22em] opacity-50 font-medium">
-              Plano Mensal
-            </p>
+            {/* CABEÇALHO DO PLANO */}
+            <div className="text-center space-y-2 border-b border-[#E9D5BB]/60 pb-5">
+              <p className="text-[12px] uppercase tracking-[0.22em] opacity-50 font-medium">
+                Plano Mensal
+              </p>
 
-            {/* 2. PREÇO & 3. ANESTESIA DO PREÇO */}
-            <div className="space-y-2 pt-1 border-b border-[#E9D5BB]/60 pb-6">
-              <div className="flex items-baseline justify-center gap-1.5">
+              {/* PREÇO */}
+              <div className="flex items-baseline justify-center gap-1.5 pt-1">
                 <span className="text-[18px] font-sans font-semibold text-[#70412D]/80 leading-none">
                   R$
                 </span>
-                <span className="text-[42px] font-sans font-bold text-[#70412D] tracking-tight leading-none tabular-nums">
+                <span className="text-[40px] font-sans font-bold text-[#70412D] tracking-tight leading-none tabular-nums">
                   29,90
                 </span>
                 <span className="text-[14px] font-sans font-medium text-[#70412D]/60 leading-none">
@@ -508,51 +508,50 @@ export default function VendaPage() {
                 </span>
               </div>
 
-              <p className="text-[11px] uppercase tracking-[0.12em] opacity-45">
+              <p className="text-[11px] uppercase tracking-[0.1em] opacity-45 pt-0.5">
                 menos de R$1 por dia
               </p>
             </div>
 
-            {/* DIVISÃO LADO A LADO: BENEFÍCIOS X TEMPO */}
-            <div className="grid grid-cols-2 gap-4 items-center text-left pt-1">
+            {/* LAYOUT DIVIDIDO EM 2 COLUNAS PERFEITAMENTE ALINHADO */}
+            <div className="grid grid-cols-2 gap-2 items-center">
               
               {/* COLUNA 1: LISTA DE BENEFÍCIOS */}
-              <ul className="text-[12px] leading-tight space-y-2.5 opacity-85">
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-1" />
-                  <span>Estudos em ordem guiada</span>
+              <ul className="text-[11px] leading-[1.35] space-y-2.5 text-left opacity-85">
+                <li className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0" />
+                  <span className="whitespace-nowrap">Estudos em ordem guiada</span>
                 </li>
 
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-1" />
-                  <span>Diário espiritual individual</span>
+                <li className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0" />
+                  <span className="whitespace-nowrap">Diário espiritual individual</span>
                 </li>
 
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-1" />
-                  <span>Registro da sua jornada</span>
+                <li className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0" />
+                  <span className="whitespace-nowrap">Registro da sua jornada</span>
                 </li>
 
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-1" />
+                <li className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0" />
                   <span className="whitespace-nowrap">Progresso sem datas fixas</span>
                 </li>
               </ul>
 
-              {/* COLUNA 2: MINUTOS / PROMESSA */}
-              <div className="border-l border-[#E9D5BB]/80 pl-4 space-y-1 text-center flex flex-col justify-center h-full">
-                <p className="text-[32px] font-sans font-bold text-[#70412D] tracking-tight leading-none tabular-nums">
+              {/* COLUNA 2: CARD 7 MIN EM DESTAQUE */}
+              <div className="border-l border-[#E9D5BB] pl-2.5 flex flex-col justify-center items-center text-center space-y-1">
+                <p className="text-[32px] font-sans font-bold text-[#70412D] leading-none">
                   7 min
                 </p>
-                <p className="text-[12px] font-sans font-medium text-[#70412D]/90 leading-snug">
+                <p className="text-[11px] leading-[1.25] text-[#70412D]/80">
                   diários para construir constância com Deus
                 </p>
               </div>
 
             </div>
 
-            {/* CANCELE QUANDO QUISER */}
-            <div className="pt-2 border-t border-[#E9D5BB]/40">
+            <div className="pt-2 text-center border-t border-[#E9D5BB]/40">
               <p className="text-[11px] uppercase tracking-[0.12em] opacity-45">
                 Cancele quando quiser
               </p>
@@ -711,15 +710,20 @@ export default function VendaPage() {
           </div>
         </section>
 
-        {/* CTA FINAL */}
+        {/* CTA FINAL (APÓS O FAQ) */}
         <section className="mb-8">
           <a
             href="https://pay.cakto.com.br/aovfbto_873529"
             style={styles.ctaButton}
             className="
+              block
+              text-center
+              bg-[#70412D]
+              text-white
+              py-4
+              rounded-full
               text-[16px]
               font-semibold
-              text-center
               shadow-xl
               shadow-[#70412D]/20
               active:scale-[0.98]
