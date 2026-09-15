@@ -721,14 +721,9 @@ export default function VendaPage() {
             href="https://pay.cakto.com.br/aovfbto_873529"
             style={styles.ctaButton}
             className="
-              block
-              text-center
-              bg-[#70412D]
-              text-white
-              py-4
-              rounded-full
               text-[16px]
               font-semibold
+              text-center
               shadow-xl
               shadow-[#70412D]/20
               active:scale-[0.98]
