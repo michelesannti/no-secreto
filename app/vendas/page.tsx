@@ -177,18 +177,17 @@ export default function VendaPage() {
             <div className="flex justify-center">
               <video
                 className="
-                  w-[220px]
-                  h-[390px]
-                  rounded-[26px]
+                  w-[230px]
+                  h-auto
+                  rounded-[24px]
                   shadow-2xl
                   overflow-hidden
-                  object-cover
+                  block
                 "
                 controls
                 playsInline
                 preload="metadata"
                 poster="/portal.webp"
-                style={{ width: "220px", height: "390px" }}
               >
                 <source
                   src="/videoapp.mp4"
