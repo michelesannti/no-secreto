@@ -265,7 +265,7 @@ export default function CreatorsPage() {
                 <li className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
                   <span>
-                    <strong>Divulgação:</strong> Marcar <strong>@nosecretoapp</strong> nos stories e postar em collab no feed.
+                    <strong>Divulgação:</strong> Marcar <strong><em>@nosecretoapp nos stories</em></strong> e postar em <strong><em>collab no feed</em></strong>.
                   </span>
                 </li>
               </ul>
