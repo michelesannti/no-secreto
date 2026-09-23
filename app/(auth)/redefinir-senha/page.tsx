@@ -10,9 +10,9 @@ export default function RedefinirSenhaPage() {
   const [requestSuccess, setRequestSuccess] = useState(false);
 
   useEffect(() => {
-    const savedSuccess = sessionStorage.getItem("redefinir_senha_enviado");
-    const savedEmail = sessionStorage.getItem("redefinir_senha_email");
-    const savedMessage = sessionStorage.getItem("redefinir_senha_message");
+    const savedSuccess = sessionStorage.getItem("auth_solicitacao_enviada");
+    const savedEmail = sessionStorage.getItem("auth_solicitacao_email");
+    const savedMessage = sessionStorage.getItem("auth_solicitacao_message");
 
     if (savedSuccess === "true") {
       setRequestSuccess(true);
@@ -48,9 +48,9 @@ export default function RedefinirSenhaPage() {
       setMessage(msg);
       setRequestSuccess(true);
 
-      sessionStorage.setItem("redefinir_senha_enviado", "true");
-      sessionStorage.setItem("redefinir_senha_email", email);
-      sessionStorage.setItem("redefinir_senha_message", msg);
+      sessionStorage.setItem("auth_solicitacao_enviada", "true");
+      sessionStorage.setItem("auth_solicitacao_email", email);
+      sessionStorage.setItem("auth_solicitacao_message", msg);
     } catch {
       setMessage("Erro ao solicitar redefinição. Tente novamente.");
     } finally {

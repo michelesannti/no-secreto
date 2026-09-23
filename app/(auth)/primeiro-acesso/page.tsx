@@ -23,9 +23,9 @@ function PrimeiroAcessoContent() {
   const [resetMessage, setResetMessage] = useState("");
 
   useEffect(() => {
-    const savedSuccess = sessionStorage.getItem("primeiro_acesso_enviado");
-    const savedEmail = sessionStorage.getItem("primeiro_acesso_email");
-    const savedMessage = sessionStorage.getItem("primeiro_acesso_message");
+    const savedSuccess = sessionStorage.getItem("auth_solicitacao_enviada");
+    const savedEmail = sessionStorage.getItem("auth_solicitacao_email");
+    const savedMessage = sessionStorage.getItem("auth_solicitacao_message");
 
     if (savedSuccess === "true") {
       setRequestSuccess(true);
@@ -82,9 +82,9 @@ function PrimeiroAcessoContent() {
 
       if (res.ok) {
         setRequestSuccess(true);
-        sessionStorage.setItem("primeiro_acesso_enviado", "true");
-        sessionStorage.setItem("primeiro_acesso_email", email);
-        sessionStorage.setItem("primeiro_acesso_message", msg);
+        sessionStorage.setItem("auth_solicitacao_enviada", "true");
+        sessionStorage.setItem("auth_solicitacao_email", email);
+        sessionStorage.setItem("auth_solicitacao_message", msg);
       }
 
       setRequestMessage(msg);
@@ -127,9 +127,9 @@ function PrimeiroAcessoContent() {
         password,
       });
 
-      sessionStorage.removeItem("primeiro_acesso_enviado");
-      sessionStorage.removeItem("primeiro_acesso_email");
-      sessionStorage.removeItem("primeiro_acesso_message");
+      sessionStorage.removeItem("auth_solicitacao_enviada");
+      sessionStorage.removeItem("auth_solicitacao_email");
+      sessionStorage.removeItem("auth_solicitacao_message");
 
       router.replace("/hoje");
     } catch {
