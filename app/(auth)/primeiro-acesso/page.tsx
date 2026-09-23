@@ -12,6 +12,7 @@ function PrimeiroAcessoContent() {
 
   const [email, setEmail] = useState("");
   const [requestLoading, setRequestLoading] = useState(false);
+  const [requestSuccess, setRequestSuccess] = useState(false);
   const [requestMessage, setRequestMessage] = useState("");
 
   const [password, setPassword] = useState("");
@@ -51,6 +52,8 @@ function PrimeiroAcessoContent() {
 
   async function handleRequestAccess(e: React.FormEvent) {
     e.preventDefault();
+    if (requestSuccess) return;
+
     setRequestLoading(true);
     setRequestMessage("");
 
@@ -62,6 +65,11 @@ function PrimeiroAcessoContent() {
       });
 
       const data = await res.json();
+
+      if (res.ok) {
+        setRequestSuccess(true);
+      }
+
       setRequestMessage(
         data.message || data.error || "Acesso enviado no email 🤎"
       );
@@ -234,17 +242,17 @@ function PrimeiroAcessoContent() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            disabled={requestLoading}
+            disabled={requestLoading || requestSuccess}
             className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60"
           />
 
           <button
             type="submit"
-            disabled={requestLoading}
+            disabled={requestLoading || requestSuccess}
             className="
               px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]
               text-sm tracking-wide transition
-              disabled:opacity-80 mt-2 self-center
+              disabled:opacity-60 mt-2 self-center
             "
           >
             {requestLoading ? "Enviando..." : "Continuar"}

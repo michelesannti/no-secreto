@@ -7,9 +7,12 @@ export default function RedefinirSenhaPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [requestSuccess, setRequestSuccess] = useState(false);
 
   async function handleReset(e: React.FormEvent) {
     e.preventDefault();
+
+    if (requestSuccess) return;
 
     setLoading(true);
     setMessage("");
@@ -30,6 +33,7 @@ export default function RedefinirSenhaPage() {
       }
 
       setMessage(data.message || "Email de redefinição enviado 🤎");
+      setRequestSuccess(true);
     } catch {
       setMessage("Erro ao solicitar redefinição. Tente novamente.");
     } finally {
@@ -63,20 +67,20 @@ export default function RedefinirSenhaPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            disabled={loading}
+            disabled={loading || requestSuccess}
             className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60"
           />
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || requestSuccess}
             className="
               px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]
               text-sm tracking-wide transition
-              disabled:opacity-80 mt-2 self-center
+              disabled:opacity-60 mt-2 self-center cursor-pointer disabled:cursor-not-allowed
             "
           >
-            {loading ? "Enviando..." : "Continuar"}
+            {loading ? "Enviando..." : requestSuccess ? "Enviado" : "Continuar"}
           </button>
 
           {message && (
