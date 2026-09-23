@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function RedefinirSenhaPage() {
@@ -8,6 +8,18 @@ export default function RedefinirSenhaPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [requestSuccess, setRequestSuccess] = useState(false);
+
+  useEffect(() => {
+    const savedSuccess = sessionStorage.getItem("redefinir_senha_enviado");
+    const savedEmail = sessionStorage.getItem("redefinir_senha_email");
+    const savedMessage = sessionStorage.getItem("redefinir_senha_message");
+
+    if (savedSuccess === "true") {
+      setRequestSuccess(true);
+      if (savedEmail) setEmail(savedEmail);
+      if (savedMessage) setMessage(savedMessage);
+    }
+  }, []);
 
   async function handleReset(e: React.FormEvent) {
     e.preventDefault();
@@ -32,8 +44,13 @@ export default function RedefinirSenhaPage() {
         return;
       }
 
-      setMessage(data.message || "Email de redefinição enviado 🤎");
+      const msg = data.message || "Email de redefinição enviado 🤎";
+      setMessage(msg);
       setRequestSuccess(true);
+
+      sessionStorage.setItem("redefinir_senha_enviado", "true");
+      sessionStorage.setItem("redefinir_senha_email", email);
+      sessionStorage.setItem("redefinir_senha_message", msg);
     } catch {
       setMessage("Erro ao solicitar redefinição. Tente novamente.");
     } finally {

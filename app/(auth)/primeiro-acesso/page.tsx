@@ -23,6 +23,18 @@ function PrimeiroAcessoContent() {
   const [resetMessage, setResetMessage] = useState("");
 
   useEffect(() => {
+    const savedSuccess = sessionStorage.getItem("primeiro_acesso_enviado");
+    const savedEmail = sessionStorage.getItem("primeiro_acesso_email");
+    const savedMessage = sessionStorage.getItem("primeiro_acesso_message");
+
+    if (savedSuccess === "true") {
+      setRequestSuccess(true);
+      if (savedEmail) setEmail(savedEmail);
+      if (savedMessage) setRequestMessage(savedMessage);
+    }
+  }, []);
+
+  useEffect(() => {
     if (!token) return;
 
     async function validateToken() {
@@ -66,13 +78,16 @@ function PrimeiroAcessoContent() {
 
       const data = await res.json();
 
+      const msg = data.message || data.error || "Acesso enviado no email 🤎";
+
       if (res.ok) {
         setRequestSuccess(true);
+        sessionStorage.setItem("primeiro_acesso_enviado", "true");
+        sessionStorage.setItem("primeiro_acesso_email", email);
+        sessionStorage.setItem("primeiro_acesso_message", msg);
       }
 
-      setRequestMessage(
-        data.message || data.error || "Acesso enviado no email 🤎"
-      );
+      setRequestMessage(msg);
     } catch {
       setRequestMessage("Erro ao enviar email. Tente novamente.");
     } finally {
@@ -111,6 +126,10 @@ function PrimeiroAcessoContent() {
         email: data.email,
         password,
       });
+
+      sessionStorage.removeItem("primeiro_acesso_enviado");
+      sessionStorage.removeItem("primeiro_acesso_email");
+      sessionStorage.removeItem("primeiro_acesso_message");
 
       router.replace("/hoje");
     } catch {
@@ -252,10 +271,10 @@ function PrimeiroAcessoContent() {
             className="
               px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]
               text-sm tracking-wide transition
-              disabled:opacity-60 mt-2 self-center
+              disabled:opacity-60 mt-2 self-center cursor-pointer disabled:cursor-not-allowed
             "
           >
-            {requestLoading ? "Enviando..." : "Continuar"}
+            {requestLoading ? "Enviando..." : requestSuccess ? "Enviado" : "Continuar"}
           </button>
 
           {requestMessage && (
