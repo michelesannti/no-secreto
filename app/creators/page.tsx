@@ -241,7 +241,7 @@ export default function CreatorsPage() {
                     30%
                   </p>
                   <p className="text-[10px] uppercase tracking-[0.08em] opacity-45 pt-0.5">
-                    Recorrente
+                    Todo mês
                   </p>
                 </div>
               </div>
@@ -251,14 +251,14 @@ export default function CreatorsPage() {
                 <li className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
                   <span>
-                    <strong>Alta Conversão:</strong> Menos de R$1/dia torna o app fácil de vender.
+                    <strong>Comissão Contínua:</strong> Você recebe a comissão todo mês enquanto a indicada continuar assinante.
                   </span>
                 </li>
 
                 <li className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#C6A46A] shrink-0 mt-2" />
                   <span>
-                    <strong>Ganho Acumulativo:</strong> Você recebe a comissão todos os meses enquanto a indicada continuar assinante.
+                    <strong>Ganho Acumulativo:</strong> Quanto mais indicadas, maior o seu ganho mensal.
                   </span>
                 </li>
 
