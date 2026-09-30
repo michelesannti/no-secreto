@@ -6,6 +6,22 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey);
 
+// Função auxiliar para validar e sanitizar URLs
+function isValidUrl(urlString: string, domain: string): boolean {
+  try {
+    const url = new URL(urlString.startsWith("http") ? urlString : `https://${urlString}`);
+    return url.hostname.includes(domain);
+  } catch {
+    return false;
+  }
+}
+
+function sanitizeUrl(urlString: string): string {
+  const trimmed = urlString.trim();
+  if (!trimmed) return "";
+  return trimmed.startsWith("http") ? trimmed : `https://${trimmed}`;
+}
+
 export async function POST(req: Request) {
   try {
     const { creator_id, link_instagram, tipo_conteudo, formato, link_tiktok } = await req.json();
@@ -18,13 +34,31 @@ export async function POST(req: Request) {
     }
 
     const isStory = formato === "STORY";
+    let formattedInsta = link_instagram ? sanitizeUrl(link_instagram) : "";
+    let formattedTiktok = link_tiktok ? sanitizeUrl(link_tiktok) : "";
 
-    // Se NÃO for STORY, o link do Instagram é obrigatório
-    if (!isStory && (!link_instagram || !link_instagram.trim())) {
-      return NextResponse.json(
-        { error: "O link do Instagram é obrigatório para este formato." },
-        { status: 400 }
-      );
+    // Validação para formatos que NÃO são STORY
+    if (!isStory) {
+      if (!formattedInsta) {
+        return NextResponse.json(
+          { error: "O link do Instagram é obrigatório para este formato." },
+          { status: 400 }
+        );
+      }
+
+      if (!isValidUrl(formattedInsta, "instagram.com")) {
+        return NextResponse.json(
+          { error: "Insira um link válido do Instagram" },
+          { status: 400 }
+        );
+      }
+
+      if (formattedTiktok && !isValidUrl(formattedTiktok, "tiktok.com")) {
+        return NextResponse.json(
+          { error: "Insira um link válido do TikTok" },
+          { status: 400 }
+        );
+      }
     }
 
     const { data, error } = await supabaseAdmin
@@ -33,8 +67,8 @@ export async function POST(req: Request) {
         creator_id,
         tipo_conteudo: tipo_conteudo || "RELATO",
         formato: formato || "REEL",
-        link_instagram: isStory ? null : link_instagram.trim(),
-        link_tiktok: isStory ? null : (link_tiktok?.trim() || null),
+        link_instagram: isStory ? null : formattedInsta,
+        link_tiktok: isStory ? null : (formattedTiktok || null),
       })
       .select()
       .single();
@@ -49,7 +83,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Conteúdo cadastrado🤎",
+      message: "Conteúdo registrado 🤎",
       data,
     });
   } catch (error: any) {

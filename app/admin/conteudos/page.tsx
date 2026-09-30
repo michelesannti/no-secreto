@@ -15,8 +15,8 @@ export default function AdminConteudosPage() {
 
   const [linkInstagram, setLinkInstagram] = useState("");
   const [linkTiktok, setLinkTiktok] = useState("");
-  const [tipoConteudo, setTipoConteudo] = useState("RELATO");
-  const [formato, setFormato] = useState("REEL");
+  const [tipoConteudo, setTipoConteudo] = useState("");
+  const [formato, setFormato] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [loadingCreators, setLoadingCreators] = useState(true);
@@ -82,8 +82,18 @@ export default function AdminConteudosPage() {
     if (!creatorIdToSubmit) {
       setMensagem({
         tipo: "erro",
-        texto: "Creator não encontrada. Certifique-se de digitar/selecionar uma Creator cadastrada.",
+        texto: "Creator não encontrada. Certifique-se de selecionar uma Creator cadastrada.",
       });
+      return;
+    }
+
+    if (!formato) {
+      setMensagem({ tipo: "erro", texto: "Selecione o formato do conteúdo." });
+      return;
+    }
+
+    if (!tipoConteudo) {
+      setMensagem({ tipo: "erro", texto: "Selecione o tipo do conteúdo." });
       return;
     }
 
@@ -115,6 +125,8 @@ export default function AdminConteudosPage() {
       setLinkTiktok("");
       setSelectedCreatorId("");
       setSearch("");
+      setFormato("");
+      setTipoConteudo("");
     } catch (err: any) {
       setMensagem({ tipo: "erro", texto: err.message || "Ocorreu um erro ao registrar." });
     } finally {
@@ -162,29 +174,41 @@ export default function AdminConteudosPage() {
             </datalist>
           </div>
 
-          {/* Formato e Tipo na mesma linha com rótulos internos */}
+          {/* Formato e Tipo com Rótulos Internos (Placeholder) */}
           <div className="grid grid-cols-2 gap-4">
             <select
               value={formato}
               onChange={(e) => setFormato(e.target.value)}
+              required
               disabled={loading}
-              className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] focus:outline-none text-sm disabled:opacity-60"
+              className={`bg-transparent border-b border-[#e9d5bb] p-2 focus:outline-none text-sm disabled:opacity-60 ${
+                formato === "" ? "text-[#70412d]/60" : "text-[#70412d]"
+              }`}
             >
-              <option value="REEL" className="bg-[#f9f5e9] text-[#70412d]">Formato: REEL</option>
-              <option value="FOTO" className="bg-[#f9f5e9] text-[#70412d]">Formato: FOTO</option>
-              <option value="STORY" className="bg-[#f9f5e9] text-[#70412d]">Formato: STORY</option>
+              <option value="" disabled className="bg-[#f9f5e9] text-[#70412d]/60">
+                Formato
+              </option>
+              <option value="REEL" className="bg-[#f9f5e9] text-[#70412d]">REEL</option>
+              <option value="FOTO" className="bg-[#f9f5e9] text-[#70412d]">FOTO</option>
+              <option value="STORY" className="bg-[#f9f5e9] text-[#70412d]">STORY</option>
             </select>
 
             <select
               value={tipoConteudo}
               onChange={(e) => setTipoConteudo(e.target.value)}
+              required
               disabled={loading}
-              className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] focus:outline-none text-sm disabled:opacity-60"
+              className={`bg-transparent border-b border-[#e9d5bb] p-2 focus:outline-none text-sm disabled:opacity-60 ${
+                tipoConteudo === "" ? "text-[#70412d]/60" : "text-[#70412d]"
+              }`}
             >
-              <option value="RELATO" className="bg-[#f9f5e9] text-[#70412d]">Tipo: RELATO</option>
-              <option value="ROTINA" className="bg-[#f9f5e9] text-[#70412d]">Tipo: ROTINA</option>
-              <option value="REFLEXÃO" className="bg-[#f9f5e9] text-[#70412d]">Tipo: REFLEXÃO</option>
-              <option value="EXPERIÊNCIA" className="bg-[#f9f5e9] text-[#70412d]">Tipo: EXPERIÊNCIA</option>
+              <option value="" disabled className="bg-[#f9f5e9] text-[#70412d]/60">
+                Tipo
+              </option>
+              <option value="RELATO" className="bg-[#f9f5e9] text-[#70412d]">RELATO</option>
+              <option value="ROTINA" className="bg-[#f9f5e9] text-[#70412d]">ROTINA</option>
+              <option value="REFLEXÃO" className="bg-[#f9f5e9] text-[#70412d]">REFLEXÃO</option>
+              <option value="EXPERIÊNCIA" className="bg-[#f9f5e9] text-[#70412d]">EXPERIÊNCIA</option>
             </select>
           </div>
 
@@ -214,7 +238,7 @@ export default function AdminConteudosPage() {
             disabled={loading || loadingCreators}
             className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide transition disabled:opacity-80 mt-2 self-center"
           >
-            {loading ? "Registrando..." : "Registrar Conteúdo"}
+            {loading ? "Registrando..." : "Registrar"}
           </button>
 
           {mensagem && (
