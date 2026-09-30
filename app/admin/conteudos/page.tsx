@@ -174,7 +174,7 @@ export default function AdminConteudosPage() {
             </datalist>
           </div>
 
-          {/* Formato e Tipo com Rótulos Internos (Placeholder) */}
+          {/* Formato e Tipo com Rótulos Internos Escondidos na Seleção */}
           <div className="grid grid-cols-2 gap-4">
             <select
               value={formato}
@@ -185,7 +185,7 @@ export default function AdminConteudosPage() {
                 formato === "" ? "text-[#70412d]/60" : "text-[#70412d]"
               }`}
             >
-              <option value="" disabled className="bg-[#f9f5e9] text-[#70412d]/60">
+              <option value="" disabled hidden className="bg-[#f9f5e9] text-[#70412d]/60">
                 Formato
               </option>
               <option value="REEL" className="bg-[#f9f5e9] text-[#70412d]">REEL</option>
@@ -202,7 +202,7 @@ export default function AdminConteudosPage() {
                 tipoConteudo === "" ? "text-[#70412d]/60" : "text-[#70412d]"
               }`}
             >
-              <option value="" disabled className="bg-[#f9f5e9] text-[#70412d]/60">
+              <option value="" disabled hidden className="bg-[#f9f5e9] text-[#70412d]/60">
                 Tipo
               </option>
               <option value="RELATO" className="bg-[#f9f5e9] text-[#70412d]">RELATO</option>
