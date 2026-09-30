@@ -116,7 +116,7 @@ export default function AdminCreatorsPage() {
               disabled:opacity-80 mt-2 self-center
             "
           >
-            {loading ? "Cadastrando..." : "Cadastrar Creator"}
+            {loading ? "Cadastrando..." : "Cadastrar"}
           </button>
 
           {mensagem && (
