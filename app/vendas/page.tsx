@@ -487,7 +487,7 @@ export default function VendaPage() {
         {/* ANCORAGEM VISUAL DE ASSINATURA + CTA PRINCIPAL */}
         <section className="mb-24 space-y-4">
           <div className="bg-[#EFE2CC]/60 rounded-[32px] p-6 sm:p-8 border border-[#E9D5BB] backdrop-blur-sm shadow-sm space-y-6">
-            
+
             {/* CABEÇALHO DO PLANO */}
             <div className="text-center space-y-2 border-b border-[#E9D5BB]/60 pb-5">
               <p className="text-[12px] uppercase tracking-[0.22em] opacity-50 font-medium">
@@ -514,7 +514,7 @@ export default function VendaPage() {
 
             {/* LAYOUT DIVIDIDO EM 2 COLUNAS PERFEITAMENTE ALINHADO */}
             <div className="grid grid-cols-2 gap-2 items-center">
-              
+
               {/* COLUNA 1: LISTA DE BENEFÍCIOS */}
               <ul className="text-[11px] leading-[1.35] space-y-2.5 text-left opacity-85">
                 <li className="flex items-center gap-1.5">
@@ -576,7 +576,7 @@ export default function VendaPage() {
           </a>
         </section>
 
-        {/* TRANSFORMADAS (PROVA SOCIAL) */}
+        {/* TRANSFORMADAS (PROVA SOCIAL) - ESTÁTICO (FEEDBACK 3 AO LADO E FEEDBACK 2 E 1 EMPILHADOS) */}
         <section className="mb-12">
           <div className="space-y-6">
             <div className="text-center space-y-3">
@@ -593,19 +593,29 @@ export default function VendaPage() {
               <div className="mx-auto" style={styles.divider}></div>
             </div>
 
-            <div className="space-y-4 flex flex-col items-center">
-              <img
-                src="/feedback1.webp"
-                alt="Feedback 1"
-                className="w-full h-auto block"
-                style={{ width: "100%", height: "auto" }}
-              />
-              <img
-                src="/feedback2.webp"
-                alt="Feedback 2"
-                className="w-full h-auto block"
-                style={{ width: "100%", height: "auto" }}
-              />
+            <div className="grid grid-cols-2 gap-4 items-start">
+              {/* FEEDBACK 3 (Lado esquerdo) */}
+              <div className="w-full">
+                <img
+                  src="/feedback3.webp"
+                  alt="Feedback 3"
+                  className="w-full h-auto block border border-[#E9D5BB]/60 rounded-[22px]"
+                />
+              </div>
+
+              {/* FEEDBACK 1 E FEEDBACK 2 EMPILHADOS (Lado direito) */}
+              <div className="w-full flex flex-col gap-4">
+                <img
+                  src="/feedback1.webp"
+                  alt="Feedback 1"
+                  className="w-full h-auto block rounded-[22px]"
+                />
+                <img
+                  src="/feedback2.webp"
+                  alt="Feedback 2"
+                  className="w-full h-auto block rounded-[22px]"
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -712,27 +722,6 @@ export default function VendaPage() {
               ))}
             </div>
           </div>
-        </section>
-
-        {/* CTA FINAL (APÓS O FAQ) */}
-        <section className="mb-8">
-          <a
-            href="https://pay.cakto.com.br/aovfbto_873529"
-            style={styles.ctaButton}
-            className="
-              text-[16px]
-              font-semibold
-              text-center
-              shadow-xl
-              shadow-[#70412D]/20
-              active:scale-[0.98]
-              hover:scale-[1.015]
-              transition-transform
-              duration-300
-            "
-          >
-            Quero viver isso com Deus
-          </a>
         </section>
 
       </div>
