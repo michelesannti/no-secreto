@@ -14,6 +14,7 @@ interface BlocoEstudo {
 export default function AdminEstudosPage() {
   const [livro, setLivro] = useState("");
   const [capitulo, setCapitulo] = useState<number>(1);
+  const [totalVersiculos, setTotalVersiculos] = useState<number>(30); // Padrão inicial
   const [jornadaOrdem, setJornadaOrdem] = useState<number>(1);
   const [qtdBlocos, setQtdBlocos] = useState<number | "">("");
   const [carregandoProximo, setCarregandoProximo] = useState(true);
@@ -25,7 +26,7 @@ export default function AdminEstudosPage() {
   const [loading, setLoading] = useState(false);
   const [mensagem, setMensagem] = useState<{ tipo: "sucesso" | "erro"; texto: string } | null>(null);
 
-  // Consulta a API Admin para trazer o próximo estudo sequencial
+  // Consulta a API Admin para trazer o próximo estudo sequencial e o total de versículos do capítulo
   const carregarProximoCapitulo = async () => {
     setCarregandoProximo(true);
     try {
@@ -35,6 +36,7 @@ export default function AdminEstudosPage() {
       if (data.proximoLivro && data.proximoCapitulo) {
         setLivro(data.proximoLivro);
         setCapitulo(data.proximoCapitulo);
+        setTotalVersiculos(data.totalVersiculos || 30);
         setJornadaOrdem(data.proximaJornadaOrdem || data.proximoCapitulo);
 
         setBlocos([
@@ -128,11 +130,20 @@ export default function AdminEstudosPage() {
     }
   };
 
+  // Gerador de opções de versículos reais para o select de Fim
+  const gerarOpcoesVersiculos = (inicio: number) => {
+    const opcoes = [];
+    for (let v = inicio; v <= totalVersiculos; v++) {
+      opcoes.push(v);
+    }
+    return opcoes;
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f9f5e9] px-6 py-12">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center bg-[#f9f5e9] px-4 py-12">
+      <div className="w-full max-w-md">
         {/* Cabeçalho Identidade No Secreto */}
-        <div className="mb-12 text-center space-y-4">
+        <div className="mb-8 text-center space-y-4">
           <img
             src="/logo.webp"
             alt="No Secreto"
@@ -147,8 +158,8 @@ export default function AdminEstudosPage() {
           </div>
         </div>
 
-        {/* Formulário Estilo Login / Creators */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+        {/* Formulário Estilo Login / Creators / Cards de Estudo */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           {carregandoProximo ? (
             <p className="text-xs text-center text-[#70412d]/60 italic">
               Buscando próximo capítulo do banco...
@@ -156,7 +167,7 @@ export default function AdminEstudosPage() {
           ) : (
             <>
               {/* Referência do Capítulo */}
-              <p className="text-lg font-serif font-semibold text-[#70412d] text-center">
+              <p className="text-xl font-serif font-semibold text-[#70412d] text-center">
                 {livro} {capitulo}
               </p>
 
@@ -166,87 +177,132 @@ export default function AdminEstudosPage() {
                 onChange={(e) => handleQtdBlocosChange(parseInt(e.target.value, 10))}
                 disabled={loading}
                 required
-                className={`bg-transparent border-b border-[#e9d5bb] p-2 focus:outline-none disabled:opacity-60 ${
+                className={`bg-transparent border-b border-[#e9d5bb] p-2 focus:outline-none disabled:opacity-60 text-sm ${
                   qtdBlocos === "" ? "text-[#70412d]/60" : "text-[#70412d]"
                 }`}
               >
                 <option value="" disabled hidden className="bg-[#f9f5e9] text-[#70412d]/60">
-                  Quantidade de Estudos
+                  Total de Estudos
                 </option>
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                   <option key={num} value={num} className="bg-[#f9f5e9] text-[#70412d]">
-                    {num}
+                    {num} {num === 1 ? "Estudo" : "Estudos"}
                   </option>
                 ))}
               </select>
 
-              {/* Blocos de Estudos */}
-              <div className="flex flex-col gap-8">
+              {/* Cards de Estudos */}
+              <div className="flex flex-col gap-6">
                 {blocos.map((bloco, idx) => (
-                  <div key={idx} className="flex flex-col gap-8 pt-4 border-t border-[#e9d5bb]/60">
-                    <div className="text-xs font-serif text-[#70412d]/70 tracking-wider uppercase">
-                      Bloco {idx + 1} de {qtdBlocos || 1}
+                  <div
+                    key={idx}
+                    className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl overflow-hidden shadow-sm flex flex-col backdrop-blur-sm"
+                  >
+                    {/* Header do Estudo */}
+                    <div className="bg-[#EFE2CC] px-4 py-3 flex items-center justify-between border-b border-[#E9D5BB]">
+                      <span className="text-xs font-bold uppercase tracking-wider text-[#70412d]">
+                        Estudo {idx + 1}
+                      </span>
+                      
+                      {/* Inputs de Versículos com Título unificado */}
+                      <div className="flex flex-col items-center">
+                        <label className="text-[10px] font-bold tracking-wider text-[#70412d] uppercase mb-1">
+                          VERSÍCULOS
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="number"
+                            value={bloco.versiculo_inicio}
+                            readOnly
+                            className="w-16 bg-white/60 border border-[#E9D5BB] rounded-lg px-2.5 py-1 text-sm text-[#70412d]/80 text-center focus:outline-none cursor-not-allowed shadow-inner"
+                          />
+                          <span className="text-xs text-[#70412d]/60">até</span>
+                          <select
+                            value={bloco.versiculo_fim}
+                            onChange={(e) =>
+                              handleBlocoChange(idx, "versiculo_fim", e.target.value ? parseInt(e.target.value, 10) : "")
+                            }
+                            required
+                            disabled={loading}
+                            className={`w-20 bg-white border border-[#E9D5BB] rounded-lg px-2 py-1 text-sm text-center focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 shadow-inner ${
+                              bloco.versiculo_fim === "" ? "text-[#70412d]/60" : "text-[#70412d]"
+                            }`}
+                          >
+                            <option value="" disabled hidden>
+                              {""}
+                            </option>
+                            {gerarOpcoesVersiculos(bloco.versiculo_inicio).map((v) => (
+                              <option key={v} value={v} className="bg-[#f9f5e9] text-[#70412d]">
+                                {v}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Versículos */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <input
-                        type="number"
-                        placeholder="Versículo Início"
-                        value={bloco.versiculo_inicio}
-                        readOnly
-                        className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60 cursor-not-allowed"
-                      />
+                    {/* Conteúdo do Card */}
+                    <div className="p-4 flex flex-col gap-4">
+                      {/* Versículos */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-bold tracking-wider text-[#70412d]/80 uppercase">
+                          VERSÍCULOS
+                        </label>
+                        <textarea
+                          rows={3}
+                          placeholder="Insira os versículos..."
+                          value={bloco.texto}
+                          onChange={(e) => handleBlocoChange(idx, "texto", e.target.value)}
+                          disabled={loading}
+                          className="bg-white border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d] placeholder:text-[#70412d]/40 focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 resize-none shadow-inner"
+                        />
+                      </div>
 
-                      <input
-                        type="number"
-                        min={bloco.versiculo_inicio}
-                        placeholder="Versículo Fim"
-                        value={bloco.versiculo_fim}
-                        onChange={(e) =>
-                          handleBlocoChange(idx, "versiculo_fim", e.target.value ? parseInt(e.target.value, 10) : "")
-                        }
-                        required
-                        disabled={loading}
-                        className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60"
-                      />
+                      {/* Contexto */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-bold tracking-wider text-[#70412d]/80 uppercase">
+                          CONTEXTO
+                        </label>
+                        <textarea
+                          rows={2}
+                          placeholder="Resumo do contexto..."
+                          value={bloco.contexto}
+                          onChange={(e) => handleBlocoChange(idx, "contexto", e.target.value)}
+                          disabled={loading}
+                          className="bg-white border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d] placeholder:text-[#70412d]/40 focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 resize-none shadow-inner"
+                        />
+                      </div>
+
+                      {/* Aplicação */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-bold tracking-wider text-[#70412d]/80 uppercase">
+                          APLICAÇÃO
+                        </label>
+                        <textarea
+                          rows={2}
+                          placeholder="Aplicação prática..."
+                          value={bloco.aplicacao}
+                          onChange={(e) => handleBlocoChange(idx, "aplicacao", e.target.value)}
+                          disabled={loading}
+                          className="bg-white border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d] placeholder:text-[#70412d]/40 focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 resize-none shadow-inner"
+                        />
+                      </div>
+
+                      {/* Destaque */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-bold tracking-wider text-[#70412d]/80 uppercase">
+                          DESTAQUE
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Frase curta de destaque"
+                          value={bloco.destaque}
+                          onChange={(e) => handleBlocoChange(idx, "destaque", e.target.value)}
+                          disabled={loading}
+                          className="bg-white border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d] placeholder:text-[#70412d]/40 focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 shadow-inner"
+                        />
+                      </div>
                     </div>
-
-                    <textarea
-                      rows={3}
-                      placeholder="Texto"
-                      value={bloco.texto}
-                      onChange={(e) => handleBlocoChange(idx, "texto", e.target.value)}
-                      disabled={loading}
-                      className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60 resize-none"
-                    />
-
-                    <textarea
-                      rows={2}
-                      placeholder="Contexto"
-                      value={bloco.contexto}
-                      onChange={(e) => handleBlocoChange(idx, "contexto", e.target.value)}
-                      disabled={loading}
-                      className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60 resize-none"
-                    />
-
-                    <textarea
-                      rows={2}
-                      placeholder="Aplicação"
-                      value={bloco.aplicacao}
-                      onChange={(e) => handleBlocoChange(idx, "aplicacao", e.target.value)}
-                      disabled={loading}
-                      className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60 resize-none"
-                    />
-
-                    <input
-                      type="text"
-                      placeholder="Destaque"
-                      value={bloco.destaque}
-                      onChange={(e) => handleBlocoChange(idx, "destaque", e.target.value)}
-                      disabled={loading}
-                      className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60"
-                    />
                   </div>
                 ))}
               </div>
@@ -255,8 +311,8 @@ export default function AdminEstudosPage() {
                 type="submit"
                 disabled={loading}
                 className="
-                  px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9]
-                  text-sm tracking-wide transition
+                  px-8 py-3 rounded-full bg-[#70412d] text-[#f9f5e9]
+                  text-sm font-medium tracking-wide transition shadow-md hover:bg-[#5c3524]
                   disabled:opacity-80 mt-2 self-center
                 "
               >
@@ -267,7 +323,7 @@ export default function AdminEstudosPage() {
 
           {mensagem && (
             <p
-              className={`text-sm text-center ${
+              className={`text-sm text-center font-medium ${
                 mensagem.tipo === "sucesso" ? "text-[#70412d]" : "text-[#9b2c2c]"
               }`}
             >

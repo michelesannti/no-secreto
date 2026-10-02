@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    apple: "/apple-touch-icon.webp",
   },
 
   openGraph: {
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     siteName: "No Secreto",
     images: [
       {
-        url: "/og.png",
+        url: "/og.webp",
         width: 1200,
         height: 630,
       },
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "No Secreto",
     description: "Seu tempo com Deus começa aqui 🤎",
-    images: ["/og.png"],
+    images: ["/og.webp"],
   },
 };
 

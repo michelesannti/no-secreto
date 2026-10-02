@@ -1,47 +1,61 @@
+// otimizar.js
 const sharp = require("sharp");
 const fs = require("fs");
 const path = require("path");
 
-const images = [
-  { name: "logo", width: 300 },
-  { name: "portal", width: 450 },
-  { name: "contexto", width: 450 },
-  { name: "aplicacao", width: 450 },
-  { name: "diario", width: 450 },
-  { name: "perfil", width: 500 },
-  { name: "feedback1", width: 800 },
-  { name: "feedback2", width: 800 },
-];
-
 async function run() {
-  const targetNames = images.map((i) => i.name.toLowerCase());
+  const publicDir = path.join(__dirname, "public");
+  const files = fs.readdirSync(publicDir);
 
-  // 1. Otimiza e gera os arquivos .webp
-  for (const img of images) {
-    const files = fs.readdirSync("./public");
-    const found = files.find((f) => f.toLowerCase().startsWith(img.name + "."));
-    if (found) {
-      const inputPath = path.join("./public", found);
-      const outputPath = path.join("./public", `${img.name}.webp`);
-      await sharp(inputPath)
-        .resize({ width: img.width })
-        .webp({ quality: 85 })
-        .toFile(outputPath);
-      console.log(`✅ Otimizada: ${img.name}.webp`);
-    }
+  // Filtra apenas imagens originais (.png, .jpg, .jpeg)
+  const imagensOriginais = files.filter((file) => {
+    const ext = path.extname(file).toLowerCase();
+    return [".png", ".jpg", ".jpeg"].includes(ext);
+  });
+
+  if (imagensOriginais.length === 0) {
+    console.log("✨ Nenhuma imagem nova para otimizar.");
+    return;
   }
 
-  // 2. Remove com segurança apenas os originais antigos que foram convertidos
-  const allFiles = fs.readdirSync("./public");
-  allFiles.forEach((file) => {
-    const ext = path.extname(file).toLowerCase();
-    const baseName = path.basename(file, path.extname(file)).toLowerCase();
+  for (const file of imagensOriginais) {
+    const ext = path.extname(file);
+    const baseName = path.basename(file, ext);
+    const inputPath = path.join(publicDir, file);
+    const outputPath = path.join(publicDir, `${baseName}.webp`);
 
-    if (targetNames.includes(baseName) && ext !== ".webp") {
-      fs.unlinkSync(path.join("./public", file));
-      console.log(`🗑️ Removido antigo com segurança: ${file}`);
+    try {
+      // Define largura inteligente baseada no nome
+      let larguraDesejada = 800; // Padrão excelente para feedbacks e imagens maiores
+      const nomeLower = baseName.toLowerCase();
+
+      if (nomeLower.includes("logo")) larguraDesejada = 300;
+      else if (nomeLower.includes("perfil")) larguraDesejada = 500;
+      else if (
+        nomeLower.includes("portal") ||
+        nomeLower.includes("contexto") ||
+        nomeLower.includes("aplicacao") ||
+        nomeLower.includes("diario")
+      ) {
+        larguraDesejada = 450;
+      }
+
+      // Converte para WebP mantendo alta qualidade
+      await sharp(inputPath)
+        .resize({ width: larguraDesejada, withoutEnlargement: true })
+        .webp({ quality: 85 })
+        .toFile(outputPath);
+
+      console.log(`✅ Convertida com sucesso: ${baseName}.webp`);
+
+      // Apaga o arquivo original na mesma hora para evitar duplicação
+      fs.unlinkSync(inputPath);
+      console.log(`🗑️ Original removido: ${file}`);
+
+    } catch (error) {
+      console.error(`❌ Erro ao processar a imagem ${file}:`, error);
     }
-  });
+  }
 }
 
 run();
