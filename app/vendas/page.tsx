@@ -576,7 +576,7 @@ export default function VendaPage() {
           </a>
         </section>
 
-        {/* TRANSFORMADAS (PROVA SOCIAL) - DUAS COLUNAS COM ROLAGEM LATERAL */}
+        {/* TRANSFORMADAS (PROVA SOCIAL) - DUAS COLUNAS COM ROLAGEM LATERAL VISÍVEL */}
         <section className="mb-12">
           <div className="space-y-6">
             <div className="text-center space-y-3">
@@ -593,11 +593,11 @@ export default function VendaPage() {
               <div className="mx-auto" style={styles.divider}></div>
             </div>
 
-            {/* Container com rolagem lateral suave */}
-            <div className="flex overflow-x-auto gap-4 pb-4 pt-1 snap-x snap-mandatory scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none]">
+            {/* Container com rolagem lateral e barra visível */}
+            <div className="flex overflow-x-auto gap-4 pb-4 pt-1 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-[#D9C2A0] scrollbar-track-[#E9D5BB]/20">
               
-              {/* COLUNA 1: Feedback 3 sozinho (com borda e sombra) */}
-              <div className="min-w-[270px] sm:min-w-[300px] w-full snap-center shrink-0">
+              {/* COLUNA 1: Feedback 3 maior (com borda e sombra) */}
+              <div className="w-[260px] sm:w-[280px] snap-center shrink-0">
                 <img
                   src="/feedback3.webp"
                   alt="Feedback 3"
@@ -605,8 +605,8 @@ export default function VendaPage() {
                 />
               </div>
 
-              {/* COLUNA 2: Feedback 1 e 2 empilhados (sem bordas, originais) */}
-              <div className="min-w-[270px] sm:min-w-[300px] w-full snap-center shrink-0 flex flex-col gap-4">
+              {/* COLUNA 2: Feedback 1 e 2 empilhados maiores (sem bordas, originais) */}
+              <div className="w-[260px] sm:w-[280px] snap-center shrink-0 flex flex-col gap-4">
                 <img
                   src="/feedback1.webp"
                   alt="Feedback 1"
