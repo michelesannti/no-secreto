@@ -576,7 +576,7 @@ export default function VendaPage() {
           </a>
         </section>
 
-        {/* TRANSFORMADAS (PROVA SOCIAL) - ESTÁTICO (FEEDBACK 3 AO LADO E FEEDBACK 2 E 1 EMPILHADOS) */}
+        {/* TRANSFORMADAS (PROVA SOCIAL) - COM ROLAGEM LATERAL E FEEDBACKS MAIORES */}
         <section className="mb-12">
           <div className="space-y-6">
             <div className="text-center space-y-3">
@@ -593,27 +593,32 @@ export default function VendaPage() {
               <div className="mx-auto" style={styles.divider}></div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 items-start">
-              {/* FEEDBACK 3 (Lado esquerdo) */}
-              <div className="w-full">
+            {/* Container com rolagem lateral (scroll horizontal) */}
+            <div className="overflow-x-auto flex gap-4 pb-4 no-scrollbar items-start">
+              {/* FEEDBACK 3 */}
+              <div className="min-w-[270px] max-w-[270px] shrink-0">
                 <img
                   src="/feedback3.webp"
                   alt="Feedback 3"
-                  className="w-full h-auto block border border-[#E9D5BB]/60 rounded-[22px]"
+                  className="w-full h-auto block border border-[#E9D5BB]/60 rounded-[22px] shadow-lg"
                 />
               </div>
 
-              {/* FEEDBACK 1 E FEEDBACK 2 EMPILHADOS (Lado direito) */}
-              <div className="w-full flex flex-col gap-4">
+              {/* FEEDBACK 1 */}
+              <div className="min-w-[270px] max-w-[270px] shrink-0">
                 <img
                   src="/feedback1.webp"
                   alt="Feedback 1"
-                  className="w-full h-auto block rounded-[22px]"
+                  className="w-full h-auto block rounded-[22px] shadow-lg"
                 />
+              </div>
+
+              {/* FEEDBACK 2 */}
+              <div className="min-w-[270px] max-w-[270px] shrink-0">
                 <img
                   src="/feedback2.webp"
                   alt="Feedback 2"
-                  className="w-full h-auto block rounded-[22px]"
+                  className="w-full h-auto block rounded-[22px] shadow-lg"
                 />
               </div>
             </div>
