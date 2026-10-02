@@ -576,7 +576,7 @@ export default function VendaPage() {
           </a>
         </section>
 
-        {/* TRANSFORMADAS (PROVA SOCIAL) - COM ROLAGEM LATERAL E FEEDBACKS MAIORES */}
+        {/* TRANSFORMADAS (PROVA SOCIAL) - DUAS COLUNAS COM ROLAGEM LATERAL */}
         <section className="mb-12">
           <div className="space-y-6">
             <div className="text-center space-y-3">
@@ -593,34 +593,32 @@ export default function VendaPage() {
               <div className="mx-auto" style={styles.divider}></div>
             </div>
 
-            {/* Container com rolagem lateral (scroll horizontal) */}
-            <div className="overflow-x-auto flex gap-4 pb-4 no-scrollbar items-start">
-              {/* FEEDBACK 3 */}
-              <div className="min-w-[270px] max-w-[270px] shrink-0">
+            {/* Container com rolagem lateral suave */}
+            <div className="flex overflow-x-auto gap-4 pb-4 pt-1 snap-x snap-mandatory scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none]">
+              
+              {/* COLUNA 1: Feedback 3 sozinho (com borda e sombra) */}
+              <div className="min-w-[270px] sm:min-w-[300px] w-full snap-center shrink-0">
                 <img
                   src="/feedback3.webp"
                   alt="Feedback 3"
-                  className="w-full h-auto block border border-[#E9D5BB]/60 rounded-[22px] shadow-lg"
+                  className="w-full h-auto block border border-[#E9D5BB]/60 rounded-[24px] shadow-lg"
                 />
               </div>
 
-              {/* FEEDBACK 1 */}
-              <div className="min-w-[270px] max-w-[270px] shrink-0">
+              {/* COLUNA 2: Feedback 1 e 2 empilhados (sem bordas, originais) */}
+              <div className="min-w-[270px] sm:min-w-[300px] w-full snap-center shrink-0 flex flex-col gap-4">
                 <img
                   src="/feedback1.webp"
                   alt="Feedback 1"
-                  className="w-full h-auto block rounded-[22px] shadow-lg"
+                  className="w-full h-auto block rounded-[24px]"
                 />
-              </div>
-
-              {/* FEEDBACK 2 */}
-              <div className="min-w-[270px] max-w-[270px] shrink-0">
                 <img
                   src="/feedback2.webp"
                   alt="Feedback 2"
-                  className="w-full h-auto block rounded-[22px] shadow-lg"
+                  className="w-full h-auto block rounded-[24px]"
                 />
               </div>
+
             </div>
           </div>
         </section>
