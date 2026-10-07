@@ -9,12 +9,13 @@ interface BlocoEstudo {
   contexto: string;
   aplicacao: string;
   destaque: string;
+  carregandoTexto?: boolean;
 }
 
 export default function AdminEstudosPage() {
   const [livro, setLivro] = useState("");
   const [capitulo, setCapitulo] = useState<number>(1);
-  const [totalVersiculos, setTotalVersiculos] = useState<number>(30); // Padrão inicial
+  const [totalVersiculos, setTotalVersiculos] = useState<number>(30);
   const [jornadaOrdem, setJornadaOrdem] = useState<number>(1);
   const [qtdBlocos, setQtdBlocos] = useState<number | "">("");
   const [carregandoProximo, setCarregandoProximo] = useState(true);
@@ -26,7 +27,6 @@ export default function AdminEstudosPage() {
   const [loading, setLoading] = useState(false);
   const [mensagem, setMensagem] = useState<{ tipo: "sucesso" | "erro"; texto: string } | null>(null);
 
-  // Consulta a API Admin para trazer o próximo estudo sequencial e o total de versículos do capítulo
   const carregarProximoCapitulo = async () => {
     setCarregandoProximo(true);
     try {
@@ -54,6 +54,36 @@ export default function AdminEstudosPage() {
   useEffect(() => {
     carregarProximoCapitulo();
   }, []);
+
+  // Função para buscar o texto automático dos versículos chamando a rota limpa /versiculos
+  const buscarTextoAutomatico = async (index: number, inicio: number, fim: number) => {
+    if (!fim || fim < inicio) return;
+
+    setBlocos((prev) => {
+      const copy = [...prev];
+      copy[index].carregandoTexto = true;
+      return copy;
+    });
+
+    try {
+      const res = await fetch(`/api/admin/estudos/versiculos?livro=${encodeURIComponent(livro)}&capitulo=${capitulo}&inicio=${inicio}&fim=${fim}`);
+      const data = await res.json();
+
+      setBlocos((prev) => {
+        const copy = [...prev];
+        copy[index].texto = data.texto || "";
+        copy[index].carregandoTexto = false;
+        return copy;
+      });
+    } catch (error) {
+      console.error("Erro ao buscar texto automático:", error);
+      setBlocos((prev) => {
+        const copy = [...prev];
+        copy[index].carregandoTexto = false;
+        return copy;
+      });
+    }
+  };
 
   const handleQtdBlocosChange = (novaQtd: number) => {
     setQtdBlocos(novaQtd);
@@ -83,8 +113,12 @@ export default function AdminEstudosPage() {
       const copy = [...prev];
       copy[index] = { ...copy[index], [field]: value };
 
-      if (field === "versiculo_fim" && value && copy[index + 1]) {
-        copy[index + 1].versiculo_inicio = parseInt(value, 10) + 1;
+      if (field === "versiculo_fim" && value) {
+        const fimNum = parseInt(value, 10);
+        if (copy[index + 1]) {
+          copy[index + 1].versiculo_inicio = fimNum + 1;
+        }
+        buscarTextoAutomatico(index, copy[index].versiculo_inicio, fimNum);
       }
 
       return copy;
@@ -130,7 +164,6 @@ export default function AdminEstudosPage() {
     }
   };
 
-  // Gerador de opções de versículos reais para o select de Fim
   const gerarOpcoesVersiculos = (inicio: number) => {
     const opcoes = [];
     for (let v = inicio; v <= totalVersiculos; v++) {
@@ -142,14 +175,12 @@ export default function AdminEstudosPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f9f5e9] px-4 py-12">
       <div className="w-full max-w-md">
-        {/* Cabeçalho Identidade No Secreto */}
         <div className="mb-8 text-center space-y-4">
           <img
             src="/logo.webp"
             alt="No Secreto"
             className="w-24 h-24 mx-auto object-contain"
           />
-
           <div>
             <h1 className="text-xl font-serif tracking-wide text-[#70412d]">
               Estudo Bíblico
@@ -158,7 +189,6 @@ export default function AdminEstudosPage() {
           </div>
         </div>
 
-        {/* Formulário Estilo Login / Creators / Cards de Estudo */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           {carregandoProximo ? (
             <p className="text-xs text-center text-[#70412d]/60 italic">
@@ -166,12 +196,10 @@ export default function AdminEstudosPage() {
             </p>
           ) : (
             <>
-              {/* Referência do Capítulo */}
               <p className="text-xl font-serif font-semibold text-[#70412d] text-center">
                 {livro} {capitulo}
               </p>
 
-              {/* Seletor de Quantidade de Estudos */}
               <select
                 value={qtdBlocos}
                 onChange={(e) => handleQtdBlocosChange(parseInt(e.target.value, 10))}
@@ -191,20 +219,17 @@ export default function AdminEstudosPage() {
                 ))}
               </select>
 
-              {/* Cards de Estudos */}
               <div className="flex flex-col gap-6">
                 {blocos.map((bloco, idx) => (
                   <div
                     key={idx}
                     className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl overflow-hidden shadow-sm flex flex-col backdrop-blur-sm"
                   >
-                    {/* Header do Estudo */}
                     <div className="bg-[#EFE2CC] px-4 py-3 flex items-center justify-between border-b border-[#E9D5BB]">
                       <span className="text-xs font-bold uppercase tracking-wider text-[#70412d]">
                         Estudo {idx + 1}
                       </span>
                       
-                      {/* Inputs de Versículos com Título unificado */}
                       <div className="flex flex-col items-center">
                         <label className="text-[10px] font-bold tracking-wider text-[#70412d] uppercase mb-1">
                           VERSÍCULOS
@@ -241,24 +266,22 @@ export default function AdminEstudosPage() {
                       </div>
                     </div>
 
-                    {/* Conteúdo do Card */}
                     <div className="p-4 flex flex-col gap-4">
-                      {/* Versículos */}
+                      {/* Campo de Versículos (Automático / Somente Leitura) */}
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-bold tracking-wider text-[#70412d]/80 uppercase">
-                          VERSÍCULOS
+                        <label className="text-[10px] font-bold tracking-wider text-[#70412d]/80 uppercase flex items-center justify-between">
+                          <span>VERSÍCULOS (Automático)</span>
+                          {bloco.carregandoTexto && <span className="text-[9px] italic text-[#70412d]/60">Buscando texto...</span>}
                         </label>
                         <textarea
-                          rows={3}
-                          placeholder="Insira os versículos..."
+                          rows={4}
+                          placeholder="Selecione o versículo final acima para carregar o texto..."
                           value={bloco.texto}
-                          onChange={(e) => handleBlocoChange(idx, "texto", e.target.value)}
-                          disabled={loading}
-                          className="bg-white border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d] placeholder:text-[#70412d]/40 focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 resize-none shadow-inner"
+                          readOnly
+                          className="bg-white/80 border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d]/90 placeholder:text-[#70412d]/40 focus:outline-none resize-none shadow-inner cursor-not-allowed font-sans"
                         />
                       </div>
 
-                      {/* Contexto */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-[10px] font-bold tracking-wider text-[#70412d]/80 uppercase">
                           CONTEXTO
@@ -273,7 +296,6 @@ export default function AdminEstudosPage() {
                         />
                       </div>
 
-                      {/* Aplicação */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-[10px] font-bold tracking-wider text-[#70412d]/80 uppercase">
                           APLICAÇÃO
@@ -288,7 +310,6 @@ export default function AdminEstudosPage() {
                         />
                       </div>
 
-                      {/* Destaque */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-[10px] font-bold tracking-wider text-[#70412d]/80 uppercase">
                           DESTAQUE

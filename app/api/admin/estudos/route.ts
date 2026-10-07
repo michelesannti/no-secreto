@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { obterTextoFormatadoNVI } from "@/lib/biblia-helper";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-// Mapeamento oficial completo dos 66 livros e seus limites de capítulos (Bíblia NVI)
 const limitesLivrosBiblia: Record<string, number> = {
   "Gênesis": 50, "Êxodo": 40, "Levítico": 27, "Números": 36, "Deuteronômio": 34,
   "Josué": 24, "Juízes": 21, "Rute": 4, "1 Samuel": 31, "2 Samuel": 24,
@@ -24,7 +24,6 @@ const limitesLivrosBiblia: Record<string, number> = {
   "3 João": 1, "Judas": 1, "Apocalipse": 22
 };
 
-// Mapeamento específico de versículos por capítulo para garantir precisão cirúrgica (ex: Gênesis 34 = 31 versículos)
 const totalVersiculosPorCapitulo: Record<string, Record<number, number>> = {
   "Gênesis": {
     1: 31, 2: 25, 3: 24, 4: 26, 5: 32, 6: 22, 7: 24, 8: 22, 9: 29, 10: 32,
@@ -34,6 +33,15 @@ const totalVersiculosPorCapitulo: Record<string, Record<number, number>> = {
     41: 57, 42: 38, 43: 34, 44: 34, 45: 28, 46: 34, 47: 31, 48: 22, 49: 33, 50: 26
   }
 };
+
+function gerarSlugJornada(livro: string, capitulo: number): string {
+  const livroNormalizado = livro
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-");
+  return `${livroNormalizado}-${capitulo}`;
+}
 
 export async function GET() {
   try {
@@ -50,7 +58,22 @@ export async function GET() {
 
     if (ultimoEstudo) {
       proximoLivro = ultimoEstudo.livro;
-      proximoCapitulo = ultimoEstudo.capitulo + 1;
+      const maxCapitulos = limitesLivrosBiblia[proximoLivro] || 50;
+      
+      if (ultimoEstudo.capitulo < maxCapitulos) {
+        proximoCapitulo = ultimoEstudo.capitulo + 1;
+      } else {
+        // Se acabou o livro atual, avança para o próximo livro da lista (lógica simples de sequência)
+        const chavesLivros = Object.keys(limitesLivrosBiblia);
+        const indexAtual = chavesLivros.indexOf(proximoLivro);
+        if (indexAtual !== -1 && indexAtual < chavesLivros.length - 1) {
+          proximoLivro = chavesLivros[indexAtual + 1];
+          proximoCapitulo = 1;
+        } else {
+          proximoLivro = "Gênesis";
+          proximoCapitulo = 1;
+        }
+      }
       proximaJornadaOrdem = (ultimoEstudo.jornada_ordem || ultimoEstudo.capitulo) + 1;
     }
 
@@ -76,35 +99,35 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Dados incompletos para o cadastro." }, { status: 400 });
     }
 
-    // Processa os blocos e formata o texto com o padrão exato (número + espaçamento duplo)
-    const registros = blocos.map((bloco: any, index: number) => {
-      let textoFormatado = "";
-      
-      for (let v = bloco.versiculo_inicio; v <= bloco.versiculo_fim; v++) {
-        const linhaVersiculo = `${v} [Texto NVI oficial de ${livro} ${capitulo}:${v}]`;
-        
-        if (v === bloco.versiculo_inicio) {
-          textoFormatado += linhaVersiculo;
-        } else {
-          textoFormatado += `\n\n${linhaVersiculo}`;
-        }
-      }
+    const slugJornada = gerarSlugJornada(livro, capitulo);
+    const jornadaExibicaoStr = `${livro} ${capitulo}`;
 
-      return {
-        livro,
-        capitulo,
-        versiculo_inicio: bloco.versiculo_inicio,
-        versiculo_fim: bloco.versiculo_fim,
-        texto: textoFormatado,
-        contexto: bloco.contexto,
-        aplicacao: bloco.aplicacao,
-        destaque: bloco.destaque,
-        ordem: index + 1,
-        jornada: `Jornada ${livro}`,
-        jornada_exibicao: `${livro} ${capitulo}`,
-        jornada_ordem: jornada_ordem || capitulo
-      };
-    });
+    // Processa cada bloco buscando o texto real através do helper da Bíblia
+    const registros = await Promise.all(
+      blocos.map(async (bloco: any, index: number) => {
+        let textoFormatado = bloco.texto;
+
+        // Se o texto não foi preenchido manualmente no front, busca automaticamente
+        if (!textoFormatado || textoFormatado.trim() === "") {
+          textoFormatado = await obterTextoFormatadoNVI(livro, capitulo, bloco.versiculo_inicio, bloco.versiculo_fim);
+        }
+
+        return {
+          livro,
+          capitulo,
+          versiculo_inicio: bloco.versiculo_inicio,
+          versiculo_fim: bloco.versiculo_fim,
+          texto: textoFormatado,
+          contexto: bloco.contexto,
+          aplicacao: bloco.aplicacao,
+          destaque: bloco.destaque,
+          ordem: index + 1,
+          jornada: slugJornada,             // Ex: "genesis-34"
+          jornada_exibicao: jornadaExibicaoStr, // Ex: "Gênesis 34"
+          jornada_ordem: jornada_ordem || capitulo
+        };
+      })
+    );
 
     const { error: insertError } = await supabase.from("estudos").insert(registros);
 
@@ -113,7 +136,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({
-      message: `Estudos de ${livro} ${capitulo} registrados com sucesso! 🤎`
+      message: `Estudo de ${livro} ${capitulo} registrado 🤎`
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
