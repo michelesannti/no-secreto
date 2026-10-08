@@ -270,7 +270,7 @@ export default function AdminEstudosPage() {
                       {/* Campo de Versículos (Automático / Somente Leitura) */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-[10px] font-bold tracking-wider text-[#70412d]/80 uppercase flex items-center justify-between">
-                          <span>VERSÍCULOS (Automático)</span>
+                          <span>VERSÍCULOS </span>
                           {bloco.carregandoTexto && <span className="text-[9px] italic text-[#70412d]/60">Buscando texto...</span>}
                         </label>
                         <textarea
@@ -288,11 +288,10 @@ export default function AdminEstudosPage() {
                         </label>
                         <textarea
                           rows={2}
-                          placeholder="Resumo do contexto..."
                           value={bloco.contexto}
                           onChange={(e) => handleBlocoChange(idx, "contexto", e.target.value)}
                           disabled={loading}
-                          className="bg-white border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d] placeholder:text-[#70412d]/40 focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 resize-none shadow-inner"
+                          className="bg-white border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d] focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 resize-none shadow-inner"
                         />
                       </div>
 
@@ -302,11 +301,10 @@ export default function AdminEstudosPage() {
                         </label>
                         <textarea
                           rows={2}
-                          placeholder="Aplicação prática..."
                           value={bloco.aplicacao}
                           onChange={(e) => handleBlocoChange(idx, "aplicacao", e.target.value)}
                           disabled={loading}
-                          className="bg-white border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d] placeholder:text-[#70412d]/40 focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 resize-none shadow-inner"
+                          className="bg-white border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d] focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 resize-none shadow-inner"
                         />
                       </div>
 
@@ -316,11 +314,10 @@ export default function AdminEstudosPage() {
                         </label>
                         <input
                           type="text"
-                          placeholder="Frase curta de destaque"
                           value={bloco.destaque}
                           onChange={(e) => handleBlocoChange(idx, "destaque", e.target.value)}
                           disabled={loading}
-                          className="bg-white border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d] placeholder:text-[#70412d]/40 focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 shadow-inner"
+                          className="bg-white border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d] focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 shadow-inner"
                         />
                       </div>
                     </div>
