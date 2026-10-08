@@ -192,7 +192,7 @@ export default function AdminEstudosPage() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           {carregandoProximo ? (
             <p className="text-xs text-center text-[#70412d]/60 italic">
-              Buscando próximo capítulo do banco...
+              Buscando próximo capítulo...
             </p>
           ) : (
             <>
@@ -275,7 +275,6 @@ export default function AdminEstudosPage() {
                         </label>
                         <textarea
                           rows={4}
-                          placeholder="Selecione o versículo final acima para carregar o texto..."
                           value={bloco.texto}
                           readOnly
                           className="bg-white/80 border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d]/90 placeholder:text-[#70412d]/40 focus:outline-none resize-none shadow-inner cursor-not-allowed font-sans"
