@@ -100,60 +100,63 @@ function DiarioContent() {
     if (!userId || !estudoId) return;
 
     setSaving(true);
-
-    const supabase = getSupabaseClient();
-
     const dataLocal = getHojeBrasil();
 
-    await supabase.from("diario").upsert({
-      user_id: userId,
-      estudo_id: estudoId,
-      destaque,
-      texto,
-      data_local: dataLocal,
-    });
+    try {
+      const response = await fetch("/api/diario/finalizar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          estudoId,
+          destaque,
+          texto,
+          dataLocal,
+        }),
+      });
 
-    await supabase.from("progresso").upsert({
-      user_id: userId,
-      estudo_id: estudoId,
-      data_local: dataLocal,
-    });
+      if (!response.ok) {
+        throw new Error("Erro ao finalizar");
+      }
 
-    localStorage.removeItem(
-      `liberado-finalizar-${estudoId}`
-    );
-    localStorage.removeItem(
-      `diario-${userId}-${estudoId}`
-    );
+      localStorage.removeItem(`liberado-finalizar-${estudoId}`);
+      localStorage.removeItem(`diario-${userId}-${estudoId}`);
 
-    const { data: estudosJornada } = await supabase
-      .from("estudos")
-      .select("id")
-      .eq("jornada", jornada);
+      const supabase = getSupabaseClient();
 
-    const { data: progressoAtualizado } = await supabase
-      .from("progresso")
-      .select("estudo_id")
-      .eq("user_id", userId);
+      const { data: estudosJornada } = await supabase
+        .from("estudos")
+        .select("id")
+        .eq("jornada", jornada);
 
-    const concluidosIds =
-      progressoAtualizado?.map((p: any) => p.estudo_id) || [];
+      const { data: progressoAtualizado } = await supabase
+        .from("progresso")
+        .select("estudo_id")
+        .eq("user_id", userId);
 
-    const todosIds =
-      estudosJornada?.map((e: any) => e.id) || [];
+      const concluidosIds =
+        progressoAtualizado?.map((p: any) => p.estudo_id) || [];
 
-    const finalizouJornada =
-      todosIds.every((id: any) =>
-        concluidosIds.includes(id)
-      );
+      const todosIds =
+        estudosJornada?.map((e: any) => e.id) || [];
 
-    if (finalizouJornada) {
-      localStorage.setItem("jornadaConcluidaNome", jornadaNome);
+      const finalizouJornada =
+        todosIds.every((id: any) =>
+          concluidosIds.includes(id)
+        );
+
+      if (finalizouJornada) {
+        localStorage.setItem("jornadaConcluidaNome", jornadaNome);
+        router.push("/perfil");
+        return;
+      }
+
       router.push("/perfil");
-      return;
+    } catch (error) {
+      console.error(error);
+      alert("Houve um erro ao salvar. Tente novamente.");
+      setSaving(false);
     }
-
-    router.push("/perfil");
   }
 
   if (!ready)
