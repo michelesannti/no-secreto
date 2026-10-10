@@ -12,14 +12,14 @@ export async function GET() {
       supabaseAdmin.from("progresso").select("*", { count: "exact", head: true }),
     ]);
 
+    // Busca de TODOS os perfis que são PAGO ou CREATOR
     const { data: profiles, error: errProfiles } = await supabaseAdmin
       .from("profiles")
-      .select("id, nome, instagram, email, creator, acesso, created_at")
-      .eq("ativo", true)
+      .select("id, nome, instagram, email, creator, acesso, ativo, created_at")
       .or("acesso.eq.PAGO,creator.eq.true");
 
     if (errProfiles) {
-      throw new Error("Erro ao buscar perfis ativos no banco.");
+      throw new Error("Erro ao buscar perfis no banco.");
     }
 
     const validUserIds = (profiles || []).map((p) => p.id);
@@ -30,30 +30,29 @@ export async function GET() {
       .in("user_id", validUserIds.length > 0 ? validUserIds : ["00000000-0000-0000-0000-000000000000"])
       .order("data_local", { ascending: false });
 
-    const usuariasDetalhes = (profiles || [])
-      .map((p) => {
-        const userProgresso = (progressoList || []).filter((pr) => pr.user_id === p.id);
-        const estudosUnicos = Array.from(new Set(userProgresso.map((pr) => pr.estudo_id)));
+    const usuariasDetalhes = (profiles || []).map((p) => {
+      const userProgresso = (progressoList || []).filter((pr) => pr.user_id === p.id);
+      const estudosUnicos = Array.from(new Set(userProgresso.map((pr) => pr.estudo_id)));
 
-        const primeiroEstudoReg = userProgresso[userProgresso.length - 1];
-        const ultimoEstudoReg = userProgresso[0];
+      const primeiroEstudoReg = userProgresso[userProgresso.length - 1];
+      const ultimoEstudoReg = userProgresso[0];
 
-        return {
-          id: p.id,
-          nome: p.nome || "Usuária",
-          instagram: p.instagram || "",
-          email: p.email || "",
-          creator: p.creator || false,
-          acesso: p.acesso,
-          data_entrada: p.created_at,
-          estudos_concluidos: estudosUnicos.length,
-          primeiro_estudo: primeiroEstudoReg ? primeiroEstudoReg.data_local : null,
-          ultimo_estudo: ultimoEstudoReg ? ultimoEstudoReg.data_local : null,
-        };
-      })
-      .filter((u) => u.estudos_concluidos > 0);
+      return {
+        id: p.id,
+        nome: p.nome || "Usuária",
+        instagram: p.instagram || "",
+        email: p.email || "",
+        creator: p.creator || false,
+        ativo: p.ativo ?? true,
+        acesso: p.acesso,
+        data_entrada: p.created_at,
+        estudos_concluidos: estudosUnicos.length,
+        primeiro_estudo: primeiroEstudoReg ? primeiroEstudoReg.data_local : null,
+        ultimo_estudo: ultimoEstudoReg ? ultimoEstudoReg.data_local : null,
+      };
+    });
 
-    // Ordenação interna por data de estudo mais recente e quantidade de estudos
+    // Ordenação por último estudo
     usuariasDetalhes.sort((a, b) => {
       const dataA = a.ultimo_estudo || "";
       const dataB = b.ultimo_estudo || "";

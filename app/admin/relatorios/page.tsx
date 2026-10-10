@@ -8,6 +8,7 @@ interface UsuariaDetalhe {
   instagram: string;
   email: string;
   creator: boolean;
+  ativo?: boolean;
   acesso?: string;
   estudos_concluidos: number;
   primeiro_estudo: string | null;
@@ -118,8 +119,16 @@ export default function AdminRelatoriosPage() {
     return strData;
   };
 
-  const clientesList = (data.usuariasDetalhes || []).filter((u) => u.acesso === "PAGO");
-  const creatorsList = (data.usuariasDetalhes || []).filter((u) => u.creator);
+  // Base Absoluta (Apenas por tipo)
+  const clientesTotal = (data.usuariasDetalhes || []).filter((u) => u.acesso === "PAGO");
+  const creatorsTotal = (data.usuariasDetalhes || []).filter((u) => u.creator);
+
+  // Lista da Tabela (Somente quem tem > 0 estudos)
+  const clientesComEstudos = clientesTotal.filter((u) => u.estudos_concluidos > 0);
+  const creatorsComEstudos = creatorsTotal.filter((u) => u.estudos_concluidos > 0);
+
+  // Total Geral de Usuárias com Acesso Ativo
+  const totalUsuariasComAcesso = (data.usuariasDetalhes || []).filter((u) => u.ativo).length;
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d] px-4 py-8 md:px-6 md:py-10 selection:bg-[#e9d5bb]">
@@ -172,13 +181,13 @@ export default function AdminRelatoriosPage() {
           </p>
         ) : abaAtiva === "metricas" ? (
           /* ABA 1: VISUALIZAÇÃO DE MÉTRICAS */
-          <div className="space-y-8">
+          <div className="space-y-6">
             
-            {/* Card Cakto (Mês Atual) */}
+            {/* Card Cakto (Mês Atual) Padronizado */}
             <div className="grid grid-cols-1 gap-4">
-              <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-5 shadow-sm space-y-3">
-                <span className="text-[11px] font-bold tracking-wider uppercase text-[#70412d]/80 block border-b border-[#e9d5bb] pb-2">
-                  💳 CAKTO (MÊS ATUAL)
+              <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-3 sm:p-5 shadow-sm space-y-4">
+                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d] text-center flex items-center justify-center border-b border-[#e9d5bb] pb-2 leading-none">
+                  CAKTO (MÊS ATUAL)
                 </span>
                 <div className="grid grid-cols-3 gap-2 text-xs">
                   <div className="flex justify-between py-1 border-r border-[#e9d5bb]/40 pr-2">
@@ -197,13 +206,23 @@ export default function AdminRelatoriosPage() {
               </div>
             </div>
 
-            {/* Grid Lado a Lado Obrigatório em Todas as Telas */}
+            {/* Resumo de Usuárias com Acesso Ativo */}
+            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl px-5 py-3 shadow-sm flex items-center justify-between text-xs">
+              <span className="font-bold uppercase tracking-wider text-[#70412d]/80 text-[11px]">
+                👥 TOTAL DE USUÁRIAS COM ACESSO (ATIVO = TRUE)
+              </span>
+              <span className="font-mono font-bold text-[#70412d] text-sm">
+                {totalUsuariasComAcesso}
+              </span>
+            </div>
+
+            {/* Grid Lado a Lado */}
             <div className="grid grid-cols-2 gap-3 sm:gap-6 items-start">
               
               {/* Tabela 1: Clientes Pagantes */}
               <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-3 sm:p-5 shadow-sm space-y-4">
                 <span className="text-sm font-bold tracking-wider uppercase text-[#70412d] text-center flex items-center justify-center border-b border-[#e9d5bb] pb-2 leading-none">
-                  CLIENTES ({clientesList.length})
+                  CLIENTES ({clientesComEstudos.length} / {clientesTotal.length})
                 </span>
 
                 <div className="overflow-x-auto">
@@ -216,8 +235,8 @@ export default function AdminRelatoriosPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#e9d5bb]/60">
-                      {clientesList.length > 0 ? (
-                        clientesList.map((u) => (
+                      {clientesComEstudos.length > 0 ? (
+                        clientesComEstudos.map((u) => (
                           <tr key={u.id} className="hover:bg-[#e9d5bb]/20 transition-colors">
                             <td className="py-2.5 font-medium text-[#70412d]">
                               <div className="font-bold">{u.nome}</div>
@@ -236,7 +255,7 @@ export default function AdminRelatoriosPage() {
                       ) : (
                         <tr>
                           <td colSpan={3} className="py-6 text-center text-[#70412d]/60 italic">
-                            Nenhuma cliente pagante com estudos concluídos.
+                            Nenhuma cliente com estudos concluídos.
                           </td>
                         </tr>
                       )}
@@ -248,7 +267,7 @@ export default function AdminRelatoriosPage() {
               {/* Tabela 2: Creators & Parceiras */}
               <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-3 sm:p-5 shadow-sm space-y-4">
                 <span className="text-sm font-bold tracking-wider uppercase text-[#70412d] text-center flex items-center justify-center border-b border-[#e9d5bb] pb-2 leading-none">
-                  CREATORS ({creatorsList.length})
+                  CREATORS ({creatorsComEstudos.length} / {creatorsTotal.length})
                 </span>
 
                 <div className="overflow-x-auto">
@@ -261,8 +280,8 @@ export default function AdminRelatoriosPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#e9d5bb]/60">
-                      {creatorsList.length > 0 ? (
-                        creatorsList.map((u) => (
+                      {creatorsComEstudos.length > 0 ? (
+                        creatorsComEstudos.map((u) => (
                           <tr key={u.id} className="hover:bg-[#e9d5bb]/20 transition-colors">
                             <td className="py-2.5 font-medium text-[#70412d]">
                               <div className="font-bold">{u.nome}</div>
