@@ -197,11 +197,11 @@ export default function AdminRelatoriosPage() {
               </div>
             </div>
 
-            {/* Grid Lado a Lado no Desktop */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            {/* Grid Lado a Lado Obrigatório em Todas as Telas */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-6 items-start">
               
               {/* Tabela 1: Clientes Pagantes */}
-              <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-5 shadow-sm space-y-4">
+              <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-3 sm:p-5 shadow-sm space-y-4">
                 <span className="text-sm font-bold tracking-wider uppercase text-[#70412d] text-center flex items-center justify-center border-b border-[#e9d5bb] pb-2 leading-none">
                   CLIENTES ({clientesList.length})
                 </span>
@@ -221,7 +221,7 @@ export default function AdminRelatoriosPage() {
                           <tr key={u.id} className="hover:bg-[#e9d5bb]/20 transition-colors">
                             <td className="py-2.5 font-medium text-[#70412d]">
                               <div className="font-bold">{u.nome}</div>
-                              <div className="text-[10px] text-[#70412d]/60">
+                              <div className="text-[10px] text-[#70412d]/60 truncate max-w-[90px] sm:max-w-none">
                                 {u.instagram ? `@${u.instagram}` : u.email}
                               </div>
                             </td>
@@ -246,7 +246,7 @@ export default function AdminRelatoriosPage() {
               </div>
 
               {/* Tabela 2: Creators & Parceiras */}
-              <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-5 shadow-sm space-y-4">
+              <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-3 sm:p-5 shadow-sm space-y-4">
                 <span className="text-sm font-bold tracking-wider uppercase text-[#70412d] text-center flex items-center justify-center border-b border-[#e9d5bb] pb-2 leading-none">
                   CREATORS ({creatorsList.length})
                 </span>
@@ -266,7 +266,7 @@ export default function AdminRelatoriosPage() {
                           <tr key={u.id} className="hover:bg-[#e9d5bb]/20 transition-colors">
                             <td className="py-2.5 font-medium text-[#70412d]">
                               <div className="font-bold">{u.nome}</div>
-                              <div className="text-[10px] text-[#70412d]/60">
+                              <div className="text-[10px] text-[#70412d]/60 truncate max-w-[90px] sm:max-w-none">
                                 {u.instagram ? `@${u.instagram}` : u.email}
                               </div>
                             </td>
