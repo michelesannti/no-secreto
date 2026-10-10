@@ -8,6 +8,7 @@ interface UsuariaDetalhe {
   instagram: string;
   email: string;
   creator: boolean;
+  acesso?: string;
   estudos_concluidos: number;
   primeiro_estudo: string | null;
   ultimo_estudo: string | null;
@@ -117,9 +118,12 @@ export default function AdminRelatoriosPage() {
     return strData;
   };
 
+  const clientesList = (data.usuariasDetalhes || []).filter((u) => u.acesso === "PAGO");
+  const creatorsList = (data.usuariasDetalhes || []).filter((u) => u.creator);
+
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d] px-4 py-8 md:px-6 md:py-10 selection:bg-[#e9d5bb]">
-      <div className="max-w-3xl mx-auto space-y-8">
+      <div className="max-w-5xl mx-auto space-y-8">
         
         {/* Cabeçalho */}
         <div className="text-center space-y-3">
@@ -193,62 +197,101 @@ export default function AdminRelatoriosPage() {
               </div>
             </div>
 
-            {/* Tabela Destrinchada */}
-            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-6 shadow-sm space-y-4">
-              <div className="border-b border-[#e9d5bb] pb-2 text-center">
-                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d] block">
-                  📖 ESTUDOS
+            {/* Grid Lado a Lado no Desktop */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+              
+              {/* Tabela 1: Clientes Pagantes */}
+              <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-5 shadow-sm space-y-4">
+                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d] text-center flex items-center justify-center border-b border-[#e9d5bb] pb-2 leading-none">
+                  CLIENTES ({clientesList.length})
                 </span>
-              </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead>
-                    <tr className="border-b border-[#e9d5bb] text-[#70412d]/60 uppercase text-[10px]">
-                      <th className="pb-2 font-bold">USUÁRIA ({data.usuariasDetalhes?.length || 0})</th>
-                      <th className="pb-2 font-bold">Tipo</th>
-                      <th className="pb-2 text-center font-bold">Estudos Concluídos</th>
-                      <th className="pb-2 text-right font-bold">Último Estudo</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#e9d5bb]/60">
-                    {data.usuariasDetalhes && data.usuariasDetalhes.length > 0 ? (
-                      data.usuariasDetalhes.map((u) => (
-                        <tr key={u.id} className="hover:bg-[#e9d5bb]/20 transition-colors">
-                          <td className="py-3 font-medium text-[#70412d]">
-                            <div className="font-bold">{u.nome}</div>
-                            <div className="text-[10px] text-[#70412d]/60">
-                              {u.instagram ? `@${u.instagram}` : u.email}
-                            </div>
-                          </td>
-                          <td className="py-3">
-                            <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
-                              u.creator 
-                                ? "bg-[#e9d5bb] text-[#70412d]" 
-                                : "bg-[#70412d] text-[#f9f5e9]"
-                            }`}>
-                              {u.creator ? "CREATOR" : "CLIENTE"}
-                            </span>
-                          </td>
-                          <td className="py-3 text-center font-mono font-bold text-[#70412d]">
-                            {u.estudos_concluidos}
-                          </td>
-                          <td className="py-3 text-right font-mono text-[11px] text-[#70412d]/80">
-                            {formatarData(u.ultimo_estudo)}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead>
+                      <tr className="border-b border-[#e9d5bb] text-[#70412d]/60 uppercase text-[10px]">
+                        <th className="pb-2 font-bold">Usuária</th>
+                        <th className="pb-2 text-center font-bold">Estudos</th>
+                        <th className="pb-2 text-center font-bold">Último</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#e9d5bb]/60">
+                      {clientesList.length > 0 ? (
+                        clientesList.map((u) => (
+                          <tr key={u.id} className="hover:bg-[#e9d5bb]/20 transition-colors">
+                            <td className="py-2.5 font-medium text-[#70412d]">
+                              <div className="font-bold">{u.nome}</div>
+                              <div className="text-[10px] text-[#70412d]/60">
+                                {u.instagram ? `@${u.instagram}` : u.email}
+                              </div>
+                            </td>
+                            <td className="py-2.5 text-center font-mono font-bold text-[#70412d]">
+                              {u.estudos_concluidos}
+                            </td>
+                            <td className="py-2.5 text-center font-mono text-[11px] text-[#70412d]/80">
+                              {formatarData(u.ultimo_estudo)}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={3} className="py-6 text-center text-[#70412d]/60 italic">
+                            Nenhuma cliente pagante com estudos concluídos.
                           </td>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan={4} className="py-6 text-center text-[#70412d]/60 italic">
-                          Nenhuma usuária com estudos concluídos encontrada.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
+
+              {/* Tabela 2: Creators & Parceiras */}
+              <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-5 shadow-sm space-y-4">
+                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d] text-center flex items-center justify-center border-b border-[#e9d5bb] pb-2 leading-none">
+                  CREATORS ({creatorsList.length})
+                </span>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead>
+                      <tr className="border-b border-[#e9d5bb] text-[#70412d]/60 uppercase text-[10px]">
+                        <th className="pb-2 font-bold">Usuária</th>
+                        <th className="pb-2 text-center font-bold">Estudos</th>
+                        <th className="pb-2 text-center font-bold">Último</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#e9d5bb]/60">
+                      {creatorsList.length > 0 ? (
+                        creatorsList.map((u) => (
+                          <tr key={u.id} className="hover:bg-[#e9d5bb]/20 transition-colors">
+                            <td className="py-2.5 font-medium text-[#70412d]">
+                              <div className="font-bold">{u.nome}</div>
+                              <div className="text-[10px] text-[#70412d]/60">
+                                {u.instagram ? `@${u.instagram}` : u.email}
+                              </div>
+                            </td>
+                            <td className="py-2.5 text-center font-mono font-bold text-[#70412d]">
+                              {u.estudos_concluidos}
+                            </td>
+                            <td className="py-2.5 text-center font-mono text-[11px] text-[#70412d]/80">
+                              {formatarData(u.ultimo_estudo)}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={3} className="py-6 text-center text-[#70412d]/60 italic">
+                            Nenhuma creator com estudos concluídos.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
             </div>
+
           </div>
         ) : (
           /* ABA 2: PREENCHIMENTO DO RELATÓRIO OPERACIONAL */

@@ -8,12 +8,10 @@ const supabaseAdmin = createClient(
 
 export async function GET() {
   try {
-    // 1. Total geral de estudos concluídos na tabela progresso
     const [{ count: estudosConcluidosTotal }] = await Promise.all([
       supabaseAdmin.from("progresso").select("*", { count: "exact", head: true }),
     ]);
 
-    // 2. Perfis ativos que sejam clientes pagantes (acesso = PAGO) ou creators (creator = TRUE)
     const { data: profiles, error: errProfiles } = await supabaseAdmin
       .from("profiles")
       .select("id, nome, instagram, email, creator, acesso, created_at")
@@ -26,14 +24,12 @@ export async function GET() {
 
     const validUserIds = (profiles || []).map((p) => p.id);
 
-    // 3. Busca o progresso de todas as usuárias válidas, ordenado do mais recente para o mais antigo
     const { data: progressoList } = await supabaseAdmin
       .from("progresso")
       .select("user_id, estudo_id, data_local")
       .in("user_id", validUserIds.length > 0 ? validUserIds : ["00000000-0000-0000-0000-000000000000"])
       .order("data_local", { ascending: false });
 
-    // 4. Mapeia e filtra apenas quem tem estudos concluídos (> 0)
     const usuariasDetalhes = (profiles || [])
       .map((p) => {
         const userProgresso = (progressoList || []).filter((pr) => pr.user_id === p.id);
@@ -57,23 +53,13 @@ export async function GET() {
       })
       .filter((u) => u.estudos_concluidos > 0);
 
-    // 5. Ordenação ESTRATÉGICA com Foco Comercial:
-    // 1º Clientes Pagantes (acesso === 'PAGO') vêm ANTES das Creators (creator === true)
-    // 2º Dentro do mesmo grupo, quem estudou mais recentemente (data_local desc)
-    // 3º Desempate por quantidade de estudos
+    // Ordenação interna por data de estudo mais recente e quantidade de estudos
     usuariasDetalhes.sort((a, b) => {
-      const isPaganteA = a.acesso === "PAGO";
-      const isPaganteB = b.acesso === "PAGO";
-
-      if (isPaganteA && !isPaganteB) return -1;
-      if (!isPaganteA && isPaganteB) return 1;
-
       const dataA = a.ultimo_estudo || "";
       const dataB = b.ultimo_estudo || "";
       if (dataA !== dataB) {
         return dataB.localeCompare(dataA);
       }
-
       return b.estudos_concluidos - a.estudos_concluidos;
     });
 
