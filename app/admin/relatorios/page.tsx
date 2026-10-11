@@ -82,6 +82,11 @@ export default function AdminRelatoriosPage() {
   const initialFim = hojeIso;
   const { strInicioIso: initialInicio, periodoTexto: initialPeriodoSemanal } = calcularIntervaloPorTipo(initialFim, "semanal");
 
+  // Mês anterior travado para o relatório mensal
+  const dataMesAnterior = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1);
+  const mesAnteriorNome = dataMesAnterior.toLocaleDateString("pt-BR", { month: "long" });
+  const mesAnteriorFormatado = `${mesAnteriorNome.charAt(0).toUpperCase() + mesAnteriorNome.slice(1)} / ${dataMesAnterior.getFullYear()}`;
+
   const [data, setData] = useState<RelatoriosData>({
     tipoRelatorio: "semanal",
     periodo: initialPeriodoSemanal,
@@ -147,13 +152,10 @@ export default function AdminRelatoriosPage() {
           periodo: periodoTexto,
         }));
       } else {
-        const mesNome = hoje.toLocaleDateString("pt-BR", { month: "long" });
-        const mesFormatado = mesNome.charAt(0).toUpperCase() + mesNome.slice(1);
-        const pMesStr = `${mesFormatado} / ${hoje.getFullYear()}`;
         setData((prev) => ({
           ...prev,
           tipoRelatorio: "mensal",
-          periodo: pMesStr,
+          periodo: mesAnteriorFormatado,
         }));
       }
       return;
@@ -326,15 +328,8 @@ export default function AdminRelatoriosPage() {
   const hAtivacaoAfiliadas = Math.round((vAtivacaoAfiliadas / maxMetasVal) * 100);
   const hMonetizacao = Math.round((vMonetizacao / maxMetasVal) * 100);
 
-  const opcoesMeses: string[] = [];
-  const anoAtualNum = hoje.getFullYear();
-  const mesAtualIdx = hoje.getMonth();
-  for (let i = 0; i <= mesAtualIdx; i++) {
-    const dataMes = new Date(anoAtualNum, mesAtualIdx - i, 1);
-    const mesNome = dataMes.toLocaleDateString("pt-BR", { month: "long" });
-    const mesFormatado = mesNome.charAt(0).toUpperCase() + mesNome.slice(1);
-    opcoesMeses.push(`${mesFormatado} / ${anoAtualNum}`);
-  }
+  // Classe utilitária para esconder setinhas nos campos numéricos
+  const inputSemSetinhasClass = "w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d] px-4 py-8 md:px-6 md:py-10 selection:bg-[#e9d5bb]">
@@ -354,7 +349,7 @@ export default function AdminRelatoriosPage() {
             <div className="w-12 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
           </div>
 
-          {/* Seletor de Abas */}
+          {/* Seletor de Abas com emojis */}
           <div className="flex justify-center gap-2 pt-4">
             <button
               type="button"
@@ -660,7 +655,7 @@ export default function AdminRelatoriosPage() {
           /* ABA 2: PREENCHIMENTO DO RELATÓRIO OPERACIONAL */
           <form onSubmit={handleSalvar} className="space-y-8">
             
-            {/* SELETOR DE TIPO (SEMANAL, QUINZENAL, MENSAL) E CALENDÁRIO COM ATÉ NO MEIO */}
+            {/* SELETOR DE TIPO (SEMANAL, QUINZENAL, MENSAL) E PERÍODO AUTO-PREENCHIDO/TRAVADO */}
             <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
                 <div>
@@ -696,52 +691,36 @@ export default function AdminRelatoriosPage() {
                   </div>
                 ) : (
                   <div>
-                    <select
-                      value={data.periodo || opcoesMeses[0]}
-                      onChange={(e) => handleChange("periodo", "", e.target.value)}
-                      className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
-                    >
-                      {opcoesMeses.map((op, idx) => (
-                        <option key={idx} value={op}>
-                          {op}
-                        </option>
-                      ))}
-                    </select>
+                    <input
+                      type="text"
+                      value={mesAnteriorFormatado}
+                      disabled
+                      className="w-full bg-[#E9D5BB]/40 border border-[#E9D5BB] rounded-xl px-3 py-2 text-xs text-[#70412d] font-bold text-center uppercase tracking-wider cursor-not-allowed focus:outline-none"
+                    />
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-4">
+            {/* SEÇÃO UNIFICADA 1: REDES SOCIAIS (EM PRIMEIRO LUGAR - SEM EMOJIS) */}
+            <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-6">
               <span className="text-xs font-bold tracking-wider text-[#70412d] uppercase block border-b border-[#E9D5BB] pb-2">
-                ⚡ SUPABASE (CONTEÚDOS)
+                REDES SOCIAIS
               </span>
-              <div>
-                <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Conteúdos Publicados</label>
-                <input
-                  type="number"
-                  value={data.supabase.conteudosPublicados}
-                  onChange={(e) => handleChange("supabase", "conteudosPublicados", e.target.value)}
-                  placeholder="0"
-                  className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
-                />
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-4">
-                <span className="text-xs font-bold tracking-wider text-[#70412d] uppercase block border-b border-[#E9D5BB] pb-2">
-                  📸 INSTAGRAM
+              {/* Subbloco Instagram */}
+              <div className="space-y-3">
+                <span className="text-[11px] font-bold text-[#70412d]/90 uppercase block">
+                  INSTAGRAM
                 </span>
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Seguidores</label>
                     <input
                       type="number"
                       value={data.instagram.seguidores}
                       onChange={(e) => handleChange("instagram", "seguidores", e.target.value)}
-                      placeholder="0"
-                      className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
+                      className={inputSemSetinhasClass}
                     />
                   </div>
                   <div>
@@ -750,8 +729,7 @@ export default function AdminRelatoriosPage() {
                       type="number"
                       value={data.instagram.visitasPerfil}
                       onChange={(e) => handleChange("instagram", "visitasPerfil", e.target.value)}
-                      placeholder="0"
-                      className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
+                      className={inputSemSetinhasClass}
                     />
                   </div>
                   <div>
@@ -760,26 +738,28 @@ export default function AdminRelatoriosPage() {
                       type="number"
                       value={data.instagram.cliquesBio}
                       onChange={(e) => handleChange("instagram", "cliquesBio", e.target.value)}
-                      placeholder="0"
-                      className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
+                      className={inputSemSetinhasClass}
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-4">
-                <span className="text-xs font-bold tracking-wider text-[#70412d] uppercase block border-b border-[#E9D5BB] pb-2">
-                  🎵 TIKTOK
+              {/* Divisor interno suave */}
+              <div className="border-t border-[#E9D5BB]/60 pt-2"></div>
+
+              {/* Subbloco TikTok */}
+              <div className="space-y-3">
+                <span className="text-[11px] font-bold text-[#70412d]/90 uppercase block">
+                  TIKTOK
                 </span>
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Seguidores</label>
                     <input
                       type="number"
                       value={data.tiktok.seguidores}
                       onChange={(e) => handleChange("tiktok", "seguidores", e.target.value)}
-                      placeholder="0"
-                      className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
+                      className={inputSemSetinhasClass}
                     />
                   </div>
                   <div>
@@ -788,17 +768,33 @@ export default function AdminRelatoriosPage() {
                       type="number"
                       value={data.tiktok.visitasPerfil}
                       onChange={(e) => handleChange("tiktok", "visitasPerfil", e.target.value)}
-                      placeholder="0"
-                      className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
+                      className={inputSemSetinhasClass}
                     />
                   </div>
                 </div>
               </div>
             </div>
 
+            {/* SEÇÃO 2: SUPABASE (SEM EMOJIS) */}
             <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-4">
               <span className="text-xs font-bold tracking-wider text-[#70412d] uppercase block border-b border-[#E9D5BB] pb-2">
-                💳 VENDAS ({mesAtualNome})
+                SUPABASE (CONTEÚDOS)
+              </span>
+              <div>
+                <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Conteúdos Publicados</label>
+                <input
+                  type="number"
+                  value={data.supabase.conteudosPublicados}
+                  onChange={(e) => handleChange("supabase", "conteudosPublicados", e.target.value)}
+                  className={inputSemSetinhasClass}
+                />
+              </div>
+            </div>
+
+            {/* SEÇÃO 3: VENDAS (SEM EMOJIS) */}
+            <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-4">
+              <span className="text-xs font-bold tracking-wider text-[#70412d] uppercase block border-b border-[#E9D5BB] pb-2">
+                VENDAS ({data.tipoRelatorio === "mensal" ? mesAnteriorFormatado : mesAtualNome})
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
@@ -807,8 +803,7 @@ export default function AdminRelatoriosPage() {
                     type="number"
                     value={data?.cakto?.vendas ?? ""}
                     onChange={(e) => handleChange("cakto", "vendas", e.target.value)}
-                    placeholder="0"
-                    className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
+                    className={inputSemSetinhasClass}
                   />
                 </div>
                 <div>
@@ -817,8 +812,7 @@ export default function AdminRelatoriosPage() {
                     type="number"
                     value={data?.cakto?.vendasAbandonadas ?? ""}
                     onChange={(e) => handleChange("cakto", "vendasAbandonadas", e.target.value)}
-                    placeholder="0"
-                    className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
+                    className={inputSemSetinhasClass}
                   />
                 </div>
                 <div>
@@ -827,8 +821,7 @@ export default function AdminRelatoriosPage() {
                     type="number"
                     value={data?.cakto?.vendasAfiliadas ?? ""}
                     onChange={(e) => handleChange("cakto", "vendasAfiliadas", e.target.value)}
-                    placeholder="0"
-                    className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
+                    className={inputSemSetinhasClass}
                   />
                 </div>
               </div>
