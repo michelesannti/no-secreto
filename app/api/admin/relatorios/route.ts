@@ -1,91 +1,93 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { getSupabaseAdminClient } from "@/lib/supabase";
 
 export async function GET() {
   try {
-    const [{ count: estudosConcluidosTotal }] = await Promise.all([
-      supabaseAdmin.from("progresso").select("*", { count: "exact", head: true }),
-    ]);
+    const supabase = getSupabaseAdminClient();
 
-    // Busca de TODOS os perfis que estão com ativo = true
-    const { data: profiles, error: errProfiles } = await supabaseAdmin
+    // 1. Busca usuárias do Supabase
+    const { data: profiles, error: profilesError } = await supabase
       .from("profiles")
-      .select("id, nome, instagram, email, creator, acesso, ativo, created_at")
-      .eq("ativo", true);
+      .select("id, nome, email, instagram, creator, ativo, acesso, creator_origem");
 
-    if (errProfiles) {
-      throw new Error("Erro ao buscar perfis no banco.");
-    }
+    if (profilesError) throw profilesError;
 
-    // Ignora a conta de teste interna
-    const profilesFiltrados = (profiles || []).filter(
-      (p) => p.email?.toLowerCase() !== "miisantos55@gmail.com"
+    // 2. Busca todo o progresso de estudos
+    const { data: progresso, error: progressoError } = await supabase
+      .from("progresso")
+      .select("user_id, created_at, data_local");
+
+    if (progressoError) throw progressoError;
+
+    // 3. Busca publicações de conteúdos
+    const { data: conteudos, error: conteudosError } = await supabase
+      .from("conteudos")
+      .select("creator_id");
+
+    if (conteudosError) throw conteudosError;
+
+    const creatorsAtivasIds = new Set((conteudos || []).map((c) => c.creator_id));
+
+    // 4. Usuárias válidas (ativas e excluindo conta de teste)
+    const usuariasValidas = (profiles || []).filter(
+      (p) => p.ativo === true && p.email !== "miisantos55@gmail.com"
     );
 
-    const validUserIds = profilesFiltrados.map((p) => p.id);
+    // Ativação Afiliadas: Total de UUIDs/Strings distintos de creators com vendas geradas
+    const creatorsComVendasSet = new Set(
+      usuariasValidas
+        .map((p) => (p.creator_origem ? String(p.creator_origem).trim() : ""))
+        .filter((origem) => origem !== "")
+    );
 
-    const { data: progressoList } = await supabaseAdmin
-      .from("progresso")
-      .select("user_id, estudo_id, data_local")
-      .in("user_id", validUserIds.length > 0 ? validUserIds : ["00000000-0000-0000-0000-000000000000"])
-      .order("data_local", { ascending: false });
+    const ativacaoAfiliadasCount = creatorsComVendasSet.size;
 
-    const usuariasDetalhes = profilesFiltrados.map((p) => {
-      const userProgresso = (progressoList || []).filter((pr) => pr.user_id === p.id);
-      const estudosUnicos = Array.from(new Set(userProgresso.map((pr) => pr.estudo_id)));
+    // 5. Mapeamento de usuárias com estudos e datas
+    const usuariasDetalhes = usuariasValidas.map((p) => {
+      const estudos = (progresso || []).filter((pr) => pr.user_id === p.id);
 
-      const primeiroEstudoReg = userProgresso[userProgresso.length - 1];
-      const ultimoEstudoReg = userProgresso[0];
+      const estudosOrdenados = [...estudos].sort(
+        (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      );
+
+      const primeiroEstudoObj = estudosOrdenados.length > 0 ? estudosOrdenados[0] : null;
+      const ultimoEstudoObj = estudosOrdenados.length > 0 ? estudosOrdenados[estudosOrdenados.length - 1] : null;
+
+      const primeiroEstudo = primeiroEstudoObj ? (primeiroEstudoObj.data_local || primeiroEstudoObj.created_at) : null;
+      const ultimoEstudo = ultimoEstudoObj ? (ultimoEstudoObj.data_local || ultimoEstudoObj.created_at) : null;
 
       return {
-        id: p.id,
-        nome: p.nome || "Usuária",
-        instagram: p.instagram || "",
-        email: p.email || "",
-        creator: p.creator || false,
-        ativo: p.ativo ?? true,
-        acesso: p.acesso,
-        data_entrada: p.created_at,
-        estudos_concluidos: estudosUnicos.length,
-        primeiro_estudo: primeiroEstudoReg ? primeiroEstudoReg.data_local : null,
-        ultimo_estudo: ultimoEstudoReg ? ultimoEstudoReg.data_local : null,
+        ...p,
+        estudos_concluidos: estudos.length,
+        primeiro_estudo: primeiroEstudo,
+        ultimo_estudo: ultimoEstudo,
       };
     });
 
-    // Ordenação por último estudo
-    usuariasDetalhes.sort((a, b) => {
-      const dataA = a.ultimo_estudo || "";
-      const dataB = b.ultimo_estudo || "";
-      if (dataA !== dataB) {
-        return dataB.localeCompare(dataA);
-      }
-      return b.estudos_concluidos - a.estudos_concluidos;
-    });
-
     return NextResponse.json({
-      supabase: {
-        estudosConcluidos: estudosConcluidosTotal || 0,
-        conteudosPublicados: 0,
-      },
-      cakto: { vendas: "", vendasAbandonadas: "", vendasAfiliadas: "" },
-      instagram: { seguidores: "", visitasPerfil: "", cliquesBio: "" },
-      tiktok: { seguidores: "", visitasPerfil: "" },
-      whatsapp: {},
+      creatorsAtivasCount: creatorsAtivasIds.size,
+      ativacaoAfiliadasCount,
       usuariasDetalhes,
+      supabase: {
+        estudosConcluidos: progresso?.length || 0,
+        conteudosPublicados: conteudos?.length || 0,
+      },
+      cakto: {
+        vendas: 0,
+        vendasAbandonadas: 0,
+        vendasAfiliadas: ativacaoAfiliadasCount,
+      },
     });
   } catch (error: any) {
+    console.error("Erro na API de relatórios:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
   try {
-    return NextResponse.json({ message: "Relatório salvo com sucesso!" });
+    const body = await request.json();
+    return NextResponse.json({ success: true, data: body });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

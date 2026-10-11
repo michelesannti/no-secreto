@@ -10,6 +10,7 @@ interface UsuariaDetalhe {
   creator: boolean;
   ativo?: boolean;
   acesso?: string;
+  creator_origem?: string | null;
   estudos_concluidos: number;
   primeiro_estudo: string | null;
   ultimo_estudo: string | null;
@@ -35,6 +36,8 @@ interface RelatoriosData {
     vendasAbandonadas: number | "";
     vendasAfiliadas: number | "";
   };
+  creatorsAtivasCount?: number;
+  ativacaoAfiliadasCount?: number;
   usuariasDetalhes?: UsuariaDetalhe[];
 }
 
@@ -46,6 +49,8 @@ export default function AdminRelatoriosPage() {
     whatsapp: {},
     supabase: { estudosConcluidos: 0, conteudosPublicados: "" },
     cakto: { vendas: "", vendasAbandonadas: "", vendasAfiliadas: "" },
+    creatorsAtivasCount: 0,
+    ativacaoAfiliadasCount: 0,
     usuariasDetalhes: [],
   });
 
@@ -59,7 +64,14 @@ export default function AdminRelatoriosPage() {
         const res = await fetch("/api/admin/relatorios");
         const json = await res.json();
         if (res.ok && json) {
-          setData(json);
+          setData((prev) => ({
+            ...prev,
+            ...json,
+            cakto: json.cakto || prev.cakto,
+            instagram: json.instagram || prev.instagram,
+            tiktok: json.tiktok || prev.tiktok,
+            supabase: json.supabase || prev.supabase,
+          }));
         }
       } catch (err) {
         console.error("Erro na busca dos relatórios:", err);
@@ -110,8 +122,9 @@ export default function AdminRelatoriosPage() {
 
   const formatarData = (strData: string | null) => {
     if (!strData) return "Nenhum";
-    const parteData = strData.split("T")[0];
-    const partes = parteData.split("-");
+    
+    const apenasData = strData.split("T")[0];
+    const partes = apenasData.split("-");
     if (partes.length === 3) {
       const [ano, mes, dia] = partes;
       return `${dia}/${mes}/${ano}`;
@@ -119,49 +132,72 @@ export default function AdminRelatoriosPage() {
     return strData;
   };
 
-  // Função para verificar se o estudo foi realizado HOJE (data local do navegador)
   const fezEstudoHoje = (strData: string | null) => {
     if (!strData) return false;
-    const dataEstudo = strData.split("T")[0];
+    const dataEstudoStr = strData.split("T")[0];
     
-    // Pega a data local de hoje no formato YYYY-MM-DD
     const agora = new Date();
     const ano = agora.getFullYear();
     const mes = String(agora.getMonth() + 1).padStart(2, "0");
     const dia = String(agora.getDate()).padStart(2, "0");
     const hojeStr = `${ano}-${mes}-${dia}`;
 
-    return dataEstudo === hojeStr;
+    return dataEstudoStr === hojeStr;
   };
 
-  // Obter o nome do mês atual em maiúsculas (ex: "OUTUBRO")
+  // Ordenação: 1º 🔥 Estudo hoje, 2º Data mais recente, 3º Quantidade de estudos
+  const ordenarUsuarias = (lista: UsuariaDetalhe[]) => {
+    return [...lista].sort((a, b) => {
+      const aHoje = fezEstudoHoje(a.ultimo_estudo) ? 1 : 0;
+      const bHoje = fezEstudoHoje(b.ultimo_estudo) ? 1 : 0;
+
+      if (aHoje !== bHoje) return bHoje - aHoje;
+
+      const dataA = a.ultimo_estudo ? new Date(a.ultimo_estudo).getTime() : 0;
+      const dataB = b.ultimo_estudo ? new Date(b.ultimo_estudo).getTime() : 0;
+
+      if (dataA !== dataB) {
+        return dataB - dataA;
+      }
+
+      return b.estudos_concluidos - a.estudos_concluidos;
+    });
+  };
+
   const mesAtualNome = new Date()
     .toLocaleDateString("pt-BR", { month: "long" })
     .toUpperCase();
 
-  const clientesTotal = (data.usuariasDetalhes || []).filter((u) => u.acesso === "PAGO");
-  const creatorsTotal = (data.usuariasDetalhes || []).filter((u) => u.creator);
+  const todasUsuarias = data.usuariasDetalhes || [];
+  
+  // FILTRO: Apenas usuárias ATIVAS e removendo a conta de teste miisantos55@gmail.com
+  const usuariasAtivas = todasUsuarias.filter(
+    (u) => u.ativo === true && u.email !== "miisantos55@gmail.com"
+  );
 
-  const clientesComEstudos = clientesTotal.filter((u) => u.estudos_concluidos > 0);
-  const creatorsComEstudos = creatorsTotal.filter((u) => u.creator && u.estudos_concluidos > 0);
+  const clientesTotal = usuariasAtivas.filter((u) => u.acesso === "PAGO");
+  const creatorsTotal = usuariasAtivas.filter((u) => u.creator);
 
-  // Contagem de quem fez estudo hoje
+  const clientesComEstudos = ordenarUsuarias(clientesTotal.filter((u) => u.estudos_concluidos > 0));
+  const creatorsComEstudos = ordenarUsuarias(creatorsTotal.filter((u) => u.creator && u.estudos_concluidos > 0));
+
   const clientesHojeCount = clientesComEstudos.filter((u) => fezEstudoHoje(u.ultimo_estudo)).length;
   const creatorsHojeCount = creatorsComEstudos.filter((u) => fezEstudoHoje(u.ultimo_estudo)).length;
 
-  const totalUsuariasComAcesso = (data.usuariasDetalhes || []).length;
+  const totalUsuariasAtivasCount = usuariasAtivas.length;
 
-  // OPÇÃO B: Cálculos das Alturas das Barras Comparativas Verticais
-  const vConcluidas = typeof data.cakto.vendas === "number" ? data.cakto.vendas : 0;
-  const vAbandonadas = typeof data.cakto.vendasAbandonadas === "number" ? data.cakto.vendasAbandonadas : 0;
-  const vAfiliadas = typeof data.cakto.vendasAfiliadas === "number" ? data.cakto.vendasAfiliadas : 0;
+  // CÁLCULOS DAS MÉTRICAS DE METAS
+  const vAtivacaoUsuarias = usuariasAtivas.filter((u) => u.estudos_concluidos > 0).length;
+  const vCreatorsAtivas = data.creatorsAtivasCount || 0;
+  const vAtivacaoAfiliadas = data.ativacaoAfiliadasCount ?? (typeof data?.cakto?.vendasAfiliadas === "number" ? data.cakto.vendasAfiliadas : 0);
+  const vMonetizacao = usuariasAtivas.filter((u) => u.acesso === "PAGO").length;
 
-  // Valor máximo para escala visual (garante pelo menos 1 para evitar divisão por 0)
-  const maxValor = Math.max(vConcluidas, vAbandonadas, vAfiliadas, 1);
+  const maxMetasVal = Math.max(vAtivacaoUsuarias, vCreatorsAtivas, vAtivacaoAfiliadas, vMonetizacao, 1);
 
-  const hConcluidas = Math.round((vConcluidas / maxValor) * 100);
-  const hAfiliadas = Math.round((vAfiliadas / maxValor) * 100);
-  const hAbandonadas = Math.round((vAbandonadas / maxValor) * 100);
+  const hAtivacaoUsuarias = Math.round((vAtivacaoUsuarias / maxMetasVal) * 100);
+  const hCreatorsAtivas = Math.round((vCreatorsAtivas / maxMetasVal) * 100);
+  const hAtivacaoAfiliadas = Math.round((vAtivacaoAfiliadas / maxMetasVal) * 100);
+  const hMonetizacao = Math.round((vMonetizacao / maxMetasVal) * 100);
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d] px-4 py-8 md:px-6 md:py-10 selection:bg-[#e9d5bb]">
@@ -216,60 +252,83 @@ export default function AdminRelatoriosPage() {
           /* ABA 1: VISUALIZAÇÃO DE MÉTRICAS */
           <div className="space-y-6">
             
-            {/* OPÇÃO B: CARD DE VENDAS COM BARRAS COMPARATIVAS VERTICAIS */}
+            {/* GRÁFICO DE METAS / ACOMPANHAMENTO DO MÊS */}
             <div className="grid grid-cols-1 gap-4">
               <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
                 
                 <div className="border-b border-[#e9d5bb] pb-2 text-center">
                   <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
-                    VENDAS ({mesAtualNome})
+                    METAS ({mesAtualNome})
                   </span>
                 </div>
 
-                {/* Área do Gráfico de Barras Verticais */}
                 <div className="pt-2 pb-1">
-                  <div className="flex items-end justify-around h-28 border-b border-[#e9d5bb]/60 px-4 gap-4">
+                  <div className="flex items-end justify-around h-32 border-b border-[#e9d5bb]/60 px-2 sm:px-4 gap-2 sm:gap-4">
                     
-                    {/* Barra 1: Vendas Diretas */}
                     <div className="flex flex-col items-center flex-1 h-full justify-end">
                       <span className="text-[11px] font-mono font-bold text-[#70412d] mb-1">
-                        {vConcluidas}
+                        {vAtivacaoUsuarias}
                       </span>
                       <div 
-                        style={{ height: `${Math.max(hConcluidas, 6)}%` }}
-                        className="w-full max-w-[40px] bg-[#70412d] rounded-t-lg transition-all duration-500"
+                        style={{ height: `${Math.max(hAtivacaoUsuarias, 6)}%` }}
+                        className="w-full max-w-[36px] bg-[#70412d] rounded-t-lg transition-all duration-500 relative group"
+                        title={`Ativação Usuárias: ${vAtivacaoUsuarias}`}
                       />
                     </div>
 
-                    {/* Barra 2: Afiliadas */}
                     <div className="flex flex-col items-center flex-1 h-full justify-end">
                       <span className="text-[11px] font-mono font-bold text-[#70412d] mb-1">
-                        {vAfiliadas}
+                        {vCreatorsAtivas}
                       </span>
                       <div 
-                        style={{ height: `${Math.max(hAfiliadas, 6)}%` }}
-                        className="w-full max-w-[40px] bg-[#b8805f] rounded-t-lg transition-all duration-500"
+                        style={{ height: `${Math.max(hCreatorsAtivas, 6)}%` }}
+                        className="w-full max-w-[36px] bg-[#8c5237] rounded-t-lg transition-all duration-500 relative group"
+                        title={`Creators Ativas: ${vCreatorsAtivas}`}
                       />
                     </div>
 
-                    {/* Barra 3: Abandonadas */}
                     <div className="flex flex-col items-center flex-1 h-full justify-end">
-                      <span className="text-[11px] font-mono font-bold text-amber-900 mb-1">
-                        {vAbandonadas}
+                      <span className="text-[11px] font-mono font-bold text-[#70412d] mb-1">
+                        {vAtivacaoAfiliadas}
                       </span>
                       <div 
-                        style={{ height: `${Math.max(hAbandonadas, 6)}%` }}
-                        className="w-full max-w-[40px] bg-amber-700/60 rounded-t-lg transition-all duration-500"
+                        style={{ height: `${Math.max(hAtivacaoAfiliadas, 6)}%` }}
+                        className="w-full max-w-[36px] bg-[#b8805f] rounded-t-lg transition-all duration-500 relative group"
+                        title={`Ativação Afiliadas: ${vAtivacaoAfiliadas}`}
+                      />
+                    </div>
+
+                    <div className="flex flex-col items-center flex-1 h-full justify-end">
+                      <span className="text-[11px] font-mono font-bold text-[#70412d] mb-1">
+                        {vMonetizacao}
+                      </span>
+                      <div 
+                        style={{ height: `${Math.max(hMonetizacao, 6)}%` }}
+                        className="w-full max-w-[36px] bg-[#5c3524] rounded-t-lg transition-all duration-500 relative group"
+                        title={`Monetização: ${vMonetizacao}`}
                       />
                     </div>
 
                   </div>
 
-                  {/* Rótulos Abaixo do Gráfico */}
-                  <div className="flex justify-around text-center text-xs pt-2">
-                    <div className="flex-1 text-[11px] font-bold text-[#70412d]">Vendas</div>
-                    <div className="flex-1 text-[11px] font-bold text-[#70412d]">Afiliadas</div>
-                    <div className="flex-1 text-[11px] font-bold text-amber-900">Abandonadas</div>
+                  {/* Legendas descritivas das colunas */}
+                  <div className="flex justify-around text-center text-[10px] sm:text-xs pt-3 gap-1">
+                    <div className="flex-1 flex flex-col items-center">
+                      <span className="font-bold text-[#70412d]">Ativação Usuárias</span>
+                      <span className="text-[9px] text-[#70412d]/60 font-medium leading-tight">com estudos</span>
+                    </div>
+                    <div className="flex-1 flex flex-col items-center">
+                      <span className="font-bold text-[#70412d]">Creators Ativas</span>
+                      <span className="text-[9px] text-[#70412d]/60 font-medium leading-tight">com posts</span>
+                    </div>
+                    <div className="flex-1 flex flex-col items-center">
+                      <span className="font-bold text-[#70412d]">Ativação Afiliadas</span>
+                      <span className="text-[9px] text-[#70412d]/60 font-medium leading-tight">com vendas</span>
+                    </div>
+                    <div className="flex-1 flex flex-col items-center">
+                      <span className="font-bold text-[#70412d]">Monetização</span>
+                      <span className="text-[9px] text-[#70412d]/60 font-medium leading-tight">assinaturas</span>
+                    </div>
                   </div>
                 </div>
 
@@ -279,14 +338,12 @@ export default function AdminRelatoriosPage() {
             {/* CARD ÚNICO UNIFICADO COM DESTAQUE DE ESTUDOS HOJE */}
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-3 sm:p-5 shadow-sm space-y-4">
               
-              {/* Título Principal Padronizado */}
               <div className="border-b border-[#e9d5bb] pb-2 text-center">
                 <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
-                  USUÁRIAS ({totalUsuariasComAcesso})
+                  USUÁRIAS ({totalUsuariasAtivasCount})
                 </span>
               </div>
 
-              {/* Grid Interno Lado a Lado com Linha Divisória */}
               <div className="grid grid-cols-2 gap-2 sm:gap-6 items-start divide-x divide-[#e9d5bb]">
                 
                 {/* Coluna 1: Clientes */}
@@ -519,7 +576,7 @@ export default function AdminRelatoriosPage() {
                   <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Vendas</label>
                   <input
                     type="number"
-                    value={data.cakto.vendas}
+                    value={data?.cakto?.vendas ?? ""}
                     onChange={(e) => handleChange("cakto", "vendas", e.target.value)}
                     placeholder="0"
                     className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
@@ -529,7 +586,7 @@ export default function AdminRelatoriosPage() {
                   <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Vendas Abandonadas</label>
                   <input
                     type="number"
-                    value={data.cakto.vendasAbandonadas}
+                    value={data?.cakto?.vendasAbandonadas ?? ""}
                     onChange={(e) => handleChange("cakto", "vendasAbandonadas", e.target.value)}
                     placeholder="0"
                     className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
@@ -539,7 +596,7 @@ export default function AdminRelatoriosPage() {
                   <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Vendas Afiliadas</label>
                   <input
                     type="number"
-                    value={data.cakto.vendasAfiliadas}
+                    value={data?.cakto?.vendasAfiliadas ?? ""}
                     onChange={(e) => handleChange("cakto", "vendasAfiliadas", e.target.value)}
                     placeholder="0"
                     className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
