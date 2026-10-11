@@ -59,8 +59,12 @@ export default function AdminRelatoriosPage() {
 
   const formatarDataPtBr = (strIso: string) => {
     if (!strIso) return "";
-    const [ano, mes, dia] = strIso.split("-");
-    return `${dia}/${mes}/${ano}`;
+    const partes = strIso.split("T")[0].split("-");
+    if (partes.length === 3) {
+      const [ano, mes, dia] = partes;
+      return `${dia}/${mes}/${ano}`;
+    }
+    return strIso;
   };
 
   const calcularIntervaloPorTipo = (strFimIso: string, tipo: "semanal" | "quinzenal") => {
@@ -219,29 +223,10 @@ export default function AdminRelatoriosPage() {
     }
   };
 
-  const formatarData = (strData: string | null) => {
-    if (!strData) return "Nenhum";
-    
-    const apenasData = strData.split("T")[0];
-    const partes = apenasData.split("-");
-    if (partes.length === 3) {
-      const [ano, mes, dia] = partes;
-      return `${dia}/${mes}/${ano}`;
-    }
-    return strData;
-  };
-
   const fezEstudoHoje = (strData: string | null) => {
     if (!strData) return false;
     const dataEstudoStr = strData.split("T")[0];
-    
-    const agora = new Date();
-    const ano = agora.getFullYear();
-    const mes = String(agora.getMonth() + 1).padStart(2, "0");
-    const dia = String(agora.getDate()).padStart(2, "0");
-    const hojeStr = `${ano}-${mes}-${dia}`;
-
-    return dataEstudoStr === hojeStr;
+    return dataEstudoStr === hojeIso;
   };
 
   const ordenarUsuarias = (lista: UsuariaDetalhe[]) => {
@@ -283,7 +268,6 @@ export default function AdminRelatoriosPage() {
 
   const totalUsuariasAtivasCount = usuariasAtivas.length;
 
-  // Histórico Semanal calculado dinamicamente com os números históricos oficiais
   const historicoSemanas = data.historicoSemanas && data.historicoSemanas.length > 0 
     ? data.historicoSemanas.map(s => ({
         semana: s.semana,
@@ -300,7 +284,6 @@ export default function AdminRelatoriosPage() {
 
   const maxPctSemana = Math.max(...historicoSemanas.map((s) => s.pct), 1);
 
-  // Coordenadas calculadas para o gráfico de linha SVG
   const svgWidth = 400;
   const svgHeight = 120;
   const paddingX = 40;
@@ -332,7 +315,6 @@ export default function AdminRelatoriosPage() {
   const hAtivacaoAfiliadas = Math.round((vAtivacaoAfiliadas / maxMetasVal) * 100);
   const hMonetizacao = Math.round((vMonetizacao / maxMetasVal) * 100);
 
-  // Classe utilitária para esconder setinhas nos campos numéricos
   const inputSemSetinhasClass = "w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center";
 
   return (
@@ -472,33 +454,21 @@ export default function AdminRelatoriosPage() {
               </div>
 
               <div className="pt-2">
-                {/* Gráfico de Linha SVG Responsivo */}
                 <div className="w-full max-w-lg mx-auto overflow-x-auto">
                   <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto overflow-visible">
-                    
-                    {/* Linhas de grade horizontais sutis */}
                     <line x1={paddingX} y1={paddingY} x2={svgWidth - paddingX} y2={paddingY} stroke="#e9d5bb" strokeDasharray="3 3" strokeWidth="1" opacity="0.6" />
                     <line x1={paddingX} y1={svgHeight / 2} x2={svgWidth - paddingX} y2={svgHeight / 2} stroke="#e9d5bb" strokeDasharray="3 3" strokeWidth="1" opacity="0.6" />
                     <line x1={paddingX} y1={svgHeight - paddingY} x2={svgWidth - paddingX} y2={svgHeight - paddingY} stroke="#e9d5bb" strokeWidth="1" opacity="0.8" />
 
-                    {/* Área sob a curva com tom suave */}
                     <path d={areaString} fill="#70412d" opacity="0.08" />
-
-                    {/* Linha de tendência principal */}
                     <path d={pathString} fill="none" stroke="#70412d" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
 
-                    {/* Pontos e Rótulos */}
                     {pontosLinha.map((p, idx) => (
                       <g key={idx}>
-                        {/* Ponto / Bolinha no gráfico */}
                         <circle cx={p.x} cy={p.y} r="4.5" fill="#f9f5e9" stroke="#70412d" strokeWidth="2.5" />
-
-                        {/* Porcentagem exata da semana acima do ponto */}
                         <text x={p.x} y={p.y - 10} textAnchor="middle" className="text-[10px] font-mono font-bold" fill="#70412d">
                           {p.pct}%
                         </text>
-
-                        {/* Intervalo de data abaixo do eixo */}
                         <text x={p.x} y={svgHeight - paddingY + 16} textAnchor="middle" className="text-[9px] font-bold uppercase" fill="#70412d" opacity="0.8">
                           {p.semana}
                         </text>
@@ -521,7 +491,7 @@ export default function AdminRelatoriosPage() {
 
               <div className="grid grid-cols-2 gap-2 sm:gap-6 items-start divide-x divide-[#e9d5bb]">
                 
-                {/* Coluna 1: Creators (esquerda) */}
+                {/* Coluna 1: Creators */}
                 <div className="space-y-3 pr-1 sm:pr-2">
                   <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
                     <span className="text-center">CREATORS ({creatorsComEstudos.length} / {creatorsTotal.length})</span>
@@ -569,7 +539,7 @@ export default function AdminRelatoriosPage() {
                                   {u.estudos_concluidos}
                                 </td>
                                 <td className="py-2.5 text-center font-mono text-[11px] text-[#70412d]/80">
-                                  {formatarData(u.ultimo_estudo)}
+                                  {formatarDataPtBr(u.ultimo_estudo || "")}
                                 </td>
                               </tr>
                             );
@@ -586,7 +556,7 @@ export default function AdminRelatoriosPage() {
                   </div>
                 </div>
 
-                {/* Coluna 2: Clientes (direita) */}
+                {/* Coluna 2: Clientes */}
                 <div className="space-y-3 pl-2 sm:pl-6">
                   <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
                     <span className="text-center">CLIENTES ({clientesComEstudos.length} / {clientesTotal.length})</span>
@@ -634,7 +604,7 @@ export default function AdminRelatoriosPage() {
                                   {u.estudos_concluidos}
                                 </td>
                                 <td className="py-2.5 text-center font-mono text-[11px] text-[#70412d]/80">
-                                  {formatarData(u.ultimo_estudo)}
+                                  {formatarDataPtBr(u.ultimo_estudo || "")}
                                 </td>
                               </tr>
                             );
@@ -659,7 +629,7 @@ export default function AdminRelatoriosPage() {
           /* ABA 2: PREENCHIMENTO DO RELATÓRIO OPERACIONAL */
           <form onSubmit={handleSalvar} className="space-y-8">
             
-            {/* SELETOR DE TIPO (SEMANAL, QUINZENAL, MENSAL) E PERÍODO */}
+            {/* SELETOR DE TIPO E DATAS PADRONIZADAS EM DD/MM/YYYY */}
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
                 <div>
@@ -676,27 +646,35 @@ export default function AdminRelatoriosPage() {
 
                 {data.tipoRelatorio === "semanal" || data.tipoRelatorio === "quinzenal" ? (
                   <div className="flex items-center gap-2">
-                    <input
-                      type="date"
-                      value={data.dataInicio || initialInicio}
-                      disabled
-                      className="w-full bg-[#E9D5BB]/30 border border-[#E9D5BB] rounded-xl px-2 py-2 text-xs text-[#70412d]/70 cursor-not-allowed focus:outline-none text-center"
-                    />
+                    {/* Data Início (Travada e formatada DD/MM/YYYY) */}
+                    <div className="w-full bg-[#E9D5BB]/30 border border-[#E9D5BB] rounded-xl px-2 py-2 text-xs text-[#70412d]/70 text-center font-mono">
+                      {formatarDataPtBr(data.dataInicio || initialInicio)}
+                    </div>
+
                     <span className="text-xs font-bold text-[#70412d]/80 uppercase shrink-0">
                       até
                     </span>
-                    <input
-                      type="date"
-                      max={hojeIso}
-                      value={data.dataFim && data.dataFim <= hojeIso ? data.dataFim : hojeIso}
-                      onChange={(e) => handleChange("dataFim", "", e.target.value)}
-                      onBlur={(e) => {
-                        if (e.target.value > hojeIso) {
-                          handleChange("dataFim", "", hojeIso);
-                        }
-                      }}
-                      className="w-full bg-white border border-[#E9D5BB] rounded-xl px-2 py-2 text-xs text-[#70412d] focus:outline-none text-center"
-                    />
+
+                    {/* Data Fim (Formatada DD/MM/YYYY com seletor invisível por cima) */}
+                    <div className="relative w-full">
+                      <div className="w-full bg-white border border-[#E9D5BB] rounded-xl px-2 py-2 text-xs text-[#70412d] text-center font-mono font-bold">
+                        {formatarDataPtBr(data.dataFim || initialFim)}
+                      </div>
+                      <input
+                        type="date"
+                        max={hojeIso}
+                        value={data.dataFim || initialFim}
+                        onChange={(e) => {
+                          const valor = e.target.value;
+                          if (valor && valor <= hojeIso) {
+                            handleChange("dataFim", "", valor);
+                          } else {
+                            handleChange("dataFim", "", hojeIso);
+                          }
+                        }}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      />
+                    </div>
                   </div>
                 ) : (
                   <div>
@@ -720,7 +698,7 @@ export default function AdminRelatoriosPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-2 sm:gap-6 items-start divide-x divide-[#e9d5bb]">
-                {/* Coluna 1: Instagram (esquerda) */}
+                {/* Coluna 1: Instagram */}
                 <div className="space-y-3 pr-1 sm:pr-2">
                   <span className="text-xs font-bold text-[#70412d]/90 uppercase block text-center border-b border-[#E9D5BB]/60 pb-1.5 min-h-[48px] flex items-center justify-center">
                     INSTAGRAM
@@ -756,7 +734,7 @@ export default function AdminRelatoriosPage() {
                   </div>
                 </div>
 
-                {/* Coluna 2: TikTok (direita) */}
+                {/* Coluna 2: TikTok */}
                 <div className="space-y-3 pl-2 sm:pl-6">
                   <span className="text-xs font-bold text-[#70412d]/90 uppercase block text-center border-b border-[#E9D5BB]/60 pb-1.5 min-h-[48px] flex items-center justify-center">
                     TIKTOK
