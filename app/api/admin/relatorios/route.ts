@@ -26,18 +26,33 @@ export async function GET() {
 
     if (conteudosError) throw conteudosError;
 
-    const creatorsAtivasIds = new Set((conteudos || []).map((c) => c.creator_id));
+    // Mapa de perfis para validação rápida
+    const profilesMap = new Map((profiles || []).map((p) => [p.id, p]));
+
+    // Creators que publicaram posts E continuam com creator = true e ativo = true
+    const creatorsAtivasIds = new Set(
+      (conteudos || [])
+        .map((c) => c.creator_id)
+        .filter((id) => {
+          const perfil = profilesMap.get(id);
+          return perfil && perfil.creator === true && perfil.ativo === true;
+        })
+    );
 
     // 4. Usuárias válidas (ativas e excluindo conta de teste)
     const usuariasValidas = (profiles || []).filter(
       (p) => p.ativo === true && p.email !== "miisantos55@gmail.com"
     );
 
-    // Ativação Afiliadas: Total de UUIDs/Strings distintos de creators com vendas geradas
+    // Ativação Afiliadas: Total de creators ATIVAS distintas (creator = true) com vendas geradas
     const creatorsComVendasSet = new Set(
       usuariasValidas
         .map((p) => (p.creator_origem ? String(p.creator_origem).trim() : ""))
-        .filter((origem) => origem !== "")
+        .filter((origem) => {
+          if (!origem) return false;
+          const perfilAfiliada = profilesMap.get(origem);
+          return Boolean(perfilAfiliada && perfilAfiliada.creator === true && perfilAfiliada.ativo === true);
+        })
     );
 
     const ativacaoAfiliadasCount = creatorsComVendasSet.size;

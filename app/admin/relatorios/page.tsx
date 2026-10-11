@@ -145,7 +145,6 @@ export default function AdminRelatoriosPage() {
     return dataEstudoStr === hojeStr;
   };
 
-  // Ordenação: 1º 🔥 Estudo hoje, 2º Data mais recente, 3º Quantidade de estudos
   const ordenarUsuarias = (lista: UsuariaDetalhe[]) => {
     return [...lista].sort((a, b) => {
       const aHoje = fezEstudoHoje(a.ultimo_estudo) ? 1 : 0;
@@ -170,7 +169,6 @@ export default function AdminRelatoriosPage() {
 
   const todasUsuarias = data.usuariasDetalhes || [];
   
-  // FILTRO: Apenas usuárias ATIVAS e removendo a conta de teste miisantos55@gmail.com
   const usuariasAtivas = todasUsuarias.filter(
     (u) => u.ativo === true && u.email !== "miisantos55@gmail.com"
   );
@@ -186,7 +184,6 @@ export default function AdminRelatoriosPage() {
 
   const totalUsuariasAtivasCount = usuariasAtivas.length;
 
-  // CÁLCULOS DAS MÉTRICAS DE METAS
   const vAtivacaoUsuarias = usuariasAtivas.filter((u) => u.estudos_concluidos > 0).length;
   const vCreatorsAtivas = data.creatorsAtivasCount || 0;
   const vAtivacaoAfiliadas = data.ativacaoAfiliadasCount ?? (typeof data?.cakto?.vendasAfiliadas === "number" ? data.cakto.vendasAfiliadas : 0);
@@ -337,73 +334,8 @@ export default function AdminRelatoriosPage() {
 
               <div className="grid grid-cols-2 gap-2 sm:gap-6 items-start divide-x divide-[#e9d5bb]">
                 
-                {/* Coluna 1: Clientes */}
+                {/* Coluna 1: Creators (agora na esquerda) */}
                 <div className="space-y-3 pr-1 sm:pr-2">
-                  <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
-                    <span className="text-center">CLIENTES ({clientesComEstudos.length} / {clientesTotal.length})</span>
-                    {clientesHojeCount > 0 && (
-                      <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
-                        🔥 {clientesHojeCount}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs">
-                      <thead>
-                        <tr className="border-b border-[#e9d5bb] text-[#70412d]/60 uppercase text-[10px]">
-                          <th className="pb-2 font-bold pl-6">Usuária</th>
-                          <th className="pb-2 text-center font-bold">Estudos</th>
-                          <th className="pb-2 text-center font-bold">Último</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#e9d5bb]/60">
-                        {clientesComEstudos.length > 0 ? (
-                          clientesComEstudos.map((u) => {
-                            const fezHoje = fezEstudoHoje(u.ultimo_estudo);
-                            return (
-                              <tr 
-                                key={u.id} 
-                                className={`transition-colors ${
-                                  fezHoje 
-                                    ? "bg-[#e9d5bb]/50 font-medium" 
-                                    : "hover:bg-[#e9d5bb]/20"
-                                }`}
-                              >
-                                <td className="py-2.5 font-medium text-[#70412d] pl-6 relative">
-                                  <span className="absolute left-1 top-2.5 w-4 text-center text-xs" title={fezHoje ? "Fez estudo hoje!" : ""}>
-                                    {fezHoje ? "🔥" : ""}
-                                  </span>
-                                  <div className="font-bold truncate">
-                                    {u.nome}
-                                  </div>
-                                  <div className="text-[10px] text-[#70412d]/60 truncate max-w-[90px] sm:max-w-none">
-                                    {u.instagram ? `@${u.instagram}` : u.email}
-                                  </div>
-                                </td>
-                                <td className="py-2.5 text-center font-mono font-bold text-[#70412d]">
-                                  {u.estudos_concluidos}
-                                </td>
-                                <td className="py-2.5 text-center font-mono text-[11px] text-[#70412d]/80">
-                                  {formatarData(u.ultimo_estudo)}
-                                </td>
-                              </tr>
-                            );
-                          })
-                        ) : (
-                          <tr>
-                            <td colSpan={3} className="py-6 text-center text-[#70412d]/60 italic">
-                              Nenhuma cliente com estudos concluídos.
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                {/* Coluna 2: Creators */}
-                <div className="space-y-3 pl-2 sm:pl-6">
                   <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
                     <span className="text-center">CREATORS ({creatorsComEstudos.length} / {creatorsTotal.length})</span>
                     {creatorsHojeCount > 0 && (
@@ -459,6 +391,71 @@ export default function AdminRelatoriosPage() {
                           <tr>
                             <td colSpan={3} className="py-6 text-center text-[#70412d]/60 italic">
                               Nenhuma creator com estudos concluídos.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Coluna 2: Clientes (agora na direita) */}
+                <div className="space-y-3 pl-2 sm:pl-6">
+                  <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
+                    <span className="text-center">CLIENTES ({clientesComEstudos.length} / {clientesTotal.length})</span>
+                    {clientesHojeCount > 0 && (
+                      <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
+                        🔥 {clientesHojeCount}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead>
+                        <tr className="border-b border-[#e9d5bb] text-[#70412d]/60 uppercase text-[10px]">
+                          <th className="pb-2 font-bold pl-6">Usuária</th>
+                          <th className="pb-2 text-center font-bold">Estudos</th>
+                          <th className="pb-2 text-center font-bold">Último</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#e9d5bb]/60">
+                        {clientesComEstudos.length > 0 ? (
+                          clientesComEstudos.map((u) => {
+                            const fezHoje = fezEstudoHoje(u.ultimo_estudo);
+                            return (
+                              <tr 
+                                key={u.id} 
+                                className={`transition-colors ${
+                                  fezHoje 
+                                    ? "bg-[#e9d5bb]/50 font-medium" 
+                                    : "hover:bg-[#e9d5bb]/20"
+                                }`}
+                              >
+                                <td className="py-2.5 font-medium text-[#70412d] pl-6 relative">
+                                  <span className="absolute left-1 top-2.5 w-4 text-center text-xs" title={fezHoje ? "Fez estudo hoje!" : ""}>
+                                    {fezHoje ? "🔥" : ""}
+                                  </span>
+                                  <div className="font-bold truncate">
+                                    {u.nome}
+                                  </div>
+                                  <div className="text-[10px] text-[#70412d]/60 truncate max-w-[90px] sm:max-w-none">
+                                    {u.instagram ? `@${u.instagram}` : u.email}
+                                  </div>
+                                </td>
+                                <td className="py-2.5 text-center font-mono font-bold text-[#70412d]">
+                                  {u.estudos_concluidos}
+                                </td>
+                                <td className="py-2.5 text-center font-mono text-[11px] text-[#70412d]/80">
+                                  {formatarData(u.ultimo_estudo)}
+                                </td>
+                              </tr>
+                            );
+                          })
+                        ) : (
+                          <tr>
+                            <td colSpan={3} className="py-6 text-center text-[#70412d]/60 italic">
+                              Nenhuma cliente com estudos concluídos.
                             </td>
                           </tr>
                         )}
