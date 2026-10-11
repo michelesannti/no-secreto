@@ -134,6 +134,11 @@ export default function AdminRelatoriosPage() {
     return dataEstudo === hojeStr;
   };
 
+  // Obter o nome do mês atual em maiúsculas (ex: "OUTUBRO")
+  const mesAtualNome = new Date()
+    .toLocaleDateString("pt-BR", { month: "long" })
+    .toUpperCase();
+
   const clientesTotal = (data.usuariasDetalhes || []).filter((u) => u.acesso === "PAGO");
   const creatorsTotal = (data.usuariasDetalhes || []).filter((u) => u.creator);
 
@@ -199,11 +204,11 @@ export default function AdminRelatoriosPage() {
           /* ABA 1: VISUALIZAÇÃO DE MÉTRICAS */
           <div className="space-y-6">
             
-            {/* Card Cakto (Mês Atual) Padronizado */}
+            {/* Card Vendas (Mês Atual) Padronizado */}
             <div className="grid grid-cols-1 gap-4">
               <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-3 sm:p-5 shadow-sm space-y-4">
                 <span className="text-sm font-bold tracking-wider uppercase text-[#70412d] text-center flex items-center justify-center border-b border-[#e9d5bb] pb-2 leading-none">
-                  CAKTO (MÊS ATUAL)
+                  VENDAS ({mesAtualNome})
                 </span>
                 <div className="grid grid-cols-3 gap-2 text-xs">
                   <div className="flex justify-between py-1 border-r border-[#e9d5bb]/40 pr-2">
@@ -237,10 +242,10 @@ export default function AdminRelatoriosPage() {
                 
                 {/* Coluna 1: Clientes */}
                 <div className="space-y-3 pr-1 sm:pr-2">
-                  <div className="text-center font-bold text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 flex flex-wrap justify-center items-center gap-1.5">
+                  <div className="text-center font-bold text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[42px] flex items-center justify-center gap-1.5">
                     <span>CLIENTES ({clientesComEstudos.length} / {clientesTotal.length})</span>
                     {clientesHojeCount > 0 && (
-                      <span className="bg-[#70412d] text-[#f9f5e9] text-[10px] px-2 py-0.5 rounded-full font-extrabold normal-case tracking-normal">
+                      <span className="bg-[#70412d] text-[#f9f5e9] text-[10px] px-2 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
                         🔥 {clientesHojeCount}
                       </span>
                     )}
@@ -302,10 +307,10 @@ export default function AdminRelatoriosPage() {
 
                 {/* Coluna 2: Creators */}
                 <div className="space-y-3 pl-3 sm:pl-6">
-                  <div className="text-center font-bold text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 flex flex-wrap justify-center items-center gap-1.5">
+                  <div className="text-center font-bold text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[42px] flex items-center justify-center gap-1.5">
                     <span>CREATORS ({creatorsComEstudos.length} / {creatorsTotal.length})</span>
                     {creatorsHojeCount > 0 && (
-                      <span className="bg-[#70412d] text-[#f9f5e9] text-[10px] px-2 py-0.5 rounded-full font-extrabold normal-case tracking-normal">
+                      <span className="bg-[#70412d] text-[#f9f5e9] text-[10px] px-2 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
                         🔥 {creatorsHojeCount}
                       </span>
                     )}
@@ -458,7 +463,7 @@ export default function AdminRelatoriosPage() {
 
             <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-4">
               <span className="text-xs font-bold tracking-wider text-[#70412d] uppercase block border-b border-[#E9D5BB] pb-2">
-                💳 CAKTO (MÊS ATUAL)
+                💳 VENDAS ({mesAtualNome})
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
