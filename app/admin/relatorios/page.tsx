@@ -138,7 +138,7 @@ export default function AdminRelatoriosPage() {
   const creatorsTotal = (data.usuariasDetalhes || []).filter((u) => u.creator);
 
   const clientesComEstudos = clientesTotal.filter((u) => u.estudos_concluidos > 0);
-  const creatorsComEstudos = creatorsTotal.filter((u) => u.estudos_concluidos > 0);
+  const creatorsComEstudos = creatorsTotal.filter((u) => u.creator && u.estudos_concluidos > 0);
 
   // Contagem de quem fez estudo hoje
   const clientesHojeCount = clientesComEstudos.filter((u) => fezEstudoHoje(u.ultimo_estudo)).length;
@@ -240,8 +240,8 @@ export default function AdminRelatoriosPage() {
                   <div className="text-center font-bold text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 flex flex-wrap justify-center items-center gap-1.5">
                     <span>CLIENTES ({clientesComEstudos.length} / {clientesTotal.length})</span>
                     {clientesHojeCount > 0 && (
-                      <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] px-2 py-0.5 rounded-full font-extrabold normal-case tracking-normal">
-                        🔥 {clientesHojeCount} hoje
+                      <span className="bg-[#70412d] text-[#f9f5e9] text-[10px] px-2 py-0.5 rounded-full font-extrabold normal-case tracking-normal">
+                        🔥 {clientesHojeCount}
                       </span>
                     )}
                   </div>
@@ -305,8 +305,8 @@ export default function AdminRelatoriosPage() {
                   <div className="text-center font-bold text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 flex flex-wrap justify-center items-center gap-1.5">
                     <span>CREATORS ({creatorsComEstudos.length} / {creatorsTotal.length})</span>
                     {creatorsHojeCount > 0 && (
-                      <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] px-2 py-0.5 rounded-full font-extrabold normal-case tracking-normal">
-                        🔥 {creatorsHojeCount} hoje
+                      <span className="bg-[#70412d] text-[#f9f5e9] text-[10px] px-2 py-0.5 rounded-full font-extrabold normal-case tracking-normal">
+                        🔥 {creatorsHojeCount}
                       </span>
                     )}
                   </div>
