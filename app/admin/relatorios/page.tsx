@@ -17,6 +17,10 @@ interface UsuariaDetalhe {
 }
 
 interface RelatoriosData {
+  tipoRelatorio?: "semanal" | "quinzenal" | "mensal";
+  periodo?: string;
+  dataInicio?: string;
+  dataFim?: string;
   instagram: {
     seguidores: number | "";
     visitasPerfil: number | "";
@@ -39,11 +43,50 @@ interface RelatoriosData {
   creatorsAtivasCount?: number;
   ativacaoAfiliadasCount?: number;
   usuariasDetalhes?: UsuariaDetalhe[];
+  historicoSemanas?: { semana: string; totalEstudos: number; usuariasAtivasNaSemana?: number; engajamentoPct?: number }[];
 }
 
 export default function AdminRelatoriosPage() {
   const [abaAtiva, setAbaAtiva] = useState<"metricas" | "relatorio">("metricas");
+
+  // Auxiliares de formatação de data
+  const formatarDataIso = (d: Date) => {
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, "0");
+    const dia = String(d.getDate()).padStart(2, "0");
+    return `${ano}-${mes}-${dia}`;
+  };
+
+  const formatarDataPtBr = (strIso: string) => {
+    if (!strIso) return "";
+    const [ano, mes, dia] = strIso.split("-");
+    return `${dia}/${mes}/${ano}`;
+  };
+
+  const calcularIntervaloPorTipo = (strFimIso: string, tipo: "semanal" | "quinzenal") => {
+    const partes = strFimIso.split("-");
+    const dataFimObj = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
+    
+    const diasSubtrair = tipo === "semanal" ? 7 : 14;
+    const dataInicioObj = new Date(dataFimObj);
+    dataInicioObj.setDate(dataFimObj.getDate() - diasSubtrair);
+
+    const strInicioIso = formatarDataIso(dataInicioObj);
+    const periodoTexto = `${formatarDataPtBr(strInicioIso)} a ${formatarDataPtBr(strFimIso)}`;
+
+    return { strInicioIso, periodoTexto };
+  };
+
+  const hoje = new Date();
+  const hojeIso = formatarDataIso(hoje);
+  const initialFim = hojeIso;
+  const { strInicioIso: initialInicio, periodoTexto: initialPeriodoSemanal } = calcularIntervaloPorTipo(initialFim, "semanal");
+
   const [data, setData] = useState<RelatoriosData>({
+    tipoRelatorio: "semanal",
+    periodo: initialPeriodoSemanal,
+    dataInicio: initialInicio,
+    dataFim: initialFim,
     instagram: { seguidores: "", visitasPerfil: "", cliquesBio: "" },
     tiktok: { seguidores: "", visitasPerfil: "" },
     whatsapp: {},
@@ -52,6 +95,7 @@ export default function AdminRelatoriosPage() {
     creatorsAtivasCount: 0,
     ativacaoAfiliadasCount: 0,
     usuariasDetalhes: [],
+    historicoSemanas: [],
   });
 
   const [loading, setLoading] = useState(true);
@@ -67,10 +111,15 @@ export default function AdminRelatoriosPage() {
           setData((prev) => ({
             ...prev,
             ...json,
+            periodo: json.periodo || prev.periodo,
+            tipoRelatorio: json.tipoRelatorio || prev.tipoRelatorio,
+            dataInicio: json.dataInicio || prev.dataInicio,
+            dataFim: json.dataFim || prev.dataFim,
             cakto: json.cakto || prev.cakto,
             instagram: json.instagram || prev.instagram,
             tiktok: json.tiktok || prev.tiktok,
             supabase: json.supabase || prev.supabase,
+            historicoSemanas: json.historicoSemanas || prev.historicoSemanas,
           }));
         }
       } catch (err) {
@@ -85,8 +134,52 @@ export default function AdminRelatoriosPage() {
   const handleChange = (
     secao: keyof RelatoriosData,
     campo: string,
-    valor: string
+    valor: any
   ) => {
+    if (secao === "tipoRelatorio") {
+      const novoTipo = valor as "semanal" | "quinzenal" | "mensal";
+      if (novoTipo === "semanal" || novoTipo === "quinzenal") {
+        const { strInicioIso, periodoTexto } = calcularIntervaloPorTipo(data.dataFim || initialFim, novoTipo);
+        setData((prev) => ({
+          ...prev,
+          tipoRelatorio: novoTipo,
+          dataInicio: strInicioIso,
+          periodo: periodoTexto,
+        }));
+      } else {
+        const mesNome = hoje.toLocaleDateString("pt-BR", { month: "long" });
+        const mesFormatado = mesNome.charAt(0).toUpperCase() + mesNome.slice(1);
+        const pMesStr = `${mesFormatado} / ${hoje.getFullYear()}`;
+        setData((prev) => ({
+          ...prev,
+          tipoRelatorio: "mensal",
+          periodo: pMesStr,
+        }));
+      }
+      return;
+    }
+
+    if (secao === "dataFim") {
+      const novoFimIso = valor;
+      const tipoAtual = data.tipoRelatorio === "quinzenal" ? "quinzenal" : "semanal";
+      const { strInicioIso, periodoTexto } = calcularIntervaloPorTipo(novoFimIso, tipoAtual);
+      setData((prev) => ({
+        ...prev,
+        dataFim: novoFimIso,
+        dataInicio: strInicioIso,
+        periodo: periodoTexto,
+      }));
+      return;
+    }
+
+    if (secao === "periodo") {
+      setData((prev) => ({
+        ...prev,
+        periodo: valor,
+      }));
+      return;
+    }
+
     const num = valor === "" ? "" : parseInt(valor, 10) || 0;
     setData((prev) => ({
       ...prev,
@@ -184,6 +277,43 @@ export default function AdminRelatoriosPage() {
 
   const totalUsuariasAtivasCount = usuariasAtivas.length;
 
+  // Histórico Semanal calculado dinamicamente com os números históricos oficiais
+  const historicoSemanas = data.historicoSemanas && data.historicoSemanas.length > 0 
+    ? data.historicoSemanas.map(s => ({
+        semana: s.semana,
+        pct: s.engajamentoPct ?? 0,
+        totalEstudos: s.totalEstudos,
+        usuariasAtivasNaSemana: s.usuariasAtivasNaSemana
+      }))
+    : [
+        { semana: "13/09 - 20/09", pct: 14, totalEstudos: 23, usuariasAtivasNaSemana: 23 },
+        { semana: "20/09 - 27/09", pct: 14, totalEstudos: 23, usuariasAtivasNaSemana: 24 },
+        { semana: "27/09 - 04/10", pct: 24, totalEstudos: 48, usuariasAtivasNaSemana: 29 },
+        { semana: "04/10 - 11/10", pct: 16, totalEstudos: 40, usuariasAtivasNaSemana: 35 },
+      ];
+
+  const maxPctSemana = Math.max(...historicoSemanas.map((s) => s.pct), 1);
+
+  // Coordenadas calculadas para o gráfico de linha SVG
+  const svgWidth = 400;
+  const svgHeight = 120;
+  const paddingX = 40;
+  const paddingY = 25;
+  const chartWidth = svgWidth - paddingX * 2;
+  const chartHeight = svgHeight - paddingY * 2;
+
+  const pontosLinha = historicoSemanas.map((item, idx) => {
+    const x = paddingX + (idx / (historicoSemanas.length - 1 || 1)) * chartWidth;
+    const y = svgHeight - paddingY - (item.pct / (maxPctSemana || 1)) * chartHeight;
+    return { x, y, ...item };
+  });
+
+  const pathString = pontosLinha.reduce((acc, p, idx) => {
+    return idx === 0 ? `M ${p.x} ${p.y}` : `${acc} L ${p.x} ${p.y}`;
+  }, "");
+
+  const areaString = `${pathString} L ${pontosLinha[pontosLinha.length - 1].x} ${svgHeight - paddingY} L ${pontosLinha[0].x} ${svgHeight - paddingY} Z`;
+
   const vAtivacaoUsuarias = usuariasAtivas.filter((u) => u.estudos_concluidos > 0).length;
   const vCreatorsAtivas = data.creatorsAtivasCount || 0;
   const vAtivacaoAfiliadas = data.ativacaoAfiliadasCount ?? (typeof data?.cakto?.vendasAfiliadas === "number" ? data.cakto.vendasAfiliadas : 0);
@@ -195,6 +325,16 @@ export default function AdminRelatoriosPage() {
   const hCreatorsAtivas = Math.round((vCreatorsAtivas / maxMetasVal) * 100);
   const hAtivacaoAfiliadas = Math.round((vAtivacaoAfiliadas / maxMetasVal) * 100);
   const hMonetizacao = Math.round((vMonetizacao / maxMetasVal) * 100);
+
+  const opcoesMeses: string[] = [];
+  const anoAtualNum = hoje.getFullYear();
+  const mesAtualIdx = hoje.getMonth();
+  for (let i = 0; i <= mesAtualIdx; i++) {
+    const dataMes = new Date(anoAtualNum, mesAtualIdx - i, 1);
+    const mesNome = dataMes.toLocaleDateString("pt-BR", { month: "long" });
+    const mesFormatado = mesNome.charAt(0).toUpperCase() + mesNome.slice(1);
+    opcoesMeses.push(`${mesFormatado} / ${anoAtualNum}`);
+  }
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d] px-4 py-8 md:px-6 md:py-10 selection:bg-[#e9d5bb]">
@@ -236,7 +376,7 @@ export default function AdminRelatoriosPage() {
                   : "bg-[#efe2cc]/60 text-[#70412d]/70 hover:bg-[#efe2cc]"
               }`}
             >
-              📝 Preencher Relatório
+              📋 Relatório
             </button>
           </div>
         </div>
@@ -255,7 +395,7 @@ export default function AdminRelatoriosPage() {
                 
                 <div className="border-b border-[#e9d5bb] pb-2 text-center">
                   <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
-                    METAS ({mesAtualNome})
+                    METAS {mesAtualNome}
                   </span>
                 </div>
 
@@ -323,6 +463,54 @@ export default function AdminRelatoriosPage() {
               </div>
             </div>
 
+            {/* SEÇÃO ESPECÍFICA: CONSTÂNCIA SEMANAL */}
+            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+              
+              <div className="border-b border-[#e9d5bb] pb-2 text-center">
+                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
+                  CONSTÂNCIA SEMANAL
+                </span>
+              </div>
+
+              <div className="pt-2">
+                {/* Gráfico de Linha SVG Responsivo */}
+                <div className="w-full max-w-lg mx-auto overflow-x-auto">
+                  <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto overflow-visible">
+                    
+                    {/* Linhas de grade horizontais sutis */}
+                    <line x1={paddingX} y1={paddingY} x2={svgWidth - paddingX} y2={paddingY} stroke="#e9d5bb" strokeDasharray="3 3" strokeWidth="1" opacity="0.6" />
+                    <line x1={paddingX} y1={svgHeight / 2} x2={svgWidth - paddingX} y2={svgHeight / 2} stroke="#e9d5bb" strokeDasharray="3 3" strokeWidth="1" opacity="0.6" />
+                    <line x1={paddingX} y1={svgHeight - paddingY} x2={svgWidth - paddingX} y2={svgHeight - paddingY} stroke="#e9d5bb" strokeWidth="1" opacity="0.8" />
+
+                    {/* Área sob a curva com tom suave */}
+                    <path d={areaString} fill="#70412d" opacity="0.08" />
+
+                    {/* Linha de tendência principal */}
+                    <path d={pathString} fill="none" stroke="#70412d" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+
+                    {/* Pontos e Rótulos */}
+                    {pontosLinha.map((p, idx) => (
+                      <g key={idx}>
+                        {/* Ponto / Bolinha no gráfico */}
+                        <circle cx={p.x} cy={p.y} r="4.5" fill="#f9f5e9" stroke="#70412d" strokeWidth="2.5" />
+
+                        {/* Porcentagem exata da semana acima do ponto */}
+                        <text x={p.x} y={p.y - 10} textAnchor="middle" className="text-[10px] font-mono font-bold" fill="#70412d">
+                          {p.pct}%
+                        </text>
+
+                        {/* Intervalo de data abaixo do eixo */}
+                        <text x={p.x} y={svgHeight - paddingY + 16} textAnchor="middle" className="text-[9px] font-bold uppercase" fill="#70412d" opacity="0.8">
+                          {p.semana}
+                        </text>
+                      </g>
+                    ))}
+                  </svg>
+                </div>
+              </div>
+
+            </div>
+
             {/* CARD ÚNICO UNIFICADO COM DESTAQUE DE ESTUDOS HOJE */}
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-3 sm:p-5 shadow-sm space-y-4">
               
@@ -334,7 +522,7 @@ export default function AdminRelatoriosPage() {
 
               <div className="grid grid-cols-2 gap-2 sm:gap-6 items-start divide-x divide-[#e9d5bb]">
                 
-                {/* Coluna 1: Creators (agora na esquerda) */}
+                {/* Coluna 1: Creators (esquerda) */}
                 <div className="space-y-3 pr-1 sm:pr-2">
                   <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
                     <span className="text-center">CREATORS ({creatorsComEstudos.length} / {creatorsTotal.length})</span>
@@ -399,7 +587,7 @@ export default function AdminRelatoriosPage() {
                   </div>
                 </div>
 
-                {/* Coluna 2: Clientes (agora na direita) */}
+                {/* Coluna 2: Clientes (direita) */}
                 <div className="space-y-3 pl-2 sm:pl-6">
                   <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
                     <span className="text-center">CLIENTES ({clientesComEstudos.length} / {clientesTotal.length})</span>
@@ -471,6 +659,59 @@ export default function AdminRelatoriosPage() {
         ) : (
           /* ABA 2: PREENCHIMENTO DO RELATÓRIO OPERACIONAL */
           <form onSubmit={handleSalvar} className="space-y-8">
+            
+            {/* SELETOR DE TIPO (SEMANAL, QUINZENAL, MENSAL) E CALENDÁRIO COM ATÉ NO MEIO */}
+            <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
+                <div>
+                  <select
+                    value={data.tipoRelatorio || "semanal"}
+                    onChange={(e) => handleChange("tipoRelatorio", "", e.target.value)}
+                    className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
+                  >
+                    <option value="semanal">Semanal</option>
+                    <option value="quinzenal">Quinzenal</option>
+                    <option value="mensal">Mensal</option>
+                  </select>
+                </div>
+
+                {data.tipoRelatorio === "semanal" || data.tipoRelatorio === "quinzenal" ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="date"
+                      value={data.dataInicio || initialInicio}
+                      disabled
+                      className="w-full bg-[#E9D5BB]/30 border border-[#E9D5BB] rounded-xl px-2 py-2 text-xs text-[#70412d]/70 cursor-not-allowed focus:outline-none text-center"
+                    />
+                    <span className="text-xs font-bold text-[#70412d]/80 uppercase shrink-0">
+                      até
+                    </span>
+                    <input
+                      type="date"
+                      max={hojeIso}
+                      value={data.dataFim || initialFim}
+                      onChange={(e) => handleChange("dataFim", "", e.target.value)}
+                      className="w-full bg-white border border-[#E9D5BB] rounded-xl px-2 py-2 text-xs text-[#70412d] focus:outline-none text-center"
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <select
+                      value={data.periodo || opcoesMeses[0]}
+                      onChange={(e) => handleChange("periodo", "", e.target.value)}
+                      className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
+                    >
+                      {opcoesMeses.map((op, idx) => (
+                        <option key={idx} value={op}>
+                          {op}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-4">
               <span className="text-xs font-bold tracking-wider text-[#70412d] uppercase block border-b border-[#E9D5BB] pb-2">
                 ⚡ SUPABASE (CONTEÚDOS)
