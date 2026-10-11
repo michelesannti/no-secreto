@@ -151,6 +151,18 @@ export default function AdminRelatoriosPage() {
 
   const totalUsuariasComAcesso = (data.usuariasDetalhes || []).length;
 
+  // OPÇÃO B: Cálculos das Alturas das Barras Comparativas Verticais
+  const vConcluidas = typeof data.cakto.vendas === "number" ? data.cakto.vendas : 0;
+  const vAbandonadas = typeof data.cakto.vendasAbandonadas === "number" ? data.cakto.vendasAbandonadas : 0;
+  const vAfiliadas = typeof data.cakto.vendasAfiliadas === "number" ? data.cakto.vendasAfiliadas : 0;
+
+  // Valor máximo para escala visual (garante pelo menos 1 para evitar divisão por 0)
+  const maxValor = Math.max(vConcluidas, vAbandonadas, vAfiliadas, 1);
+
+  const hConcluidas = Math.round((vConcluidas / maxValor) * 100);
+  const hAfiliadas = Math.round((vAfiliadas / maxValor) * 100);
+  const hAbandonadas = Math.round((vAbandonadas / maxValor) * 100);
+
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d] px-4 py-8 md:px-6 md:py-10 selection:bg-[#e9d5bb]">
       <div className="max-w-5xl mx-auto space-y-8">
@@ -204,26 +216,63 @@ export default function AdminRelatoriosPage() {
           /* ABA 1: VISUALIZAÇÃO DE MÉTRICAS */
           <div className="space-y-6">
             
-            {/* Card Vendas (Mês Atual) Padronizado */}
+            {/* OPÇÃO B: CARD DE VENDAS COM BARRAS COMPARATIVAS VERTICAIS */}
             <div className="grid grid-cols-1 gap-4">
-              <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-3 sm:p-5 shadow-sm space-y-4">
-                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d] text-center flex items-center justify-center border-b border-[#e9d5bb] pb-2 leading-none">
-                  VENDAS ({mesAtualNome})
-                </span>
-                <div className="grid grid-cols-3 gap-2 text-xs">
-                  <div className="flex justify-between py-1 border-r border-[#e9d5bb]/40 pr-2">
-                    <span className="text-[#70412d]/70">Vendas:</span>
-                    <span className="font-mono font-bold text-[#70412d]">{data.cakto.vendas !== "" ? data.cakto.vendas : "-"}</span>
+              <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+                
+                <div className="border-b border-[#e9d5bb] pb-2 text-center">
+                  <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
+                    VENDAS ({mesAtualNome})
+                  </span>
+                </div>
+
+                {/* Área do Gráfico de Barras Verticais */}
+                <div className="pt-2 pb-1">
+                  <div className="flex items-end justify-around h-28 border-b border-[#e9d5bb]/60 px-4 gap-4">
+                    
+                    {/* Barra 1: Vendas Diretas */}
+                    <div className="flex flex-col items-center flex-1 h-full justify-end">
+                      <span className="text-[11px] font-mono font-bold text-[#70412d] mb-1">
+                        {vConcluidas}
+                      </span>
+                      <div 
+                        style={{ height: `${Math.max(hConcluidas, 6)}%` }}
+                        className="w-full max-w-[40px] bg-[#70412d] rounded-t-lg transition-all duration-500"
+                      />
+                    </div>
+
+                    {/* Barra 2: Afiliadas */}
+                    <div className="flex flex-col items-center flex-1 h-full justify-end">
+                      <span className="text-[11px] font-mono font-bold text-[#70412d] mb-1">
+                        {vAfiliadas}
+                      </span>
+                      <div 
+                        style={{ height: `${Math.max(hAfiliadas, 6)}%` }}
+                        className="w-full max-w-[40px] bg-[#b8805f] rounded-t-lg transition-all duration-500"
+                      />
+                    </div>
+
+                    {/* Barra 3: Abandonadas */}
+                    <div className="flex flex-col items-center flex-1 h-full justify-end">
+                      <span className="text-[11px] font-mono font-bold text-amber-900 mb-1">
+                        {vAbandonadas}
+                      </span>
+                      <div 
+                        style={{ height: `${Math.max(hAbandonadas, 6)}%` }}
+                        className="w-full max-w-[40px] bg-amber-700/60 rounded-t-lg transition-all duration-500"
+                      />
+                    </div>
+
                   </div>
-                  <div className="flex justify-between py-1 border-r border-[#e9d5bb]/40 px-2">
-                    <span className="text-[#70412d]/70">Abandonadas:</span>
-                    <span className="font-mono font-bold text-amber-800">{data.cakto.vendasAbandonadas !== "" ? data.cakto.vendasAbandonadas : "-"}</span>
-                  </div>
-                  <div className="flex justify-between py-1 pl-2">
-                    <span className="text-[#70412d]/70">Afiliadas:</span>
-                    <span className="font-mono font-bold text-[#70412d]">{data.cakto.vendasAfiliadas !== "" ? data.cakto.vendasAfiliadas : "-"}</span>
+
+                  {/* Rótulos Abaixo do Gráfico */}
+                  <div className="flex justify-around text-center text-xs pt-2">
+                    <div className="flex-1 text-[11px] font-bold text-[#70412d]">Vendas</div>
+                    <div className="flex-1 text-[11px] font-bold text-[#70412d]">Afiliadas</div>
+                    <div className="flex-1 text-[11px] font-bold text-amber-900">Abandonadas</div>
                   </div>
                 </div>
+
               </div>
             </div>
 
@@ -238,14 +287,14 @@ export default function AdminRelatoriosPage() {
               </div>
 
               {/* Grid Interno Lado a Lado com Linha Divisória */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-6 items-start divide-x divide-[#e9d5bb]">
+              <div className="grid grid-cols-2 gap-2 sm:gap-6 items-start divide-x divide-[#e9d5bb]">
                 
                 {/* Coluna 1: Clientes */}
                 <div className="space-y-3 pr-1 sm:pr-2">
-                  <div className="text-center font-bold text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[42px] flex items-center justify-center gap-1.5">
-                    <span>CLIENTES ({clientesComEstudos.length} / {clientesTotal.length})</span>
+                  <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
+                    <span className="text-center">CLIENTES ({clientesComEstudos.length} / {clientesTotal.length})</span>
                     {clientesHojeCount > 0 && (
-                      <span className="bg-[#70412d] text-[#f9f5e9] text-[10px] px-2 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
+                      <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
                         🔥 {clientesHojeCount}
                       </span>
                     )}
@@ -306,11 +355,11 @@ export default function AdminRelatoriosPage() {
                 </div>
 
                 {/* Coluna 2: Creators */}
-                <div className="space-y-3 pl-3 sm:pl-6">
-                  <div className="text-center font-bold text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[42px] flex items-center justify-center gap-1.5">
-                    <span>CREATORS ({creatorsComEstudos.length} / {creatorsTotal.length})</span>
+                <div className="space-y-3 pl-2 sm:pl-6">
+                  <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
+                    <span className="text-center">CREATORS ({creatorsComEstudos.length} / {creatorsTotal.length})</span>
                     {creatorsHojeCount > 0 && (
-                      <span className="bg-[#70412d] text-[#f9f5e9] text-[10px] px-2 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
+                      <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
                         🔥 {creatorsHojeCount}
                       </span>
                     )}
