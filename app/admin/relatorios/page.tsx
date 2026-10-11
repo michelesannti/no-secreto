@@ -170,8 +170,6 @@ export default function AdminRelatoriosPage() {
 
     if (secao === "dataFim") {
       let novoFimIso = valor;
-      
-      // Trava estrita contra datas futuras
       if (!novoFimIso || novoFimIso > hojeIso) {
         novoFimIso = hojeIso;
       }
@@ -635,7 +633,7 @@ export default function AdminRelatoriosPage() {
           /* ABA 2: PREENCHIMENTO DO RELATÓRIO OPERACIONAL */
           <form onSubmit={handleSalvar} className="space-y-8">
             
-            {/* SELETOR DE TIPO E DATAS PADRONIZADAS EM DD/MM/YYYY COM TRAVA REAL DE CALENDÁRIO */}
+            {/* SELETOR DE TIPO E DATAS */}
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
                 <div>
@@ -661,7 +659,7 @@ export default function AdminRelatoriosPage() {
                       até
                     </span>
 
-                    {/* Data Fim (Formatada DD/MM/YYYY com seletor invisível e bloqueio direto no onChange) */}
+                    {/* Data Fim (Formatada DD/MM/YYYY com seletor invisível por cima e bloqueio rigoroso) */}
                     <div className="relative w-full">
                       <div className="w-full bg-white border border-[#E9D5BB] rounded-xl px-2 py-2 text-xs text-[#70412d] text-center font-mono font-bold">
                         {formatarDataPtBr(data.dataFim || initialFim)}
@@ -673,16 +671,9 @@ export default function AdminRelatoriosPage() {
                         onChange={(e) => {
                           const val = e.target.value;
                           if (val && val > hojeIso) {
-                            e.target.value = hojeIso;
                             handleChange("dataFim", "", hojeIso);
                           } else {
                             handleChange("dataFim", "", val || hojeIso);
-                          }
-                        }}
-                        onInput={(e: any) => {
-                          if (e.target.value && e.target.value > hojeIso) {
-                            e.target.value = hojeIso;
-                            handleChange("dataFim", "", hojeIso);
                           }
                         }}
                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
