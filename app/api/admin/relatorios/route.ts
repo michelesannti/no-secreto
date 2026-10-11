@@ -12,17 +12,22 @@ export async function GET() {
       supabaseAdmin.from("progresso").select("*", { count: "exact", head: true }),
     ]);
 
-    // Busca de TODOS os perfis que são PAGO ou CREATOR
+    // Busca de TODOS os perfis que estão com ativo = true
     const { data: profiles, error: errProfiles } = await supabaseAdmin
       .from("profiles")
       .select("id, nome, instagram, email, creator, acesso, ativo, created_at")
-      .or("acesso.eq.PAGO,creator.eq.true");
+      .eq("ativo", true);
 
     if (errProfiles) {
       throw new Error("Erro ao buscar perfis no banco.");
     }
 
-    const validUserIds = (profiles || []).map((p) => p.id);
+    // Ignora a conta de teste interna
+    const profilesFiltrados = (profiles || []).filter(
+      (p) => p.email?.toLowerCase() !== "miisantos55@gmail.com"
+    );
+
+    const validUserIds = profilesFiltrados.map((p) => p.id);
 
     const { data: progressoList } = await supabaseAdmin
       .from("progresso")
@@ -30,7 +35,7 @@ export async function GET() {
       .in("user_id", validUserIds.length > 0 ? validUserIds : ["00000000-0000-0000-0000-000000000000"])
       .order("data_local", { ascending: false });
 
-    const usuariasDetalhes = (profiles || []).map((p) => {
+    const usuariasDetalhes = profilesFiltrados.map((p) => {
       const userProgresso = (progressoList || []).filter((pr) => pr.user_id === p.id);
       const estudosUnicos = Array.from(new Set(userProgresso.map((pr) => pr.estudo_id)));
 
