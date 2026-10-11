@@ -162,7 +162,12 @@ export default function AdminRelatoriosPage() {
     }
 
     if (secao === "dataFim") {
-      const novoFimIso = valor;
+      let novoFimIso = valor;
+      // Validação estrita para celular: travar em hoje caso selecione data futura
+      if (novoFimIso > hojeIso) {
+        novoFimIso = hojeIso;
+      }
+
       const tipoAtual = data.tipoRelatorio === "quinzenal" ? "quinzenal" : "semanal";
       const { strInicioIso, periodoTexto } = calcularIntervaloPorTipo(novoFimIso, tipoAtual);
       setData((prev) => ({
@@ -655,7 +660,7 @@ export default function AdminRelatoriosPage() {
           /* ABA 2: PREENCHIMENTO DO RELATÓRIO OPERACIONAL */
           <form onSubmit={handleSalvar} className="space-y-8">
             
-            {/* SELETOR DE TIPO (SEMANAL, QUINZENAL, MENSAL CENTRALIZADO) E PERÍODO */}
+            {/* SELETOR DE TIPO (SEMANAL, QUINZENAL, MENSAL) E PERÍODO */}
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
                 <div>
