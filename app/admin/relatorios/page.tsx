@@ -329,7 +329,7 @@ export default function AdminRelatoriosPage() {
   const hMonetizacao = Math.round((vMonetizacao / maxMetasVal) * 100);
 
   // Classe utilitária para esconder setinhas nos campos numéricos
-  const inputSemSetinhasClass = "w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+  const inputSemSetinhasClass = "w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center";
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d] px-4 py-8 md:px-6 md:py-10 selection:bg-[#e9d5bb]">
@@ -349,7 +349,7 @@ export default function AdminRelatoriosPage() {
             <div className="w-12 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
           </div>
 
-          {/* Seletor de Abas com emojis */}
+          {/* Seletor de Abas */}
           <div className="flex justify-center gap-2 pt-4">
             <button
               type="button"
@@ -507,7 +507,7 @@ export default function AdminRelatoriosPage() {
             </div>
 
             {/* CARD ÚNICO UNIFICADO COM DESTAQUE DE ESTUDOS HOJE */}
-            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-3 sm:p-5 shadow-sm space-y-4">
+            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               
               <div className="border-b border-[#e9d5bb] pb-2 text-center">
                 <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
@@ -655,14 +655,14 @@ export default function AdminRelatoriosPage() {
           /* ABA 2: PREENCHIMENTO DO RELATÓRIO OPERACIONAL */
           <form onSubmit={handleSalvar} className="space-y-8">
             
-            {/* SELETOR DE TIPO (SEMANAL, QUINZENAL, MENSAL) E PERÍODO AUTO-PREENCHIDO/TRAVADO */}
-            <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-4">
+            {/* SELETOR DE TIPO (SEMANAL, QUINZENAL, MENSAL CENTRALIZADO) E PERÍODO */}
+            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
                 <div>
                   <select
                     value={data.tipoRelatorio || "semanal"}
                     onChange={(e) => handleChange("tipoRelatorio", "", e.target.value)}
-                    className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none"
+                    className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none text-center"
                   >
                     <option value="semanal">Semanal</option>
                     <option value="quinzenal">Quinzenal</option>
@@ -702,86 +702,89 @@ export default function AdminRelatoriosPage() {
               </div>
             </div>
 
-            {/* SEÇÃO UNIFICADA 1: REDES SOCIAIS (EM PRIMEIRO LUGAR - SEM EMOJIS) */}
-            <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-6">
-              <span className="text-xs font-bold tracking-wider text-[#70412d] uppercase block border-b border-[#E9D5BB] pb-2">
-                REDES SOCIAIS
-              </span>
-
-              {/* Subbloco Instagram */}
-              <div className="space-y-3">
-                <span className="text-[11px] font-bold text-[#70412d]/90 uppercase block">
-                  INSTAGRAM
+            {/* SEÇÃO UNIFICADA 1: REDES SOCIAIS */}
+            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+              <div className="border-b border-[#e9d5bb] pb-2 text-center">
+                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
+                  REDES SOCIAIS
                 </span>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Seguidores</label>
-                    <input
-                      type="number"
-                      value={data.instagram.seguidores}
-                      onChange={(e) => handleChange("instagram", "seguidores", e.target.value)}
-                      className={inputSemSetinhasClass}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Visitas ao Perfil</label>
-                    <input
-                      type="number"
-                      value={data.instagram.visitasPerfil}
-                      onChange={(e) => handleChange("instagram", "visitasPerfil", e.target.value)}
-                      className={inputSemSetinhasClass}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Cliques no Link da Bio</label>
-                    <input
-                      type="number"
-                      value={data.instagram.cliquesBio}
-                      onChange={(e) => handleChange("instagram", "cliquesBio", e.target.value)}
-                      className={inputSemSetinhasClass}
-                    />
-                  </div>
-                </div>
               </div>
 
-              {/* Divisor interno suave */}
-              <div className="border-t border-[#E9D5BB]/60 pt-2"></div>
-
-              {/* Subbloco TikTok */}
-              <div className="space-y-3">
-                <span className="text-[11px] font-bold text-[#70412d]/90 uppercase block">
-                  TIKTOK
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Seguidores</label>
-                    <input
-                      type="number"
-                      value={data.tiktok.seguidores}
-                      onChange={(e) => handleChange("tiktok", "seguidores", e.target.value)}
-                      className={inputSemSetinhasClass}
-                    />
+              <div className="grid grid-cols-2 gap-2 sm:gap-6 items-start divide-x divide-[#e9d5bb]">
+                {/* Coluna 1: Instagram (esquerda) */}
+                <div className="space-y-3 pr-1 sm:pr-2">
+                  <span className="text-xs font-bold text-[#70412d]/90 uppercase block text-center border-b border-[#E9D5BB]/60 pb-1.5 min-h-[48px] flex items-center justify-center">
+                    INSTAGRAM
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Seguidores</label>
+                      <input
+                        type="number"
+                        value={data.instagram.seguidores}
+                        onChange={(e) => handleChange("instagram", "seguidores", e.target.value)}
+                        className={inputSemSetinhasClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Visitas ao Perfil</label>
+                      <input
+                        type="number"
+                        value={data.instagram.visitasPerfil}
+                        onChange={(e) => handleChange("instagram", "visitasPerfil", e.target.value)}
+                        className={inputSemSetinhasClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Cliques na Bio</label>
+                      <input
+                        type="number"
+                        value={data.instagram.cliquesBio}
+                        onChange={(e) => handleChange("instagram", "cliquesBio", e.target.value)}
+                        className={inputSemSetinhasClass}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Visitas ao Perfil</label>
-                    <input
-                      type="number"
-                      value={data.tiktok.visitasPerfil}
-                      onChange={(e) => handleChange("tiktok", "visitasPerfil", e.target.value)}
-                      className={inputSemSetinhasClass}
-                    />
+                </div>
+
+                {/* Coluna 2: TikTok (direita) */}
+                <div className="space-y-3 pl-2 sm:pl-6">
+                  <span className="text-xs font-bold text-[#70412d]/90 uppercase block text-center border-b border-[#E9D5BB]/60 pb-1.5 min-h-[48px] flex items-center justify-center">
+                    TIKTOK
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Seguidores</label>
+                      <input
+                        type="number"
+                        value={data.tiktok.seguidores}
+                        onChange={(e) => handleChange("tiktok", "seguidores", e.target.value)}
+                        className={inputSemSetinhasClass}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Visitas ao Perfil</label>
+                      <input
+                        type="number"
+                        value={data.tiktok.visitasPerfil}
+                        onChange={(e) => handleChange("tiktok", "visitasPerfil", e.target.value)}
+                        className={inputSemSetinhasClass}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* SEÇÃO 2: SUPABASE (SEM EMOJIS) */}
-            <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-4">
-              <span className="text-xs font-bold tracking-wider text-[#70412d] uppercase block border-b border-[#E9D5BB] pb-2">
-                SUPABASE (CONTEÚDOS)
-              </span>
-              <div>
-                <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Conteúdos Publicados</label>
+            {/* SEÇÃO 2: SUPABASE */}
+            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+              <div className="border-b border-[#e9d5bb] pb-2 text-center">
+                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
+                  SUPABASE (CONTEÚDOS)
+                </span>
+              </div>
+              <div className="max-w-xs mx-auto">
+                <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Conteúdos Publicados</label>
                 <input
                   type="number"
                   value={data.supabase.conteudosPublicados}
@@ -791,14 +794,16 @@ export default function AdminRelatoriosPage() {
               </div>
             </div>
 
-            {/* SEÇÃO 3: VENDAS (SEM EMOJIS) */}
-            <div className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl p-5 shadow-sm space-y-4">
-              <span className="text-xs font-bold tracking-wider text-[#70412d] uppercase block border-b border-[#E9D5BB] pb-2">
-                VENDAS ({data.tipoRelatorio === "mensal" ? mesAnteriorFormatado : mesAtualNome})
-              </span>
+            {/* SEÇÃO 3: VENDAS */}
+            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+              <div className="border-b border-[#e9d5bb] pb-2 text-center">
+                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
+                  VENDAS ({data.tipoRelatorio === "mensal" ? mesAnteriorFormatado : mesAtualNome})
+                </span>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Vendas</label>
+                  <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Vendas</label>
                   <input
                     type="number"
                     value={data?.cakto?.vendas ?? ""}
@@ -807,7 +812,7 @@ export default function AdminRelatoriosPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Vendas Abandonadas</label>
+                  <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Vendas Abandonadas</label>
                   <input
                     type="number"
                     value={data?.cakto?.vendasAbandonadas ?? ""}
@@ -816,7 +821,7 @@ export default function AdminRelatoriosPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1">Vendas Afiliadas</label>
+                  <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Vendas Afiliadas</label>
                   <input
                     type="number"
                     value={data?.cakto?.vendasAfiliadas ?? ""}
