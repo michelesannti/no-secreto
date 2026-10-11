@@ -163,8 +163,7 @@ export default function AdminRelatoriosPage() {
 
     if (secao === "dataFim") {
       let novoFimIso = valor;
-      // Validação estrita para celular: travar em hoje caso selecione data futura
-      if (novoFimIso > hojeIso) {
+      if (!novoFimIso || novoFimIso > hojeIso) {
         novoFimIso = hojeIso;
       }
 
@@ -689,8 +688,13 @@ export default function AdminRelatoriosPage() {
                     <input
                       type="date"
                       max={hojeIso}
-                      value={data.dataFim || initialFim}
+                      value={data.dataFim && data.dataFim <= hojeIso ? data.dataFim : hojeIso}
                       onChange={(e) => handleChange("dataFim", "", e.target.value)}
+                      onBlur={(e) => {
+                        if (e.target.value > hojeIso) {
+                          handleChange("dataFim", "", hojeIso);
+                        }
+                      }}
                       className="w-full bg-white border border-[#E9D5BB] rounded-xl px-2 py-2 text-xs text-[#70412d] focus:outline-none text-center"
                     />
                   </div>
