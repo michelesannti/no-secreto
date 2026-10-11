@@ -271,8 +271,7 @@ export default function AdminRelatoriosPage() {
                       </span>
                       <div 
                         style={{ height: `${Math.max(hAtivacaoUsuarias, 6)}%` }}
-                        className="w-full max-w-[36px] bg-[#70412d] rounded-t-lg transition-all duration-500 relative group"
-                        title={`Ativação Usuárias: ${vAtivacaoUsuarias}`}
+                        className="w-full max-w-[36px] bg-[#70412d] rounded-t-lg transition-all duration-500"
                       />
                     </div>
 
@@ -282,8 +281,7 @@ export default function AdminRelatoriosPage() {
                       </span>
                       <div 
                         style={{ height: `${Math.max(hCreatorsAtivas, 6)}%` }}
-                        className="w-full max-w-[36px] bg-[#8c5237] rounded-t-lg transition-all duration-500 relative group"
-                        title={`Creators Ativas: ${vCreatorsAtivas}`}
+                        className="w-full max-w-[36px] bg-[#8c5237] rounded-t-lg transition-all duration-500"
                       />
                     </div>
 
@@ -293,8 +291,7 @@ export default function AdminRelatoriosPage() {
                       </span>
                       <div 
                         style={{ height: `${Math.max(hAtivacaoAfiliadas, 6)}%` }}
-                        className="w-full max-w-[36px] bg-[#b8805f] rounded-t-lg transition-all duration-500 relative group"
-                        title={`Ativação Afiliadas: ${vAtivacaoAfiliadas}`}
+                        className="w-full max-w-[36px] bg-[#b8805f] rounded-t-lg transition-all duration-500"
                       />
                     </div>
 
@@ -304,30 +301,24 @@ export default function AdminRelatoriosPage() {
                       </span>
                       <div 
                         style={{ height: `${Math.max(hMonetizacao, 6)}%` }}
-                        className="w-full max-w-[36px] bg-[#5c3524] rounded-t-lg transition-all duration-500 relative group"
-                        title={`Monetização: ${vMonetizacao}`}
+                        className="w-full max-w-[36px] bg-[#5c3524] rounded-t-lg transition-all duration-500"
                       />
                     </div>
 
                   </div>
 
-                  {/* Legendas descritivas das colunas */}
-                  <div className="flex justify-around text-center text-[10px] sm:text-xs pt-3 gap-1">
-                    <div className="flex-1 flex flex-col items-center">
-                      <span className="font-bold text-[#70412d]">Ativação Usuárias</span>
-                      <span className="text-[9px] text-[#70412d]/60 font-medium leading-tight">com estudos</span>
+                  <div className="flex justify-around text-center text-[10px] sm:text-xs pt-2 gap-1">
+                    <div className="flex-1 font-bold text-[#70412d]">
+                      Usuárias com Estudos
                     </div>
-                    <div className="flex-1 flex flex-col items-center">
-                      <span className="font-bold text-[#70412d]">Creators Ativas</span>
-                      <span className="text-[9px] text-[#70412d]/60 font-medium leading-tight">com posts</span>
+                    <div className="flex-1 font-bold text-[#70412d]">
+                      Creators com Posts
                     </div>
-                    <div className="flex-1 flex flex-col items-center">
-                      <span className="font-bold text-[#70412d]">Ativação Afiliadas</span>
-                      <span className="text-[9px] text-[#70412d]/60 font-medium leading-tight">com vendas</span>
+                    <div className="flex-1 font-bold text-[#70412d]">
+                      Creators com Vendas
                     </div>
-                    <div className="flex-1 flex flex-col items-center">
-                      <span className="font-bold text-[#70412d]">Monetização</span>
-                      <span className="text-[9px] text-[#70412d]/60 font-medium leading-tight">assinaturas</span>
+                    <div className="flex-1 font-bold text-[#70412d]">
+                      Assinaturas
                     </div>
                   </div>
                 </div>
