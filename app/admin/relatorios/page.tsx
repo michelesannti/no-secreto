@@ -119,11 +119,30 @@ export default function AdminRelatoriosPage() {
     return strData;
   };
 
+  // Função para verificar se o estudo foi realizado HOJE (data local do navegador)
+  const fezEstudoHoje = (strData: string | null) => {
+    if (!strData) return false;
+    const dataEstudo = strData.split("T")[0];
+    
+    // Pega a data local de hoje no formato YYYY-MM-DD
+    const agora = new Date();
+    const ano = agora.getFullYear();
+    const mes = String(agora.getMonth() + 1).padStart(2, "0");
+    const dia = String(agora.getDate()).padStart(2, "0");
+    const hojeStr = `${ano}-${mes}-${dia}`;
+
+    return dataEstudo === hojeStr;
+  };
+
   const clientesTotal = (data.usuariasDetalhes || []).filter((u) => u.acesso === "PAGO");
   const creatorsTotal = (data.usuariasDetalhes || []).filter((u) => u.creator);
 
   const clientesComEstudos = clientesTotal.filter((u) => u.estudos_concluidos > 0);
   const creatorsComEstudos = creatorsTotal.filter((u) => u.estudos_concluidos > 0);
+
+  // Contagem de quem fez estudo hoje
+  const clientesHojeCount = clientesComEstudos.filter((u) => fezEstudoHoje(u.ultimo_estudo)).length;
+  const creatorsHojeCount = creatorsComEstudos.filter((u) => fezEstudoHoje(u.ultimo_estudo)).length;
 
   const totalUsuariasComAcesso = (data.usuariasDetalhes || []).length;
 
@@ -203,13 +222,13 @@ export default function AdminRelatoriosPage() {
               </div>
             </div>
 
-            {/* CARD ÚNICO UNIFICADO COM SEPARAÇÃO VERTICAL SUTIL */}
+            {/* CARD ÚNICO UNIFICADO COM DESTAQUE DE ESTUDOS HOJE */}
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-3 sm:p-5 shadow-sm space-y-4">
               
-              {/* Título Principal do Card */}
+              {/* Título Principal Padronizado */}
               <div className="border-b border-[#e9d5bb] pb-2 text-center">
                 <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
-                  USUÁRIAS: <span className="font-mono font-extrabold text-[#70412d]">{totalUsuariasComAcesso}</span>
+                  USUÁRIAS ({totalUsuariasComAcesso})
                 </span>
               </div>
 
@@ -218,37 +237,57 @@ export default function AdminRelatoriosPage() {
                 
                 {/* Coluna 1: Clientes */}
                 <div className="space-y-3 pr-1 sm:pr-2">
-                  <div className="text-center font-bold text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5">
-                    CLIENTES ({clientesComEstudos.length} / {clientesTotal.length})
+                  <div className="text-center font-bold text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 flex flex-wrap justify-center items-center gap-1.5">
+                    <span>CLIENTES ({clientesComEstudos.length} / {clientesTotal.length})</span>
+                    {clientesHojeCount > 0 && (
+                      <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] px-2 py-0.5 rounded-full font-extrabold normal-case tracking-normal">
+                        🔥 {clientesHojeCount} hoje
+                      </span>
+                    )}
                   </div>
 
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs">
                       <thead>
                         <tr className="border-b border-[#e9d5bb] text-[#70412d]/60 uppercase text-[10px]">
-                          <th className="pb-2 font-bold">Usuária</th>
+                          <th className="pb-2 font-bold pl-6">Usuária</th>
                           <th className="pb-2 text-center font-bold">Estudos</th>
                           <th className="pb-2 text-center font-bold">Último</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-[#e9d5bb]/60">
                         {clientesComEstudos.length > 0 ? (
-                          clientesComEstudos.map((u) => (
-                            <tr key={u.id} className="hover:bg-[#e9d5bb]/20 transition-colors">
-                              <td className="py-2.5 font-medium text-[#70412d]">
-                                <div className="font-bold">{u.nome}</div>
-                                <div className="text-[10px] text-[#70412d]/60 truncate max-w-[90px] sm:max-w-none">
-                                  {u.instagram ? `@${u.instagram}` : u.email}
-                                </div>
-                              </td>
-                              <td className="py-2.5 text-center font-mono font-bold text-[#70412d]">
-                                {u.estudos_concluidos}
-                              </td>
-                              <td className="py-2.5 text-center font-mono text-[11px] text-[#70412d]/80">
-                                {formatarData(u.ultimo_estudo)}
-                              </td>
-                            </tr>
-                          ))
+                          clientesComEstudos.map((u) => {
+                            const fezHoje = fezEstudoHoje(u.ultimo_estudo);
+                            return (
+                              <tr 
+                                key={u.id} 
+                                className={`transition-colors ${
+                                  fezHoje 
+                                    ? "bg-[#e9d5bb]/50 font-medium" 
+                                    : "hover:bg-[#e9d5bb]/20"
+                                }`}
+                              >
+                                <td className="py-2.5 font-medium text-[#70412d] pl-6 relative">
+                                  <span className="absolute left-1 top-2.5 w-4 text-center text-xs" title={fezHoje ? "Fez estudo hoje!" : ""}>
+                                    {fezHoje ? "🔥" : ""}
+                                  </span>
+                                  <div className="font-bold truncate">
+                                    {u.nome}
+                                  </div>
+                                  <div className="text-[10px] text-[#70412d]/60 truncate max-w-[90px] sm:max-w-none">
+                                    {u.instagram ? `@${u.instagram}` : u.email}
+                                  </div>
+                                </td>
+                                <td className="py-2.5 text-center font-mono font-bold text-[#70412d]">
+                                  {u.estudos_concluidos}
+                                </td>
+                                <td className="py-2.5 text-center font-mono text-[11px] text-[#70412d]/80">
+                                  {formatarData(u.ultimo_estudo)}
+                                </td>
+                              </tr>
+                            );
+                          })
                         ) : (
                           <tr>
                             <td colSpan={3} className="py-6 text-center text-[#70412d]/60 italic">
@@ -263,37 +302,57 @@ export default function AdminRelatoriosPage() {
 
                 {/* Coluna 2: Creators */}
                 <div className="space-y-3 pl-3 sm:pl-6">
-                  <div className="text-center font-bold text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5">
-                    CREATORS ({creatorsComEstudos.length} / {creatorsTotal.length})
+                  <div className="text-center font-bold text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 flex flex-wrap justify-center items-center gap-1.5">
+                    <span>CREATORS ({creatorsComEstudos.length} / {creatorsTotal.length})</span>
+                    {creatorsHojeCount > 0 && (
+                      <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] px-2 py-0.5 rounded-full font-extrabold normal-case tracking-normal">
+                        🔥 {creatorsHojeCount} hoje
+                      </span>
+                    )}
                   </div>
 
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs">
                       <thead>
                         <tr className="border-b border-[#e9d5bb] text-[#70412d]/60 uppercase text-[10px]">
-                          <th className="pb-2 font-bold">Usuária</th>
+                          <th className="pb-2 font-bold pl-6">Usuária</th>
                           <th className="pb-2 text-center font-bold">Estudos</th>
                           <th className="pb-2 text-center font-bold">Último</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-[#e9d5bb]/60">
                         {creatorsComEstudos.length > 0 ? (
-                          creatorsComEstudos.map((u) => (
-                            <tr key={u.id} className="hover:bg-[#e9d5bb]/20 transition-colors">
-                              <td className="py-2.5 font-medium text-[#70412d]">
-                                <div className="font-bold">{u.nome}</div>
-                                <div className="text-[10px] text-[#70412d]/60 truncate max-w-[90px] sm:max-w-none">
-                                  {u.instagram ? `@${u.instagram}` : u.email}
-                                </div>
-                              </td>
-                              <td className="py-2.5 text-center font-mono font-bold text-[#70412d]">
-                                {u.estudos_concluidos}
-                              </td>
-                              <td className="py-2.5 text-center font-mono text-[11px] text-[#70412d]/80">
-                                {formatarData(u.ultimo_estudo)}
-                              </td>
-                            </tr>
-                          ))
+                          creatorsComEstudos.map((u) => {
+                            const fezHoje = fezEstudoHoje(u.ultimo_estudo);
+                            return (
+                              <tr 
+                                key={u.id} 
+                                className={`transition-colors ${
+                                  fezHoje 
+                                    ? "bg-[#e9d5bb]/50 font-medium" 
+                                    : "hover:bg-[#e9d5bb]/20"
+                                }`}
+                              >
+                                <td className="py-2.5 font-medium text-[#70412d] pl-6 relative">
+                                  <span className="absolute left-1 top-2.5 w-4 text-center text-xs" title={fezHoje ? "Fez estudo hoje!" : ""}>
+                                    {fezHoje ? "🔥" : ""}
+                                  </span>
+                                  <div className="font-bold truncate">
+                                    {u.nome}
+                                  </div>
+                                  <div className="text-[10px] text-[#70412d]/60 truncate max-w-[90px] sm:max-w-none">
+                                    {u.instagram ? `@${u.instagram}` : u.email}
+                                  </div>
+                                </td>
+                                <td className="py-2.5 text-center font-mono font-bold text-[#70412d]">
+                                  {u.estudos_concluidos}
+                                </td>
+                                <td className="py-2.5 text-center font-mono text-[11px] text-[#70412d]/80">
+                                  {formatarData(u.ultimo_estudo)}
+                                </td>
+                              </tr>
+                            );
+                          })
                         ) : (
                           <tr>
                             <td colSpan={3} className="py-6 text-center text-[#70412d]/60 italic">
