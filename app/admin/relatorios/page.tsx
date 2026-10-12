@@ -17,7 +17,22 @@ interface RelatoriosData {
     seguidores: number | "";
     visitasPerfil: number | "";
   };
-  whatsapp: Record<string, number | "">;
+  whatsapp: {
+    acesso?: number | "";
+    briefing?: number | "";
+    afiliacao?: number | "";
+    integrada?: number | "";
+    story?: number | "";
+    conteudo?: number | "";
+    lead?: number | "";
+    cliente?: number | "";
+    clienteCreator?: number | "";
+    followUp?: number | "";
+    semRetorno?: number | "";
+    pausa?: number | "";
+    inativa?: number | "";
+    desistencia?: number | "";
+  };
   supabase: {
     estudosConcluidos: number;
     conteudosPublicados: number | "";
@@ -337,7 +352,22 @@ export default function AdminRelatoriosPage() {
     dataFim: initialFim,
     instagram: { seguidores: "", visitasPerfil: "", cliquesBio: "" },
     tiktok: { seguidores: "", visitasPerfil: "" },
-    whatsapp: {},
+    whatsapp: {
+      acesso: "",
+      briefing: "",
+      afiliacao: "",
+      integrada: "",
+      story: "",
+      conteudo: "",
+      lead: "",
+      cliente: "",
+      clienteCreator: "",
+      followUp: "",
+      semRetorno: "",
+      pausa: "",
+      inativa: "",
+      desistencia: "",
+    },
     supabase: { estudosConcluidos: 0, conteudosPublicados: "" },
     cakto: { vendas: "", vendasAbandonadas: "", vendasAfiliadas: "" },
   });
@@ -364,6 +394,7 @@ export default function AdminRelatoriosPage() {
               cakto: json.cakto || prev.cakto,
               instagram: json.instagram || prev.instagram,
               tiktok: json.tiktok || prev.tiktok,
+              whatsapp: { ...prev.whatsapp, ...(json.whatsapp || {}) },
               supabase: json.supabase || prev.supabase,
             };
           });
@@ -467,6 +498,23 @@ export default function AdminRelatoriosPage() {
 
   const inputSemSetinhasClass = "w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center";
 
+  const camposWhatsapp: { key: keyof RelatoriosData["whatsapp"]; label: string }[] = [
+    { key: "acesso", label: "Acesso" },
+    { key: "briefing", label: "Briefing" },
+    { key: "afiliacao", label: "Afiliação" },
+    { key: "integrada", label: "Integrada" },
+    { key: "story", label: "Story" },
+    { key: "conteudo", label: "Conteúdo" },
+    { key: "lead", label: "Lead" },
+    { key: "cliente", label: "Cliente" },
+    { key: "clienteCreator", label: "Cliente Creator" },
+    { key: "followUp", label: "Follow-up" },
+    { key: "semRetorno", label: "Sem Retorno" },
+    { key: "pausa", label: "Pausa" },
+    { key: "inativa", label: "Inativa" },
+    { key: "desistencia", label: "Desistência" },
+  ];
+
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d] px-4 py-8 md:px-6 md:py-10 selection:bg-[#e9d5bb]">
       <div className="max-w-5xl mx-auto space-y-8">
@@ -480,7 +528,7 @@ export default function AdminRelatoriosPage() {
           />
           <div>
             <h1 className="text-2xl font-serif tracking-wide text-[#70412d] font-bold">
-              Relatório
+              Relatórios
             </h1>
             <div className="w-12 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
           </div>
@@ -497,7 +545,7 @@ export default function AdminRelatoriosPage() {
               href="/admin/relatorios"
               className="px-6 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition bg-[#70412d] text-[#f9f5e9] shadow-sm"
             >
-              📋 Relatório
+              📋 Relatórios
             </Link>
           </div>
         </div>
@@ -548,7 +596,7 @@ export default function AdminRelatoriosPage() {
               </div>
             </div>
 
-            {/* SEÇÃO UNIFICADA 1: REDES SOCIAIS (COM ALINHAMENTO FIXADO) */}
+            {/* SEÇÃO UNIFICADA 1: REDES SOCIAIS */}
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               <div className="border-b border-[#e9d5bb] pb-2 text-center">
                 <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
@@ -632,7 +680,31 @@ export default function AdminRelatoriosPage() {
               </div>
             </div>
 
-            {/* SEÇÃO 2: SUPABASE */}
+            {/* SEÇÃO 2: WHATSAPP */}
+            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+              <div className="border-b border-[#e9d5bb] pb-2 text-center">
+                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
+                  WHATSAPP
+                </span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 items-end">
+                {camposWhatsapp.map((campo) => (
+                  <div key={campo.key} className="flex flex-col">
+                    <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
+                      {campo.label}
+                    </label>
+                    <input
+                      type="number"
+                      value={data.whatsapp?.[campo.key] ?? ""}
+                      onChange={(e) => handleChange("whatsapp", campo.key, e.target.value)}
+                      className={inputSemSetinhasClass}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* SEÇÃO 3: SUPABASE */}
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               <div className="border-b border-[#e9d5bb] pb-2 text-center">
                 <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
@@ -650,7 +722,7 @@ export default function AdminRelatoriosPage() {
               </div>
             </div>
 
-            {/* SEÇÃO 3: VENDAS */}
+            {/* SEÇÃO 4: VENDAS */}
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               <div className="border-b border-[#e9d5bb] pb-2 text-center">
                 <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">

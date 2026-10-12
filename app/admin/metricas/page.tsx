@@ -196,7 +196,7 @@ export default function AdminMetricasPage() {
               href="/admin/relatorios"
               className="px-6 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition bg-[#efe2cc]/60 text-[#70412d]/70 hover:bg-[#efe2cc]"
             >
-              📋 Relatório
+              📋 Relatórios
             </Link>
           </div>
         </div>
