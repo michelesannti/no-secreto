@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface Creator {
   id: string;
@@ -8,9 +8,198 @@ interface Creator {
   instagram: string;
 }
 
+// SVG do chevron em creme (#f9f5e9) para fundos marrons
+const CHEVRON_CREME_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23f9f5e9' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`;
+
+// SVG do chevron em marrom (#70412d) para fundos claros
+const CHEVRON_MARROM_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2370412d' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`;
+
+// Dropdown Customizado para Selecionar a Creator com Pesquisa
+function DropdownCreatorCustomizado({
+  creators,
+  selectedId,
+  onChange,
+  disabled,
+}: {
+  creators: Creator[];
+  selectedId: string;
+  onChange: (id: string) => void;
+  disabled?: boolean;
+}) {
+  const [aberto, setAberto] = useState(false);
+  const [busca, setBusca] = useState("");
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setAberto(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const creatorSelecionada = creators.find((c) => c.id === selectedId);
+  const labelAtual = creatorSelecionada 
+    ? `${creatorSelecionada.nome} (@${creatorSelecionada.instagram})` 
+    : "Creator";
+
+  const creatorsFiltradas = creators.filter((c) => {
+    const texto = `${c.nome} (@${c.instagram})`.toLowerCase();
+    return texto.includes(busca.toLowerCase());
+  });
+
+  const temSelecao = Boolean(selectedId);
+
+  return (
+    <div className="relative w-full" ref={containerRef}>
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => !disabled && setAberto(!aberto)}
+        style={{
+          backgroundImage: temSelecao ? CHEVRON_CREME_SVG : CHEVRON_MARROM_SVG,
+          backgroundPosition: "right 0.5rem center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "1.25em 1.25em",
+        }}
+        className={`w-full rounded-xl pl-3 pr-8 py-2 text-sm text-center focus:outline-none transition shadow-sm truncate ${
+          temSelecao
+            ? "bg-[#70412d] text-[#f9f5e9] font-medium"
+            : "bg-transparent border-b border-[#e9d5bb] text-[#70412d]/60 text-left pl-2"
+        } ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+      >
+        <span className="block truncate">{labelAtual}</span>
+      </button>
+
+      {aberto && (
+        <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-[#f9f5e9] border border-[#e9d5bb] rounded-2xl p-2 shadow-xl space-y-2">
+          {/* Input de Pesquisa interno */}
+          <input
+            type="text"
+            placeholder="Pesquisar creator..."
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            autoFocus
+            className="w-full bg-white border border-[#e9d5bb] rounded-xl px-3 py-1.5 text-xs text-[#70412d] focus:outline-none shadow-inner"
+          />
+
+          <div className="max-h-48 overflow-y-auto space-y-1">
+            {creatorsFiltradas.length > 0 ? (
+              creatorsFiltradas.map((c) => {
+                const ehSelecionado = c.id === selectedId;
+                return (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() => {
+                      onChange(c.id);
+                      setAberto(false);
+                      setBusca("");
+                    }}
+                    className={`w-full text-left py-2 px-3 rounded-xl text-xs transition ${
+                      ehSelecionado
+                        ? "bg-[#70412d] text-[#f9f5e9] font-bold shadow-sm"
+                        : "text-[#70412d] hover:bg-[#efe2cc]"
+                    }`}
+                  >
+                    {c.nome} (@{c.instagram})
+                  </button>
+                );
+              })
+            ) : (
+              <p className="text-center text-[11px] text-[#70412d]/60 py-2 italic">
+                Nenhuma creator encontrada.
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Dropdown Customizado genérico para Formato e Tipo
+function DropdownCustomizado({
+  valor,
+  placeholder,
+  opcoes,
+  onChange,
+  disabled,
+}: {
+  valor: string;
+  placeholder: string;
+  opcoes: string[];
+  onChange: (val: string) => void;
+  disabled?: boolean;
+}) {
+  const [aberto, setAberto] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setAberto(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const temSelecao = Boolean(valor);
+
+  return (
+    <div className="relative w-full" ref={containerRef}>
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => !disabled && setAberto(!aberto)}
+        style={{
+          backgroundImage: temSelecao ? CHEVRON_CREME_SVG : CHEVRON_MARROM_SVG,
+          backgroundPosition: "right 0.5rem center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "1.25em 1.25em",
+        }}
+        className={`w-full rounded-xl pl-3 pr-8 py-2 text-sm text-center focus:outline-none transition shadow-sm truncate ${
+          temSelecao
+            ? "bg-[#70412d] text-[#f9f5e9] font-medium"
+            : "bg-transparent border-b border-[#e9d5bb] text-[#70412d]/60 text-left pl-2"
+        } ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+      >
+        <span className="block truncate">{valor !== "" ? valor : placeholder}</span>
+      </button>
+
+      {aberto && (
+        <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-[#f9f5e9] border border-[#e9d5bb] rounded-2xl p-1.5 shadow-xl space-y-1">
+          {opcoes.map((op) => {
+            const ehSelecionado = op === valor;
+            return (
+              <button
+                key={op}
+                type="button"
+                onClick={() => {
+                  onChange(op);
+                  setAberto(false);
+                }}
+                className={`w-full text-center py-2 px-3 rounded-xl text-xs transition ${
+                  ehSelecionado
+                    ? "bg-[#70412d] text-[#f9f5e9] font-bold shadow-sm"
+                    : "text-[#70412d] hover:bg-[#efe2cc]"
+                }`}
+              >
+                {op}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function AdminConteudosPage() {
   const [creators, setCreators] = useState<Creator[]>([]);
-  const [search, setSearch] = useState("");
   const [selectedCreatorId, setSelectedCreatorId] = useState("");
 
   const [linkInstagram, setLinkInstagram] = useState("");
@@ -43,46 +232,16 @@ export default function AdminConteudosPage() {
     fetchCreators();
   }, []);
 
-  const handleCreatorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearch(value);
-
-    // Procura a creator correspondente
-    const match = creators.find(
-      (c) =>
-        c.nome?.toLowerCase() === value.toLowerCase() ||
-        c.instagram?.toLowerCase().replace(/@/g, "") === value.toLowerCase().replace(/@/g, "") ||
-        `${c.nome} (@${c.instagram})`.toLowerCase() === value.toLowerCase()
-    );
-
-    if (match) {
-      setSelectedCreatorId(match.id);
-    } else {
-      setSelectedCreatorId("");
-    }
-  };
-
   const isStory = formato === "STORY";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMensagem(null);
 
-    let creatorIdToSubmit = selectedCreatorId;
-
-    if (!creatorIdToSubmit && search) {
-      const match = creators.find(
-        (c) =>
-          c.nome?.toLowerCase().includes(search.toLowerCase()) ||
-          c.instagram?.toLowerCase().includes(search.toLowerCase().replace(/@/g, ""))
-      );
-      if (match) creatorIdToSubmit = match.id;
-    }
-
-    if (!creatorIdToSubmit) {
+    if (!selectedCreatorId) {
       setMensagem({
         tipo: "erro",
-        texto: "Creator não encontrada. Certifique-se de selecionar uma Creator cadastrada.",
+        texto: "Selecione uma Creator.",
       });
       return;
     }
@@ -104,7 +263,7 @@ export default function AdminConteudosPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          creator_id: creatorIdToSubmit,
+          creator_id: selectedCreatorId,
           link_instagram: isStory ? "" : linkInstagram,
           link_tiktok: isStory ? "" : linkTiktok,
           tipo_conteudo: tipoConteudo,
@@ -124,7 +283,6 @@ export default function AdminConteudosPage() {
       setLinkInstagram("");
       setLinkTiktok("");
       setSelectedCreatorId("");
-      setSearch("");
       setFormato("");
       setTipoConteudo("");
     } catch (err: any) {
@@ -155,61 +313,31 @@ export default function AdminConteudosPage() {
 
         {/* Formulário Estilo Login */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-          {/* Input Unificado com Sugestões (Datalist) */}
-          <div className="flex flex-col">
-            <input
-              type="text"
-              list="creators-list"
-              placeholder={loadingCreators ? "Carregando creators..." : "Creator"}
-              value={search}
-              onChange={handleCreatorChange}
-              required
-              disabled={loading || loadingCreators}
-              className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none disabled:opacity-60 text-sm"
-            />
-            <datalist id="creators-list">
-              {creators.map((c) => (
-                <option key={c.id} value={`${c.nome} (@${c.instagram})`} />
-              ))}
-            </datalist>
-          </div>
+          {/* Seletor Customizado de Creator com Pesquisa */}
+          <DropdownCreatorCustomizado
+            creators={creators}
+            selectedId={selectedCreatorId}
+            onChange={setSelectedCreatorId}
+            disabled={loading || loadingCreators}
+          />
 
-          {/* Formato e Tipo com Rótulos Internos Escondidos na Seleção */}
+          {/* Formato e Tipo com Dropdowns Customizados */}
           <div className="grid grid-cols-2 gap-4">
-            <select
-              value={formato}
-              onChange={(e) => setFormato(e.target.value)}
-              required
+            <DropdownCustomizado
+              valor={formato}
+              placeholder="Formato"
+              opcoes={["REEL", "FOTO", "STORY"]}
+              onChange={setFormato}
               disabled={loading}
-              className={`bg-transparent border-b border-[#e9d5bb] p-2 focus:outline-none text-sm disabled:opacity-60 ${
-                formato === "" ? "text-[#70412d]/60" : "text-[#70412d]"
-              }`}
-            >
-              <option value="" disabled hidden className="bg-[#f9f5e9] text-[#70412d]/60">
-                Formato
-              </option>
-              <option value="REEL" className="bg-[#f9f5e9] text-[#70412d]">REEL</option>
-              <option value="FOTO" className="bg-[#f9f5e9] text-[#70412d]">FOTO</option>
-              <option value="STORY" className="bg-[#f9f5e9] text-[#70412d]">STORY</option>
-            </select>
+            />
 
-            <select
-              value={tipoConteudo}
-              onChange={(e) => setTipoConteudo(e.target.value)}
-              required
+            <DropdownCustomizado
+              valor={tipoConteudo}
+              placeholder="Tipo"
+              opcoes={["RELATO", "ROTINA", "REFLEXÃO", "EXPERIÊNCIA"]}
+              onChange={setTipoConteudo}
               disabled={loading}
-              className={`bg-transparent border-b border-[#e9d5bb] p-2 focus:outline-none text-sm disabled:opacity-60 ${
-                tipoConteudo === "" ? "text-[#70412d]/60" : "text-[#70412d]"
-              }`}
-            >
-              <option value="" disabled hidden className="bg-[#f9f5e9] text-[#70412d]/60">
-                Tipo
-              </option>
-              <option value="RELATO" className="bg-[#f9f5e9] text-[#70412d]">RELATO</option>
-              <option value="ROTINA" className="bg-[#f9f5e9] text-[#70412d]">ROTINA</option>
-              <option value="REFLEXÃO" className="bg-[#f9f5e9] text-[#70412d]">REFLEXÃO</option>
-              <option value="EXPERIÊNCIA" className="bg-[#f9f5e9] text-[#70412d]">EXPERIÊNCIA</option>
-            </select>
+            />
           </div>
 
           {/* Link do Instagram */}
@@ -236,7 +364,7 @@ export default function AdminConteudosPage() {
           <button
             type="submit"
             disabled={loading || loadingCreators}
-            className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide transition disabled:opacity-80 mt-2 self-center"
+            className="px-6 py-2 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm tracking-wide transition disabled:opacity-80 mt-2 self-center cursor-pointer hover:bg-[#5c3524]"
           >
             {loading ? "Registrando..." : "Registrar"}
           </button>
