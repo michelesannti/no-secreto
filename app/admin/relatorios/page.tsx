@@ -228,7 +228,7 @@ function SeletorCalendarioVisual({
 
       {aberto && (
         <div className="absolute right-0 top-full mt-2 z-50 w-64 bg-[#f9f5e9] border border-[#e9d5bb] rounded-2xl p-3 shadow-xl space-y-3">
-          {/* Cabeçalho do Mês com SVG vetorial para evitar emoji no iOS */}
+          {/* Cabeçalho do Mês */}
           <div className="flex items-center justify-between border-b border-[#e9d5bb] pb-2 text-xs font-bold text-[#70412d]">
             <button
               type="button"
@@ -902,7 +902,6 @@ export default function AdminRelatoriosPage() {
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
                 <div>
-                  {/* Dropdown Customizado com Fundo Marrom e Texto Creme */}
                   <SeletorTipoCustomizado
                     valor={data.tipoRelatorio || "semanal"}
                     onChange={(novoTipo) => handleChange("tipoRelatorio", "", novoTipo)}
@@ -911,7 +910,6 @@ export default function AdminRelatoriosPage() {
 
                 {data.tipoRelatorio === "semanal" || data.tipoRelatorio === "quinzenal" ? (
                   <div className="flex items-center gap-2">
-                    {/* Data Início (Travada e formatada DD/MM/YYYY) */}
                     <div className="w-full bg-[#E9D5BB]/30 border border-[#E9D5BB] rounded-xl px-2 py-2 text-xs text-[#70412d]/70 text-center font-mono">
                       {formatarDataPtBr(data.dataInicio || initialInicio)}
                     </div>
@@ -920,7 +918,6 @@ export default function AdminRelatoriosPage() {
                       até
                     </span>
 
-                    {/* Data Fim (Calendário visual customizado) */}
                     <SeletorCalendarioVisual
                       valorIso={data.dataFim || initialFim}
                       hojeIso={hojeIso}
@@ -940,7 +937,7 @@ export default function AdminRelatoriosPage() {
               </div>
             </div>
 
-            {/* SEÇÃO UNIFICADA 1: REDES SOCIAIS */}
+            {/* SEÇÃO UNIFICADA 1: REDES SOCIAIS (COM ALINHAMENTO FIXADO) */}
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               <div className="border-b border-[#e9d5bb] pb-2 text-center">
                 <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
@@ -954,9 +951,11 @@ export default function AdminRelatoriosPage() {
                   <span className="text-xs font-bold text-[#70412d]/90 uppercase block text-center border-b border-[#E9D5BB]/60 pb-1.5 min-h-[48px] flex items-center justify-center">
                     INSTAGRAM
                   </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div>
-                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Seguidores</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+                    <div className="flex flex-col">
+                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
+                        Seguidores
+                      </label>
                       <input
                         type="number"
                         value={data.instagram.seguidores}
@@ -964,8 +963,10 @@ export default function AdminRelatoriosPage() {
                         className={inputSemSetinhasClass}
                       />
                     </div>
-                    <div>
-                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Visitas ao Perfil</label>
+                    <div className="flex flex-col">
+                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
+                        Visitas ao Perfil
+                      </label>
                       <input
                         type="number"
                         value={data.instagram.visitasPerfil}
@@ -973,8 +974,10 @@ export default function AdminRelatoriosPage() {
                         className={inputSemSetinhasClass}
                       />
                     </div>
-                    <div>
-                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Cliques na Bio</label>
+                    <div className="flex flex-col">
+                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
+                        Cliques na Bio
+                      </label>
                       <input
                         type="number"
                         value={data.instagram.cliquesBio}
@@ -990,9 +993,11 @@ export default function AdminRelatoriosPage() {
                   <span className="text-xs font-bold text-[#70412d]/90 uppercase block text-center border-b border-[#E9D5BB]/60 pb-1.5 min-h-[48px] flex items-center justify-center">
                     TIKTOK
                   </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Seguidores</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
+                    <div className="flex flex-col">
+                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
+                        Seguidores
+                      </label>
                       <input
                         type="number"
                         value={data.tiktok.seguidores}
@@ -1000,8 +1005,10 @@ export default function AdminRelatoriosPage() {
                         className={inputSemSetinhasClass}
                       />
                     </div>
-                    <div>
-                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Visitas ao Perfil</label>
+                    <div className="flex flex-col">
+                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
+                        Visitas ao Perfil
+                      </label>
                       <input
                         type="number"
                         value={data.tiktok.visitasPerfil}
