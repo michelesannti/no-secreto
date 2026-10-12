@@ -228,14 +228,16 @@ function SeletorCalendarioVisual({
 
       {aberto && (
         <div className="absolute right-0 top-full mt-2 z-50 w-64 bg-[#f9f5e9] border border-[#e9d5bb] rounded-2xl p-3 shadow-xl space-y-3">
-          {/* Cabeçalho do Mês */}
+          {/* Cabeçalho do Mês com SVG vetorial para evitar emoji no iOS */}
           <div className="flex items-center justify-between border-b border-[#e9d5bb] pb-2 text-xs font-bold text-[#70412d]">
             <button
               type="button"
               onClick={() => mudarMes(-1)}
               className="p-1 hover:bg-[#efe2cc] rounded-lg transition"
             >
-              ◀
+              <svg className="w-3.5 h-3.5 fill-[#70412d]" viewBox="0 0 24 24">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+              </svg>
             </button>
             <span className="capitalize">
               {nomesMeses[mesVisual]} {anoVisual}
@@ -246,11 +248,13 @@ function SeletorCalendarioVisual({
               onClick={() => mudarMes(1)}
               className={`p-1 rounded-lg transition ${
                 naoPodeAvisar
-                  ? "text-gray-300 cursor-not-allowed opacity-30"
+                  ? "opacity-30 cursor-not-allowed"
                   : "hover:bg-[#efe2cc]"
               }`}
             >
-              ▶
+              <svg className="w-3.5 h-3.5 fill-[#70412d]" viewBox="0 0 24 24">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+              </svg>
             </button>
           </div>
 
