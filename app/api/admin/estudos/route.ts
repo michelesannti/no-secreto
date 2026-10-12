@@ -136,7 +136,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({
-      message: `Estudo de ${livro} ${capitulo} registrado 🤎`
+      message: ` ${livro} ${capitulo} registrado 🤎`
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
