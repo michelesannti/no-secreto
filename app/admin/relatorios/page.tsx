@@ -46,10 +46,83 @@ interface RelatoriosData {
   historicoSemanas?: { semana: string; totalEstudos: number; usuariasAtivasNaSemana?: number; engajamentoPct?: number }[];
 }
 
-// SVG exato do chevron nativo de form-select (#70412d)
+// SVG do chevron nativo
 const CHEVRON_NATIVO_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2370412d' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`;
 
-// Componente do Calendário Customizado (Com a setinha nativa exatamente igual aos <select>)
+// Componente de Dropdown Customizado para o Tipo de Relatório (Com a mesma tipografia/fonte original)
+function SeletorTipoCustomizado({
+  valor,
+  onChange,
+}: {
+  valor: "semanal" | "quinzenal" | "mensal";
+  onChange: (novoTipo: "semanal" | "quinzenal" | "mensal") => void;
+}) {
+  const [aberto, setAberto] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setAberto(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const opcoes: { id: "semanal" | "quinzenal" | "mensal"; label: string }[] = [
+    { id: "semanal", label: "Semanal" },
+    { id: "quinzenal", label: "Quinzenal" },
+    { id: "mensal", label: "Mensal" },
+  ];
+
+  const labelAtual = opcoes.find((o) => o.id === valor)?.label || "Semanal";
+
+  return (
+    <div className="relative w-full" ref={containerRef}>
+      <button
+        type="button"
+        onClick={() => setAberto(!aberto)}
+        style={{
+          backgroundImage: CHEVRON_NATIVO_SVG,
+          backgroundPosition: "right 0.5rem center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "1.25em 1.25em",
+        }}
+        className="w-full bg-white border border-[#E9D5BB] rounded-xl pl-3 pr-8 py-2 text-sm text-[#70412d] text-center focus:outline-none shadow-sm active:scale-95 transition"
+      >
+        <span className="block text-center">{labelAtual}</span>
+      </button>
+
+      {aberto && (
+        <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-[#f9f5e9] border border-[#e9d5bb] rounded-2xl p-1.5 shadow-xl space-y-1">
+          {opcoes.map((item) => {
+            const ehSelecionado = item.id === valor;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => {
+                  onChange(item.id);
+                  setAberto(false);
+                }}
+                className={`w-full text-center py-2 px-3 rounded-xl text-sm transition ${
+                  ehSelecionado
+                    ? "bg-[#70412d] text-[#f9f5e9] font-medium shadow-sm"
+                    : "text-[#70412d] hover:bg-[#efe2cc]"
+                }`}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Componente do Calendário Customizado
 function SeletorCalendarioVisual({
   valorIso,
   hojeIso,
@@ -822,15 +895,11 @@ export default function AdminRelatoriosPage() {
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
                 <div>
-                  <select
-                    value={data.tipoRelatorio || "semanal"}
-                    onChange={(e) => handleChange("tipoRelatorio", "", e.target.value)}
-                    className="w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none text-center"
-                  >
-                    <option value="semanal">Semanal</option>
-                    <option value="quinzenal">Quinzenal</option>
-                    <option value="mensal">Mensal</option>
-                  </select>
+                  {/* Dropdown Customizado */}
+                  <SeletorTipoCustomizado
+                    valor={data.tipoRelatorio || "semanal"}
+                    onChange={(novoTipo) => handleChange("tipoRelatorio", "", novoTipo)}
+                  />
                 </div>
 
                 {data.tipoRelatorio === "semanal" || data.tipoRelatorio === "quinzenal" ? (
@@ -844,7 +913,7 @@ export default function AdminRelatoriosPage() {
                       até
                     </span>
 
-                    {/* Data Fim (Calendário visual com a setinha idêntica aos <select>) */}
+                    {/* Data Fim (Calendário visual customizado) */}
                     <SeletorCalendarioVisual
                       valorIso={data.dataFim || initialFim}
                       hojeIso={hojeIso}
