@@ -46,10 +46,13 @@ interface RelatoriosData {
   historicoSemanas?: { semana: string; totalEstudos: number; usuariasAtivasNaSemana?: number; engajamentoPct?: number }[];
 }
 
-// SVG do chevron nativo
-const CHEVRON_NATIVO_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2370412d' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`;
+// SVG do chevron em creme (#f9f5e9) para destacar no fundo marrom
+const CHEVRON_CREME_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23f9f5e9' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`;
 
-// Componente de Dropdown Customizado para o Tipo de Relatório (Com a mesma tipografia/fonte original)
+// SVG do chevron em marrom (#70412d)
+const CHEVRON_MARROM_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2370412d' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`;
+
+// Dropdown Customizado do Tipo com Fundo Marrom e Letra Creme quando Selecionado
 function SeletorTipoCustomizado({
   valor,
   onChange,
@@ -84,12 +87,12 @@ function SeletorTipoCustomizado({
         type="button"
         onClick={() => setAberto(!aberto)}
         style={{
-          backgroundImage: CHEVRON_NATIVO_SVG,
+          backgroundImage: CHEVRON_CREME_SVG,
           backgroundPosition: "right 0.5rem center",
           backgroundRepeat: "no-repeat",
           backgroundSize: "1.25em 1.25em",
         }}
-        className="w-full bg-white border border-[#E9D5BB] rounded-xl pl-3 pr-8 py-2 text-sm text-[#70412d] text-center focus:outline-none shadow-sm active:scale-95 transition"
+        className="w-full bg-[#70412d] border border-[#70412d] rounded-xl pl-3 pr-8 py-2 text-sm font-medium text-[#f9f5e9] text-center focus:outline-none shadow-sm active:scale-95 transition"
       >
         <span className="block text-center">{labelAtual}</span>
       </button>
@@ -213,7 +216,7 @@ function SeletorCalendarioVisual({
         type="button"
         onClick={() => setAberto(!aberto)}
         style={{
-          backgroundImage: CHEVRON_NATIVO_SVG,
+          backgroundImage: CHEVRON_MARROM_SVG,
           backgroundPosition: "right 0.5rem center",
           backgroundRepeat: "no-repeat",
           backgroundSize: "1.25em 1.25em",
@@ -895,7 +898,7 @@ export default function AdminRelatoriosPage() {
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
                 <div>
-                  {/* Dropdown Customizado */}
+                  {/* Dropdown Customizado com Fundo Marrom e Texto Creme */}
                   <SeletorTipoCustomizado
                     valor={data.tipoRelatorio || "semanal"}
                     onChange={(novoTipo) => handleChange("tipoRelatorio", "", novoTipo)}
