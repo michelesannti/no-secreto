@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface BlocoEstudo {
   versiculo_inicio: number;
@@ -10,6 +10,154 @@ interface BlocoEstudo {
   aplicacao: string;
   destaque: string;
   carregandoTexto?: boolean;
+}
+
+// SVG exato do chevron nativo (#70412d)
+const CHEVRON_NATIVO_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2370412d' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`;
+
+// Dropdown Customizado para a Quantidade de Estudos
+function DropdownQtdEstudos({
+  valor,
+  onChange,
+  disabled,
+}: {
+  valor: number | "";
+  onChange: (val: number) => void;
+  disabled?: boolean;
+}) {
+  const [aberto, setAberto] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setAberto(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const opcoes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const labelAtual = valor !== "" ? `${valor} ${valor === 1 ? "Estudo" : "Estudos"}` : "Total de Estudos";
+
+  return (
+    <div className="relative w-full max-w-xs mx-auto" ref={containerRef}>
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => !disabled && setAberto(!aberto)}
+        style={{
+          backgroundImage: CHEVRON_NATIVO_SVG,
+          backgroundPosition: "right 0.5rem center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "1.25em 1.25em",
+        }}
+        className={`w-full bg-transparent border-b border-[#e9d5bb] pl-2 pr-8 py-2 text-sm text-center focus:outline-none transition tabular-nums ${
+          valor === "" ? "text-[#70412d]/60" : "text-[#70412d] font-medium"
+        } ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+      >
+        <span className="block text-center">{labelAtual}</span>
+      </button>
+
+      {aberto && (
+        <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-[#f9f5e9] border border-[#e9d5bb] rounded-2xl p-1.5 shadow-xl space-y-1 max-h-60 overflow-y-auto">
+          {opcoes.map((num) => {
+            const ehSelecionado = num === valor;
+            return (
+              <button
+                key={num}
+                type="button"
+                onClick={() => {
+                  onChange(num);
+                  setAberto(false);
+                }}
+                className={`w-full text-center py-2 px-3 rounded-xl text-sm transition tabular-nums ${
+                  ehSelecionado
+                    ? "bg-[#70412d] text-[#f9f5e9] font-medium shadow-sm"
+                    : "text-[#70412d] hover:bg-[#efe2cc]"
+                }`}
+              >
+                {num} {num === 1 ? "Estudo" : "Estudos"}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Dropdown Customizado para o Versículo Fim
+function DropdownVersiculoFim({
+  valor,
+  opcoes,
+  onChange,
+  disabled,
+}: {
+  valor: number | "";
+  opcoes: number[];
+  onChange: (val: number) => void;
+  disabled?: boolean;
+}) {
+  const [aberto, setAberto] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setAberto(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative w-16" ref={containerRef}>
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => !disabled && setAberto(!aberto)}
+        style={{
+          backgroundImage: CHEVRON_NATIVO_SVG,
+          backgroundPosition: "right 0.35rem center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "0.9em 0.9em",
+        }}
+        className={`w-16 h-8 bg-white border border-[#E9D5BB] rounded-xl pl-2 pr-5 text-sm text-center focus:outline-none shadow-inner transition flex items-center justify-center font-sans tabular-nums ${
+          valor === "" ? "text-[#70412d]/60" : "text-[#70412d] font-medium"
+        } ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+      >
+        <span className="block text-center">{valor !== "" ? valor : ""}</span>
+      </button>
+
+      {aberto && (
+        <div className="absolute right-0 top-full mt-2 z-50 w-24 bg-[#f9f5e9] border border-[#e9d5bb] rounded-xl p-1 shadow-xl space-y-1 max-h-48 overflow-y-auto">
+          {opcoes.map((v) => {
+            const ehSelecionado = v === valor;
+            return (
+              <button
+                key={v}
+                type="button"
+                onClick={() => {
+                  onChange(v);
+                  setAberto(false);
+                }}
+                className={`w-full text-center py-1 px-2 rounded-lg text-xs transition font-sans tabular-nums ${
+                  ehSelecionado
+                    ? "bg-[#70412d] text-[#f9f5e9] font-bold shadow-sm"
+                    : "text-[#70412d] hover:bg-[#efe2cc]"
+                }`}
+              >
+                {v}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function AdminEstudosPage() {
@@ -55,7 +203,6 @@ export default function AdminEstudosPage() {
     carregarProximoCapitulo();
   }, []);
 
-  // Função para buscar o texto automático dos versículos chamando a rota limpa /versiculos
   const buscarTextoAutomatico = async (index: number, inicio: number, fim: number) => {
     if (!fim || fim < inicio) return;
 
@@ -196,28 +343,15 @@ export default function AdminEstudosPage() {
             </p>
           ) : (
             <>
-              <p className="text-xl font-serif font-semibold text-[#70412d] text-center">
+              <p className="text-xl font-sans font-bold text-[#70412d] text-center tracking-wide tabular-nums">
                 {livro} {capitulo}
               </p>
 
-              <select
-                value={qtdBlocos}
-                onChange={(e) => handleQtdBlocosChange(parseInt(e.target.value, 10))}
+              <DropdownQtdEstudos
+                valor={qtdBlocos}
+                onChange={handleQtdBlocosChange}
                 disabled={loading}
-                required
-                className={`bg-transparent border-b border-[#e9d5bb] p-2 focus:outline-none disabled:opacity-60 text-sm ${
-                  qtdBlocos === "" ? "text-[#70412d]/60" : "text-[#70412d]"
-                }`}
-              >
-                <option value="" disabled hidden className="bg-[#f9f5e9] text-[#70412d]/60">
-                  Total de Estudos
-                </option>
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                  <option key={num} value={num} className="bg-[#f9f5e9] text-[#70412d]">
-                    {num} {num === 1 ? "Estudo" : "Estudos"}
-                  </option>
-                ))}
-              </select>
+              />
 
               <div className="flex flex-col gap-6">
                 {blocos.map((bloco, idx) => (
@@ -226,7 +360,7 @@ export default function AdminEstudosPage() {
                     className="bg-[#EFE2CC]/50 border border-[#E9D5BB] rounded-2xl overflow-hidden shadow-sm flex flex-col backdrop-blur-sm"
                   >
                     <div className="bg-[#EFE2CC] px-4 py-3 flex items-center justify-between border-b border-[#E9D5BB]">
-                      <span className="text-xs font-bold uppercase tracking-wider text-[#70412d]">
+                      <span className="text-xs font-bold uppercase tracking-wider text-[#70412d] tabular-nums">
                         Estudo {idx + 1}
                       </span>
                       
@@ -235,49 +369,33 @@ export default function AdminEstudosPage() {
                           VERSÍCULOS
                         </label>
                         <div className="flex items-center gap-2">
-                          <input
-                            type="number"
-                            value={bloco.versiculo_inicio}
-                            readOnly
-                            className="w-16 bg-white/60 border border-[#E9D5BB] rounded-lg px-2.5 py-1 text-sm text-[#70412d]/80 text-center focus:outline-none cursor-not-allowed shadow-inner"
-                          />
+                          {/* Versículo Início com o fundo padronizado do Data Início (bg-[#E9D5BB]/30) */}
+                          <div className="w-16 h-8 bg-[#E9D5BB]/30 border border-[#E9D5BB] rounded-xl text-sm text-[#70412d]/70 text-center font-medium shadow-inner flex items-center justify-center font-sans tabular-nums cursor-not-allowed select-none">
+                            {bloco.versiculo_inicio}
+                          </div>
                           <span className="text-xs text-[#70412d]/60">até</span>
-                          <select
-                            value={bloco.versiculo_fim}
-                            onChange={(e) =>
-                              handleBlocoChange(idx, "versiculo_fim", e.target.value ? parseInt(e.target.value, 10) : "")
-                            }
-                            required
+                          <DropdownVersiculoFim
+                            valor={bloco.versiculo_fim}
+                            opcoes={gerarOpcoesVersiculos(bloco.versiculo_inicio)}
+                            onChange={(val) => handleBlocoChange(idx, "versiculo_fim", val)}
                             disabled={loading}
-                            className={`w-20 bg-white border border-[#E9D5BB] rounded-lg px-2 py-1 text-sm text-center focus:outline-none focus:ring-1 focus:ring-[#70412d]/30 shadow-inner ${
-                              bloco.versiculo_fim === "" ? "text-[#70412d]/60" : "text-[#70412d]"
-                            }`}
-                          >
-                            <option value="" disabled hidden>
-                              {""}
-                            </option>
-                            {gerarOpcoesVersiculos(bloco.versiculo_inicio).map((v) => (
-                              <option key={v} value={v} className="bg-[#f9f5e9] text-[#70412d]">
-                                {v}
-                              </option>
-                            ))}
-                          </select>
+                          />
                         </div>
                       </div>
                     </div>
 
                     <div className="p-4 flex flex-col gap-4">
-                      {/* Campo de Versículos (Automático / Somente Leitura) */}
                       <div className="flex flex-col gap-1.5">
                         <label className="text-[10px] font-bold tracking-wider text-[#70412d]/80 uppercase flex items-center justify-between">
                           <span>VERSÍCULOS </span>
                           {bloco.carregandoTexto && <span className="text-[9px] italic text-[#70412d]/60">Buscando texto...</span>}
                         </label>
+                        {/* Texto do Versículo com o fundo padronizado do Data Início (bg-[#E9D5BB]/30) */}
                         <textarea
                           rows={4}
                           value={bloco.texto}
                           readOnly
-                          className="bg-white/80 border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d]/90 placeholder:text-[#70412d]/40 focus:outline-none resize-none shadow-inner cursor-not-allowed font-sans"
+                          className="bg-[#E9D5BB]/30 border border-[#E9D5BB] rounded-xl p-3 text-sm text-[#70412d]/80 placeholder:text-[#70412d]/40 focus:outline-none resize-none shadow-inner cursor-not-allowed font-sans"
                         />
                       </div>
 
