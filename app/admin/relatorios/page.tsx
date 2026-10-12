@@ -540,8 +540,8 @@ export default function AdminRelatoriosPage() {
                     <input
                       type="text"
                       value={mesAnteriorFormatado}
-                      disabled
-                      className="w-full bg-[#E9D5BB]/40 border border-[#E9D5BB] rounded-xl px-3 py-2 text-xs text-[#70412d] font-bold text-center uppercase tracking-wider cursor-not-allowed focus:outline-none"
+                      readOnly
+                      className="w-full bg-[#E9D5BB]/40 border border-[#E9D5BB] rounded-xl px-3 py-2 text-xs text-[#70412d] font-bold text-center uppercase tracking-wider cursor-default focus:outline-none opacity-100"
                     />
                   </div>
                 )}
