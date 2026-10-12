@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface UsuariaDetalhe {
   id: string;
@@ -44,6 +44,191 @@ interface RelatoriosData {
   ativacaoAfiliadasCount?: number;
   usuariasDetalhes?: UsuariaDetalhe[];
   historicoSemanas?: { semana: string; totalEstudos: number; usuariasAtivasNaSemana?: number; engajamentoPct?: number }[];
+}
+
+// SVG exato do chevron nativo de form-select (#70412d)
+const CHEVRON_NATIVO_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2370412d' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`;
+
+// Componente do Calendário Customizado (Com a setinha nativa exatamente igual aos <select>)
+function SeletorCalendarioVisual({
+  valorIso,
+  hojeIso,
+  onSelecionarData,
+}: {
+  valorIso: string;
+  hojeIso: string;
+  onSelecionarData: (dataIso: string) => void;
+}) {
+  const [aberto, setAberto] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const partesValor = (valorIso || hojeIso).split("-");
+  const [anoVisual, setAnoVisual] = useState(parseInt(partesValor[0]));
+  const [mesVisual, setMesVisual] = useState(parseInt(partesValor[1]) - 1);
+
+  const partesHoje = hojeIso.split("-");
+  const anoAtual = parseInt(partesHoje[0]);
+  const mesAtual = parseInt(partesHoje[1]) - 1;
+
+  useEffect(() => {
+    const p = (valorIso || hojeIso).split("-");
+    setAnoVisual(parseInt(p[0]));
+    setMesVisual(parseInt(p[1]) - 1);
+  }, [valorIso, hojeIso]);
+
+  // Fechar ao clicar fora
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setAberto(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const formatarPtBr = (iso: string) => {
+    if (!iso) return "";
+    const [a, m, d] = iso.split("-");
+    return `${d}/${m}/${a}`;
+  };
+
+  const nomesMeses = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+  ];
+
+  // Cálculos do calendário
+  const primeiroDiaSemana = new Date(anoVisual, mesVisual, 1).getDay();
+  const totalDiasMes = new Date(anoVisual, mesVisual + 1, 0).getDate();
+
+  const naoPodeAvisar =
+    anoVisual > anoAtual || (anoVisual === anoAtual && mesVisual >= mesAtual);
+
+  const mudarMes = (delta: number) => {
+    if (delta > 0 && naoPodeAvisar) return;
+
+    let novoMes = mesVisual + delta;
+    let novoAno = anoVisual;
+    if (novoMes < 0) {
+      novoMes = 11;
+      novoAno--;
+    } else if (novoMes > 11) {
+      novoMes = 0;
+      novoAno++;
+    }
+
+    if (novoAno > anoAtual || (novoAno === anoAtual && novoMes > mesAtual)) {
+      return;
+    }
+
+    setMesVisual(novoMes);
+    setAnoVisual(novoAno);
+  };
+
+  const diasGrade = [];
+  for (let i = 0; i < primeiroDiaSemana; i++) {
+    diasGrade.push(null);
+  }
+  for (let d = 1; d <= totalDiasMes; d++) {
+    diasGrade.push(d);
+  }
+
+  return (
+    <div className="relative w-full" ref={containerRef}>
+      <button
+        type="button"
+        onClick={() => setAberto(!aberto)}
+        style={{
+          backgroundImage: CHEVRON_NATIVO_SVG,
+          backgroundPosition: "right 0.5rem center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "1.25em 1.25em",
+        }}
+        className="w-full bg-white border border-[#E9D5BB] rounded-xl pl-3 pr-8 py-2 text-xs text-[#70412d] font-bold text-center font-mono focus:outline-none shadow-sm active:scale-95 transition"
+      >
+        <span className="block text-center">{formatarPtBr(valorIso || hojeIso)}</span>
+      </button>
+
+      {aberto && (
+        <div className="absolute right-0 top-full mt-2 z-50 w-64 bg-[#f9f5e9] border border-[#e9d5bb] rounded-2xl p-3 shadow-xl space-y-3">
+          {/* Cabeçalho do Mês */}
+          <div className="flex items-center justify-between border-b border-[#e9d5bb] pb-2 text-xs font-bold text-[#70412d]">
+            <button
+              type="button"
+              onClick={() => mudarMes(-1)}
+              className="p-1 hover:bg-[#efe2cc] rounded-lg transition"
+            >
+              ◀
+            </button>
+            <span className="capitalize">
+              {nomesMeses[mesVisual]} {anoVisual}
+            </span>
+            <button
+              type="button"
+              disabled={naoPodeAvisar}
+              onClick={() => mudarMes(1)}
+              className={`p-1 rounded-lg transition ${
+                naoPodeAvisar
+                  ? "text-gray-300 cursor-not-allowed opacity-30"
+                  : "hover:bg-[#efe2cc]"
+              }`}
+            >
+              ▶
+            </button>
+          </div>
+
+          {/* Dias da Semana */}
+          <div className="grid grid-cols-7 text-center text-[10px] font-bold text-[#70412d]/60">
+            <span>DOM</span>
+            <span>SEG</span>
+            <span>TER</span>
+            <span>QUA</span>
+            <span>QUI</span>
+            <span>SEX</span>
+            <span>SÁB</span>
+          </div>
+
+          {/* Grade de Dias */}
+          <div className="grid grid-cols-7 gap-1 text-center text-xs font-bold">
+            {diasGrade.map((dia, idx) => {
+              if (dia === null) {
+                return <div key={`empty-${idx}`} />;
+              }
+
+              const mesStr = String(mesVisual + 1).padStart(2, "0");
+              const diaStr = String(dia).padStart(2, "0");
+              const dataLoopIso = `${anoVisual}-${mesStr}-${diaStr}`;
+
+              const ehFuturo = dataLoopIso > hojeIso;
+              const ehSelecionado = dataLoopIso === valorIso;
+
+              return (
+                <button
+                  key={dataLoopIso}
+                  type="button"
+                  disabled={ehFuturo}
+                  onClick={() => {
+                    onSelecionarData(dataLoopIso);
+                    setAberto(false);
+                  }}
+                  className={`py-1.5 rounded-lg text-[11px] transition font-mono ${
+                    ehSelecionado
+                      ? "bg-[#70412d] text-[#f9f5e9] shadow-sm"
+                      : ehFuturo
+                      ? "text-gray-300 cursor-not-allowed opacity-40"
+                      : "text-[#70412d] hover:bg-[#efe2cc]"
+                  }`}
+                >
+                  {dia}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function AdminRelatoriosPage() {
@@ -659,26 +844,12 @@ export default function AdminRelatoriosPage() {
                       até
                     </span>
 
-                    {/* Data Fim (Formatada DD/MM/YYYY com seletor invisível por cima e bloqueio rigoroso) */}
-                    <div className="relative w-full">
-                      <div className="w-full bg-white border border-[#E9D5BB] rounded-xl px-2 py-2 text-xs text-[#70412d] text-center font-mono font-bold">
-                        {formatarDataPtBr(data.dataFim || initialFim)}
-                      </div>
-                      <input
-                        type="date"
-                        max={hojeIso}
-                        value={data.dataFim && data.dataFim <= hojeIso ? data.dataFim : hojeIso}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          if (val && val > hojeIso) {
-                            handleChange("dataFim", "", hojeIso);
-                          } else {
-                            handleChange("dataFim", "", val || hojeIso);
-                          }
-                        }}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                      />
-                    </div>
+                    {/* Data Fim (Calendário visual com a setinha idêntica aos <select>) */}
+                    <SeletorCalendarioVisual
+                      valorIso={data.dataFim || initialFim}
+                      hojeIso={hojeIso}
+                      onSelecionarData={(novaIso) => handleChange("dataFim", "", novaIso)}
+                    />
                   </div>
                 ) : (
                   <div>
