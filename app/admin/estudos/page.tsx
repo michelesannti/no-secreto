@@ -281,6 +281,24 @@ export default function AdminEstudosPage() {
       return;
     }
 
+    // TRAVA COMPLETA DE CAMPOS
+    for (let i = 0; i < blocos.length; i++) {
+      const b = blocos[i];
+      if (
+        b.versiculo_fim === "" ||
+        !b.texto?.trim() ||
+        !b.contexto?.trim() ||
+        !b.aplicacao?.trim() ||
+        !b.destaque?.trim()
+      ) {
+        setMensagem({
+          tipo: "erro",
+          texto: `Preencha todos os campos do Estudo ${i + 1} antes de registrar`,
+        });
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
@@ -369,7 +387,6 @@ export default function AdminEstudosPage() {
                           VERSÍCULOS
                         </label>
                         <div className="flex items-center gap-2">
-                          {/* Versículo Início com o fundo padronizado do Data Início (bg-[#E9D5BB]/30) */}
                           <div className="w-16 h-8 bg-[#E9D5BB]/30 border border-[#E9D5BB] rounded-xl text-sm text-[#70412d]/70 text-center font-medium shadow-inner flex items-center justify-center font-sans tabular-nums cursor-not-allowed select-none">
                             {bloco.versiculo_inicio}
                           </div>
@@ -390,7 +407,6 @@ export default function AdminEstudosPage() {
                           <span>VERSÍCULOS </span>
                           {bloco.carregandoTexto && <span className="text-[9px] italic text-[#70412d]/60">Buscando texto...</span>}
                         </label>
-                        {/* Texto do Versículo com o fundo padronizado do Data Início (bg-[#E9D5BB]/30) */}
                         <textarea
                           rows={4}
                           value={bloco.texto}
