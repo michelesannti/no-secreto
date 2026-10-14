@@ -14,40 +14,65 @@ export async function GET() {
       .from("progresso")
       .select("*", { count: "exact", head: true });
 
-    // 2. DADOS AUTOMÁTICOS DO INSTAGRAM (Leitura pública direta do perfil)
+    // 2. DADOS AUTOMÁTICOS DO INSTAGRAM (Via Meta Graph API se configurado, ou fallback público)
     let instagramData = {
       seguidores: 0,
       visitasPerfil: 0,
       cliquesBio: 0,
     };
 
-    try {
-      // Consulta os dados públicos do perfil do Instagram sem precisar de token do Facebook
-      const resIg = await fetch(
-        "https://www.instagram.com/nosecretoapp/?__a=1&__d=dis",
-        {
-          headers: {
-            "User-Agent":
-              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-          },
-          next: { revalidate: 3600 }, // Cache de 1 hora
-        }
-      );
+    const igToken = process.env.META_USER_ACCESS_TOKEN;
+    const igAccountId = process.env.META_INSTAGRAM_ACCOUNT_ID;
 
-      if (resIg.ok) {
-        const text = await resIg.text();
-        try {
-          const json = JSON.parse(text);
-          const userData = json?.graphql?.user || json?.data?.user;
-          if (userData) {
-            instagramData.seguidores = userData.edge_followed_by?.count || 0;
+    if (igToken && igAccountId) {
+      try {
+        const resIg = await fetch(
+          `https://graph.facebook.com/v19.0/${igAccountId}?fields=followers_count,insights.metric(profile_views,website_clicks).period(day)&access_token=${igToken}`,
+          { next: { revalidate: 3600 } }
+        );
+        if (resIg.ok) {
+          const json = await resIg.json();
+          instagramData.seguidores = json.followers_count || 0;
+          if (json.insights?.data) {
+            json.insights.data.forEach((metric: any) => {
+              const val = metric.values?.[0]?.value || 0;
+              if (metric.name === "profile_views") instagramData.visitasPerfil = val;
+              if (metric.name === "website_clicks") instagramData.cliquesBio = val;
+            });
           }
-        } catch {
-          // Fallback caso o Instagram retorne HTML de segurança
         }
+      } catch (errIg) {
+        console.error("Erro ao buscar dados da Meta Graph API:", errIg);
       }
-    } catch (errIg) {
-      console.error("Erro ao buscar dados do Instagram:", errIg);
+    } else {
+      // Fallback de leitura pública básica
+      try {
+        const resIg = await fetch(
+          "https://www.instagram.com/nosecretoapp/?__a=1&__d=dis",
+          {
+            headers: {
+              "User-Agent":
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            },
+            next: { revalidate: 3600 },
+          }
+        );
+
+        if (resIg.ok) {
+          const text = await resIg.text();
+          try {
+            const json = JSON.parse(text);
+            const userData = json?.graphql?.user || json?.data?.user;
+            if (userData) {
+              instagramData.seguidores = userData.edge_followed_by?.count || 0;
+            }
+          } catch {
+            // Ignora se o Instagram retornar HTML
+          }
+        }
+      } catch (errIg) {
+        console.error("Erro ao buscar dados públicos do Instagram:", errIg);
+      }
     }
 
     // 3. DADOS DO WHATSAPP (Via Evolution API caso esteja configurada)
@@ -109,7 +134,7 @@ export async function GET() {
 
     // 4. RETORNO DO RELATÓRIO PRONTO
     return NextResponse.json({
-      tipoRelatorio: "mensal",
+      tipoRelatorio: "semanal",
       instagram: instagramData,
       tiktok: { seguidores: 0, visitasPerfil: 0 },
       whatsapp: whatsappData,

@@ -387,9 +387,9 @@ export default function AdminRelatoriosPage() {
             return {
               ...prev,
               ...json,
+              tipoRelatorio: "semanal", // Garante padrão semanal ao carregar
               dataFim: dataFimValida,
               periodo: json.periodo || prev.periodo,
-              tipoRelatorio: json.tipoRelatorio || prev.tipoRelatorio,
               dataInicio: json.dataInicio || prev.dataInicio,
               cakto: json.cakto || prev.cakto,
               instagram: json.instagram || prev.instagram,
