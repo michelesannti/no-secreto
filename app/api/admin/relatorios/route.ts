@@ -14,64 +14,34 @@ export async function GET() {
       .from("progresso")
       .select("*", { count: "exact", head: true });
 
-    // 2. DADOS AUTOMÁTICOS DO INSTAGRAM (Via Meta Graph API se configurado, ou fallback público)
+    // 2. DADOS AUTOMÁTICOS DO INSTAGRAM (Via Business Discovery)
     let instagramData = {
       seguidores: 0,
       visitasPerfil: 0,
       cliquesBio: 0,
     };
 
-    const igToken = process.env.META_USER_ACCESS_TOKEN;
-    const igAccountId = process.env.META_INSTAGRAM_ACCOUNT_ID;
+    const actorId = process.env.INSTAGRAM_ACTOR_ID;
+    const targetUsername = process.env.INSTAGRAM_TARGET_USERNAME;
+    const igToken = process.env.FACEBOOK_USER_ACCESS_TOKEN;
 
-    if (igToken && igAccountId) {
+    if (actorId && targetUsername && igToken) {
       try {
-        const resIg = await fetch(
-          `https://graph.facebook.com/v19.0/${igAccountId}?fields=followers_count,insights.metric(profile_views,website_clicks).period(day)&access_token=${igToken}`,
-          { next: { revalidate: 3600 } }
-        );
+        const url = `https://graph.facebook.com/v26.0/${actorId}?fields=business_discovery.username(${targetUsername}){followers_count,media_count,username}&access_token=${igToken}`;
+        const resIg = await fetch(url, { next: { revalidate: 3600 } });
+        
         if (resIg.ok) {
           const json = await resIg.json();
-          instagramData.seguidores = json.followers_count || 0;
-          if (json.insights?.data) {
-            json.insights.data.forEach((metric: any) => {
-              const val = metric.values?.[0]?.value || 0;
-              if (metric.name === "profile_views") instagramData.visitasPerfil = val;
-              if (metric.name === "website_clicks") instagramData.cliquesBio = val;
-            });
+          if (json.business_discovery) {
+            instagramData.seguidores = json.business_discovery.followers_count || 0;
+            // Opcional: se quiser guardar o media_count em algum lugar ou exibir
           }
+        } else {
+          const errorJson = await resIg.json();
+          console.error("Erro na Graph API do Instagram:", errorJson);
         }
       } catch (errIg) {
         console.error("Erro ao buscar dados da Meta Graph API:", errIg);
-      }
-    } else {
-      // Fallback de leitura pública básica
-      try {
-        const resIg = await fetch(
-          "https://www.instagram.com/nosecretoapp/?__a=1&__d=dis",
-          {
-            headers: {
-              "User-Agent":
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            },
-            next: { revalidate: 3600 },
-          }
-        );
-
-        if (resIg.ok) {
-          const text = await resIg.text();
-          try {
-            const json = JSON.parse(text);
-            const userData = json?.graphql?.user || json?.data?.user;
-            if (userData) {
-              instagramData.seguidores = userData.edge_followed_by?.count || 0;
-            }
-          } catch {
-            // Ignora se o Instagram retornar HTML
-          }
-        }
-      } catch (errIg) {
-        console.error("Erro ao buscar dados públicos do Instagram:", errIg);
       }
     }
 
