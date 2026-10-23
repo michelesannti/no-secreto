@@ -44,13 +44,9 @@ interface RelatoriosData {
   };
 }
 
-// SVG do chevron em creme (#f9f5e9) para destacar no fundo marrom
 const CHEVRON_CREME_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23f9f5e9' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`;
-
-// SVG do chevron em marrom (#70412d)
 const CHEVRON_MARROM_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2370412d' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`;
 
-// Dropdown Customizado do Tipo com Fundo Marrom e Letra Creme quando Selecionado
 function SeletorTipoCustomizado({
   valor,
   onChange,
@@ -123,7 +119,6 @@ function SeletorTipoCustomizado({
   );
 }
 
-// Componente do Calendário Customizado
 function SeletorCalendarioVisual({
   valorIso,
   hojeIso,
@@ -376,37 +371,54 @@ export default function AdminRelatoriosPage() {
   const [salvando, setSalvando] = useState(false);
   const [mensagem, setMensagem] = useState<{ tipo: "sucesso" | "erro"; texto: string } | null>(null);
 
-  useEffect(() => {
-    async function fetchRelatorios() {
-      try {
-        const res = await fetch("/api/admin/relatorios");
-        const json = await res.json();
-        if (res.ok && json) {
-          setData((prev) => {
-            const dataFimValida = json.dataFim && json.dataFim <= hojeIso ? json.dataFim : hojeIso;
-            return {
-              ...prev,
-              ...json,
-              tipoRelatorio: "semanal", // Garante padrão semanal ao carregar
-              dataFim: dataFimValida,
-              periodo: json.periodo || prev.periodo,
-              dataInicio: json.dataInicio || prev.dataInicio,
-              cakto: json.cakto || prev.cakto,
-              instagram: json.instagram || prev.instagram,
-              tiktok: json.tiktok || prev.tiktok,
-              whatsapp: { ...prev.whatsapp, ...(json.whatsapp || {}) },
-              supabase: json.supabase || prev.supabase,
-            };
-          });
-        }
-      } catch (err) {
-        console.error("Erro na busca dos relatórios:", err);
-      } finally {
-        setLoading(false);
+  const carregarDadosAPI = async (tipo: "semanal" | "quinzenal" | "mensal", inicio: string, fim: string) => {
+    setLoading(true);
+    try {
+      let queryUrl = `/api/admin/relatorios?tipo=${tipo}`;
+      if (tipo === "mensal") {
+        const ano = dataMesAnterior.getFullYear();
+        const mes = dataMesAnterior.getMonth() + 1;
+        const primeiroDiaMes = `${ano}-${String(mes).padStart(2, "0")}-01`;
+        const ultimoDiaMesObj = new Date(ano, mes, 0);
+        const ultimoDiaMes = formatarDataIso(ultimoDiaMesObj);
+        queryUrl += `&inicio=${primeiroDiaMes}&fim=${ultimoDiaMes}`;
+      } else if (inicio && fim) {
+        queryUrl += `&inicio=${inicio}&fim=${fim}`;
       }
+
+      const res = await fetch(queryUrl);
+      const json = await res.json();
+      if (res.ok && json) {
+        setData((prev) => ({
+          ...prev,
+          ...json,
+          tipoRelatorio: tipo,
+          dataFim: fim || prev.dataFim,
+          dataInicio: inicio || prev.dataInicio,
+          instagram: {
+            seguidores: json.instagram?.seguidores ?? "",
+            visitasPerfil: json.instagram?.visitasPerfil ?? "",
+            cliquesBio: json.instagram?.cliquesBio ?? "",
+          },
+          tiktok: json.tiktok || prev.tiktok,
+          whatsapp: json.whatsapp || prev.whatsapp,
+          supabase: json.supabase || prev.supabase,
+          cakto: json.cakto || prev.cakto,
+        }));
+      }
+    } catch (err) {
+      console.error("Erro na busca dos relatórios:", err);
+    } finally {
+      setLoading(false);
     }
-    fetchRelatorios();
-  }, [hojeIso]);
+  };
+
+  useEffect(() => {
+    const hojeObj = new Date();
+    const hojeStr = formatarDataIso(hojeObj);
+    const { strInicioIso } = calcularIntervaloPorTipo(hojeStr, "semanal");
+    carregarDadosAPI("semanal", strInicioIso, hojeStr);
+  }, []);
 
   const handleChange = (
     secao: keyof RelatoriosData,
@@ -423,12 +435,14 @@ export default function AdminRelatoriosPage() {
           dataInicio: strInicioIso,
           periodo: periodoTexto,
         }));
+        carregarDadosAPI(novoTipo, strInicioIso, data.dataFim || initialFim);
       } else {
         setData((prev) => ({
           ...prev,
           tipoRelatorio: "mensal",
           periodo: mesAnteriorFormatado,
         }));
+        carregarDadosAPI("mensal", "", "");
       }
       return;
     }
@@ -448,6 +462,8 @@ export default function AdminRelatoriosPage() {
         dataInicio: strInicioIso,
         periodo: periodoTexto,
       }));
+
+      carregarDadosAPI(tipoAtual, strInicioIso, novoFimIso);
       return;
     }
 
@@ -497,6 +513,9 @@ export default function AdminRelatoriosPage() {
     .toUpperCase();
 
   const inputSemSetinhasClass = "w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center";
+  
+  // Classe visual para inputs de dados preenchidos automaticamente (igual data inicio)
+  const inputInstagramPreenchidoClass = "w-full bg-[#E9D5BB]/40 border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d]/80 font-medium focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center opacity-80 cursor-default";
 
   const camposWhatsapp: { key: keyof RelatoriosData["whatsapp"]; label: string }[] = [
     { key: "acesso", label: "Acesso" },
@@ -519,7 +538,6 @@ export default function AdminRelatoriosPage() {
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d] px-4 py-8 md:px-6 md:py-10 selection:bg-[#e9d5bb]">
       <div className="max-w-5xl mx-auto space-y-8">
         
-        {/* Cabeçalho Principal */}
         <div className="text-center space-y-3">
           <img
             src="/logo.webp"
@@ -533,7 +551,6 @@ export default function AdminRelatoriosPage() {
             <div className="w-12 h-[2px] bg-[#e9d5bb] mt-2 mx-auto"></div>
           </div>
 
-          {/* Seletor de Abas Navegáveis */}
           <div className="flex justify-center gap-2 pt-4">
             <Link
               href="/admin/metricas"
@@ -550,235 +567,228 @@ export default function AdminRelatoriosPage() {
           </div>
         </div>
 
-        {loading ? (
-          <p className="text-xs text-center text-[#70412d]/60 italic font-serif py-12">
-            Carregando dados...
-          </p>
-        ) : (
-          <form onSubmit={handleSalvar} className="space-y-8">
-            
-            {/* SELETOR DE TIPO E DATAS */}
-            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
-                <div>
-                  <SeletorTipoCustomizado
-                    valor={data.tipoRelatorio || "semanal"}
-                    onChange={(novoTipo) => handleChange("tipoRelatorio", "", novoTipo)}
+        <form onSubmit={handleSalvar} className="space-y-8">
+          
+          <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
+              <div>
+                <SeletorTipoCustomizado
+                  valor={data.tipoRelatorio || "semanal"}
+                  onChange={(novoTipo) => handleChange("tipoRelatorio", "", novoTipo)}
+                />
+              </div>
+
+              {data.tipoRelatorio === "semanal" || data.tipoRelatorio === "quinzenal" ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-full bg-[#E9D5BB]/40 border border-[#E9D5BB] rounded-xl px-2 py-2 text-xs text-[#70412d]/80 font-medium text-center font-mono opacity-80 cursor-default">
+                    {formatarDataPtBr(data.dataInicio || initialInicio)}
+                  </div>
+
+                  <span className="text-xs font-bold text-[#70412d]/80 uppercase shrink-0">
+                    até
+                  </span>
+
+                  <SeletorCalendarioVisual
+                    valorIso={data.dataFim || initialFim}
+                    hojeIso={hojeIso}
+                    onSelecionarData={(novaIso) => handleChange("dataFim", "", novaIso)}
                   />
                 </div>
+              ) : (
+                <div>
+                  <input
+                    type="text"
+                    value={mesAnteriorFormatado}
+                    readOnly
+                    className="w-full bg-[#E9D5BB]/40 border border-[#E9D5BB] rounded-xl px-3 py-2 text-xs text-[#70412d]/80 font-medium text-center uppercase tracking-wider cursor-default focus:outline-none opacity-80"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
 
-                {data.tipoRelatorio === "semanal" || data.tipoRelatorio === "quinzenal" ? (
-                  <div className="flex items-center gap-2">
-                    <div className="w-full bg-[#E9D5BB]/30 border border-[#E9D5BB] rounded-xl px-2 py-2 text-xs text-[#70412d]/70 text-center font-mono">
-                      {formatarDataPtBr(data.dataInicio || initialInicio)}
-                    </div>
+          {loading && (
+            <p className="text-xs text-center text-[#70412d]/60 italic font-serif py-2">
+              Atualizando dados do período...
+            </p>
+          )}
 
-                    <span className="text-xs font-bold text-[#70412d]/80 uppercase shrink-0">
-                      até
-                    </span>
-
-                    <SeletorCalendarioVisual
-                      valorIso={data.dataFim || initialFim}
-                      hojeIso={hojeIso}
-                      onSelecionarData={(novaIso) => handleChange("dataFim", "", novaIso)}
-                    />
-                  </div>
-                ) : (
-                  <div>
-                    <input
-                      type="text"
-                      value={mesAnteriorFormatado}
-                      readOnly
-                      className="w-full bg-[#E9D5BB]/40 border border-[#E9D5BB] rounded-xl px-3 py-2 text-xs text-[#70412d] font-bold text-center uppercase tracking-wider cursor-default focus:outline-none opacity-100"
-                    />
-                  </div>
-                )}
-              </div>
+          <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+            <div className="border-b border-[#e9d5bb] pb-2 text-center">
+              <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
+                REDES SOCIAIS
+              </span>
             </div>
 
-            {/* SEÇÃO UNIFICADA 1: REDES SOCIAIS */}
-            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
-              <div className="border-b border-[#e9d5bb] pb-2 text-center">
-                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
-                  REDES SOCIAIS
+            <div className="grid grid-cols-2 gap-2 sm:gap-6 items-start divide-x divide-[#e9d5bb]">
+              <div className="space-y-3 pr-1 sm:pr-2">
+                <span className="text-xs font-bold text-[#70412d]/90 uppercase block text-center border-b border-[#E9D5BB]/60 pb-1.5 min-h-[48px] flex items-center justify-center">
+                  INSTAGRAM
                 </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 sm:gap-6 items-start divide-x divide-[#e9d5bb]">
-                {/* Coluna 1: Instagram */}
-                <div className="space-y-3 pr-1 sm:pr-2">
-                  <span className="text-xs font-bold text-[#70412d]/90 uppercase block text-center border-b border-[#E9D5BB]/60 pb-1.5 min-h-[48px] flex items-center justify-center">
-                    INSTAGRAM
-                  </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
-                    <div className="flex flex-col">
-                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
-                        Seguidores
-                      </label>
-                      <input
-                        type="number"
-                        value={data.instagram.seguidores}
-                        onChange={(e) => handleChange("instagram", "seguidores", e.target.value)}
-                        className={inputSemSetinhasClass}
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
-                        Visitas ao Perfil
-                      </label>
-                      <input
-                        type="number"
-                        value={data.instagram.visitasPerfil}
-                        onChange={(e) => handleChange("instagram", "visitasPerfil", e.target.value)}
-                        className={inputSemSetinhasClass}
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
-                        Cliques na Bio
-                      </label>
-                      <input
-                        type="number"
-                        value={data.instagram.cliquesBio}
-                        onChange={(e) => handleChange("instagram", "cliquesBio", e.target.value)}
-                        className={inputSemSetinhasClass}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Coluna 2: TikTok */}
-                <div className="space-y-3 pl-2 sm:pl-6">
-                  <span className="text-xs font-bold text-[#70412d]/90 uppercase block text-center border-b border-[#E9D5BB]/60 pb-1.5 min-h-[48px] flex items-center justify-center">
-                    TIKTOK
-                  </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
-                    <div className="flex flex-col">
-                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
-                        Seguidores
-                      </label>
-                      <input
-                        type="number"
-                        value={data.tiktok.seguidores}
-                        onChange={(e) => handleChange("tiktok", "seguidores", e.target.value)}
-                        className={inputSemSetinhasClass}
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
-                        Visitas ao Perfil
-                      </label>
-                      <input
-                        type="number"
-                        value={data.tiktok.visitasPerfil}
-                        onChange={(e) => handleChange("tiktok", "visitasPerfil", e.target.value)}
-                        className={inputSemSetinhasClass}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* SEÇÃO 2: WHATSAPP */}
-            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
-              <div className="border-b border-[#e9d5bb] pb-2 text-center">
-                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
-                  WHATSAPP
-                </span>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 items-end">
-                {camposWhatsapp.map((campo) => (
-                  <div key={campo.key} className="flex flex-col">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+                  <div className="flex flex-col">
                     <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
-                      {campo.label}
+                      Seguidores
                     </label>
                     <input
                       type="number"
-                      value={data.whatsapp?.[campo.key] ?? ""}
-                      onChange={(e) => handleChange("whatsapp", campo.key, e.target.value)}
+                      value={data.instagram.seguidores}
+                      onChange={(e) => handleChange("instagram", "seguidores", e.target.value)}
+                      className={inputInstagramPreenchidoClass}
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
+                      Visitas ao Perfil
+                    </label>
+                    <input
+                      type="number"
+                      value={data.instagram.visitasPerfil}
+                      onChange={(e) => handleChange("instagram", "visitasPerfil", e.target.value)}
+                      className={inputInstagramPreenchidoClass}
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
+                      Cliques na Bio
+                    </label>
+                    <input
+                      type="number"
+                      value={data.instagram.cliquesBio}
+                      onChange={(e) => handleChange("instagram", "cliquesBio", e.target.value)}
+                      className={inputInstagramPreenchidoClass}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3 pl-2 sm:pl-6">
+                <span className="text-xs font-bold text-[#70412d]/90 uppercase block text-center border-b border-[#E9D5BB]/60 pb-1.5 min-h-[48px] flex items-center justify-center">
+                  TIKTOK
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
+                      Seguidores
+                    </label>
+                    <input
+                      type="number"
+                      value={data.tiktok.seguidores}
+                      onChange={(e) => handleChange("tiktok", "seguidores", e.target.value)}
                       className={inputSemSetinhasClass}
                     />
                   </div>
-                ))}
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
+                      Visitas ao Perfil
+                    </label>
+                    <input
+                      type="number"
+                      value={data.tiktok.visitasPerfil}
+                      onChange={(e) => handleChange("tiktok", "visitasPerfil", e.target.value)}
+                      className={inputSemSetinhasClass}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
 
-            {/* SEÇÃO 3: SUPABASE */}
-            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
-              <div className="border-b border-[#e9d5bb] pb-2 text-center">
-                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
-                  SUPABASE (CONTEÚDOS)
-                </span>
-              </div>
-              <div className="max-w-xs mx-auto">
-                <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Conteúdos Publicados</label>
+          <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+            <div className="border-b border-[#e9d5bb] pb-2 text-center">
+              <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
+                WHATSAPP
+              </span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 items-end">
+              {camposWhatsapp.map((campo) => (
+                <div key={campo.key} className="flex flex-col">
+                  <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
+                    {campo.label}
+                  </label>
+                  <input
+                    type="number"
+                    value={data.whatsapp?.[campo.key] ?? ""}
+                    onChange={(e) => handleChange("whatsapp", campo.key, e.target.value)}
+                    className={inputSemSetinhasClass}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+            <div className="border-b border-[#e9d5bb] pb-2 text-center">
+              <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
+                SUPABASE (CONTEÚDOS)
+              </span>
+            </div>
+            <div className="max-w-xs mx-auto">
+              <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Conteúdos Publicados</label>
+              <input
+                type="number"
+                value={data.supabase.conteudosPublicados}
+                onChange={(e) => handleChange("supabase", "conteudosPublicados", e.target.value)}
+                className={inputSemSetinhasClass}
+              />
+            </div>
+          </div>
+
+          <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+            <div className="border-b border-[#e9d5bb] pb-2 text-center">
+              <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
+                VENDAS ({data.tipoRelatorio === "mensal" ? mesAnteriorFormatado : mesAtualNome})
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Vendas</label>
                 <input
                   type="number"
-                  value={data.supabase.conteudosPublicados}
-                  onChange={(e) => handleChange("supabase", "conteudosPublicados", e.target.value)}
+                  value={data?.cakto?.vendas ?? ""}
+                  onChange={(e) => handleChange("cakto", "vendas", e.target.value)}
+                  className={inputSemSetinhasClass}
+                />
+              </div>
+              <div>
+                <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Vendas Abandonadas</label>
+                <input
+                  type="number"
+                  value={data?.cakto?.vendasAbandonadas ?? ""}
+                  onChange={(e) => handleChange("cakto", "vendasAbandonadas", e.target.value)}
+                  className={inputSemSetinhasClass}
+                />
+              </div>
+              <div>
+                <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Vendas Afiliadas</label>
+                <input
+                  type="number"
+                  value={data?.cakto?.vendasAfiliadas ?? ""}
+                  onChange={(e) => handleChange("cakto", "vendasAfiliadas", e.target.value)}
                   className={inputSemSetinhasClass}
                 />
               </div>
             </div>
+          </div>
 
-            {/* SEÇÃO 4: VENDAS */}
-            <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
-              <div className="border-b border-[#e9d5bb] pb-2 text-center">
-                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
-                  VENDAS ({data.tipoRelatorio === "mensal" ? mesAnteriorFormatado : mesAtualNome})
-                </span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Vendas</label>
-                  <input
-                    type="number"
-                    value={data?.cakto?.vendas ?? ""}
-                    onChange={(e) => handleChange("cakto", "vendas", e.target.value)}
-                    className={inputSemSetinhasClass}
-                  />
-                </div>
-                <div>
-                  <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Vendas Abandonadas</label>
-                  <input
-                    type="number"
-                    value={data?.cakto?.vendasAbandonadas ?? ""}
-                    onChange={(e) => handleChange("cakto", "vendasAbandonadas", e.target.value)}
-                    className={inputSemSetinhasClass}
-                  />
-                </div>
-                <div>
-                  <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Vendas Afiliadas</label>
-                  <input
-                    type="number"
-                    value={data?.cakto?.vendasAfiliadas ?? ""}
-                    onChange={(e) => handleChange("cakto", "vendasAfiliadas", e.target.value)}
-                    className={inputSemSetinhasClass}
-                  />
-                </div>
-              </div>
-            </div>
+          <div className="text-center pt-2">
+            <button
+              type="submit"
+              disabled={salvando}
+              className="px-8 py-3 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm font-medium tracking-wide transition shadow-md hover:bg-[#5c3524] disabled:opacity-80"
+            >
+              {salvando ? "Salvando..." : "Salvar Relatório"}
+            </button>
+          </div>
 
-            <div className="text-center pt-2">
-              <button
-                type="submit"
-                disabled={salvando}
-                className="px-8 py-3 rounded-full bg-[#70412d] text-[#f9f5e9] text-sm font-medium tracking-wide transition shadow-md hover:bg-[#5c3524] disabled:opacity-80"
-              >
-                {salvando ? "Salvando..." : "Salvar Relatório"}
-              </button>
-            </div>
-
-            {mensagem && (
-              <p className={`text-sm text-center font-medium ${
-                mensagem.tipo === "sucesso" ? "text-[#70412d]" : "text-[#9b2c2c]"
-              }`}>
-                {mensagem.texto}
-              </p>
-            )}
-          </form>
-        )}
+          {mensagem && (
+            <p className={`text-sm text-center font-medium ${
+              mensagem.tipo === "sucesso" ? "text-[#70412d]" : "text-[#9b2c2c]"
+            }`}>
+              {mensagem.texto}
+            </p>
+          )}
+        </form>
 
       </div>
     </div>

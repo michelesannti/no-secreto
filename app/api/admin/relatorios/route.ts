@@ -1,11 +1,39 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabase";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    
+    const tipo = searchParams.get("tipo") || "semanal";
+    const inicioParam = searchParams.get("inicio");
+    const fimParam = searchParams.get("fim");
+
+    const agora = new Date();
+    let dataInicio: Date;
+    let dataFim: Date = new Date();
+
+    if (inicioParam && fimParam) {
+      dataInicio = new Date(`${inicioParam}T00:00:00Z`);
+      const dataFimSolicitada = new Date(`${fimParam}T23:59:59Z`);
+      // Trava de segurança: Nunca permite data de fim no futuro
+      dataFim = dataFimSolicitada > agora ? agora : dataFimSolicitada;
+    } else {
+      let diasAtras = 7;
+      if (tipo === "quinzenal") diasAtras = 14;
+      if (tipo === "mensal") diasAtras = 30;
+
+      dataInicio = new Date();
+      dataInicio.setDate(agora.getDate() - diasAtras);
+      dataFim = agora;
+    }
+
+    // Converte para Timestamps Unix em segundos para a Graph API da Meta
+    const since = Math.floor(dataInicio.getTime() / 1000);
+    const until = Math.floor(dataFim.getTime() / 1000);
+
     const supabase = getSupabaseAdminClient();
 
-    // 1. DADOS AUTOMÁTICOS DO SUPABASE (Conteúdos e Estudos)
     const { count: conteudosCount } = await supabase
       .from("conteudos")
       .select("*", { count: "exact", head: true });
@@ -14,7 +42,6 @@ export async function GET() {
       .from("progresso")
       .select("*", { count: "exact", head: true });
 
-    // 2. DADOS AUTOMÁTICOS DO INSTAGRAM (Via Business Discovery)
     let instagramData = {
       seguidores: 0,
       visitasPerfil: 0,
@@ -27,25 +54,57 @@ export async function GET() {
 
     if (actorId && targetUsername && igToken) {
       try {
-        const url = `https://graph.facebook.com/v26.0/${actorId}?fields=business_discovery.username(${targetUsername}){followers_count,media_count,username}&access_token=${igToken}`;
-        const resIg = await fetch(url, { next: { revalidate: 3600 } });
+        // A) Seguidores Atuais
+        const urlDiscovery = `https://graph.facebook.com/v26.0/${actorId}?fields=business_discovery.username(${targetUsername}){followers_count,media_count,username}&access_token=${igToken}`;
         
-        if (resIg.ok) {
-          const json = await resIg.json();
-          if (json.business_discovery) {
-            instagramData.seguidores = json.business_discovery.followers_count || 0;
-            // Opcional: se quiser guardar o media_count em algum lugar ou exibir
+        // B) Insights Filtrados (profile_views e website_clicks)
+        const urlInsights = `https://graph.facebook.com/v26.0/${actorId}/insights?metric=profile_views,website_clicks&period=day&metric_type=total_value&since=${since}&until=${until}&access_token=${igToken}`;
+
+        const [resDiscovery, resInsights] = await Promise.all([
+          fetch(urlDiscovery, { cache: "no-store" }),
+          fetch(urlInsights, { cache: "no-store" }),
+        ]);
+
+        if (resDiscovery.ok) {
+          const jsonDiscovery = await resDiscovery.json();
+          if (jsonDiscovery.business_discovery) {
+            instagramData.seguidores = jsonDiscovery.business_discovery.followers_count || 0;
           }
         } else {
-          const errorJson = await resIg.json();
-          console.error("Erro na Graph API do Instagram:", errorJson);
+          const errDisc = await resDiscovery.json();
+          console.error("Erro no Business Discovery do Instagram:", errDisc);
+        }
+
+        if (resInsights.ok) {
+          const jsonInsights = await resInsights.json();
+          if (Array.isArray(jsonInsights.data)) {
+            jsonInsights.data.forEach((metric: any) => {
+              let totalPeriodo = 0;
+
+              if (Array.isArray(metric.values)) {
+                totalPeriodo = metric.values.reduce((acc: number, item: any) => acc + (item.value || 0), 0);
+              } else if (metric.total_value?.value) {
+                totalPeriodo = metric.total_value.value;
+              }
+
+              if (metric.name === "profile_views") {
+                instagramData.visitasPerfil = totalPeriodo;
+              }
+              if (metric.name === "website_clicks") {
+                instagramData.cliquesBio = totalPeriodo;
+              }
+            });
+          }
+        } else {
+          const errIns = await resInsights.json();
+          console.error("Erro nos Insights do Instagram:", errIns);
         }
       } catch (errIg) {
-        console.error("Erro ao buscar dados da Meta Graph API:", errIg);
+        console.error("Erro na consulta da Meta Graph API:", errIg);
       }
     }
 
-    // 3. DADOS DO WHATSAPP (Via Evolution API caso esteja configurada)
+    // WhatsApp
     let whatsappData = {
       acesso: 0,
       briefing: 0,
@@ -102,9 +161,12 @@ export async function GET() {
       }
     }
 
-    // 4. RETORNO DO RELATÓRIO PRONTO
     return NextResponse.json({
-      tipoRelatorio: "semanal",
+      tipoRelatorio: tipo,
+      intervaloExato: {
+        inicio: dataInicio.toISOString().split("T")[0],
+        fim: dataFim.toISOString().split("T")[0],
+      },
       instagram: instagramData,
       tiktok: { seguidores: 0, visitasPerfil: 0 },
       whatsapp: whatsappData,
@@ -119,7 +181,7 @@ export async function GET() {
       },
     });
   } catch (error: any) {
-    console.error("Erro na API de relatórios:", error);
+    console.error("Erro na API de relatorios:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
