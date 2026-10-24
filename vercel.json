@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/admin/relatorios/renovar-token",
+      "schedule": "0 0 1 * *"
+    }
+  ]
+}

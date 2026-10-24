@@ -34,6 +34,22 @@ export async function GET(request: Request) {
 
     const supabase = getSupabaseAdminClient();
 
+    // 1. Busca prioritária do token ativo na tabela system_config
+    let igToken = process.env.FACEBOOK_USER_ACCESS_TOKEN;
+    try {
+      const { data: configData } = await supabase
+        .from("system_config")
+        .select("value")
+        .eq("key", "FACEBOOK_USER_ACCESS_TOKEN")
+        .maybeSingle();
+
+      if (configData?.value) {
+        igToken = configData.value;
+      }
+    } catch (errConfig) {
+      console.warn("Aviso: Não foi possível ler token do Supabase, utilizando fallback de env:", errConfig);
+    }
+
     const { count: conteudosCount } = await supabase
       .from("conteudos")
       .select("*", { count: "exact", head: true });
@@ -50,7 +66,6 @@ export async function GET(request: Request) {
 
     const actorId = process.env.INSTAGRAM_ACTOR_ID;
     const targetUsername = process.env.INSTAGRAM_TARGET_USERNAME;
-    const igToken = process.env.FACEBOOK_USER_ACCESS_TOKEN;
 
     if (actorId && targetUsername && igToken) {
       try {
