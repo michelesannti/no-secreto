@@ -3,6 +3,17 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
+interface CreatorDetalhe {
+  nome: string;
+  instagram: string;
+  email: string;
+  dataEntrada: string;
+  estudosConcluidos: number;
+  diariosRegistrados: number;
+  primeiroEstudo: string | null;
+  ultimoEstudo: string | null;
+}
+
 interface RelatoriosData {
   tipoRelatorio?: "semanal" | "quinzenal" | "mensal";
   periodo?: string;
@@ -18,6 +29,7 @@ interface RelatoriosData {
     visitasPerfil: number | "";
   };
   whatsapp: {
+    dados?: number | "";
     acesso?: number | "";
     briefing?: number | "";
     afiliacao?: number | "";
@@ -34,8 +46,9 @@ interface RelatoriosData {
     desistencia?: number | "";
   };
   supabase: {
-    estudosConcluidos: number;
+    estudosConcluidos: number | "";
     conteudosPublicados: number | "";
+    detalheCreators?: CreatorDetalhe[];
   };
   cakto: {
     vendas: number | "";
@@ -308,7 +321,7 @@ export default function AdminRelatoriosPage() {
   };
 
   const formatarDataPtBr = (strIso: string) => {
-    if (!strIso) return "";
+    if (!strIso) return "-";
     const partes = strIso.split("T")[0].split("-");
     if (partes.length === 3) {
       const [ano, mes, dia] = partes;
@@ -348,6 +361,7 @@ export default function AdminRelatoriosPage() {
     instagram: { seguidores: "", visitasPerfil: "", cliquesBio: "" },
     tiktok: { seguidores: "", visitasPerfil: "" },
     whatsapp: {
+      dados: "",
       acesso: "",
       briefing: "",
       afiliacao: "",
@@ -363,7 +377,7 @@ export default function AdminRelatoriosPage() {
       inativa: "",
       desistencia: "",
     },
-    supabase: { estudosConcluidos: 0, conteudosPublicados: "" },
+    supabase: { estudosConcluidos: "", conteudosPublicados: "", detalheCreators: [] },
     cakto: { vendas: "", vendasAbandonadas: "", vendasAfiliadas: "" },
   });
 
@@ -402,7 +416,11 @@ export default function AdminRelatoriosPage() {
           },
           tiktok: json.tiktok || prev.tiktok,
           whatsapp: json.whatsapp || prev.whatsapp,
-          supabase: json.supabase || prev.supabase,
+          supabase: {
+            estudosConcluidos: json.supabase?.estudosConcluidos ?? prev.supabase.estudosConcluidos,
+            conteudosPublicados: json.supabase?.conteudosPublicados ?? prev.supabase.conteudosPublicados,
+            detalheCreators: json.supabase?.detalheCreators || [],
+          },
           cakto: json.cakto || prev.cakto,
         }));
       }
@@ -514,10 +532,10 @@ export default function AdminRelatoriosPage() {
 
   const inputSemSetinhasClass = "w-full bg-white border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center";
   
-  // Classe visual para inputs de dados preenchidos automaticamente (igual data inicio)
   const inputInstagramPreenchidoClass = "w-full bg-[#E9D5BB]/40 border border-[#E9D5BB] rounded-xl px-3 py-2 text-sm text-[#70412d]/80 font-medium focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center opacity-80 cursor-default";
 
   const camposWhatsapp: { key: keyof RelatoriosData["whatsapp"]; label: string }[] = [
+    { key: "dados", label: "Dados" },
     { key: "acesso", label: "Acesso" },
     { key: "briefing", label: "Briefing" },
     { key: "afiliacao", label: "Afiliação" },
@@ -700,7 +718,7 @@ export default function AdminRelatoriosPage() {
                 WHATSAPP
               </span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 items-end">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 items-end">
               {camposWhatsapp.map((campo) => (
                 <div key={campo.key} className="flex flex-col">
                   <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
@@ -715,6 +733,50 @@ export default function AdminRelatoriosPage() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* SEÇÃO DEDICADA: ESTUDOS CONCLUÍDOS */}
+          <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-5">
+            <div className="border-b border-[#e9d5bb] pb-2 text-center">
+              <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
+                ESTUDOS
+              </span>
+            </div>
+
+            {data.supabase.detalheCreators && data.supabase.detalheCreators.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="border-b border-[#e9d5bb] text-[#70412d]/80 uppercase tracking-wider font-bold">
+                      <th className="py-2 px-3">Nome</th>
+                      <th className="py-2 px-3">Instagram</th>
+                      <th className="py-2 px-3 text-center">Entrada</th>
+                      <th className="py-2 px-3 text-center">Estudos</th>
+                      <th className="py-2 px-3 text-center">Diários</th>
+                      <th className="py-2 px-3 text-center">Primeiro Estudo</th>
+                      <th className="py-2 px-3 text-center">Último Estudo</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#e9d5bb]/60">
+                    {data.supabase.detalheCreators.map((c, i) => (
+                      <tr key={i} className="hover:bg-[#efe2cc]/80 transition">
+                        <td className="py-2.5 px-3 font-medium text-[#70412d]">{c.nome || "Sem Nome"}</td>
+                        <td className="py-2.5 px-3 text-[#70412d]/80">{c.instagram ? `@${c.instagram.replace("@", "")}` : "-"}</td>
+                        <td className="py-2.5 px-3 text-center font-mono text-[#70412d]/80">{formatarDataPtBr(c.dataEntrada)}</td>
+                        <td className="py-2.5 px-3 text-center font-bold text-[#70412d] bg-[#e9d5bb]/40 rounded-lg">{c.estudosConcluidos}</td>
+                        <td className="py-2.5 px-3 text-center font-semibold text-[#70412d]/80">{c.diariosRegistrados}</td>
+                        <td className="py-2.5 px-3 text-center font-mono text-[11px] text-[#70412d]/70">{formatarDataPtBr(c.primeiroEstudo || "")}</td>
+                        <td className="py-2.5 px-3 text-center font-mono text-[11px] text-[#70412d]/70">{formatarDataPtBr(c.ultimoEstudo || "")}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="text-xs text-center text-[#70412d]/60 italic py-4">
+                Nenhuma criadora com registros encontrados para este período.
+              </p>
+            )}
           </div>
 
           <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">

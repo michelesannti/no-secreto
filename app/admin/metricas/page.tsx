@@ -344,7 +344,7 @@ export default function AdminMetricasPage() {
                     <table className="w-full text-left text-xs">
                       <thead>
                         <tr className="border-b border-[#e9d5bb] text-[#70412d]/60 uppercase text-[10px]">
-                          <th className="pb-2 font-bold pl-6">Usuária</th>
+                          <th className="pb-2 font-bold pl-6">Nome</th>
                           <th className="pb-2 text-center font-bold">Estudos</th>
                           <th className="pb-2 text-center font-bold">Último</th>
                         </tr>
@@ -409,7 +409,7 @@ export default function AdminMetricasPage() {
                     <table className="w-full text-left text-xs">
                       <thead>
                         <tr className="border-b border-[#e9d5bb] text-[#70412d]/60 uppercase text-[10px]">
-                          <th className="pb-2 font-bold pl-6">Usuária</th>
+                          <th className="pb-2 font-bold pl-6">Nome</th>
                           <th className="pb-2 text-center font-bold">Estudos</th>
                           <th className="pb-2 text-center font-bold">Último</th>
                         </tr>
