@@ -753,8 +753,8 @@ export default function AdminRelatoriosPage() {
                       <th className="py-2 px-3 text-center">Entrada</th>
                       <th className="py-2 px-3 text-center">Estudos</th>
                       <th className="py-2 px-3 text-center">Diários</th>
-                      <th className="py-2 px-3 text-center">Primeiro Estudo</th>
-                      <th className="py-2 px-3 text-center">Último Estudo</th>
+                      <th className="py-2 px-3 text-center">Primeiro</th>
+                      <th className="py-2 px-3 text-center">Último</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#e9d5bb]/60">
