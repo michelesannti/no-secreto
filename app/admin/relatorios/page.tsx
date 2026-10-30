@@ -414,7 +414,10 @@ export default function AdminRelatoriosPage() {
             visitasPerfil: json.instagram?.visitasPerfil ?? "",
             cliquesBio: json.instagram?.cliquesBio ?? "",
           },
-          tiktok: json.tiktok || prev.tiktok,
+          tiktok: {
+            seguidores: json.tiktok?.seguidores ?? "",
+            visitasPerfil: json.tiktok?.visitasPerfil ?? "",
+          },
           whatsapp: json.whatsapp || prev.whatsapp,
           supabase: {
             estudosConcluidos: json.supabase?.estudosConcluidos ?? prev.supabase.estudosConcluidos,
@@ -693,7 +696,7 @@ export default function AdminRelatoriosPage() {
                       type="number"
                       value={data.tiktok.seguidores}
                       onChange={(e) => handleChange("tiktok", "seguidores", e.target.value)}
-                      className={inputSemSetinhasClass}
+                      className={inputInstagramPreenchidoClass}
                     />
                   </div>
                   <div className="flex flex-col">
@@ -704,7 +707,7 @@ export default function AdminRelatoriosPage() {
                       type="number"
                       value={data.tiktok.visitasPerfil}
                       onChange={(e) => handleChange("tiktok", "visitasPerfil", e.target.value)}
-                      className={inputSemSetinhasClass}
+                      className={inputInstagramPreenchidoClass}
                     />
                   </div>
                 </div>
