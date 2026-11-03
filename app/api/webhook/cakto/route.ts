@@ -26,10 +26,10 @@ export async function POST(req: Request) {
       );
     }
 
-    // Busca profile existente para verificar se é conta GRATUITO
+    // Busca profile existente para verificar se é conta GRATUITO e manter a creator_origem original
     const { data: existingProfile } = await supabase
       .from("profiles")
-      .select("id, acesso")
+      .select("id, acesso, creator_origem")
       .eq("email", email)
       .maybeSingle();
 
@@ -88,7 +88,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true });
     }
 
-    // Busca afiliada pelo e-mail caso exista
+    // Busca afiliada pelo e-mail caso exista na transação atual
     let creatorOrigem: string | null = null;
     if (affiliateEmail) {
       const { data: creator } = await supabase
@@ -135,7 +135,11 @@ export async function POST(req: Request) {
       console.log("✅ Usuário criado no Auth:", userId);
     }
 
-    const novoAcesso = existingProfile?.acesso === "GRATUITO" ? "GRATUITO" : "PAGO";
+    // Qualquer compra aprovada no webhook define o acesso como PAGO
+    const novoAcesso = "PAGO";
+
+    // Preserva a creator_origem original caso o perfil já possua uma cadastrada
+    const finalCreatorOrigem = existingProfile?.creator_origem || creatorOrigem;
 
     // Atualiza ou insere o perfil com ativo = true
     const { error: upsertError } = await supabase
@@ -146,7 +150,7 @@ export async function POST(req: Request) {
         nome: name || null,
         ativo: true,
         acesso: novoAcesso,
-        creator_origem: creatorOrigem,
+        creator_origem: finalCreatorOrigem,
       });
 
     if (upsertError) {
