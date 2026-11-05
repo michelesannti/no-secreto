@@ -12,6 +12,7 @@ export async function GET() {
       .from("profiles")
       .select("id, nome, instagram")
       .eq("creator", true)
+      .neq("id", "25fbe759-2b1f-40ac-9402-c17eaeedf784")
       .order("nome", { ascending: true });
 
     if (error) {
