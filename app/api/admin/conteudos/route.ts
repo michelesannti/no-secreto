@@ -24,7 +24,7 @@ function sanitizeUrl(urlString: string): string {
 
 export async function POST(req: Request) {
   try {
-    const { creator_id, link_instagram, tipo_conteudo, formato, link_tiktok } = await req.json();
+    const { creator_id, link_instagram, tipo_conteudo, formato } = await req.json();
 
     if (!creator_id) {
       return NextResponse.json(
@@ -35,7 +35,6 @@ export async function POST(req: Request) {
 
     const isStory = formato === "STORY";
     let formattedInsta = link_instagram ? sanitizeUrl(link_instagram) : "";
-    let formattedTiktok = link_tiktok ? sanitizeUrl(link_tiktok) : "";
 
     // Validação para formatos que NÃO são STORY
     if (!isStory) {
@@ -52,13 +51,6 @@ export async function POST(req: Request) {
           { status: 400 }
         );
       }
-
-      if (formattedTiktok && !isValidUrl(formattedTiktok, "tiktok.com")) {
-        return NextResponse.json(
-          { error: "Insira um link válido do TikTok" },
-          { status: 400 }
-        );
-      }
     }
 
     const { data, error } = await supabaseAdmin
@@ -68,7 +60,6 @@ export async function POST(req: Request) {
         tipo_conteudo: tipo_conteudo || "RELATO",
         formato: formato || "REEL",
         link_instagram: isStory ? null : formattedInsta,
-        link_tiktok: isStory ? null : (formattedTiktok || null),
       })
       .select()
       .single();

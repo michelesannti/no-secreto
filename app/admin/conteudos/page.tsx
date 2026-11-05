@@ -203,7 +203,6 @@ export default function AdminConteudosPage() {
   const [selectedCreatorId, setSelectedCreatorId] = useState("");
 
   const [linkInstagram, setLinkInstagram] = useState("");
-  const [linkTiktok, setLinkTiktok] = useState("");
   const [tipoConteudo, setTipoConteudo] = useState("");
   const [formato, setFormato] = useState("");
 
@@ -265,7 +264,6 @@ export default function AdminConteudosPage() {
         body: JSON.stringify({
           creator_id: selectedCreatorId,
           link_instagram: isStory ? "" : linkInstagram,
-          link_tiktok: isStory ? "" : linkTiktok,
           tipo_conteudo: tipoConteudo,
           formato,
         }),
@@ -281,7 +279,6 @@ export default function AdminConteudosPage() {
 
       // Limpar campos
       setLinkInstagram("");
-      setLinkTiktok("");
       setSelectedCreatorId("");
       setFormato("");
       setTipoConteudo("");
@@ -347,16 +344,6 @@ export default function AdminConteudosPage() {
             value={linkInstagram}
             onChange={(e) => setLinkInstagram(e.target.value)}
             required={!isStory}
-            disabled={loading || isStory}
-            className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none text-sm disabled:opacity-40"
-          />
-
-          {/* Link do TikTok */}
-          <input
-            type="url"
-            placeholder="Link TikTok"
-            value={linkTiktok}
-            onChange={(e) => setLinkTiktok(e.target.value)}
             disabled={loading || isStory}
             className="bg-transparent border-b border-[#e9d5bb] p-2 text-[#70412d] placeholder:text-[#70412d]/60 focus:outline-none text-sm disabled:opacity-40"
           />
