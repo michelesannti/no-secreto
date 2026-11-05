@@ -36,14 +36,9 @@ interface RelatoriosData {
     integrada?: number | "";
     story?: number | "";
     conteudo?: number | "";
-    lead?: number | "";
-    cliente?: number | "";
-    clienteCreator?: number | "";
-    followUp?: number | "";
-    semRetorno?: number | "";
     pausa?: number | "";
     inativa?: number | "";
-    desistencia?: number | "";
+    lead?: number | "";
   };
   supabase: {
     estudosConcluidos: number | "";
@@ -368,14 +363,9 @@ export default function AdminRelatoriosPage() {
       integrada: "",
       story: "",
       conteudo: "",
-      lead: "",
-      cliente: "",
-      clienteCreator: "",
-      followUp: "",
-      semRetorno: "",
       pausa: "",
       inativa: "",
-      desistencia: "",
+      lead: "",
     },
     supabase: { estudosConcluidos: "", conteudosPublicados: "", detalheCreators: [] },
     cakto: { vendas: "", vendasAbandonadas: "", vendasAfiliadas: "" },
@@ -545,14 +535,9 @@ export default function AdminRelatoriosPage() {
     { key: "integrada", label: "Integrada" },
     { key: "story", label: "Story" },
     { key: "conteudo", label: "Conteúdo" },
-    { key: "lead", label: "Lead" },
-    { key: "cliente", label: "Cliente" },
-    { key: "clienteCreator", label: "Cliente Creator" },
-    { key: "followUp", label: "Follow-up" },
-    { key: "semRetorno", label: "Sem Retorno" },
     { key: "pausa", label: "Pausa" },
     { key: "inativa", label: "Inativa" },
-    { key: "desistencia", label: "Desistência" },
+    { key: "lead", label: "Lead" },
   ];
 
   return (
@@ -721,7 +706,7 @@ export default function AdminRelatoriosPage() {
                 WHATSAPP
               </span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 items-end">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 items-end">
               {camposWhatsapp.map((campo) => (
                 <div key={campo.key} className="flex flex-col">
                   <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center min-h-[32px] flex items-center justify-center">
