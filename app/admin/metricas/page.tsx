@@ -15,6 +15,7 @@ interface UsuariaDetalhe {
   estudos_concluidos: number;
   primeiro_estudo: string | null;
   ultimo_estudo: string | null;
+  data_local?: string | null;
 }
 
 interface MetricasData {
@@ -46,7 +47,7 @@ export default function AdminMetricasPage() {
   };
 
   const formatarDataPtBr = (strIso: string) => {
-    if (!strIso) return "";
+    if (!strIso) return "-";
     const partes = strIso.split("T")[0].split("-");
     if (partes.length === 3) {
       const [ano, mes, dia] = partes;
@@ -80,8 +81,13 @@ export default function AdminMetricasPage() {
     return dataEstudoStr === hojeIso;
   };
 
-  const ordenarUsuarias = (lista: UsuariaDetalhe[]) => {
-    return [...lista].sort((a, b) => {
+  // Função para ordenar inteligentemente separando quem tem estudo de quem está zerada
+  const ordenarComZeradasNoFim = (lista: UsuariaDetalhe[]) => {
+    const comEstudos = lista.filter((u) => u.estudos_concluidos > 0);
+    const zeradas = lista.filter((u) => u.estudos_concluidos === 0);
+
+    // Ordena quem tem estudos (quem fez hoje primeiro, depois por data do último estudo mais recente)
+    comEstudos.sort((a, b) => {
       const aHoje = fezEstudoHoje(a.ultimo_estudo) ? 1 : 0;
       const bHoje = fezEstudoHoje(b.ultimo_estudo) ? 1 : 0;
 
@@ -90,12 +96,20 @@ export default function AdminMetricasPage() {
       const dataA = a.ultimo_estudo ? new Date(a.ultimo_estudo).getTime() : 0;
       const dataB = b.ultimo_estudo ? new Date(b.ultimo_estudo).getTime() : 0;
 
-      if (dataA !== dataB) {
-        return dataB - dataA;
-      }
+      if (dataA !== dataB) return dataB - dataA;
 
       return b.estudos_concluidos - a.estudos_concluidos;
     });
+
+    // Ordena as zeradas da mais recente para a mais antiga pela data de cadastro (data_local)
+    zeradas.sort((a, b) => {
+      const dataA = a.data_local ? new Date(a.data_local).getTime() : 0;
+      const dataB = b.data_local ? new Date(b.data_local).getTime() : 0;
+      return dataB - dataA;
+    });
+
+    // Retorna unidas: ativas no topo, zeradas no rodapé da tabela
+    return [...comEstudos, ...zeradas];
   };
 
   const mesAtualNome = new Date()
@@ -111,11 +125,16 @@ export default function AdminMetricasPage() {
   const clientesTotal = usuariasAtivas.filter((u) => u.acesso === "PAGO");
   const creatorsTotal = usuariasAtivas.filter((u) => u.creator);
 
-  const clientesComEstudos = ordenarUsuarias(clientesTotal.filter((u) => u.estudos_concluidos > 0));
-  const creatorsComEstudos = ordenarUsuarias(creatorsTotal.filter((u) => u.creator && u.estudos_concluidos > 0));
+  // Listas aplicando a regra de zeradas no fim
+  const clientesLista = ordenarComZeradasNoFim(clientesTotal);
+  const creatorsLista = ordenarComZeradasNoFim(creatorsTotal);
 
-  const clientesHojeCount = clientesComEstudos.filter((u) => fezEstudoHoje(u.ultimo_estudo)).length;
-  const creatorsHojeCount = creatorsComEstudos.filter((u) => fezEstudoHoje(u.ultimo_estudo)).length;
+  // Contagem de quem tem pelo menos 1 estudo para o subtítulo (X / Y)
+  const clientesComEstudosCount = clientesTotal.filter((u) => u.estudos_concluidos > 0).length;
+  const creatorsComEstudosCount = creatorsTotal.filter((u) => u.creator && u.estudos_concluidos > 0).length;
+
+  const clientesHojeCount = clientesLista.filter((u) => fezEstudoHoje(u.ultimo_estudo)).length;
+  const creatorsHojeCount = creatorsLista.filter((u) => fezEstudoHoje(u.ultimo_estudo)).length;
 
   const totalUsuariasAtivasCount = usuariasAtivas.length;
 
@@ -332,7 +351,7 @@ export default function AdminMetricasPage() {
                 {/* Coluna 1: Creators */}
                 <div className="space-y-3 pr-1 sm:pr-2">
                   <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
-                    <span className="text-center">CREATORS ({creatorsComEstudos.length} / {creatorsTotal.length})</span>
+                    <span className="text-center">CREATORS ({creatorsComEstudosCount} / {creatorsTotal.length})</span>
                     {creatorsHojeCount > 0 && (
                       <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
                         🔥 {creatorsHojeCount}
@@ -346,19 +365,22 @@ export default function AdminMetricasPage() {
                         <tr className="border-b border-[#e9d5bb] text-[#70412d]/60 uppercase text-[10px]">
                           <th className="pb-2 font-bold pl-6">Nome</th>
                           <th className="pb-2 text-center font-bold">Estudos</th>
-                          <th className="pb-2 text-center font-bold">Último</th>
+                          <th className="pb-2 text-center font-bold">Data</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-[#e9d5bb]/60">
-                        {creatorsComEstudos.length > 0 ? (
-                          creatorsComEstudos.map((u) => {
+                        {creatorsLista.length > 0 ? (
+                          creatorsLista.map((u) => {
                             const fezHoje = fezEstudoHoje(u.ultimo_estudo);
+                            const estaZerada = u.estudos_concluidos === 0;
                             return (
                               <tr 
                                 key={u.id} 
                                 className={`transition-colors ${
                                   fezHoje 
                                     ? "bg-[#e9d5bb]/50 font-medium" 
+                                    : estaZerada 
+                                    ? "bg-[#dfd3c3]/70 hover:bg-[#dfd3c3]" 
                                     : "hover:bg-[#e9d5bb]/20"
                                 }`}
                               >
@@ -377,7 +399,7 @@ export default function AdminMetricasPage() {
                                   {u.estudos_concluidos}
                                 </td>
                                 <td className="py-2.5 text-center font-mono text-[11px] text-[#70412d]/80">
-                                  {formatarDataPtBr(u.ultimo_estudo || "")}
+                                  {formatarDataPtBr(u.ultimo_estudo || u.data_local || "")}
                                 </td>
                               </tr>
                             );
@@ -385,7 +407,7 @@ export default function AdminMetricasPage() {
                         ) : (
                           <tr>
                             <td colSpan={3} className="py-6 text-center text-[#70412d]/60 italic">
-                              Nenhuma creator com estudos concluídos.
+                              Nenhuma creator cadastrada.
                             </td>
                           </tr>
                         )}
@@ -397,7 +419,7 @@ export default function AdminMetricasPage() {
                 {/* Coluna 2: Clientes */}
                 <div className="space-y-3 pl-2 sm:pl-6">
                   <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
-                    <span className="text-center">CLIENTES ({clientesComEstudos.length} / {clientesTotal.length})</span>
+                    <span className="text-center">CLIENTES ({clientesComEstudosCount} / {clientesTotal.length})</span>
                     {clientesHojeCount > 0 && (
                       <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
                         🔥 {clientesHojeCount}
@@ -411,19 +433,22 @@ export default function AdminMetricasPage() {
                         <tr className="border-b border-[#e9d5bb] text-[#70412d]/60 uppercase text-[10px]">
                           <th className="pb-2 font-bold pl-6">Nome</th>
                           <th className="pb-2 text-center font-bold">Estudos</th>
-                          <th className="pb-2 text-center font-bold">Último</th>
+                          <th className="pb-2 text-center font-bold">Data</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-[#e9d5bb]/60">
-                        {clientesComEstudos.length > 0 ? (
-                          clientesComEstudos.map((u) => {
+                        {clientesLista.length > 0 ? (
+                          clientesLista.map((u) => {
                             const fezHoje = fezEstudoHoje(u.ultimo_estudo);
+                            const estaZerada = u.estudos_concluidos === 0;
                             return (
                               <tr 
                                 key={u.id} 
                                 className={`transition-colors ${
                                   fezHoje 
                                     ? "bg-[#e9d5bb]/50 font-medium" 
+                                    : estaZerada 
+                                    ? "bg-[#dfd3c3]/70 hover:bg-[#dfd3c3]" 
                                     : "hover:bg-[#e9d5bb]/20"
                                 }`}
                               >
@@ -442,7 +467,7 @@ export default function AdminMetricasPage() {
                                   {u.estudos_concluidos}
                                 </td>
                                 <td className="py-2.5 text-center font-mono text-[11px] text-[#70412d]/80">
-                                  {formatarDataPtBr(u.ultimo_estudo || "")}
+                                  {formatarDataPtBr(u.ultimo_estudo || u.data_local || "")}
                                 </td>
                               </tr>
                             );
@@ -450,7 +475,7 @@ export default function AdminMetricasPage() {
                         ) : (
                           <tr>
                             <td colSpan={3} className="py-6 text-center text-[#70412d]/60 italic">
-                              Nenhuma cliente com estudos concluídos.
+                              Nenhuma cliente cadastrada.
                             </td>
                           </tr>
                         )}
