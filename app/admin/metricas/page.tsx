@@ -37,6 +37,7 @@ export default function AdminMetricasPage() {
   });
 
   const [loading, setLoading] = useState(true);
+  const [busca, setBusca] = useState("");
 
   // Auxiliares de formatação de data
   const formatarDataIso = (d: Date) => {
@@ -125,13 +126,23 @@ export default function AdminMetricasPage() {
   const clientesTotal = usuariasAtivas.filter((u) => u.acesso === "PAGO");
   const creatorsTotal = usuariasAtivas.filter((u) => u.creator);
 
-  // Listas aplicando a regra de zeradas no fim
-  const clientesLista = ordenarComZeradasNoFim(clientesTotal);
-  const creatorsLista = ordenarComZeradasNoFim(creatorsTotal);
+  // Aplicação do filtro de busca por nome, instagram ou email
+  const termoBusca = busca.toLowerCase().trim();
+  const clientesFiltradas = clientesTotal.filter((u) => 
+    (u.nome && u.nome.toLowerCase().includes(termoBusca)) ||
+    (u.instagram && u.instagram.toLowerCase().includes(termoBusca)) ||
+    (u.email && u.email.toLowerCase().includes(termoBusca))
+  );
 
-  // Contagem de quem tem pelo menos 1 estudo para o subtítulo (X / Y)
-  const clientesComEstudosCount = clientesTotal.filter((u) => u.estudos_concluidos > 0).length;
-  const creatorsComEstudosCount = creatorsTotal.filter((u) => u.creator && u.estudos_concluidos > 0).length;
+  const creatorsFiltradas = creatorsTotal.filter((u) => 
+    (u.nome && u.nome.toLowerCase().includes(termoBusca)) ||
+    (u.instagram && u.instagram.toLowerCase().includes(termoBusca)) ||
+    (u.email && u.email.toLowerCase().includes(termoBusca))
+  );
+
+  // Listas aplicando a regra de ordenação com zeradas no fim
+  const clientesLista = ordenarComZeradasNoFim(clientesFiltradas);
+  const creatorsLista = ordenarComZeradasNoFim(creatorsFiltradas);
 
   const clientesHojeCount = clientesLista.filter((u) => fezEstudoHoje(u.ultimo_estudo)).length;
   const creatorsHojeCount = creatorsLista.filter((u) => fezEstudoHoje(u.ultimo_estudo)).length;
@@ -337,13 +348,24 @@ export default function AdminMetricasPage() {
 
             </div>
 
-            {/* CARD ÚNICO UNIFICADO COM DESTAQUE DE ESTUDOS HOJE */}
+            {/* CARD ÚNICO UNIFICADO COM TÍTULO CENTRALIZADO + BUSCA */}
             <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
               
-              <div className="border-b border-[#e9d5bb] pb-2 text-center">
-                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
+              <div className="border-b border-[#e9d5bb] pb-3 text-center space-y-3">
+                <span className="text-sm font-bold tracking-wider uppercase text-[#70412d] block">
                   USUÁRIAS ({totalUsuariasAtivasCount})
                 </span>
+
+                {/* Campo de Busca Centralizado */}
+                <div className="flex justify-center">
+                  <input
+                    type="text"
+                    placeholder="🔍"
+                    value={busca}
+                    onChange={(e) => setBusca(e.target.value)}
+                    className="w-full max-w-sm px-3 py-1.5 text-xs bg-[#f9f5e9] border border-[#e9d5bb] rounded-full text-[#70412d] placeholder-[#70412d]/50 focus:outline-none focus:ring-1 focus:ring-[#70412d] text-center"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2 sm:gap-6 items-start divide-x divide-[#e9d5bb]">
@@ -351,7 +373,7 @@ export default function AdminMetricasPage() {
                 {/* Coluna 1: Creators */}
                 <div className="space-y-3 pr-1 sm:pr-2">
                   <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
-                    <span className="text-center">CREATORS ({creatorsComEstudosCount} / {creatorsTotal.length})</span>
+                    <span className="text-center">CREATORS ({creatorsLista.length})</span>
                     {creatorsHojeCount > 0 && (
                       <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
                         🔥 {creatorsHojeCount}
@@ -407,7 +429,7 @@ export default function AdminMetricasPage() {
                         ) : (
                           <tr>
                             <td colSpan={3} className="py-6 text-center text-[#70412d]/60 italic">
-                              Nenhuma creator cadastrada.
+                              Nenhuma creator encontrada.
                             </td>
                           </tr>
                         )}
@@ -419,7 +441,7 @@ export default function AdminMetricasPage() {
                 {/* Coluna 2: Clientes */}
                 <div className="space-y-3 pl-2 sm:pl-6">
                   <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
-                    <span className="text-center">CLIENTES ({clientesComEstudosCount} / {clientesTotal.length})</span>
+                    <span className="text-center">CLIENTES ({clientesLista.length})</span>
                     {clientesHojeCount > 0 && (
                       <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
                         🔥 {clientesHojeCount}
@@ -475,7 +497,7 @@ export default function AdminMetricasPage() {
                         ) : (
                           <tr>
                             <td colSpan={3} className="py-6 text-center text-[#70412d]/60 italic">
-                              Nenhuma cliente cadastrada.
+                              Nenhuma cliente encontrada.
                             </td>
                           </tr>
                         )}
