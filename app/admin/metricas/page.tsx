@@ -140,6 +140,10 @@ export default function AdminMetricasPage() {
     (u.email && u.email.toLowerCase().includes(termoBusca))
   );
 
+  // Contagens totais para os cabeçalhos das colunas (independente da busca)
+  const clientesComEstudosTotalCount = clientesTotal.filter((u) => u.estudos_concluidos > 0).length;
+  const creatorsComEstudosTotalCount = creatorsTotal.filter((u) => u.estudos_concluidos > 0).length;
+
   // Listas aplicando a regra de ordenação com zeradas no fim
   const clientesLista = ordenarComZeradasNoFim(clientesFiltradas);
   const creatorsLista = ordenarComZeradasNoFim(creatorsFiltradas);
@@ -373,7 +377,7 @@ export default function AdminMetricasPage() {
                 {/* Coluna 1: Creators */}
                 <div className="space-y-3 pr-1 sm:pr-2">
                   <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
-                    <span className="text-center">CREATORS ({creatorsLista.length})</span>
+                    <span className="text-center">CREATORS ({creatorsComEstudosTotalCount} / {creatorsTotal.length})</span>
                     {creatorsHojeCount > 0 && (
                       <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
                         🔥 {creatorsHojeCount}
@@ -441,7 +445,7 @@ export default function AdminMetricasPage() {
                 {/* Coluna 2: Clientes */}
                 <div className="space-y-3 pl-2 sm:pl-6">
                   <div className="text-center font-bold text-[10px] sm:text-xs uppercase tracking-wider text-[#70412d]/90 border-b border-[#e9d5bb]/60 pb-1.5 min-h-[48px] flex flex-col sm:flex-row items-center justify-center gap-1">
-                    <span className="text-center">CLIENTES ({clientesLista.length})</span>
+                    <span className="text-center">CLIENTES ({clientesComEstudosTotalCount} / {clientesTotal.length})</span>
                     {clientesHojeCount > 0 && (
                       <span className="bg-[#70412d] text-[#f9f5e9] text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-extrabold normal-case tracking-normal shrink-0">
                         🔥 {clientesHojeCount}
