@@ -1,10 +1,62 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabase";
 
+function mapearEOrdenarPerfisNoPeriodo(
+  perfis: any[],
+  todosProgressos: any[],
+  todosDiarios: any[],
+  dataInicioIso: string,
+  dataFimIso: string
+) {
+  let totalEstudosPeriodo = 0;
+
+  const lista = perfis.map((perfil: any) => {
+    // Filtra progressos e diários estritamente dentro da data_local do período selecionado
+    const userProgressosPeriodo = todosProgressos.filter(
+      (p: any) =>
+        p.user_id === perfil.id &&
+        p.data_local &&
+        p.data_local >= dataInicioIso &&
+        p.data_local <= dataFimIso
+    );
+
+    const userDiariosPeriodo = todosDiarios.filter(
+      (d: any) =>
+        d.user_id === perfil.id &&
+        d.data_local &&
+        d.data_local >= dataInicioIso &&
+        d.data_local <= dataFimIso &&
+        d.texto &&
+        d.texto.trim() !== ""
+    );
+
+    const estudosUnicosPeriodo = new Set(userProgressosPeriodo.map((p: any) => p.estudo_id)).size;
+    totalEstudosPeriodo += estudosUnicosPeriodo;
+
+    return {
+      nome: perfil.nome || "Sem Nome",
+      instagram: perfil.instagram || "",
+      email: perfil.email || "",
+      estudosConcluidos: estudosUnicosPeriodo,
+      diariosRegistrados: userDiariosPeriodo.length,
+    };
+  });
+
+  // Ordenação inteligente: quem produziu mais estudos no período aparece primeiro; desempata pelos diários
+  lista.sort((a, b) => {
+    if (b.estudosConcluidos !== a.estudosConcluidos) {
+      return b.estudosConcluidos - a.estudosConcluidos;
+    }
+    return b.diariosRegistrados - a.diariosRegistrados;
+  });
+
+  return { lista, totalEstudos: totalEstudosPeriodo };
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    
+
     const tipo = searchParams.get("tipo") || "semanal";
     const inicioParam = searchParams.get("inicio");
     const fimParam = searchParams.get("fim");
@@ -58,61 +110,34 @@ export async function GET(request: Request) {
       .gte("data_local", dataInicioIso)
       .lte("data_local", dataFimIso);
 
-    // 3. Busca paralela segura: perfis de criadoras, todo o progresso e todos os diários
-    const [resCreators, resProgresso, resDiarios] = await Promise.all([
-      supabase.from("profiles").select("id, nome, instagram, email, data_local").eq("creator", true),
+    // 3. Busca paralela segura: creators, clientes (PAGO), progresso e diários
+    const [resCreators, resClientes, resProgresso, resDiarios] = await Promise.all([
+      supabase.from("profiles").select("id, nome, instagram, email").eq("creator", true),
+      supabase.from("profiles").select("id, nome, instagram, email").eq("acesso", "PAGO"),
       supabase.from("progresso").select("user_id, estudo_id, data_local"),
       supabase.from("diario").select("user_id, id, texto, data_local"),
     ]);
 
     const creators = resCreators.data || [];
+    const clientes = resClientes.data || [];
     const todosProgressos = resProgresso.data || [];
     const todosDiarios = resDiarios.data || [];
 
-    let totalEstudosPeriodo = 0;
+    const { lista: relatorioCreators, totalEstudos: totalEstudosCreators } = mapearEOrdenarPerfisNoPeriodo(
+      creators,
+      todosProgressos,
+      todosDiarios,
+      dataInicioIso,
+      dataFimIso
+    );
 
-    const relatorioCreators = creators.map((creator: any) => {
-      // Progressos da criadora
-      const userProgressos = todosProgressos.filter((p: any) => p.user_id === creator.id);
-      
-      // Diários preenchidos da criadora
-      const userDiarios = todosDiarios.filter((d: any) => 
-        d.user_id === creator.id && d.texto && d.texto.trim() !== ""
-      );
-
-      const estudosUnicos = new Set(userProgressos.map((p: any) => p.estudo_id)).size;
-      totalEstudosPeriodo += estudosUnicos;
-
-      const datasEstudo = userProgressos
-        .map((p: any) => p.data_local)
-        .filter(Boolean)
-        .sort();
-
-      return {
-        nome: creator.nome || "Sem Nome",
-        instagram: creator.instagram || "",
-        email: creator.email || "",
-        dataEntrada: creator.data_local || "",
-        estudosConcluidos: estudosUnicos,
-        diariosRegistrados: userDiarios.length,
-        primeiroEstudo: datasEstudo[0] || null,
-        ultimoEstudo: datasEstudo[datasEstudo.length - 1] || null,
-      };
-    });
-
-    // Ordenação idêntica à SQL (ultimo_estudo desc nulls last, estudos_concluidos desc)
-    relatorioCreators.sort((a, b) => {
-      if (a.ultimoEstudo && b.ultimoEstudo) {
-        if (b.ultimoEstudo !== a.ultimoEstudo) {
-          return b.ultimoEstudo.localeCompare(a.ultimoEstudo);
-        }
-      } else if (a.ultimoEstudo) {
-        return -1;
-      } else if (b.ultimoEstudo) {
-        return 1;
-      }
-      return b.estudosConcluidos - a.estudosConcluidos;
-    });
+    const { lista: relatorioClientes, totalEstudos: totalEstudosClientes } = mapearEOrdenarPerfisNoPeriodo(
+      clientes,
+      todosProgressos,
+      todosDiarios,
+      dataInicioIso,
+      dataFimIso
+    );
 
     let instagramData = {
       seguidores: 0,
@@ -174,9 +199,10 @@ export async function GET(request: Request) {
       instagram: instagramData,
       tiktok: { seguidores: "", visitasPerfil: "" },
       supabase: {
-        estudosConcluidos: totalEstudosPeriodo,
+        estudosConcluidos: totalEstudosCreators + totalEstudosClientes,
         conteudosPublicados: conteudosCount || 0,
         detalheCreators: relatorioCreators,
+        detalheClientes: relatorioClientes,
       },
       cakto: {
         vendas: 0,

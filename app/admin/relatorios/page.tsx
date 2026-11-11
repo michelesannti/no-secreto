@@ -3,15 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
-interface CreatorDetalhe {
+interface PerfilEstudoDetalhe {
   nome: string;
   instagram: string;
   email: string;
-  dataEntrada: string;
   estudosConcluidos: number;
   diariosRegistrados: number;
-  primeiroEstudo: string | null;
-  ultimoEstudo: string | null;
 }
 
 interface RelatoriosData {
@@ -43,7 +40,8 @@ interface RelatoriosData {
   supabase: {
     estudosConcluidos: number | "";
     conteudosPublicados: number | "";
-    detalheCreators?: CreatorDetalhe[];
+    detalheCreators?: PerfilEstudoDetalhe[];
+    detalheClientes?: PerfilEstudoDetalhe[];
   };
   cakto: {
     vendas: number | "";
@@ -367,7 +365,12 @@ export default function AdminRelatoriosPage() {
       inativa: "",
       lead: "",
     },
-    supabase: { estudosConcluidos: "", conteudosPublicados: "", detalheCreators: [] },
+    supabase: {
+      estudosConcluidos: "",
+      conteudosPublicados: "",
+      detalheCreators: [],
+      detalheClientes: [],
+    },
     cakto: { vendas: "", vendasAbandonadas: "", vendasAfiliadas: "" },
   });
 
@@ -413,6 +416,7 @@ export default function AdminRelatoriosPage() {
             estudosConcluidos: json.supabase?.estudosConcluidos ?? prev.supabase.estudosConcluidos,
             conteudosPublicados: json.supabase?.conteudosPublicados ?? prev.supabase.conteudosPublicados,
             detalheCreators: json.supabase?.detalheCreators || [],
+            detalheClientes: json.supabase?.detalheClientes || [],
           },
           cakto: json.cakto || prev.cakto,
         }));
@@ -539,6 +543,41 @@ export default function AdminRelatoriosPage() {
     { key: "inativa", label: "Inativa" },
     { key: "lead", label: "Lead" },
   ];
+
+  const renderTabelaEstudos = (lista: PerfilEstudoDetalhe[] | undefined, mensagemVazia: string) => {
+    if (!lista || lista.length === 0) {
+      return (
+        <p className="text-xs text-center text-[#70412d]/60 italic py-4">
+          {mensagemVazia}
+        </p>
+      );
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr className="border-b border-[#e9d5bb] text-[#70412d]/80 uppercase tracking-wider font-bold">
+              <th className="py-2 px-3">Nome</th>
+              <th className="py-2 px-3">Instagram</th>
+              <th className="py-2 px-3 text-center">Estudos no Período</th>
+              <th className="py-2 px-3 text-center">Diários no Período</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-[#e9d5bb]/60">
+            {lista.map((c, i) => (
+              <tr key={i} className="hover:bg-[#efe2cc]/80 transition">
+                <td className="py-2.5 px-3 font-medium text-[#70412d]">{c.nome || "Sem Nome"}</td>
+                <td className="py-2.5 px-3 text-[#70412d]/80">{c.instagram ? `@${c.instagram.replace("@", "")}` : "-"}</td>
+                <td className="py-2.5 px-3 text-center font-bold text-[#70412d] bg-[#e9d5bb]/40 rounded-lg">{c.estudosConcluidos}</td>
+                <td className="py-2.5 px-3 text-center font-semibold text-[#70412d]/80">{c.diariosRegistrados}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-[#f9f5e9] text-[#70412d] px-4 py-8 md:px-6 md:py-10 selection:bg-[#e9d5bb]">
@@ -723,47 +762,32 @@ export default function AdminRelatoriosPage() {
             </div>
           </div>
 
-          <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-5">
+          <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-6">
             <div className="border-b border-[#e9d5bb] pb-2 text-center">
               <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
-                ESTUDOS
+                ESTUDOS (NO PERÍODO)
               </span>
             </div>
 
-            {data.supabase.detalheCreators && data.supabase.detalheCreators.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs border-collapse">
-                  <thead>
-                    <tr className="border-b border-[#e9d5bb] text-[#70412d]/80 uppercase tracking-wider font-bold">
-                      <th className="py-2 px-3">Nome</th>
-                      <th className="py-2 px-3">Instagram</th>
-                      <th className="py-2 px-3 text-center">Entrada</th>
-                      <th className="py-2 px-3 text-center">Estudos</th>
-                      <th className="py-2 px-3 text-center">Diários</th>
-                      <th className="py-2 px-3 text-center">Primeiro</th>
-                      <th className="py-2 px-3 text-center">Último</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#e9d5bb]/60">
-                    {data.supabase.detalheCreators.map((c, i) => (
-                      <tr key={i} className="hover:bg-[#efe2cc]/80 transition">
-                        <td className="py-2.5 px-3 font-medium text-[#70412d]">{c.nome || "Sem Nome"}</td>
-                        <td className="py-2.5 px-3 text-[#70412d]/80">{c.instagram ? `@${c.instagram.replace("@", "")}` : "-"}</td>
-                        <td className="py-2.5 px-3 text-center font-mono text-[#70412d]/80">{formatarDataPtBr(c.dataEntrada)}</td>
-                        <td className="py-2.5 px-3 text-center font-bold text-[#70412d] bg-[#e9d5bb]/40 rounded-lg">{c.estudosConcluidos}</td>
-                        <td className="py-2.5 px-3 text-center font-semibold text-[#70412d]/80">{c.diariosRegistrados}</td>
-                        <td className="py-2.5 px-3 text-center font-mono text-[11px] text-[#70412d]/70">{formatarDataPtBr(c.primeiroEstudo || "")}</td>
-                        <td className="py-2.5 px-3 text-center font-mono text-[11px] text-[#70412d]/70">{formatarDataPtBr(c.ultimoEstudo || "")}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <p className="text-xs text-center text-[#70412d]/60 italic py-4">
-                Nenhuma criadora com registros encontrados para este período.
-              </p>
-            )}
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold tracking-wider uppercase text-[#70412d]/80 text-center">
+                Creators
+              </h3>
+              {renderTabelaEstudos(
+                data.supabase.detalheCreators,
+                "Nenhuma criadora cadastrada."
+              )}
+            </div>
+
+            <div className="border-t border-[#e9d5bb] pt-4 space-y-3">
+              <h3 className="text-xs font-bold tracking-wider uppercase text-[#70412d]/80 text-center">
+                Clientes (Pagantes)
+              </h3>
+              {renderTabelaEstudos(
+                data.supabase.detalheClientes,
+                "Nenhuma cliente pagante cadastrada."
+              )}
+            </div>
           </div>
 
           <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
