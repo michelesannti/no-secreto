@@ -405,8 +405,8 @@ export default function AdminRelatoriosPage() {
             cliquesBio: json.instagram?.cliquesBio ?? "",
           },
           tiktok: {
-            seguidores: json.tiktok?.seguidores ?? "",
-            visitasPerfil: json.tiktok?.visitasPerfil ?? "",
+            seguidores: json.tiktok?.seguidores || "",
+            visitasPerfil: json.tiktok?.visitasPerfil || "",
           },
           whatsapp: json.whatsapp || prev.whatsapp,
           supabase: {
@@ -681,7 +681,7 @@ export default function AdminRelatoriosPage() {
                       type="number"
                       value={data.tiktok.seguidores}
                       onChange={(e) => handleChange("tiktok", "seguidores", e.target.value)}
-                      className={inputInstagramPreenchidoClass}
+                      className={inputSemSetinhasClass}
                     />
                   </div>
                   <div className="flex flex-col">
@@ -692,7 +692,7 @@ export default function AdminRelatoriosPage() {
                       type="number"
                       value={data.tiktok.visitasPerfil}
                       onChange={(e) => handleChange("tiktok", "visitasPerfil", e.target.value)}
-                      className={inputInstagramPreenchidoClass}
+                      className={inputSemSetinhasClass}
                     />
                   </div>
                 </div>
@@ -723,7 +723,6 @@ export default function AdminRelatoriosPage() {
             </div>
           </div>
 
-          {/* SEÇÃO DEDICADA: ESTUDOS CONCLUÍDOS */}
           <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-5">
             <div className="border-b border-[#e9d5bb] pb-2 text-center">
               <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">

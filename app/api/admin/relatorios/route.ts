@@ -172,7 +172,7 @@ export async function GET(request: Request) {
         fim: dataFimIso,
       },
       instagram: instagramData,
-      tiktok: { seguidores: 0, visitasPerfil: 0 },
+      tiktok: { seguidores: "", visitasPerfil: "" },
       supabase: {
         estudosConcluidos: totalEstudosPeriodo,
         conteudosPublicados: conteudosCount || 0,
