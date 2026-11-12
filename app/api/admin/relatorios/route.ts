@@ -11,7 +11,6 @@ function mapearEOrdenarPerfisNoPeriodo(
   let totalEstudosPeriodo = 0;
 
   const lista = perfis.map((perfil: any) => {
-    // Filtra progressos e diários estritamente dentro da data_local do período selecionado
     const userProgressosPeriodo = todosProgressos.filter(
       (p: any) =>
         p.user_id === perfil.id &&
@@ -42,7 +41,6 @@ function mapearEOrdenarPerfisNoPeriodo(
     };
   });
 
-  // Ordenação inteligente: quem produziu mais estudos no período aparece primeiro; desempata pelos diários
   lista.sort((a, b) => {
     if (b.estudosConcluidos !== a.estudosConcluidos) {
       return b.estudosConcluidos - a.estudosConcluidos;
@@ -87,7 +85,6 @@ export async function GET(request: Request) {
 
     const supabase = getSupabaseAdminClient();
 
-    // 1. Busca prioritária do token ativo na tabela system_config
     let igToken = process.env.FACEBOOK_USER_ACCESS_TOKEN;
     try {
       const { data: configData } = await supabase
@@ -103,14 +100,12 @@ export async function GET(request: Request) {
       console.warn("Aviso: Não foi possível ler token do Supabase, utilizando fallback de env:", errConfig);
     }
 
-    // 2. Contagem de conteúdos publicados no período
     const { count: conteudosCount } = await supabase
       .from("conteudos")
       .select("*", { count: "exact", head: true })
       .gte("data_local", dataInicioIso)
       .lte("data_local", dataFimIso);
 
-    // 3. Busca paralela segura: creators, clientes (PAGO), progresso e diários
     const [resCreators, resClientes, resProgresso, resDiarios] = await Promise.all([
       supabase.from("profiles").select("id, nome, instagram, email").eq("creator", true),
       supabase.from("profiles").select("id, nome, instagram, email").eq("acesso", "PAGO"),

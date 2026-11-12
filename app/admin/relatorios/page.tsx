@@ -544,7 +544,7 @@ export default function AdminRelatoriosPage() {
     { key: "lead", label: "Lead" },
   ];
 
-  const renderTabelaEstudos = (lista: PerfilEstudoDetalhe[] | undefined, mensagemVazia: string) => {
+  const renderTabelaEstudos = (lista: PerfilEstudoDetalhe[] | undefined, mensagemVazia: string, tituloColuna: string, isCreator: boolean) => {
     if (!lista || lista.length === 0) {
       return (
         <p className="text-xs text-center text-[#70412d]/60 italic py-4">
@@ -557,22 +557,30 @@ export default function AdminRelatoriosPage() {
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="border-b border-[#e9d5bb] text-[#70412d]/80 uppercase tracking-wider font-bold">
-              <th className="py-2 px-3">Nome</th>
-              <th className="py-2 px-3">Instagram</th>
-              <th className="py-2 px-3 text-center">Estudos no Período</th>
-              <th className="py-2 px-3 text-center">Diários no Período</th>
+            <tr className="border-b border-[#e9d5bb] text-[#70412d]/80 uppercase tracking-wider font-bold text-[10px] sm:text-xs">
+              <th className="py-2 px-1.5 sm:px-3">{tituloColuna}</th>
+              <th className="py-2 px-1.5 sm:px-3 text-center">Estudos/Diários</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#e9d5bb]/60">
-            {lista.map((c, i) => (
-              <tr key={i} className="hover:bg-[#efe2cc]/80 transition">
-                <td className="py-2.5 px-3 font-medium text-[#70412d]">{c.nome || "Sem Nome"}</td>
-                <td className="py-2.5 px-3 text-[#70412d]/80">{c.instagram ? `@${c.instagram.replace("@", "")}` : "-"}</td>
-                <td className="py-2.5 px-3 text-center font-bold text-[#70412d] bg-[#e9d5bb]/40 rounded-lg">{c.estudosConcluidos}</td>
-                <td className="py-2.5 px-3 text-center font-semibold text-[#70412d]/80">{c.diariosRegistrados}</td>
-              </tr>
-            ))}
+            {lista.map((c, i) => {
+              const temInstagram = isCreator && c.instagram && c.instagram.trim() !== "";
+              return (
+                <tr key={i} className="hover:bg-[#efe2cc]/80 transition">
+                  <td className="py-2 px-1.5 sm:py-2.5 sm:px-3">
+                    <div className="font-medium text-[#70412d] text-[11px] sm:text-xs leading-tight">{c.nome || "Sem Nome"}</div>
+                    {temInstagram && (
+                      <div className="text-[10px] sm:text-[11px] text-[#70412d]/70">
+                        {`@${c.instagram.replace("@", "")}`}
+                      </div>
+                    )}
+                  </td>
+                  <td className="py-2 px-1.5 sm:py-2.5 sm:px-3 text-center font-bold text-[#70412d] bg-[#e9d5bb]/40 rounded-lg font-mono text-[11px] sm:text-xs whitespace-nowrap">
+                    {c.estudosConcluidos} / {c.diariosRegistrados}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -762,31 +770,31 @@ export default function AdminRelatoriosPage() {
             </div>
           </div>
 
-          <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-6">
+          <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-3 sm:p-5 shadow-sm space-y-6">
             <div className="border-b border-[#e9d5bb] pb-2 text-center">
               <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
-                ESTUDOS (NO PERÍODO)
+                ESTUDOS
               </span>
             </div>
 
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold tracking-wider uppercase text-[#70412d]/80 text-center">
-                Creators
-              </h3>
-              {renderTabelaEstudos(
-                data.supabase.detalheCreators,
-                "Nenhuma criadora cadastrada."
-              )}
-            </div>
+            <div className="grid grid-cols-2 gap-2 sm:gap-6 items-start divide-x divide-[#e9d5bb]">
+              <div className="space-y-3 pr-1 sm:pr-2">
+                {renderTabelaEstudos(
+                  data.supabase.detalheCreators,
+                  "Nenhuma criadora cadastrada.",
+                  "Creators",
+                  true
+                )}
+              </div>
 
-            <div className="border-t border-[#e9d5bb] pt-4 space-y-3">
-              <h3 className="text-xs font-bold tracking-wider uppercase text-[#70412d]/80 text-center">
-                Clientes (Pagantes)
-              </h3>
-              {renderTabelaEstudos(
-                data.supabase.detalheClientes,
-                "Nenhuma cliente pagante cadastrada."
-              )}
+              <div className="space-y-3 pl-2 sm:pl-6">
+                {renderTabelaEstudos(
+                  data.supabase.detalheClientes,
+                  "Nenhuma cliente pagante cadastrada.",
+                  "Clientes",
+                  false
+                )}
+              </div>
             </div>
           </div>
 
