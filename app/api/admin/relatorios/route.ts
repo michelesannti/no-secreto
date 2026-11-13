@@ -32,12 +32,26 @@ function mapearEOrdenarPerfisNoPeriodo(
     const estudosUnicosPeriodo = new Set(userProgressosPeriodo.map((p: any) => p.estudo_id)).size;
     totalEstudosPeriodo += estudosUnicosPeriodo;
 
+    // Descobrir a data do último estudo concluído no período
+    let ultimoEstudoData: string | null = null;
+    if (userProgressosPeriodo.length > 0) {
+      const datasOrdenadas = userProgressosPeriodo
+        .map((p: any) => p.data_local)
+        .filter(Boolean)
+        .sort((a: string, b: string) => b.localeCompare(a)); // Mais recente primeiro
+      
+      if (datasOrdenadas.length > 0) {
+        ultimoEstudoData = datasOrdenadas[0]; // Formato YYYY-MM-DD
+      }
+    }
+
     return {
       nome: perfil.nome || "Sem Nome",
       instagram: perfil.instagram || "",
       email: perfil.email || "",
       estudosConcluidos: estudosUnicosPeriodo,
       diariosRegistrados: userDiariosPeriodo.length,
+      ultimoEstudo: ultimoEstudoData,
     };
   });
 

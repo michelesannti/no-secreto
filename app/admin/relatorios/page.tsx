@@ -9,6 +9,7 @@ interface PerfilEstudoDetalhe {
   email: string;
   estudosConcluidos: number;
   diariosRegistrados: number;
+  ultimoEstudo?: string | null;
 }
 
 interface RelatoriosData {
@@ -315,10 +316,11 @@ export default function AdminRelatoriosPage() {
 
   const formatarDataPtBr = (strIso: string) => {
     if (!strIso) return "-";
+    // Se vier no formato YYYY-MM-DD
     const partes = strIso.split("T")[0].split("-");
     if (partes.length === 3) {
       const [ano, mes, dia] = partes;
-      return `${dia}/${mes}/${ano}`;
+      return `${dia}/${mes}`;
     }
     return strIso;
   };
@@ -560,6 +562,7 @@ export default function AdminRelatoriosPage() {
             <tr className="border-b border-[#e9d5bb] text-[#70412d]/80 uppercase tracking-wider font-bold text-[10px] sm:text-xs">
               <th className="py-2 px-1.5 sm:px-3">{tituloColuna}</th>
               <th className="py-2 px-1.5 sm:px-3 text-center">Estudos/Diários</th>
+              <th className="py-2 px-1.5 sm:px-3 text-center">Último</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#e9d5bb]/60">
@@ -577,6 +580,9 @@ export default function AdminRelatoriosPage() {
                   </td>
                   <td className="py-2 px-1.5 sm:py-2.5 sm:px-3 text-center font-bold text-[#70412d] bg-[#e9d5bb]/40 rounded-lg font-mono text-[11px] sm:text-xs whitespace-nowrap">
                     {c.estudosConcluidos} / {c.diariosRegistrados}
+                  </td>
+                  <td className="py-2 px-1.5 sm:py-2.5 sm:px-3 text-center text-[#70412d]/80 font-mono text-[11px] sm:text-xs whitespace-nowrap">
+                    {c.ultimoEstudo ? formatarDataPtBr(c.ultimoEstudo) : "-"}
                   </td>
                 </tr>
               );
