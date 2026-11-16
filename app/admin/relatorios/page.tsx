@@ -316,10 +316,19 @@ export default function AdminRelatoriosPage() {
 
   const formatarDataPtBr = (strIso: string) => {
     if (!strIso) return "-";
-    // Se vier no formato YYYY-MM-DD
     const partes = strIso.split("T")[0].split("-");
     if (partes.length === 3) {
       const [ano, mes, dia] = partes;
+      return `${dia}/${mes}/${ano}`;
+    }
+    return strIso;
+  };
+
+  const formatarDataCurtaPtBr = (strIso: string) => {
+    if (!strIso) return "-";
+    const partes = strIso.split("T")[0].split("-");
+    if (partes.length === 3) {
+      const [, mes, dia] = partes;
       return `${dia}/${mes}`;
     }
     return strIso;
@@ -582,7 +591,7 @@ export default function AdminRelatoriosPage() {
                     {c.estudosConcluidos} / {c.diariosRegistrados}
                   </td>
                   <td className="py-2 px-1.5 sm:py-2.5 sm:px-3 text-center text-[#70412d]/80 font-mono text-[11px] sm:text-xs whitespace-nowrap">
-                    {c.ultimoEstudo ? formatarDataPtBr(c.ultimoEstudo) : "-"}
+                    {c.ultimoEstudo ? formatarDataCurtaPtBr(c.ultimoEstudo) : "-"}
                   </td>
                 </tr>
               );
