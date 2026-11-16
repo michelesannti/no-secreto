@@ -17,6 +17,7 @@ interface RelatoriosData {
   periodo?: string;
   dataInicio?: string;
   dataFim?: string;
+  mesSelecionado?: string; // Formato YYYY-MM
   instagram: {
     seguidores: number | "";
     visitasPerfil: number | "";
@@ -53,6 +54,11 @@ interface RelatoriosData {
 
 const CHEVRON_CREME_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23f9f5e9' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`;
 const CHEVRON_MARROM_SVG = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2370412d' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`;
+
+const NOMES_MESES = [
+  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+];
 
 function SeletorTipoCustomizado({
   valor,
@@ -168,19 +174,14 @@ function SeletorCalendarioVisual({
     return `${d}/${m}/${a}`;
   };
 
-  const nomesMeses = [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-  ];
-
   const primeiroDiaSemana = new Date(anoVisual, mesVisual, 1).getDay();
   const totalDiasMes = new Date(anoVisual, mesVisual + 1, 0).getDate();
 
-  const naoPodeAvisar =
+  const naoPodeAvancar =
     anoVisual > anoAtual || (anoVisual === anoAtual && mesVisual >= mesAtual);
 
   const mudarMes = (delta: number) => {
-    if (delta > 0 && naoPodeAvisar) return;
+    if (delta > 0 && naoPodeAvancar) return;
 
     let novoMes = mesVisual + delta;
     let novoAno = anoVisual;
@@ -237,14 +238,14 @@ function SeletorCalendarioVisual({
               </svg>
             </button>
             <span className="capitalize">
-              {nomesMeses[mesVisual]} {anoVisual}
+              {NOMES_MESES[mesVisual]} {anoVisual}
             </span>
             <button
               type="button"
-              disabled={naoPodeAvisar}
+              disabled={naoPodeAvancar}
               onClick={() => mudarMes(1)}
               className={`p-1 rounded-lg transition ${
-                naoPodeAvisar
+                naoPodeAvancar
                   ? "opacity-30 cursor-not-allowed"
                   : "hover:bg-[#efe2cc]"
               }`}
@@ -306,6 +307,127 @@ function SeletorCalendarioVisual({
   );
 }
 
+function SeletorMesVisual({
+  valorMesIso,
+  maxMesIso,
+  onSelecionarMes,
+}: {
+  valorMesIso: string; // Formato YYYY-MM
+  maxMesIso: string;   // Limite máximo permitido (mês anterior ao atual, YYYY-MM)
+  onSelecionarMes: (novoMesIso: string) => void;
+}) {
+  const [aberto, setAberto] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const partesValor = valorMesIso.split("-");
+  const [anoVisual, setAnoVisual] = useState(parseInt(partesValor[0]));
+
+  const partesMax = maxMesIso.split("-");
+  const anoMax = parseInt(partesMax[0]);
+
+  useEffect(() => {
+    const p = valorMesIso.split("-");
+    setAnoVisual(parseInt(p[0]));
+  }, [valorMesIso]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setAberto(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const formatarLabelMes = (ym: string) => {
+    const [a, m] = ym.split("-");
+    const nome = NOMES_MESES[parseInt(m, 10) - 1] || "";
+    return `${nome} / ${a}`;
+  };
+
+  const naoPodeAvancarAno = anoVisual >= anoMax;
+
+  return (
+    <div className="relative w-full" ref={containerRef}>
+      <button
+        type="button"
+        onClick={() => setAberto(!aberto)}
+        style={{
+          backgroundImage: CHEVRON_MARROM_SVG,
+          backgroundPosition: "right 0.5rem center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "1.25em 1.25em",
+        }}
+        className="w-full bg-white border border-[#E9D5BB] rounded-xl pl-3 pr-8 py-2 text-xs text-[#70412d] font-bold text-center uppercase tracking-wider focus:outline-none shadow-sm active:scale-95 transition"
+      >
+        <span className="block text-center">{formatarLabelMes(valorMesIso)}</span>
+      </button>
+
+      {aberto && (
+        <div className="absolute right-0 top-full mt-2 z-50 w-64 bg-[#f9f5e9] border border-[#e9d5bb] rounded-2xl p-3 shadow-xl space-y-3">
+          <div className="flex items-center justify-between border-b border-[#e9d5bb] pb-2 text-xs font-bold text-[#70412d]">
+            <button
+              type="button"
+              onClick={() => setAnoVisual((prev) => prev - 1)}
+              className="p-1 hover:bg-[#efe2cc] rounded-lg transition"
+            >
+              <svg className="w-3.5 h-3.5 fill-[#70412d]" viewBox="0 0 24 24">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+              </svg>
+            </button>
+            <span>{anoVisual}</span>
+            <button
+              type="button"
+              disabled={naoPodeAvancarAno}
+              onClick={() => !naoPodeAvancarAno && setAnoVisual((prev) => prev + 1)}
+              className={`p-1 rounded-lg transition ${
+                naoPodeAvancarAno
+                  ? "opacity-30 cursor-not-allowed"
+                  : "hover:bg-[#efe2cc]"
+              }`}
+            >
+              <svg className="w-3.5 h-3.5 fill-[#70412d]" viewBox="0 0 24 24">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-3 gap-1.5 text-center text-xs font-bold">
+            {NOMES_MESES.map((nomeMes, idx) => {
+              const mesStr = String(idx + 1).padStart(2, "0");
+              const ymLoop = `${anoVisual}-${mesStr}`;
+              const ehFuturoOuAtual = ymLoop > maxMesIso;
+              const ehSelecionado = ymLoop === valorMesIso;
+
+              return (
+                <button
+                  key={ymLoop}
+                  type="button"
+                  disabled={ehFuturoOuAtual}
+                  onClick={() => {
+                    onSelecionarMes(ymLoop);
+                    setAberto(false);
+                  }}
+                  className={`py-2 px-1 rounded-lg text-[11px] transition ${
+                    ehSelecionado
+                      ? "bg-[#70412d] text-[#f9f5e9] shadow-sm"
+                      : ehFuturoOuAtual
+                      ? "text-gray-300 cursor-not-allowed opacity-40"
+                      : "text-[#70412d] hover:bg-[#efe2cc]"
+                  }`}
+                >
+                  {nomeMes.slice(0, 3).toUpperCase()}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function AdminRelatoriosPage() {
   const formatarDataIso = (d: Date) => {
     const ano = d.getFullYear();
@@ -348,20 +470,36 @@ export default function AdminRelatoriosPage() {
     return { strInicioIso, periodoTexto };
   };
 
+  const formatarMesAnoTexto = (ym: string) => {
+    const [a, m] = ym.split("-");
+    const nome = NOMES_MESES[parseInt(m, 10) - 1] || "";
+    return `${nome} / ${a}`;
+  };
+
+  const obterIntervaloMesIso = (ym: string) => {
+    const [anoStr, mesStr] = ym.split("-");
+    const ano = parseInt(anoStr, 10);
+    const mes = parseInt(mesStr, 10);
+    const inicio = `${anoStr}-${mesStr}-01`;
+    const ultimoDiaObj = new Date(ano, mes, 0);
+    const fim = formatarDataIso(ultimoDiaObj);
+    return { inicio, fim };
+  };
+
   const hoje = new Date();
   const hojeIso = formatarDataIso(hoje);
   const initialFim = hojeIso;
   const { strInicioIso: initialInicio, periodoTexto: initialPeriodoSemanal } = calcularIntervaloPorTipo(initialFim, "semanal");
 
   const dataMesAnterior = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1);
-  const mesAnteriorNome = dataMesAnterior.toLocaleDateString("pt-BR", { month: "long" });
-  const mesAnteriorFormatado = `${mesAnteriorNome.charAt(0).toUpperCase() + mesAnteriorNome.slice(1)} / ${dataMesAnterior.getFullYear()}`;
+  const mesAnteriorIso = `${dataMesAnterior.getFullYear()}-${String(dataMesAnterior.getMonth() + 1).padStart(2, "0")}`;
 
   const [data, setData] = useState<RelatoriosData>({
     tipoRelatorio: "semanal",
     periodo: initialPeriodoSemanal,
     dataInicio: initialInicio,
     dataFim: initialFim,
+    mesSelecionado: mesAnteriorIso,
     instagram: { seguidores: "", visitasPerfil: "", cliquesBio: "" },
     tiktok: { seguidores: "", visitasPerfil: "" },
     whatsapp: {
@@ -393,14 +531,7 @@ export default function AdminRelatoriosPage() {
     setLoading(true);
     try {
       let queryUrl = `/api/admin/relatorios?tipo=${tipo}`;
-      if (tipo === "mensal") {
-        const ano = dataMesAnterior.getFullYear();
-        const mes = dataMesAnterior.getMonth() + 1;
-        const primeiroDiaMes = `${ano}-${String(mes).padStart(2, "0")}-01`;
-        const ultimoDiaMesObj = new Date(ano, mes, 0);
-        const ultimoDiaMes = formatarDataIso(ultimoDiaMesObj);
-        queryUrl += `&inicio=${primeiroDiaMes}&fim=${ultimoDiaMes}`;
-      } else if (inicio && fim) {
+      if (inicio && fim) {
         queryUrl += `&inicio=${inicio}&fim=${fim}`;
       }
 
@@ -454,22 +585,43 @@ export default function AdminRelatoriosPage() {
     if (secao === "tipoRelatorio") {
       const novoTipo = valor as "semanal" | "quinzenal" | "mensal";
       if (novoTipo === "semanal" || novoTipo === "quinzenal") {
-        const { strInicioIso, periodoTexto } = calcularIntervaloPorTipo(data.dataFim || initialFim, novoTipo);
+        const fimBase = hojeIso;
+        const { strInicioIso, periodoTexto } = calcularIntervaloPorTipo(fimBase, novoTipo);
         setData((prev) => ({
           ...prev,
           tipoRelatorio: novoTipo,
           dataInicio: strInicioIso,
+          dataFim: fimBase,
           periodo: periodoTexto,
         }));
-        carregarDadosAPI(novoTipo, strInicioIso, data.dataFim || initialFim);
+        carregarDadosAPI(novoTipo, strInicioIso, fimBase);
       } else {
+        const mesAlvo = data.mesSelecionado || mesAnteriorIso;
+        const { inicio, fim } = obterIntervaloMesIso(mesAlvo);
         setData((prev) => ({
           ...prev,
           tipoRelatorio: "mensal",
-          periodo: mesAnteriorFormatado,
+          mesSelecionado: mesAlvo,
+          dataInicio: inicio,
+          dataFim: fim,
+          periodo: formatarMesAnoTexto(mesAlvo),
         }));
-        carregarDadosAPI("mensal", "", "");
+        carregarDadosAPI("mensal", inicio, fim);
       }
+      return;
+    }
+
+    if (secao === "mesSelecionado") {
+      const novoMesIso = valor as string;
+      const { inicio, fim } = obterIntervaloMesIso(novoMesIso);
+      setData((prev) => ({
+        ...prev,
+        mesSelecionado: novoMesIso,
+        dataInicio: inicio,
+        dataFim: fim,
+        periodo: formatarMesAnoTexto(novoMesIso),
+      }));
+      carregarDadosAPI("mensal", inicio, fim);
       return;
     }
 
@@ -664,11 +816,10 @@ export default function AdminRelatoriosPage() {
                 </div>
               ) : (
                 <div>
-                  <input
-                    type="text"
-                    value={mesAnteriorFormatado}
-                    readOnly
-                    className="w-full bg-[#E9D5BB]/40 border border-[#E9D5BB] rounded-xl px-3 py-2 text-xs text-[#70412d]/80 font-medium text-center uppercase tracking-wider cursor-default focus:outline-none opacity-80"
+                  <SeletorMesVisual
+                    valorMesIso={data.mesSelecionado || mesAnteriorIso}
+                    maxMesIso={mesAnteriorIso}
+                    onSelecionarMes={(novoMesIso) => handleChange("mesSelecionado", "", novoMesIso)}
                   />
                 </div>
               )}
@@ -833,7 +984,7 @@ export default function AdminRelatoriosPage() {
           <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
             <div className="border-b border-[#e9d5bb] pb-2 text-center">
               <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
-                VENDAS ({data.tipoRelatorio === "mensal" ? mesAnteriorFormatado : mesAtualNome})
+                VENDAS ({data.tipoRelatorio === "mensal" ? formatarMesAnoTexto(data.mesSelecionado || mesAnteriorIso).toUpperCase() : mesAtualNome})
               </span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

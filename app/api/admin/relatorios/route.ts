@@ -32,16 +32,15 @@ function mapearEOrdenarPerfisNoPeriodo(
     const estudosUnicosPeriodo = new Set(userProgressosPeriodo.map((p: any) => p.estudo_id)).size;
     totalEstudosPeriodo += estudosUnicosPeriodo;
 
-    // Descobrir a data do último estudo concluído no período
     let ultimoEstudoData: string | null = null;
     if (userProgressosPeriodo.length > 0) {
       const datasOrdenadas = userProgressosPeriodo
         .map((p: any) => p.data_local)
         .filter(Boolean)
-        .sort((a: string, b: string) => b.localeCompare(a)); // Mais recente primeiro
-      
+        .sort((a: string, b: string) => b.localeCompare(a));
+
       if (datasOrdenadas.length > 0) {
-        ultimoEstudoData = datasOrdenadas[0]; // Formato YYYY-MM-DD
+        ultimoEstudoData = datasOrdenadas[0];
       }
     }
 
@@ -56,9 +55,20 @@ function mapearEOrdenarPerfisNoPeriodo(
   });
 
   lista.sort((a, b) => {
+    const dataA = a.ultimoEstudo || "";
+    const dataB = b.ultimoEstudo || "";
+
+    // 1º critério: Data do último estudo mais recente primeiro (quem não tem data vai para o final)
+    if (dataB !== dataA) {
+      return dataB.localeCompare(dataA);
+    }
+
+    // 2º critério (desempate): Maior quantidade de estudos concluídos
     if (b.estudosConcluidos !== a.estudosConcluidos) {
       return b.estudosConcluidos - a.estudosConcluidos;
     }
+
+    // 3º critério (desempate): Maior quantidade de diários registrados
     return b.diariosRegistrados - a.diariosRegistrados;
   });
 
