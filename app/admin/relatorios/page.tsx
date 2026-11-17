@@ -536,6 +536,13 @@ export default function AdminRelatoriosPage() {
       }
 
       const res = await fetch(queryUrl);
+      const contentType = res.headers.get("content-type");
+
+      if (!contentType || !contentType.includes("application/json")) {
+        console.warn(`Aviso: API retornou status ${res.status} sem JSON.`);
+        return;
+      }
+
       const json = await res.json();
       if (res.ok && json) {
         setData((prev) => ({
@@ -674,6 +681,11 @@ export default function AdminRelatoriosPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Erro de comunicação com a API (rota não encontrada).");
+      }
 
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || "Erro ao salvar relatório.");
