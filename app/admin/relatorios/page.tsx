@@ -741,6 +741,8 @@ export default function AdminRelatoriosPage() {
           <tbody className="divide-y divide-[#e9d5bb]/60">
             {lista.map((c, i) => {
               const temInstagram = isCreator && c.instagram && c.instagram.trim() !== "";
+              const temEmail = !isCreator && c.email && c.email.trim() !== "";
+
               return (
                 <tr key={i} className="hover:bg-[#efe2cc]/80 transition">
                   <td className="py-2 px-1.5 sm:py-2.5 sm:px-3">
@@ -748,6 +750,11 @@ export default function AdminRelatoriosPage() {
                     {temInstagram && (
                       <div className="text-[10px] sm:text-[11px] text-[#70412d]/70">
                         {`@${c.instagram.replace("@", "")}`}
+                      </div>
+                    )}
+                    {temEmail && (
+                      <div className="text-[10px] sm:text-[11px] text-[#70412d]/70 truncate max-w-[130px] sm:max-w-[200px]" title={c.email}>
+                        {c.email}
                       </div>
                     )}
                   </td>
