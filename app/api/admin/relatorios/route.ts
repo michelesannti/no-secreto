@@ -48,6 +48,7 @@ function mapearEOrdenarPerfisNoPeriodo(
       nome: perfil.nome || "Sem Nome",
       instagram: perfil.instagram || "",
       email: perfil.email || "",
+      dataCadastro: perfil.data_local || "",
       estudosConcluidos: estudosUnicosPeriodo,
       diariosRegistrados: userDiariosPeriodo.length,
       ultimoEstudo: ultimoEstudoData,
@@ -69,7 +70,12 @@ function mapearEOrdenarPerfisNoPeriodo(
     }
 
     // 3º critério (desempate): Maior quantidade de diários registrados
-    return b.diariosRegistrados - a.diariosRegistrados;
+    if (b.diariosRegistrados !== a.diariosRegistrados) {
+      return b.diariosRegistrados - a.diariosRegistrados;
+    }
+
+    // 4º critério (desempate final): Data de cadastro mais recente primeiro
+    return b.dataCadastro.localeCompare(a.dataCadastro);
   });
 
   return { lista, totalEstudos: totalEstudosPeriodo };
@@ -131,8 +137,16 @@ export async function GET(request: Request) {
       .lte("data_local", dataFimIso);
 
     const [resCreators, resClientes, resProgresso, resDiarios] = await Promise.all([
-      supabase.from("profiles").select("id, nome, instagram, email").eq("creator", true),
-      supabase.from("profiles").select("id, nome, instagram, email").eq("acesso", "PAGO"),
+      supabase
+        .from("profiles")
+        .select("id, nome, instagram, email, data_local")
+        .eq("creator", true)
+        .lte("data_local", dataFimIso),
+      supabase
+        .from("profiles")
+        .select("id, nome, instagram, email, data_local")
+        .eq("acesso", "PAGO")
+        .lte("data_local", dataFimIso),
       supabase.from("progresso").select("user_id, estudo_id, data_local"),
       supabase.from("diario").select("user_id, id, texto, data_local"),
     ]);
