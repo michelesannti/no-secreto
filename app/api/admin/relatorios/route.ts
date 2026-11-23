@@ -81,6 +81,100 @@ function mapearEOrdenarPerfisNoPeriodo(
   return { lista, totalEstudos: totalEstudosPeriodo };
 }
 
+function mapearEOrdenarConteudosNoPeriodo(
+  creators: any[],
+  todosConteudos: any[],
+  dataInicioIso: string,
+  dataFimIso: string
+) {
+  const lista = creators.map((creator: any) => {
+    const conteudosPeriodo = todosConteudos.filter(
+      (c: any) =>
+        c.creator_id === creator.id &&
+        c.data_local &&
+        c.data_local >= dataInicioIso &&
+        c.data_local <= dataFimIso
+    );
+
+    const conteudosTotal = conteudosPeriodo.length;
+
+    const conteudosInstagram = conteudosPeriodo.filter(
+      (c: any) => typeof c.link_instagram === "string" && c.link_instagram.trim() !== ""
+    ).length;
+
+    let ultimoConteudoData: string | null = null;
+    if (conteudosPeriodo.length > 0) {
+      const datasOrdenadas = conteudosPeriodo
+        .map((c: any) => c.data_local)
+        .filter(Boolean)
+        .sort((a: string, b: string) => b.localeCompare(a));
+
+      if (datasOrdenadas.length > 0) {
+        ultimoConteudoData = datasOrdenadas[0];
+      }
+    }
+
+    const tiposUnicos = Array.from(
+      new Set(
+        conteudosPeriodo
+          .map((c: any) => (c.tipo_conteudo ? String(c.tipo_conteudo).trim() : ""))
+          .filter(Boolean)
+      )
+    );
+
+    const formatosUnicos = Array.from(
+      new Set(
+        conteudosPeriodo
+          .map((c: any) => (c.formato ? String(c.formato).trim() : ""))
+          .filter(Boolean)
+      )
+    );
+
+    const resumoTiposFormatos = [
+      tiposUnicos.length > 0 ? tiposUnicos.join(", ") : "",
+      formatosUnicos.length > 0 ? formatosUnicos.join(", ") : "",
+    ]
+      .filter(Boolean)
+      .join(" • ");
+
+    return {
+      nome: creator.nome || "Sem Nome",
+      instagram: creator.instagram || "",
+      email: creator.email || "",
+      dataCadastro: creator.data_local || "",
+      conteudosTotal,
+      conteudosInstagram,
+      ultimoConteudo: ultimoConteudoData,
+      tiposFormatos: resumoTiposFormatos || "-",
+    };
+  });
+
+  lista.sort((a, b) => {
+    const dataA = a.ultimoConteudo || "";
+    const dataB = b.ultimoConteudo || "";
+
+    // 1º critério: Data do último conteúdo publicado mais recente primeiro
+    if (dataB !== dataA) {
+      return dataB.localeCompare(dataA);
+    }
+
+    // 2º critério (desempate): Maior quantidade de conteúdos publicados no período
+    if (b.conteudosTotal !== a.conteudosTotal) {
+      return b.conteudosTotal - a.conteudosTotal;
+    }
+
+    // 3º critério (desempate): Maior quantidade de conteúdos com link do Instagram
+    if (b.conteudosInstagram !== a.conteudosInstagram) {
+      return b.conteudosInstagram - a.conteudosInstagram;
+    }
+
+    // 4º critério (desempate final): Data de cadastro mais recente primeiro
+    return b.dataCadastro.localeCompare(a.dataCadastro);
+  });
+
+  return lista;
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -130,13 +224,7 @@ export async function GET(request: Request) {
       console.warn("Aviso: Não foi possível ler token do Supabase, utilizando fallback de env:", errConfig);
     }
 
-    const { count: conteudosCount } = await supabase
-      .from("conteudos")
-      .select("*", { count: "exact", head: true })
-      .gte("data_local", dataInicioIso)
-      .lte("data_local", dataFimIso);
-
-    const [resCreators, resClientes, resProgresso, resDiarios] = await Promise.all([
+    const [resCreators, resClientes, resProgresso, resDiarios, resConteudos] = await Promise.all([
       supabase
         .from("profiles")
         .select("id, nome, instagram, email, data_local")
@@ -149,12 +237,16 @@ export async function GET(request: Request) {
         .lte("data_local", dataFimIso),
       supabase.from("progresso").select("user_id, estudo_id, data_local"),
       supabase.from("diario").select("user_id, id, texto, data_local"),
+      supabase
+        .from("conteudos")
+        .select("id, creator_id, link_instagram, tipo_conteudo, formato, data_local"),
     ]);
 
     const creators = resCreators.data || [];
     const clientes = resClientes.data || [];
     const todosProgressos = resProgresso.data || [];
     const todosDiarios = resDiarios.data || [];
+    const todosConteudos = resConteudos.data || [];
 
     const { lista: relatorioCreators, totalEstudos: totalEstudosCreators } = mapearEOrdenarPerfisNoPeriodo(
       creators,
@@ -168,6 +260,13 @@ export async function GET(request: Request) {
       clientes,
       todosProgressos,
       todosDiarios,
+      dataInicioIso,
+      dataFimIso
+    );
+
+    const detalheConteudosCreators = mapearEOrdenarConteudosNoPeriodo(
+      creators,
+      todosConteudos,
       dataInicioIso,
       dataFimIso
     );
@@ -233,9 +332,9 @@ export async function GET(request: Request) {
       tiktok: { seguidores: "", visitasPerfil: "" },
       supabase: {
         estudosConcluidos: totalEstudosCreators + totalEstudosClientes,
-        conteudosPublicados: conteudosCount || 0,
         detalheCreators: relatorioCreators,
         detalheClientes: relatorioClientes,
+        detalheConteudosCreators,
       },
       cakto: {
         vendas: 0,

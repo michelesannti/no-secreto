@@ -12,6 +12,16 @@ interface PerfilEstudoDetalhe {
   ultimoEstudo?: string | null;
 }
 
+interface ConteudoCreatorDetalhe {
+  nome: string;
+  instagram: string;
+  email: string;
+  conteudosTotal: number;
+  conteudosInstagram: number;
+  ultimoConteudo?: string | null;
+  tiposFormatos?: string;
+}
+
 interface RelatoriosData {
   tipoRelatorio?: "semanal" | "quinzenal" | "mensal";
   periodo?: string;
@@ -41,9 +51,9 @@ interface RelatoriosData {
   };
   supabase: {
     estudosConcluidos: number | "";
-    conteudosPublicados: number | "";
     detalheCreators?: PerfilEstudoDetalhe[];
     detalheClientes?: PerfilEstudoDetalhe[];
+    detalheConteudosCreators?: ConteudoCreatorDetalhe[];
   };
   cakto: {
     vendas: number | "";
@@ -516,9 +526,9 @@ export default function AdminRelatoriosPage() {
     },
     supabase: {
       estudosConcluidos: "",
-      conteudosPublicados: "",
       detalheCreators: [],
       detalheClientes: [],
+      detalheConteudosCreators: [],
     },
     cakto: { vendas: "", vendasAbandonadas: "", vendasAfiliadas: "" },
   });
@@ -563,9 +573,9 @@ export default function AdminRelatoriosPage() {
           whatsapp: json.whatsapp || prev.whatsapp,
           supabase: {
             estudosConcluidos: json.supabase?.estudosConcluidos ?? prev.supabase.estudosConcluidos,
-            conteudosPublicados: json.supabase?.conteudosPublicados ?? prev.supabase.conteudosPublicados,
             detalheCreators: json.supabase?.detalheCreators || [],
             detalheClientes: json.supabase?.detalheClientes || [],
+            detalheConteudosCreators: json.supabase?.detalheConteudosCreators || [],
           },
           cakto: json.cakto || prev.cakto,
         }));
@@ -763,6 +773,61 @@ export default function AdminRelatoriosPage() {
                   </td>
                   <td className="py-2 px-1.5 sm:py-2.5 sm:px-3 text-center text-[#70412d]/80 font-mono text-[11px] sm:text-xs whitespace-nowrap">
                     {c.ultimoEstudo ? formatarDataCurtaPtBr(c.ultimoEstudo) : "-"}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderTabelaConteudosCreators = (lista: ConteudoCreatorDetalhe[] | undefined) => {
+    if (!lista || lista.length === 0) {
+      return (
+        <p className="text-xs text-center text-[#70412d]/60 italic py-4">
+          Nenhuma criadora cadastrada.
+        </p>
+      );
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr className="border-b border-[#e9d5bb] text-[#70412d]/80 uppercase tracking-wider font-bold text-[10px] sm:text-xs">
+              <th className="py-2 px-1.5 sm:px-3">Creator</th>
+              <th className="py-2 px-1.5 sm:px-3 text-center">Total / Instagram</th>
+              <th className="py-2 px-1.5 sm:px-3 text-center">Último</th>
+              <th className="py-2 px-1.5 sm:px-3">Tipos / Formatos</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-[#e9d5bb]/60">
+            {lista.map((c, i) => {
+              const temInstagram = c.instagram && c.instagram.trim() !== "";
+              return (
+                <tr key={i} className="hover:bg-[#efe2cc]/80 transition">
+                  <td className="py-2 px-1.5 sm:py-2.5 sm:px-3">
+                    <div className="font-medium text-[#70412d] text-[11px] sm:text-xs leading-tight">
+                      {c.nome || "Sem Nome"}
+                    </div>
+                    {temInstagram && (
+                      <div className="text-[10px] sm:text-[11px] text-[#70412d]/70">
+                        {`@${c.instagram.replace("@", "")}`}
+                      </div>
+                    )}
+                  </td>
+                  <td className="py-2 px-1.5 sm:py-2.5 sm:px-3 text-center font-bold text-[#70412d] bg-[#e9d5bb]/40 rounded-lg font-mono text-[11px] sm:text-xs whitespace-nowrap">
+                    {c.conteudosTotal} / {c.conteudosInstagram}
+                  </td>
+                  <td className="py-2 px-1.5 sm:py-2.5 sm:px-3 text-center text-[#70412d]/80 font-mono text-[11px] sm:text-xs whitespace-nowrap">
+                    {c.ultimoConteudo ? formatarDataCurtaPtBr(c.ultimoConteudo) : "-"}
+                  </td>
+                  <td className="py-2 px-1.5 sm:py-2.5 sm:px-3 text-[#70412d]/80 text-[10px] sm:text-xs">
+                    <span className="line-clamp-2" title={c.tiposFormatos || "-"}>
+                      {c.tiposFormatos || "-"}
+                    </span>
                   </td>
                 </tr>
               );
@@ -986,17 +1051,12 @@ export default function AdminRelatoriosPage() {
           <div className="bg-[#efe2cc]/60 border border-[#e9d5bb] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
             <div className="border-b border-[#e9d5bb] pb-2 text-center">
               <span className="text-sm font-bold tracking-wider uppercase text-[#70412d]">
-                SUPABASE (CONTEÚDOS)
+                CONTEÚDOS
               </span>
             </div>
-            <div className="max-w-xs mx-auto">
-              <label className="text-[11px] font-bold text-[#70412d]/80 uppercase block mb-1 text-center">Conteúdos Publicados</label>
-              <input
-                type="number"
-                value={data.supabase.conteudosPublicados}
-                onChange={(e) => handleChange("supabase", "conteudosPublicados", e.target.value)}
-                className={inputSemSetinhasClass}
-              />
+
+            <div>
+              {renderTabelaConteudosCreators(data.supabase.detalheConteudosCreators)}
             </div>
           </div>
 
